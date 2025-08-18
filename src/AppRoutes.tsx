@@ -4,7 +4,7 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import Layout from "@/components/Layout";
 
-import HomePage from "@/pages/index";
+import HomePage from "@/pages/main/index";
 import CatalogPage from "@/pages/catalog/[type]";
 import PropertyPage from "@/pages/property/[id]";
 import TeamPage from "@/pages/team/index";

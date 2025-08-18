@@ -1,0 +1,137 @@
+.advantages {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 40px;
+  width: 1200px;
+  height: 560px;
+  background: #EBEBEB;
+  border-radius: 20px;
+  box-sizing: border-box;
+  margin-bottom: 150px;
+}
+
+.frame142 {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-end;
+  padding: 0px;
+  gap: 60px;
+  width: 1120px;
+  height: 401px;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0px;
+  gap: 40px;
+  width: 686px;
+  height: 401px;
+}
+
+.frame63 {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0px;
+  width: 686px;
+  height: 80px;
+}
+
+.pretitle {
+  width: 686px;
+  height: 14px;
+  font-family: 'Raleway', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 14px;
+  text-transform: uppercase;
+  color: #050505;
+}
+
+.title {
+  width: 686px;
+  height: 56px;
+  font-family: 'Raleway', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 48px;
+  line-height: 56px;
+  text-transform: uppercase;
+  color: #050505;
+}
+
+.aboutUsExamples {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0px;
+  gap: 50px;
+  width: 686px;
+  height: 281px;
+}
+
+.frame394,
+.frame395 {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  padding: 0px;
+  gap: 40px;
+  width: 686px;
+}
+
+.frame60,
+.frame59,
+.frame62,
+.frame61,
+.frame55,
+.frame57 {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0px;
+  gap: 12px;
+  width: 202px;
+  background: #EBEBEB;
+}
+
+.starIcon {
+  margin-bottom: 12px; /* Настройте это значение по необходимости */
+}
+
+.benefitTitle {
+  width: 202px;
+  height: 16px;
+  font-family: 'Raleway', sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 16px;
+  text-transform: capitalize; /* changed from all-small-caps */
+  color: #050505;
+}
+
+.benefitText {
+  width: 182px;
+  font-family: 'Raleway', sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 11px;
+  line-height: 13px;
+  text-transform: capitalize; /* changed from all-small-caps */
+  color: #565656;
+}
+
+.photo {
+  width: 374px;
+  height: 401px;
+  background-image: url('../../../public/icons/Home.svg');
+  background-size: cover;
+  background-position: center;
+  border-radius: 20px;
+}

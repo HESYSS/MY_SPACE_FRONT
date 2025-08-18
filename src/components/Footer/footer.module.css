@@ -1,12 +1,12 @@
 /* Общие стили для футера */
 .footer {
-  background-color: #000;
+  background-color: #050505;
   color: #fff;
   font-family: 'Montserrat', sans-serif;
   opacity: 1;
 
   /* Размеры и отступы из макета */
-  width: 1860px;
+  width: 1920px;
   height: 325px;
   border-top: 1px solid #2e2e2e;
   padding-top: 40px;

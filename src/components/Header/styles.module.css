@@ -1,70 +1,127 @@
-.navbar {
-  background-color: #000;
-  color: #fff;
-  padding: 10px 20px;
+/* Header block */
+.header {
+  box-sizing: border-box;
   display: flex;
-  justify-content: space-between;
+  flex-direction: row;
+  justify-content: center;
   align-items: center;
-  border-bottom: 2px solid #00aaff;
-  font-family: Arial, sans-serif;
+  padding: 18px 0px;
+  width: 1920px;
+  height: 92px;
+  background: #050505;
+  border-radius: 0px 0px 20px 20px;
 }
 
-.logo img {
-  height: 30px;
-}
-
-.nav-links {
-  list-style: none;
+/* Navbar */
+.navbar {
   display: flex;
-  margin: 0;
+  flex-direction: row;
+  justify-content: space-between; /* Распределяем пространство между левой и правой частью */
+  align-items: center;
+  width: 1200px;
+  height: 56px;
+}
+
+/* Left Nav (Лого и навигация) */
+.leftNav {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 41px; /* Отступ между логотипом и ссылками */
+}
+
+/* Logo */
+.logo img {
+  width: 108px;
+  height: 56px;
+}
+
+/* Navigation Links */
+.navLinks {
+  display: flex;
+  flex-direction: row;
+  list-style: none;
   padding: 0;
+  margin: 0;
+  gap: 41px; /* Отступ между ссылками */
 }
 
-.nav-links li {
-  margin-right: 25px;
-}
-
-.nav-links a {
-  color: #fff;
+.navLinks a {
+  font-family: 'Raleway', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 23px;
+  text-transform: uppercase;
+  color: #EBEBEB;
   text-decoration: none;
-  font-weight: 500;
   transition: color 0.3s;
 }
 
-.nav-links a:hover {
-  color: #00aaff;
+.navLinks a:hover {
+  color: #03B9B3;
 }
 
-.nav-links li:last-child {
-  margin-right: 0;
+/* Active link */
+.navLinks .activeLink {
+  color: #03B9B3; /* Цвет для активной ссылки */
 }
 
-.cta-button {
-  background-color: #1a1a1a;
-  color: #fff;
-  padding: 10px 20px;
-  border: 1px solid #00aaff;
-  border-radius: 5px;
-  text-decoration: none;
-  font-weight: 500;
-  transition: background-color 0.3s;
-}
-
-.cta-button:hover {
-  background-color: #00aaff;
-}
-
-.contact-info {
+/* Right Nav */
+.navRight {
   display: flex;
+  flex-direction: row;
   align-items: center;
+  gap: 20px;
 }
 
-.lang-selector {
-  color: #fff;
-  margin-right: 20px;
+/* CTA Button */
+.ctaButton {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 12px 20px;
+  gap: 10px;
+  width: 192px;
+  height: 47px;
+  background: #051818;
+  border-radius: 4px;
+  font-family: 'Raleway', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 23px;
+  text-transform: uppercase;
+  color: #EBEBEB;
+  text-decoration: none;
+  white-space: nowrap;
 }
 
+/* Contact Info */
+.contactInfo {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+}
+
+.langSelector {
+  font-family: 'Raleway', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 23px;
+  color: #FFFFFF;
+}
+
+/* Phone number */
 .phone {
-  color: #fff;
+  font-family: 'Inter', sans-serif;
+  font-style: normal;
+  font-weight: 300;
+  font-size: 20px;
+  line-height: 24px;
+  color: #EBEBEB;
   text-decoration: none;
 }
