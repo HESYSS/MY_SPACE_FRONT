@@ -13,7 +13,6 @@ const Layout = ({ children }: LayoutProps) => {
     <div className="layout">
       <Header />
       <main>{children}</main>
-      <OurValues/>
       <Footer />
     </div>
   );

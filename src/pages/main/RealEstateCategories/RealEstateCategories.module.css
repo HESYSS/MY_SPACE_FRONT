@@ -1,0 +1,245 @@
+/* Real Estate p */
+.realEstateP {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 0px;
+  gap: 60px;
+  width: 1200px;
+  height: 674px;
+  box-sizing: border-box;
+  margin-top: 80px;
+  margin-left: 540px;
+  margin-right: 360px;
+  margin-bottom: 80px;
+}
+
+/* Title real estate */
+.titleRealEstate {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0px;
+  gap: 30px;
+  width: 1200px;
+  height: 75px;
+}
+
+/* Line 8 */
+.line8 {
+  width: 579px;
+  height: 1px;
+  background: #EBEBEB; /* Предполагаемый цвет линии */
+  transform: rotate(180deg);
+}
+
+/* Вся Нерухомість */
+.mainTitle {
+  width: 592px;
+  height: 75px;
+  font-family: 'Raleway', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 64px;
+  line-height: 75px;
+  text-transform: uppercase;
+  color: #EBEBEB;
+  white-space: nowrap;
+}
+
+/* Columns real estate */
+.columnsRealEstate {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 0px;
+  gap: 20px;
+  width: 1200px;
+  height: 539px;
+}
+
+/* column1 */
+.column1 {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0px;
+  gap: 20px;
+  width: 285px;
+  height: 538px;
+}
+
+/* Frame 48 */
+.frame48 {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 170px 20px 20px;
+  gap: 10px;
+  width: 305px;
+  height: 304px;
+  background: #0A0A0A;
+  border-radius: 10px;
+}
+
+/* Text block styles */
+.textBlock {
+  width: 245px;
+  height: 114px;
+  font-family: 'Raleway', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 32px;
+  line-height: 38px;
+  font-variant: small-caps;
+  color: #EBEBEB;
+}
+
+/* Frame 49 (Houses) */
+.frame49 {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  padding: 20px;
+  gap: 90px;
+  width: 265px;
+  height: 214px;
+  background-image: url('../../../../public/icons/TownHouse.png');
+  background-size: cover;
+  background-position: center;
+  border-radius: 10px;
+}
+
+/* Common styles for arrow circles */
+.frame40,
+.frame41 {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 12px;
+  gap: 10px;
+  width: 46px;
+  height: 46px;
+  background: #EBEBEB;
+  border-radius: 100px;
+}
+
+/* Common styles for arrows */
+.vector4 {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #03B9B3; /* Цвет стрелки, возможно, потребуется SVG */
+}
+
+/* Category title styles */
+.categoryTitle {
+  width: 245px;
+  height: 38px;
+  font-family: 'Raleway', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 32px;
+  line-height: 38px;
+  text-transform: capitalize;
+  color: #EBEBEB;
+  margin: 0;
+}
+
+/* Frame 369 */
+.frame369 {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  padding: 50px 0px 0px;
+  gap: 10px;
+  width: 285px;
+  height: 539px;
+}
+
+/* column2 (Commercial) */
+.column2 {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  padding: 20px;
+  gap: 244px;
+  width: 285px;
+  height: 406px;
+  background-image: url('../../../../public/icons/Commercial.png');
+  background-size: cover;
+  background-position: center;
+  border-radius: 10px;
+  margin-left: 15px;
+}
+
+/* column3 */
+.column3 {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0px;
+  gap: 20px;
+  width: 285px;
+  height: 539px;
+}
+
+/* Frame 43 (Apartments) */
+.frame43 {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: 20px;
+  width: 285px;
+  height: 304px;
+  background-image: url('../../../../public/icons/apartment.png');
+  background-size: cover;
+  background-position: center;
+  border-radius: 10px;
+}
+
+/* Frame 47 */
+.frame47 {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  padding: 20px;
+  gap: 10px;
+  width: 320px;
+  height: 215px;
+  background: #0A0A0A;
+  border-radius: 10px;
+}
+
+/* column4 (Land) */
+.column4 {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 84px 0px 0px;
+  gap: 10px;
+  width: 285px;
+  height: 539px;
+}
+
+/* Frame 43 (Land) - дублируется в фигме, нужно уточнить */
+.column4 .frame43 {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  padding: 20px;
+  gap: 244px;
+  width: 285px;
+  height: 406px;
+  background-image: url('../../../../public/icons/LandPlots.png');
+  background-size: cover;
+  background-position: center;
+  border-radius: 10px;
+  margin-left: 45px;
+}

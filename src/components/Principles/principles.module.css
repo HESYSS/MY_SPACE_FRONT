@@ -4,11 +4,13 @@
   align-items: flex-start;
   padding: 40px;
   width: 1200px;
-  height: 560px;
+  height: 481px;
   background: #EBEBEB;
   border-radius: 20px;
   box-sizing: border-box;
   margin-bottom: 150px;
+  margin-top: 80px;
+  margin-left: 540px;
 }
 
 .frame142 {
@@ -63,6 +65,7 @@
   line-height: 56px;
   text-transform: uppercase;
   color: #050505;
+  margin-top: 15px;
 }
 
 .aboutUsExamples {
@@ -101,7 +104,7 @@
 }
 
 .starIcon {
-  margin-bottom: 12px; /* Настройте это значение по необходимости */
+  margin-bottom: -20px; /* Настройте это значение по необходимости */
 }
 
 .benefitTitle {
@@ -125,6 +128,7 @@
   line-height: 13px;
   text-transform: capitalize; /* changed from all-small-caps */
   color: #565656;
+  margin-top: -5px;
 }
 
 .photo {

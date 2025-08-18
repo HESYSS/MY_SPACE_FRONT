@@ -1,5 +1,7 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import RealEstateCategories from "./RealEstateCategories";
+import OurValues from "@/components/Principles";
 
 export default function HomePage() {
   return (
@@ -10,6 +12,8 @@ export default function HomePage() {
           Відео, слайдер районів, категорії нерухомості, про нас, форми
           зворотнього звʼязку
         </p>
+        <RealEstateCategories/>
+        <OurValues/>
       </main>
     </div>
   );
