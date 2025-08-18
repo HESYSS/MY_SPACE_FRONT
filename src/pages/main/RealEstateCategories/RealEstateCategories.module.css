@@ -10,7 +10,7 @@
   height: 674px;
   box-sizing: border-box;
   margin-top: 80px;
-  margin-left: 540px;
+  margin-left: 360px;
   margin-right: 360px;
   margin-bottom: 80px;
 }
@@ -30,8 +30,7 @@
 .line8 {
   width: 579px;
   height: 1px;
-  background: #EBEBEB; /* Предполагаемый цвет линии */
-  transform: rotate(180deg);
+  background: linear-gradient(to right, #191919, #03B9B3); /* Использование градиента */
 }
 
 /* Вся Нерухомість */

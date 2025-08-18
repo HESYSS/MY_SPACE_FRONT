@@ -1,0 +1,155 @@
+/* Coworking p */
+.coworkingP {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 0px;
+  gap: 60px;
+  width: 1200px;
+  height: 479px;
+  box-sizing: border-box;
+  margin-left: 360px;
+  margin-bottom: 80px;
+}
+
+/* Coworking title */
+.coworkingTitle {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0px;
+  gap: 30px;
+  width: 1200px;
+  height: 75px;
+}
+
+/* Line 8 */
+.line8 {
+  width: 808px;
+  height: 1px;
+  background: linear-gradient(to left, #191919, #03B9B3);
+  transform: matrix(-1, 0, 0, 1, 0, 0);
+}
+
+/* Співпраця */
+.mainTitle {
+  width: 362px;
+  height: 75px;
+  font-family: 'Raleway', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 64px;
+  line-height: 75px;
+  text-transform: uppercase;
+  color: #EBEBEB;
+}
+
+/* Coworking */
+.coworking {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0px;
+  gap: 267px;
+  width: 1200px;
+  height: 344px;
+}
+
+/* Бажаєте отримати консультацію? */
+.callToAction {
+  width: 403px;
+  height: 168px;
+  font-family: 'Raleway', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 48px;
+  line-height: 56px;
+  text-transform: uppercase;
+  color: #EBEBEB;
+}
+
+/* Frame 89 */
+.frame89 {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 30px 36px;
+  gap: 10px;
+  width: 525px;
+  height: 226px;
+  background: #0A0A0A;
+  border-radius: 20px;
+  box-sizing: border-box;
+}
+
+/* Frame 88 */
+.frame88 {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  padding: 0px;
+  gap: 64px;
+  width: 453px;
+  height: 284px;
+}
+
+/* Общие стили для строк с опциями */
+.frame87,
+.frame85,
+.frame83 {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0px;
+  gap: 10px;
+  width: 453px;
+  height: 52px;
+  box-sizing: border-box;
+}
+
+/* Линии разделители */
+.line16,
+.line17,
+.line18 {
+  width: 453px;
+  height: 1px;
+  border-top: 1px solid #303030;
+  box-sizing: border-box;
+}
+
+/* Общие стили для фреймов с текстом и стрелкой */
+.frame86,
+.frame84,
+.frame82 {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0px;
+  width: 453px;
+  height: 42px;
+  box-sizing: border-box;
+  /* Удалили gap */
+}
+
+/* Текст опций */
+.optionText {
+  font-family: 'Raleway', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 28px;
+  line-height: 42px;
+  color: #EBEBEB;
+  margin: 0;
+  white-space: nowrap;
+  font-family: Raleway;
+  font-variant: small-caps;
+}
+
+/* Стили для изображений стрелок */
+.arrowIcon {
+  width: 26px;
+  height: 26px;
+}

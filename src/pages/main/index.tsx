@@ -1,7 +1,7 @@
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
 import RealEstateCategories from "./RealEstateCategories";
 import OurValues from "@/components/Principles";
+import styles from './main.module.css';
+import CoworkingSection from "./CoworkingSection";
 
 export default function HomePage() {
   return (
@@ -13,7 +13,18 @@ export default function HomePage() {
           зворотнього звʼязку
         </p>
         <RealEstateCategories/>
-        <OurValues/>
+        <div className={styles.mainP}>
+          <div className={styles.titleMain}>
+            <h2 className={styles.mainTitle}>ПРО НАС</h2>
+            <div className={styles.line8}></div>
+          </div>
+
+        <div className={styles.aboutUsContainer}> {/* Новый контейнер */}
+          <div className={styles.lightEffect}></div> {/* Эффект свечения */}
+          <OurValues/> {/* Блок "Про нас" */}
+        </div>
+        </div>
+        <CoworkingSection/>
       </main>
     </div>
   );

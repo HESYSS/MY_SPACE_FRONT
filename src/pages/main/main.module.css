@@ -1,0 +1,68 @@
+.mainP {
+    width: 1200;
+    height: 75;
+    gap: 30px;
+    opacity: 1;
+    margin-bottom: 80px;
+}
+
+/* Title real estate */
+.titleMain {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0px;
+  width: 1200px;
+  height: 75px;
+}
+
+/* Line 8 */
+.line8 {
+  width: 887px;
+  height: 1px;
+  background: linear-gradient(to Left, #191919, #03B9B3); /* Использование градиента */
+}
+
+/* Вся Нерухомість */
+.mainTitle {
+  width: 592px;
+  height: 75px;
+  font-family: 'Raleway', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 64px;
+  line-height: 75px;
+  text-transform: uppercase;
+  color: #EBEBEB;
+  white-space: nowrap;
+  margin-left: 400px;
+}
+
+/* Container for "About Us" section and the light effect */
+.aboutUsContainer {
+  position: relative;
+  /* Задайте высоту, чтобы контейнер мог содержать оба элемента */
+  height: auto;
+}
+
+/* Light effect behind the "About Us" section */
+.lightEffect {
+  position: absolute;
+  width: 872px;
+  height: 411px;
+  margin-top: 300px;
+  /* Центрирование овала */
+  left: 50%;
+  transform: translateX(-50%);
+  top: 50%;
+  transform: translate(-50%, -50%); /* Центрирует элемент по горизонтали и вертикали */
+  background: rgba(3, 185, 179, 0.5);
+  filter: blur(250px);
+  z-index: -1;
+}
+
+/* Ensure the main content is above the effect */
+.OurValues {
+  position: relative;
+  z-index: 1;
+}
