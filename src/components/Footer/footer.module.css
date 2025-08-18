@@ -1,0 +1,114 @@
+/* Общие стили для футера */
+.footer {
+  background-color: #000;
+  color: #fff;
+  font-family: 'Montserrat', sans-serif;
+  opacity: 1;
+
+  /* Размеры и отступы из макета */
+  width: 1860px;
+  height: 325px;
+  border-top: 1px solid #2e2e2e;
+  padding-top: 40px;
+  padding-bottom: 40px;
+  
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Основной контент (колонки) */
+.mainContent {
+  width: 1200px;
+  display: flex;
+  justify-content: flex-start;
+  gap: 70px; /* Отступ между колонками */
+  margin-left: 330px; /* Отступ от левого края футера */
+  margin-right: 330px;
+}
+
+/* Секция с логотипом */
+.logoSection {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 247.5px;
+  height: 295px;
+  gap: 218px; /* Расстояние между логотипом и копирайтом */
+  justify-content: space-between; /* Равномерное распределение элементов */
+}
+
+.logoSection img {
+  width: 108px;
+  height: 56.61px;
+}
+
+.copyright {
+  font-family: 'Inter', sans-serif;
+  font-weight: 400; /* Regular */
+  font-size: 16px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  color: #565656;
+  white-space: nowrap; /* Этот стиль предотвращает перенос текста */
+}
+
+/* Секции меню, информации и контактов */
+.menuSection,
+.infoSection,
+.contactSection {
+  display: flex;
+  flex-direction: column;
+  width: 247.5px;
+  height: 295px;
+}
+
+/* Заголовки колонок */
+.footerHeading {
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1; /* 100% = 1 */
+  letter-spacing: 0;
+  margin-bottom: 20px;
+  color: #565656;
+}
+
+/* Списки ссылок */
+.footerLinks {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* Отступ между элементами списка */
+}
+
+.footerLinks a {
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 1; /* 100% = 1 */
+  letter-spacing: 0;
+  color: #EBEBEB;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.footerLinks a:hover {
+  color: #00aaff;
+}
+
+/* Блок с социальными иконками */
+.socialIcons {
+  display: flex;
+  gap: 10px;
+  margin-top: 40px; /* Отступ от основного контента */
+}
+
+.socialIcon {
+  width: 32px;
+  height: 32px;
+  margin-top: 50px;
+}
