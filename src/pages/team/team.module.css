@@ -1,0 +1,48 @@
+/* Container for positioning the oval */
+.ovalContainer {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: -180px;
+}
+
+/* The oval glowing effect */
+.ovalEffect {
+  position: absolute;
+  width: 872px;
+  height: 411px;
+  background: rgba(3, 185, 179, 0.5);
+  filter: blur(250px);
+  z-index: -1;
+  /* Adjust these values to position the oval correctly below the component */
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 150px; /* Вы можете настроить это значение */
+  margin-left: 450px;
+}
+
+/* Container for positioning the oval */
+.ovalContainer2 {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: -180px;
+}
+
+/* The oval glowing effect */
+.ovalEffect2 {
+  position: absolute;
+  width: 872px;
+  height: 411px;
+  background: rgba(3, 185, 179, 0.5);
+  filter: blur(250px);
+  z-index: -1;
+  /* Adjust these values to position the oval correctly below the component */
+  left: 50%;
+  transform: translateX(-50%);
+  margin-left: -50px;
+}

@@ -2,7 +2,6 @@
 import React, { ReactNode } from "react";
 import Header from "../Header";
 import Footer from "../Footer";
-import OurValues from "../Principles";
 
 type LayoutProps = {
   children: ReactNode;

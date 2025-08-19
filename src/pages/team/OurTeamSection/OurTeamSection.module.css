@@ -1,0 +1,195 @@
+/* Container for the whole section */
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0;
+  gap: 60px;
+  width: 1200px;
+  margin: 0 auto;
+  margin-bottom: 80px;
+}
+
+/* Title section with the line */
+.titleSection {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0;
+  gap: 30px;
+  width: 100%;
+  height: 75px;
+}
+
+/* Main heading "НАША КОМАНДА" */
+.mainTitle {
+  font-family: 'Raleway';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 64px;
+  line-height: 75px;
+  text-transform: uppercase;
+  color: #EBEBEB;
+  white-space: nowrap;
+}
+
+/* The horizontal line */
+.line {
+  width: 100%;
+  height: 0;
+  border-top: 1px solid transparent;
+  border-image: linear-gradient(to right, #191919, #03b9b3) 1;
+}
+
+/* "Active team" section container */
+.activeTeam {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0;
+  gap: 40px;
+  width: 100%;
+}
+
+/* Subheading "Найактивніші члени команди по продажам" */
+.activeTeamTitle {
+  width: 100%;
+  font-family: 'Raleway';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 48px;
+  line-height: 56px;
+  text-align: center;
+  color: #EBEBEB;
+}
+
+/* Main container for member columns */
+.bestMembers {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  padding: 0;
+  gap: 56px;
+  width: 100%;
+}
+
+/* Base styles for each column */
+.column {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0;
+  gap: 40px;
+  width: 258px;
+}
+
+/* Specific offsets for each column based on Figma */
+.column3 {
+  margin-top: 80px;
+}
+
+.column1 {
+  margin-top: 60px;
+}
+
+.column4 {
+    margin-top: 20px;
+}
+
+/* Single member card */
+.memberCard {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: auto;
+}
+
+/* Wrapper for the image */
+.imageWrapper {
+  position: relative;
+  width: 100%;
+  height: 279px;
+  background: #0A0A0A;
+  border-radius: 10px 10px 0px 0px;
+  overflow: hidden;
+}
+
+/* The actual image */
+.memberImage {
+  width: 257px;
+  height: 279px;
+  object-fit: cover;
+  border-radius: 6px 6px 0px 0px;
+}
+
+/* Gradient overlay on the image */
+.imageOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 50.19%, #000000 100%);
+  border-radius: 6px 6px 0px 0px;
+  z-index: 1;
+}
+
+/* Container for the member's information */
+.memberInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 20px;
+  width: 217px;
+  height: 50px;
+  background: #0A0A0A;
+  border-radius: 0px 0px 6px 6px;
+  gap: 10px;
+}
+
+/* Member name */
+.memberName {
+  font-family: 'Raleway';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 23px;
+  text-align: right;
+  text-transform: uppercase;
+  color: #EBEBEB;
+  width: 100%;
+  margin-top: -50px;
+  z-index: 1;
+  font-style: Bold;
+}
+
+/* Role container with arrow */
+.memberRole {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0;
+  width: 100%;
+  height: 32px;
+}
+
+/* The arrow itself */
+.arrow {
+  width: 20px;
+  height: 20px;
+  margin-left: 10px;
+}
+
+/* Role text */
+.roleText {
+  font-family: 'Raleway';
+  font-style: bold;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 16px;
+  text-align: right;
+  text-transform: uppercase;
+  color: #9C9C9C;
+  flex-grow: 1;
+}

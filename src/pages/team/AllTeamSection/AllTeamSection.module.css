@@ -1,0 +1,158 @@
+/* All team section main container */
+.allTeamContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0px;
+  gap: 40px;
+  width: 1200px;
+  height: 371px; /* Высота по макету */
+  flex-grow: 0;
+  margin-left: 360px;
+  margin-bottom: 80px;
+}
+
+/* "Вся команда" title */
+.sectionTitle {
+  width: 100%;
+  height: 56px;
+  font-family: 'Raleway';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 48px;
+  line-height: 56px;
+  text-align: center;
+  color: #EBEBEB;
+  margin: 0;
+}
+
+/* Container for carousel and pagination */
+.carouselContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0px;
+  gap: 20px;
+  width: 1200px;
+  height: 275px;
+}
+
+/* Row for team member cards */
+.teamRow {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  padding: 0px;
+  gap: 30px;
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+/* Hide scrollbar for Chrome, Safari, and Opera */
+.teamRow::-webkit-scrollbar {
+  display: none;
+}
+
+/* Photo and name container */
+.photoAndName {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 6px;
+  gap: 10px;
+  width: 216px;
+  height: 247px;
+  position: relative;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+/* Photo of team member */
+.memberPhoto {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+/* Gradient overlay on the image */
+.gradientOverlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180.05deg, rgba(0, 0, 0, 0) 50.39%, rgba(0, 0, 0, 0.8) 99.95%);
+  border-radius: 4px;
+  z-index: 1;
+}
+
+/* Container for name and role */
+.textContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 8px;
+  gap: 10px;
+  width: 204px;
+  height: 50px;
+  background: rgba(10, 10, 10, 0.8);
+  border-radius: 2px;
+  position: relative;
+  z-index: 2;
+}
+
+/* Member name */
+.memberName {
+  font-family: 'Raleway';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 19px;
+  text-transform: capitalize;
+  color: #EBEBEB;
+  margin: 0;
+}
+
+/* Member role */
+.memberRole {
+  font-family: 'Raleway';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 14px;
+  text-transform: lowercase;
+  color: #9C9C9C;
+  margin: 0;
+}
+
+/* Pagination dots */
+.pagination {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 0px;
+  gap: 8px;
+  width: 120px;
+  height: 8px;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  background: #EBEBEB;
+  border-radius: 50%;
+}
+
+.dotActive {
+  width: 8px;
+  height: 8px;
+  background: #03B9B3;
+  border-radius: 50%;
+}
