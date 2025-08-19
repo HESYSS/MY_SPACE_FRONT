@@ -23,6 +23,14 @@
   background: linear-gradient(to Left, #191919, #03B9B3); /* Использование градиента */
 }
 
+.line9 {
+  width: 661px;
+  height: 1px;
+  background: linear-gradient(to Left, #191919, #03B9B3); /* Использование градиента */
+  margin-left: 10px;
+}
+
+
 /* Вся Нерухомість */
 .mainTitle {
   width: 592px;

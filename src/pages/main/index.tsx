@@ -12,6 +12,10 @@ export default function HomePage() {
           Відео, слайдер районів, категорії нерухомості, про нас, форми
           зворотнього звʼязку
         </p>
+        <div className={styles.titleMain}>
+        <h2 className={styles.mainTitle}>РАЙОНИ КИЄВА</h2>
+        <div className={styles.line9}></div>
+        </div>
         <RealEstateCategories/>
         <div className={styles.mainP}>
           <div className={styles.titleMain}>
