@@ -1,0 +1,183 @@
+/* Partners and headers main container */
+.teamSection {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0px;
+  gap: 40px;
+  width: 1200px;
+  height: 885px;
+  box-sizing: border-box;
+  margin-left: 360px;
+  margin-bottom: 80px;
+}
+
+/* Titles container */
+.titles {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0px;
+  gap: 400px; /* Adjust this gap if needed for different screen sizes */
+  width: 1200px;
+  height: 56px;
+  box-sizing: border-box;
+}
+
+/* "Партнери" and "Керівники" titles */
+.title {
+  font-family: 'Raleway', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 48px;
+  line-height: 56px;
+  text-align: center;
+  font-variant: small-caps;
+  color: #EBEBEB;
+  margin: 0;
+}
+
+/* Container for all team member cards (Par&Man) */
+.teamMembersContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0px;
+  gap: 30px;
+  width: 1200px;
+  height: 789px;
+  box-sizing: border-box;
+}
+
+/* Row for team member cards */
+.row {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  padding: 0px;
+  gap: 58px;
+  width: 1200px;
+  box-sizing: border-box;
+}
+
+/* Team member card */
+.teamMemberCard {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 20px;
+  width: 257px;
+  height: auto; /* Changed from fixed height to auto for flexibility */
+  background: #0A0A0A;
+  border-radius: 6px;
+  box-sizing: border-box;
+}
+
+/* Card content */
+.cardContent {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0px;
+  gap: 10px;
+  width: 217px;
+  height: auto;
+}
+
+/* Photo and name container */
+.photoAndName {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-end;
+  padding: 5px;
+  width: 217px;
+  height: 232px;
+  position: relative;
+}
+
+/* Photo of team member */
+.memberPhoto {
+  position: absolute;
+  width: 217px;
+  height: 232px;
+  top: 0;
+  left: 0;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+/* Member name */
+.memberName {
+  font-family: 'Raleway', sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 23px;
+  text-align: right;
+  text-transform: uppercase;
+  color: #FFFFFF;
+  margin: 0;
+  position: relative;
+  z-index: 2;
+  /* Добавляем эти свойства для переноса слов */
+  white-space: pre-line;
+  word-wrap: break-word;
+}
+
+/* Member description container */
+.memberDesc {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0px;
+  gap: 20px;
+  width: 217px;
+  height: auto;
+}
+
+/* Position text container */
+.memberPosition {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  padding: 10px 0px 0px;
+  width: 217px;
+  border-top: 1px solid #303030;
+}
+
+/* Position text */
+.positionText {
+  font-family: 'Raleway', sans-serif;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 19px;
+  text-align: right;
+  text-transform: uppercase;
+  color: #03B9B3;
+  margin: 0;
+}
+
+/* Vectors (logo and arrow) container */
+.vectors {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: 0px;
+  width: 217px;
+  height: 20px;
+}
+
+.mySpaceLogo {
+  width: 52px;
+  height: 20px;
+}
+
+.arrowIcon {
+  width: 20px;
+  height: 20px;
+}
