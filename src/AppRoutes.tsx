@@ -14,6 +14,7 @@ import ContactsPage from "@/pages/contacts/index";
 import PolicyPage from "@/pages/policy/index";
 import TermsPage from "@/pages/terms/index";
 import AdminPage from "@/pages/admin/index";
+import EmployeePage from "./pages/worker";
 
 export default function AppRoutes() {
   return (
@@ -30,6 +31,7 @@ export default function AppRoutes() {
         <Route path="/terms" element={<TermsPage />} />
         <Route path="/admin" element={<AdminPage />} />
         <Route path="*" element={<Navigate to="/" />} />
+        <Route path="/worker" element={<EmployeePage />}/>
       </Routes>
     </Layout>
   );

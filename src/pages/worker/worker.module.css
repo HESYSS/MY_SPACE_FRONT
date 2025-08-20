@@ -1,0 +1,339 @@
+/* Новый контейнер для всего содержимого */
+.containerWithOval {
+  position: relative;
+  overflow: visible; /* Убеждаемся, что ничего не обрезается */
+  width: 1920px;
+}
+
+/* Container for the title and line */
+.titleArea {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0px;
+  gap: 30px;
+  width: 1200px;
+  height: 75px;
+  position: relative; /* Добавляем позиционирование */
+  z-index: 1; /* Чтобы был над овалом */
+  margin-left: 360px;
+  margin-top: 80px;
+  margin-bottom: 80px;
+}
+
+/* Line before the title */
+.titleLine {
+  height: 1px;
+  width: 659px;
+  background: linear-gradient(to right, #050505 0%, #03B9B3 100%);
+  flex-grow: 1;
+}
+
+/* "ЧИТАТИ БІЛЬШЕ" title */
+.readMoreTitle {
+  width: 511px;
+  height: 75px;
+  font-family: 'Raleway';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 64px;
+  line-height: 75px;
+  text-transform: uppercase;
+  color: #EBEBEB;
+  margin: 0;
+  flex-grow: 0;
+}
+
+.contactsBlockWrapper {
+  padding: 1px;
+  border-radius: 20px;
+  background: linear-gradient(90deg, #FFFFFF 0%, #000000 50%, #000000 100%);
+  margin: 40px auto;
+  width: 1200px;
+  height: 560px;
+  margin-bottom: 80px;
+  position: relative;
+  z-index: 2; /* Устанавливаем z-index, чтобы он был над овалом */
+  margin-left: 360px;
+}
+
+/* Original contacts block with modified styles */
+.contactsBlock {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 40px;
+  gap: 10px;
+  width: 100%;
+  height: 100%;
+  background: #0A0A0A;
+  border-radius: 20px;
+  flex-grow: 0;
+  z-index: 2;
+}
+
+.frame301 {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  padding: 0px;
+  gap: 40px;
+  width: 100%;
+  height: 480px;
+  flex-grow: 0;
+}
+
+/* Employee photo container */
+.photoContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0px;
+  gap: 10px;
+  width: 320px;
+  height: 480px;
+  flex-grow: 0;
+}
+
+/* Employee photo */
+.employeePhoto {
+  width: 320px;
+  height: 480px;
+  border-radius: 4px;
+  object-fit: cover;
+}
+
+/* Employee name */
+.employeeName {
+  width: 100%;
+  height: 42px;
+  font-family: 'Raleway';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 42px;
+  color: #FFFFFF;
+  text-align: left;
+  margin: 0;
+}
+
+/* Container for all info (name, role, experience, etc.) */
+.infoContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0px;
+  gap: 40px;
+  width: 760px;
+  height: 480px;
+  flex-grow: 1;
+}
+
+/* Name and role block */
+.nameAndRole {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 0px 0px;
+  gap: 20px;
+  width: 100%;
+  height: 130px;
+}
+
+/* Employee role */
+.employeeRole {
+  width: 100%;
+  height: 28px;
+  font-family: 'Raleway';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 28px;
+  color: #03B9B3;
+  text-align: left;
+  margin: 0;
+}
+
+/* Divider line */
+.line17 {
+  width: 100%;
+  height: 0px;
+  border-top: 1px solid #303030;
+}
+
+/* Container for experience, profile, and about me blocks */
+.additionalInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0px;
+  gap: 20px;
+  width: 100%;
+  height: auto;
+}
+
+/* Individual info section (experience, profile, about me) */
+.infoSection {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 0px;
+  gap: 10px;
+  width: 100%;
+}
+
+/* Title for info sections (Досвід, Профіль, Про себе) */
+.infoTitle {
+  width: 100%;
+  height: 28px;
+  font-family: 'Raleway';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 28px;
+  color: #EBEBEB;
+  margin: 0;
+  text-align: left;
+}
+
+/* Text for info sections */
+.infoText {
+  width: 100%;
+  height: auto;
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 17px;
+  color: #EBEBEB;
+  margin: 0;
+  text-align: left;
+}
+
+/* Coworking */
+.coworking {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0px;
+  gap: 267px;
+  width: 1200px;
+  height: 344px;
+  margin-left: 360px;
+  margin-bottom: 80px;
+  position: relative;
+  z-index: 1; /* Устанавливаем z-index, чтобы он был поверх овала */
+}
+
+/* Бажаєте отримати консультацію? */
+.callToAction {
+  width: 403px;
+  height: 168px;
+  font-family: 'Raleway', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 48px;
+  line-height: 56px;
+  text-transform: uppercase;
+  color: #EBEBEB;
+}
+
+/* Frame 89 */
+.frame89 {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 30px 36px;
+  gap: 10px;
+  width: 525px;
+  height: 226px;
+  background: #0A0A0A;
+  border-radius: 20px;
+  box-sizing: border-box;
+  z-index: 2;
+}
+
+/* Frame 88 */
+.frame88 {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  padding: 0px;
+  gap: 64px;
+  width: 453px;
+  height: 284px;
+}
+
+/* Общие стили для строк с опциями */
+.frame87,
+.frame85,
+.frame83 {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0px;
+  gap: 10px;
+  width: 453px;
+  height: 52px;
+  box-sizing: border-box;
+}
+
+/* Линии разделители */
+.line16,
+.line17,
+.line18 {
+  width: 453px;
+  height: 1px;
+  border-top: 1px solid #303030;
+  box-sizing: border-box;
+}
+
+/* Общие стили для фреймов с текстом и стрелкой */
+.frame86,
+.frame84,
+.frame82 {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0px;
+  width: 453px;
+  height: 42px;
+  box-sizing: border-box;
+}
+
+/* Текст опций */
+.optionText {
+  font-family: 'Raleway', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 28px;
+  line-height: 42px;
+  color: #EBEBEB;
+  margin: 0;
+  white-space: nowrap;
+  font-family: Raleway;
+  font-variant: small-caps;
+}
+
+/* Стили для изображений стрелок */
+.arrowIcon {
+  width: 26px;
+  height: 26px;
+}
+
+.glowingOval {
+  position: absolute;
+  width: 872px;
+  height: 411px;
+  right: 0px;
+  top: 500px;
+  background: rgba(3, 185, 179, 0.5);
+  filter: blur(250px);
+  z-index: 1;
+  left: 850px;
+}
