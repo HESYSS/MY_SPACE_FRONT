@@ -9,7 +9,7 @@
   width: 1200px;
   height: 479px;
   box-sizing: border-box;
-  margin-left: 360px;
+
   margin-bottom: 80px;
 }
 
@@ -26,23 +26,22 @@
 
 /* Line 8 */
 .line8 {
-  width: 808px;
+  width: 100%;
   height: 1px;
-  background: linear-gradient(to left, #191919, #03B9B3);
+  background: linear-gradient(to left, #191919, #03b9b3);
   transform: matrix(-1, 0, 0, 1, 0, 0);
 }
 
 /* Співпраця */
 .mainTitle {
-  width: 362px;
   height: 75px;
-  font-family: 'Raleway', sans-serif;
+  font-family: "Raleway", sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 64px;
   line-height: 75px;
   text-transform: uppercase;
-  color: #EBEBEB;
+  color: #ebebeb;
 }
 
 /* Coworking */
@@ -61,13 +60,13 @@
 .callToAction {
   width: 403px;
   height: 168px;
-  font-family: 'Raleway', sans-serif;
+  font-family: "Raleway", sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 48px;
   line-height: 56px;
   text-transform: uppercase;
-  color: #EBEBEB;
+  color: #ebebeb;
 }
 
 /* Frame 89 */
@@ -79,7 +78,7 @@
   gap: 10px;
   width: 525px;
   height: 226px;
-  background: #0A0A0A;
+  background: #0a0a0a;
   border-radius: 20px;
   box-sizing: border-box;
 }
@@ -136,12 +135,12 @@
 
 /* Текст опций */
 .optionText {
-  font-family: 'Raleway', sans-serif;
+  font-family: "Raleway", sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 28px;
   line-height: 42px;
-  color: #EBEBEB;
+  color: #ebebeb;
   margin: 0;
   white-space: nowrap;
   font-family: Raleway;

@@ -1,13 +1,30 @@
+.mainDiv {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 1200px;
+  height: auto;
+  background-color: transparent;
+  margin-left: 365px;
+}
 .mainP {
-    width: 1200;
-    height: 75;
-    gap: 30px;
-    opacity: 1;
-    margin-bottom: 80px;
+  display: flex;
+  position: relative; /* Добавляем позиционирование для родителя */
+  width: 1200;
+  height: 75; /* Возможно, потребуется увеличить высоту, чтобы вместить эффект */
+  gap: 30px;
+  opacity: 1;
+  margin-bottom: 80px;
+  background-color: transparent;
+  z-index: 1; /* Устанавливаем z-index ниже, чем у эффекта */
 }
 
 /* Title real estate */
 .titleMain {
+  display: flex;
+  /* The text container */
+  position: relative; /* Step 2: Add this */
+  z-index: 1; /* Step 2: Add this */
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -18,32 +35,40 @@
 
 /* Line 8 */
 .line8 {
-  width: 887px;
+  width: 100%;
   height: 1px;
-  background: linear-gradient(to Left, #191919, #03B9B3); /* Использование градиента */
+  background: linear-gradient(
+    to Left,
+    #191919,
+    #03b9b3
+  ); /* Использование градиента */
+  margin-left: 30px;
 }
 
 .line9 {
-  width: 661px;
+  width: 100%;
   height: 1px;
-  background: linear-gradient(to Left, #191919, #03B9B3); /* Использование градиента */
-  margin-left: 10px;
+  background: linear-gradient(
+    to Left,
+    #191919,
+    #03b9b3
+  ); /* Использование градиента */
+  margin-left: 30px;
 }
-
 
 /* Вся Нерухомість */
 .mainTitle {
-  width: 592px;
+  display: flex;
+  width: auto;
   height: 75px;
-  font-family: 'Raleway', sans-serif;
+  font-family: "Raleway", sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 64px;
   line-height: 75px;
   text-transform: uppercase;
-  color: #EBEBEB;
+  color: #ebebeb;
   white-space: nowrap;
-  margin-left: 400px;
 }
 
 /* Container for "About Us" section and the light effect */
@@ -63,7 +88,27 @@
   left: 50%;
   transform: translateX(-50%);
   top: 50%;
-  transform: translate(-50%, -50%); /* Центрирует элемент по горизонтали и вертикали */
+  transform: translate(
+    -50%,
+    -50%
+  ); /* Центрирует элемент по горизонтали и вертикали */
+  background: rgba(3, 185, 179, 0.5);
+  filter: blur(250px);
+  z-index: -1;
+}
+.lightEffect1 {
+  position: absolute;
+  width: 872px;
+  height: 411px;
+  margin-top: 300px;
+  /* Центрирование овала */
+  left: 50%;
+  transform: translateX(-50%);
+  top: 125%;
+  transform: translate(
+    -50%,
+    -50%
+  ); /* Центрирует элемент по горизонтали и вертикали */
   background: rgba(3, 185, 179, 0.5);
   filter: blur(250px);
   z-index: -1;

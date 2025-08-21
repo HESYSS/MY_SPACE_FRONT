@@ -47,24 +47,24 @@
 }
 
 .navLinks a {
-  font-family: 'Raleway', sans-serif;
+  font-family: "Raleway", sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 20px;
   line-height: 23px;
   text-transform: uppercase;
-  color: #EBEBEB;
+  color: #ebebeb;
   text-decoration: none;
   transition: color 0.3s;
 }
 
 .navLinks a:hover {
-  color: #03B9B3;
+  color: #03b9b3;
 }
 
 /* Active link */
 .navLinks .activeLink {
-  color: #03B9B3; /* Цвет для активной ссылки */
+  color: #03b9b3; /* Цвет для активной ссылки */
 }
 
 /* Right Nav */
@@ -87,13 +87,13 @@
   height: 47px;
   background: #051818;
   border-radius: 4px;
-  font-family: 'Raleway', sans-serif;
+  font-family: "Raleway", sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 20px;
   line-height: 23px;
   text-transform: uppercase;
-  color: #EBEBEB;
+  color: #ebebeb;
   text-decoration: none;
   white-space: nowrap;
 }
@@ -107,21 +107,21 @@
 }
 
 .langSelector {
-  font-family: 'Raleway', sans-serif;
+  font-family: "Raleway", sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 20px;
   line-height: 23px;
-  color: #FFFFFF;
+  color: #ffffff;
 }
 
 /* Phone number */
 .phone {
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
   font-style: normal;
   font-weight: 300;
   font-size: 20px;
   line-height: 24px;
-  color: #EBEBEB;
+  color: #ebebeb;
   text-decoration: none;
 }

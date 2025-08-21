@@ -1,0 +1,47 @@
+.arrows {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%); /* центр по X и Y */
+  width: 1200px;
+  height: 16.7px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 20;
+  pointer-events: none; /* контейнер не ловит клики */
+}
+
+.arrowBtn {
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: auto; /* кнопки кликабельны */
+}
+
+.leftArrow {
+  transform: rotate(180deg) translateX(-70px);
+}
+
+.rightArrow {
+  transform: translateX(-70px);
+}
+
+/* Анимация наводки — масштабируем SVG, чтобы не перетирать rotate/translate */
+.arrowBtn svg {
+  transition: transform 0.25s ease, filter 0.25s ease;
+}
+
+.arrowBtn:hover svg {
+  transform: scale(1.3);
+  filter: drop-shadow(0 0 6px #03b9b3);
+}
+
+/* Подсветка штриха */
+.arrowBtn:hover path {
+  stroke: #09d5cf;
+}

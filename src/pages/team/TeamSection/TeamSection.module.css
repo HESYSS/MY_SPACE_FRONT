@@ -8,7 +8,7 @@
   width: 1200px;
   height: 885px;
   box-sizing: border-box;
-  margin-left: 360px;
+
   margin-bottom: 80px;
 }
 
@@ -26,14 +26,14 @@
 
 /* "Партнери" and "Керівники" titles */
 .title {
-  font-family: 'Raleway', sans-serif;
+  font-family: "Raleway", sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 48px;
   line-height: 56px;
   text-align: center;
   font-variant: small-caps;
-  color: #EBEBEB;
+  color: #ebebeb;
   margin: 0;
 }
 
@@ -69,7 +69,7 @@
   padding: 20px;
   width: 257px;
   height: auto; /* Changed from fixed height to auto for flexibility */
-  background: #0A0A0A;
+  background: #0a0a0a;
   border-radius: 6px;
   box-sizing: border-box;
 }
@@ -110,14 +110,14 @@
 
 /* Member name */
 .memberName {
-  font-family: 'Raleway', sans-serif;
+  font-family: "Raleway", sans-serif;
   font-style: normal;
   font-weight: 700;
   font-size: 20px;
   line-height: 23px;
   text-align: right;
   text-transform: uppercase;
-  color: #FFFFFF;
+  color: #ffffff;
   margin: 0;
   position: relative;
   z-index: 2;
@@ -150,14 +150,14 @@
 
 /* Position text */
 .positionText {
-  font-family: 'Raleway', sans-serif;
+  font-family: "Raleway", sans-serif;
   font-style: normal;
   font-weight: 600;
   font-size: 16px;
   line-height: 19px;
   text-align: right;
   text-transform: uppercase;
-  color: #03B9B3;
+  color: #03b9b3;
   margin: 0;
 }
 

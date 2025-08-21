@@ -10,8 +10,6 @@
   height: 674px;
   box-sizing: border-box;
   margin-top: 80px;
-  margin-left: 360px;
-  margin-right: 360px;
   margin-bottom: 80px;
 }
 
@@ -28,22 +26,26 @@
 
 /* Line 8 */
 .line8 {
-  width: 579px;
+  width: 100%;
   height: 1px;
-  background: linear-gradient(to right, #191919, #03B9B3); /* Использование градиента */
+  background: linear-gradient(
+    to right,
+    #191919,
+    #03b9b3
+  ); /* Использование градиента */
 }
 
 /* Вся Нерухомість */
 .mainTitle {
-  width: 592px;
+  width: 100%;
   height: 75px;
-  font-family: 'Raleway', sans-serif;
+  font-family: "Raleway", sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 64px;
   line-height: 75px;
   text-transform: uppercase;
-  color: #EBEBEB;
+  color: #ebebeb;
   white-space: nowrap;
 }
 
@@ -51,7 +53,6 @@
 .columnsRealEstate {
   display: flex;
   flex-direction: row;
-  justify-content: center;
   align-items: center;
   padding: 0px;
   gap: 20px;
@@ -79,9 +80,9 @@
   align-items: center;
   padding: 170px 20px 20px;
   gap: 10px;
-  width: 305px;
+  width: 285px;
   height: 304px;
-  background: #0A0A0A;
+  background: #0a0a0a;
   border-radius: 10px;
 }
 
@@ -89,13 +90,13 @@
 .textBlock {
   width: 245px;
   height: 114px;
-  font-family: 'Raleway', sans-serif;
+  font-family: "Raleway", sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 32px;
   line-height: 38px;
   font-variant: small-caps;
-  color: #EBEBEB;
+  color: #ebebeb;
 }
 
 /* Frame 49 (Houses) */
@@ -105,9 +106,9 @@
   align-items: flex-end;
   padding: 20px;
   gap: 90px;
-  width: 265px;
+  width: 245px;
   height: 214px;
-  background-image: url('../../../../public/icons/TownHouse.png');
+  background-image: url("../../../../public/icons/TownHouse.png");
   background-size: cover;
   background-position: center;
   border-radius: 10px;
@@ -124,7 +125,7 @@
   gap: 10px;
   width: 46px;
   height: 46px;
-  background: #EBEBEB;
+  background: #ebebeb;
   border-radius: 100px;
 }
 
@@ -132,20 +133,20 @@
 .vector4 {
   width: 16px;
   height: 16px;
-  border: 2px solid #03B9B3; /* Цвет стрелки, возможно, потребуется SVG */
+  border: 2px solid #03b9b3; /* Цвет стрелки, возможно, потребуется SVG */
 }
 
 /* Category title styles */
 .categoryTitle {
   width: 245px;
   height: 38px;
-  font-family: 'Raleway', sans-serif;
+  font-family: "Raleway", sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 32px;
   line-height: 38px;
   text-transform: capitalize;
-  color: #EBEBEB;
+  color: #ebebeb;
   margin: 0;
 }
 
@@ -169,11 +170,10 @@
   gap: 244px;
   width: 285px;
   height: 406px;
-  background-image: url('../../../../public/icons/Commercial.png');
+  background-image: url("../../../../public/icons/Commercial.png");
   background-size: cover;
   background-position: center;
   border-radius: 10px;
-  margin-left: 15px;
 }
 
 /* column3 */
@@ -194,9 +194,10 @@
   justify-content: space-between;
   align-items: flex-end;
   padding: 20px;
-  width: 285px;
+  width: 245px;
+
   height: 304px;
-  background-image: url('../../../../public/icons/apartment.png');
+  background-image: url("../../../../public/icons/apartment.png");
   background-size: cover;
   background-position: center;
   border-radius: 10px;
@@ -210,9 +211,9 @@
   align-items: flex-end;
   padding: 20px;
   gap: 10px;
-  width: 320px;
+  width: 285px;
   height: 215px;
-  background: #0A0A0A;
+  background: #0a0a0a;
   border-radius: 10px;
 }
 
@@ -223,7 +224,7 @@
   align-items: flex-start;
   padding: 84px 0px 0px;
   gap: 10px;
-  width: 285px;
+  width: 245px;
   height: 539px;
 }
 
@@ -234,11 +235,10 @@
   align-items: flex-end;
   padding: 20px;
   gap: 244px;
-  width: 285px;
+  width: 245px;
   height: 406px;
-  background-image: url('../../../../public/icons/LandPlots.png');
+  background-image: url("../../../../public/icons/LandPlots.png");
   background-size: cover;
   background-position: center;
   border-radius: 10px;
-  margin-left: 45px;
 }

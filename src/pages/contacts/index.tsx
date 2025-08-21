@@ -1,12 +1,12 @@
 import React from "react";
-import Image from 'next/image';
-import styles from './contacts.module.css';
+import Image from "next/image";
+import styles from "./contacts.module.css";
 
 // Импорт изображений, если они нужны для контактов
-import youtubeIcon from '../../../public/icons/youtube.svg';
-import instagramIcon from '../../../public/icons/instagram.svg';
-import arrowRight from '../../../public/icons/line.svg';
-import star from '../../../public/icons/star.svg';
+import youtubeIcon from "../../../public/icons/youtube.svg";
+import instagramIcon from "../../../public/icons/instagram.svg";
+import arrowRight from "../../../public/icons/line.svg";
+import star from "../../../public/icons/star.svg";
 
 const ContactsPage: React.FC = () => {
   return (
@@ -28,17 +28,31 @@ const ContactsPage: React.FC = () => {
               {/* Соціальні мережі */}
               <div className={styles.contactItem}>
                 <div className={styles.contactIconContainer}>
-                  <Image src={star} alt="Star icon" className={styles.starIcon} />
+                  <Image
+                    src={star}
+                    alt="Star icon"
+                    className={styles.starIcon}
+                  />
                 </div>
                 <div className={styles.contactDetails}>
                   <h4 className={styles.contactTitle}>Соціальні мережі</h4>
                   <div className={styles.socialLinks}>
                     <div className={styles.socialLink}>
-                      <Image src={youtubeIcon} alt="YouTube" width={22} height={16} />
+                      <Image
+                        src={youtubeIcon}
+                        alt="YouTube"
+                        width={22}
+                        height={16}
+                      />
                       <p className={styles.socialText}>YouTube</p>
                     </div>
                     <div className={styles.socialLink}>
-                      <Image src={instagramIcon} alt="Instagram" width={22} height={22} />
+                      <Image
+                        src={instagramIcon}
+                        alt="Instagram"
+                        width={22}
+                        height={22}
+                      />
                       <p className={styles.socialText}>Instagram</p>
                     </div>
                   </div>
@@ -48,7 +62,11 @@ const ContactsPage: React.FC = () => {
               {/* Електронна пошта */}
               <div className={styles.contactItem}>
                 <div className={styles.contactIconContainer}>
-                  <Image src={star} alt="Star icon" className={styles.starIcon} />
+                  <Image
+                    src={star}
+                    alt="Star icon"
+                    className={styles.starIcon}
+                  />
                 </div>
                 <div className={styles.contactDetails}>
                   <h4 className={styles.contactTitle}>Електронна пошта</h4>
@@ -59,7 +77,11 @@ const ContactsPage: React.FC = () => {
               {/* Номер телефону */}
               <div className={styles.contactItem}>
                 <div className={styles.contactIconContainer}>
-                  <Image src={star} alt="Star icon" className={styles.starIcon} />
+                  <Image
+                    src={star}
+                    alt="Star icon"
+                    className={styles.starIcon}
+                  />
                 </div>
                 <div className={styles.contactDetails}>
                   <h4 className={styles.contactTitle}>Номер телефону</h4>
@@ -70,11 +92,17 @@ const ContactsPage: React.FC = () => {
               {/* Адреса */}
               <div className={styles.contactItem}>
                 <div className={styles.contactIconContainer}>
-                  <Image src={star} alt="Star icon" className={styles.starIcon} />
+                  <Image
+                    src={star}
+                    alt="Star icon"
+                    className={styles.starIcon}
+                  />
                 </div>
                 <div className={styles.contactDetails}>
                   <h4 className={styles.contactTitle}>Адреса</h4>
-                  <p className={styles.contactInfo}>вул. В’ячеслава Липинського 8, Київ, 01030, Україна</p>
+                  <p className={styles.contactInfo}>
+                    вул. В’ячеслава Липинського 8, Київ, 01030, Україна
+                  </p>
                 </div>
               </div>
             </div>
@@ -84,7 +112,12 @@ const ContactsPage: React.FC = () => {
               <div className={styles.contactTextSection}>
                 <h4 className={styles.contactTitle}>Зв’язок</h4>
                 <p className={styles.contactInfoSmall}>
-                  Це допомагає намітити візуальні елементи в документ або презентацію, наприклад, друкарня, шрифт, або макет. Lorem Ipsum в основному частиною латинського тексту за класичною автор і філософа Цицерона. Це слова і букви були змінені додаванням або видаленням, так навмисно роблять його зміст безглуздо, це не є справжньою.
+                  Це допомагає намітити візуальні елементи в документ або
+                  презентацію, наприклад, друкарня, шрифт, або макет. Lorem
+                  Ipsum в основному частиною латинського тексту за класичною
+                  автор і філософа Цицерона. Це слова і букви були змінені
+                  додаванням або видаленням, так навмисно роблять його зміст
+                  безглуздо, це не є справжньою.
                 </p>
               </div>
               <div className={styles.workHours}>
@@ -112,7 +145,11 @@ const ContactsPage: React.FC = () => {
                 <div className={styles.line16}></div>
                 <div className={styles.frame86}>
                   <p className={styles.optionText}>Продавцям/Орендодавцям</p>
-                  <Image src={arrowRight} alt="Стрілка вправо" className={styles.arrowIcon} />
+                  <Image
+                    src={arrowRight}
+                    alt="Стрілка вправо"
+                    className={styles.arrowIcon}
+                  />
                 </div>
               </div>
             </div>
@@ -121,7 +158,11 @@ const ContactsPage: React.FC = () => {
                 <div className={styles.line17}></div>
                 <div className={styles.frame84}>
                   <p className={styles.optionText}>Покупцям/Орендарям</p>
-                  <Image src={arrowRight} alt="Стрілка вправо" className={styles.arrowIcon} />
+                  <Image
+                    src={arrowRight}
+                    alt="Стрілка вправо"
+                    className={styles.arrowIcon}
+                  />
                 </div>
               </div>
             </div>
@@ -131,5 +172,4 @@ const ContactsPage: React.FC = () => {
     </div>
   );
 };
-
 export default ContactsPage;
