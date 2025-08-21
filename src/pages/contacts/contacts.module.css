@@ -1,0 +1,383 @@
+/* Новый контейнер для всего содержимого */
+.containerWithOval {
+  position: relative;
+  overflow: hidden; /* Убеждаемся, что ничего не обрезается */
+  background-color: #0A0A0A; /* Добавил для лучшего отображения */
+}
+
+/* Container for the title and line */
+.titleArea {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0px;
+  gap: 30px;
+  width: 1200px;
+  height: 75px;
+  position: relative;
+  z-index: 2;
+  margin-left: 360px;
+  margin-top: 80px;
+  margin-bottom: 80px;
+}
+
+/* Line before the title */
+.titleLine {
+  height: 1px;
+  width: 830px;
+  background: linear-gradient(to right, #050505 0%, #03B9B3 100%);
+  flex-grow: 1;
+  margin-left: 250px;
+}
+
+/* "КОНТАКТИ" title */
+.readMoreTitle {
+  width: 511px;
+  height: 75px;
+  font-family: 'Raleway';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 64px;
+  line-height: 75px;
+  text-transform: uppercase;
+  color: #EBEBEB;
+  margin: 0;
+  flex-grow: 0;
+}
+
+/* Contacts block wrapper */
+.contactsBlockWrapper {
+  padding: 1px;
+  border-radius: 20px;
+  background: linear-gradient(240deg, #FFFFFF 0%, #000000 50%, #000000 100%);
+  margin: 40px auto;
+  width: 1200px;
+  height: 342px;
+  margin-bottom: 80px;
+  position: relative;
+  z-index: 2;
+  margin-left: 360px;
+}
+
+/* Contacts block */
+.contactsBlock {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 40px;
+  gap: 10px;
+  width: 100%;
+  height: 100%;
+  background: #0A0A0A;
+  border-radius: 20px;
+  flex-grow: 0;
+  z-index: 2;
+}
+
+/* Main info container */
+.info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0px;
+  gap: 40px;
+  width: 1120px;
+  height: 262px;
+  flex: none;
+  order: 0;
+  align-self: stretch;
+  flex-grow: 0;
+}
+
+/* Contacts text section */
+.contactsText {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  padding: 0px;
+  gap: 20px;
+  width: 1120px;
+  height: 129px;
+  flex: none;
+  order: 0;
+  align-self: stretch;
+  flex-grow: 0;
+}
+
+/* Общие стили для каждого контактного блока */
+.contactItem {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  padding: 0px;
+  gap: 20px;
+  flex-grow: 1;
+}
+
+/* Контейнер для точки */
+.contactIconContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 6px 0px;
+  gap: 20px;
+  width: 16px;
+  height: 28px;
+}
+
+/* Точка */
+.ellipse {
+  width: 16px;
+  height: 16px;
+  background: #03B9B3;
+  border-radius: 50%;
+}
+
+/* Контейнер для текста контактов */
+.contactDetails {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0px;
+  gap: 20px;
+  flex-grow: 1;
+}
+
+/* Заголовки */
+.contactTitle {
+  font-family: 'Raleway';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 28px;
+  color: #EBEBEB;
+  margin: 0;
+  white-space: nowrap;
+}
+
+/* Текст контактов */
+.contactInfo {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 17px;
+  color: #EBEBEB;
+  margin: 0;
+}
+
+/* Social media links */
+.socialLinks {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0px;
+  gap: 10px;
+}
+
+.socialLink {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 5px 0px;
+  gap: 10px;
+}
+
+.socialText {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 17px;
+  color: #FFFFFF;
+  margin: 0;
+}
+
+/* Нижняя часть (Зв’язок и Години роботи) */
+.bottomRow {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  padding: 0px;
+  gap: 64px;
+  width: 100%;
+}
+
+.contactTextSection {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0px;
+  gap: 13px;
+  width: 791px;
+}
+
+.contactInfoSmall {
+  font-family: 'Raleway';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 11px;
+  line-height: 13px;
+  font-variant: all-small-caps;
+  color: #565656;
+  margin: 0;
+}
+
+.workHours {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0px 0px 0px 20px;
+  gap: 10px;
+  width: 265px;
+}
+
+.line {
+  width: 245px;
+  height: 0px;
+  border-top: 1px solid #303030;
+}
+
+.hoursDetails {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px 0;
+}
+
+.workDay, .workTime {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 17px;
+  color: #565656;
+  margin: 0;
+  width: 122.5px;
+}
+
+.workTime{
+    margin-top: -20px;
+}
+
+/* Coworking */
+.coworking {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0px;
+  gap: 267px;
+  width: 1200px;
+  height: 344px;
+  margin-left: 360px;
+  margin-bottom: 80px;
+  position: relative;
+  z-index: 1;
+}
+
+/* Бажаєте отримати консультацію? */
+.callToAction {
+  width: 403px;
+  height: 168px;
+  font-family: 'Raleway', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 48px;
+  line-height: 56px;
+  text-transform: uppercase;
+  color: #EBEBEB;
+}
+
+/* Frame 89 */
+.frame89 {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 30px 36px;
+  gap: 10px;
+  width: 525px;
+  height: 226px;
+  background: #0A0A0A;
+  border-radius: 20px;
+  box-sizing: border-box;
+  z-index: 2;
+}
+
+/* Frame 88 */
+.frame88 {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  padding: 0px;
+  gap: 64px;
+  width: 453px;
+  height: 284px;
+}
+
+/* Общие стили для строк с опциями */
+.frame87,
+.frame85 {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0px;
+  gap: 10px;
+  width: 453px;
+  height: 52px;
+  box-sizing: border-box;
+}
+
+/* Линии разделители */
+.line16,
+.line17 {
+  width: 453px;
+  height: 1px;
+  border-top: 1px solid #303030;
+  box-sizing: border-box;
+}
+
+/* Общие стили для фреймов с текстом и стрелкой */
+.frame86,
+.frame84 {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0px;
+  width: 453px;
+  height: 42px;
+  box-sizing: border-box;
+}
+
+/* Текст опций */
+.optionText {
+  font-family: 'Raleway', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 28px;
+  line-height: 42px;
+  color: #EBEBEB;
+  margin: 0;
+  white-space: nowrap;
+  font-variant: small-caps;
+}
+
+/* Стили для изображений стрелок */
+.arrowIcon {
+  width: 26px;
+  height: 26px;
+}
+
+/* Glowing Oval */
+.glowingOval {
+  position: absolute;
+  width: 872px;
+  height: 411px;
+  right: 0px;
+  top: 400px;
+  background: rgba(3, 185, 179, 0.5);
+  filter: blur(250px);
+  z-index: 1;
+  left: 850px;
+}
