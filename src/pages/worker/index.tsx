@@ -1,23 +1,24 @@
 import React from "react";
 import Image from "next/image";
 import styles from "./worker.module.css";
+import { useTranslation } from "react-i18next"; // Импортируем хук
 
 // Импорт изображения
 import vitaliyPenc from "../../../public/icons/vitaliyPenc.png";
 import arrowRight from "../../../public/icons/line.svg";
 
 const EmployeePage = () => {
+  const { t } = useTranslation("common");
+
   return (
     <div className={styles.mainDiv}>
       <div className={styles.containerWithOval}>
         {" "}
-        {/* Новый контейнер, который будет держать овал */}
-        {/* Овал со свечением, который теперь позиционируется относительно containerWithOval */}
         <div className={styles.glowingOval}></div>
         {/* Title block */}
         <div className={styles.titleArea}>
           <div className={styles.titleLine}></div>
-          <h2 className={styles.readMoreTitle}>ЧИТАТИ БІЛЬШЕ</h2>
+          <h2 className={styles.readMoreTitle}>{t('readMoreTitle')}</h2>
         </div>
         {/* Employee information block wrapped in a new container */}
         <div className={styles.contactsBlockWrapper}>
@@ -56,8 +57,8 @@ const EmployeePage = () => {
                   <div className={styles.infoSection}>
                     <h4 className={styles.infoTitle}>Про себе</h4>
                     <p className={styles.infoText}>
-                      Це допомагає намітити візуальні елементи в документ або
-                      презентацію, наприклад, друкарня, шрифт, або макет.
+                      Это помогает наметить визуальные элементы в документ или
+                      презентацию, например, типография, шрифт, или макет.
                     </p>
                   </div>
                 </div>
@@ -66,19 +67,17 @@ const EmployeePage = () => {
           </div>
         </div>
         <div className={styles.coworking}>
-          <h3 className={styles.callToAction}>
-            Бажаєте отримати консультацію?
-          </h3>
+          <h3 className={styles.callToAction}>{t('consultationCallToAction')}</h3>
           <div className={styles.frame89}>
             <div className={styles.frame88}>
               <div className={styles.optionRow}>
                 <div className={styles.frame87}>
                   <div className={styles.line16}></div>
                   <div className={styles.frame86}>
-                    <p className={styles.optionText}>Продавцям/Орендодавцям</p>
+                    <p className={styles.optionText}>{t('forSellersLandlords')}</p>
                     <img
                       src={arrowRight.src}
-                      alt="Стрілка вправо"
+                      alt={t('arrowRightAlt')}
                       className={styles.arrowIcon}
                     />
                   </div>
@@ -88,10 +87,10 @@ const EmployeePage = () => {
                 <div className={styles.frame85}>
                   <div className={styles.line17}></div>
                   <div className={styles.frame84}>
-                    <p className={styles.optionText}>Покупцям/Орендарям</p>
+                    <p className={styles.optionText}>{t('forBuyersTenants')}</p>
                     <img
                       src={arrowRight.src}
-                      alt="Стрілка вправо"
+                      alt={t('arrowRightAlt')}
                       className={styles.arrowIcon}
                     />
                   </div>

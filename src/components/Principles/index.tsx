@@ -1,59 +1,64 @@
+// components/principles/principles.jsx
+
 import styles from './principles.module.css';
 import starIcon from '../../../public/icons/star.svg';
+import { useTranslation } from 'react-i18next'; // Импортируем хук
 
 export default function OurValues() {
+  const { t } = useTranslation('common'); // Используем файл common.json
+
   return (
     <section className={styles.advantages}>
       <div className={styles.frame142}>
         <div className={styles.info}>
           <div className={styles.frame63}>
-            <span className={styles.pretitle}>ДОСЛІДІТЬ ПЕРЕВАГИ</span>
-            <h2 className={styles.title}>НАШІ ЦІННОСТІ</h2>
+            <span className={styles.pretitle}>{t('principlesPretitle')}</span>
+            <h2 className={styles.title}>{t('principlesTitle')}</h2>
           </div>
           <div className={styles.aboutUsExamples}>
             <div className={styles.frame394}>
               <div className={styles.frame60}>
-                <img src={starIcon.src} alt="Зірочка" className={styles.starIcon}/>
-                <h3 className={styles.benefitTitle}>Широкий вибір</h3>
+                <img src={starIcon.src} alt={t('starAlt')} className={styles.starIcon}/>
+                <h3 className={styles.benefitTitle}>{t('broadSelectionTitle')}</h3>
                 <p className={styles.benefitText}>
-                  Ми надаємо доступ до найширшого асортименту нерухомості — від квартир до комерційних приміщень для будь-якої потреби.
+                  {t('broadSelectionText')}
                 </p>
               </div>
               <div className={styles.frame59}>
-                <img src={starIcon.src} alt="Зірочка" className={styles.starIcon}/>
-                <h3 className={styles.benefitTitle}>Довіра клієнтів</h3>
+                <img src={starIcon.src} alt={t('starAlt')} className={styles.starIcon}/>
+                <h3 className={styles.benefitTitle}>{t('customerTrustTitle')}</h3>
                 <p className={styles.benefitText}>
-                  Наші клієнти обирають нас знову і знову — ми створюємо довірчі відносини, на яких базується успіх.
+                  {t('customerTrustText')}
                 </p>
               </div>
               <div className={styles.frame62}>
-                <img src={starIcon.src} alt="Зірочка" className={styles.starIcon}/>                
-                <h3 className={styles.benefitTitle}>Надійність</h3>
+                <img src={starIcon.src} alt={t('starAlt')} className={styles.starIcon}/>
+                <h3 className={styles.benefitTitle}>{t('reliabilityTitle')}</h3>
                 <p className={styles.benefitText}>
-                  Ми працюємо тільки з перевіреними об'єктами та партнерами. З нами ви можете бути впевненими у своєму виборі.
+                  {t('reliabilityText')}
                 </p>
               </div>
             </div>
             <div className={styles.frame395}>
               <div className={styles.frame61}>
-                <img src={starIcon.src} alt="Зірочка" className={styles.starIcon}/>
-                <h3 className={styles.benefitTitle}>Простота користування</h3>
+                <img src={starIcon.src} alt={t('starAlt')} className={styles.starIcon}/>
+                <h3 className={styles.benefitTitle}>{t('easeOfUseTitle')}</h3>
                 <p className={styles.benefitText}>
-                  Ми зробили пошук нерухомості простим і швидким — знайдіть найкращі варіанти в кілька кліків.
+                  {t('easeOfUseText')}
                 </p>
               </div>
               <div className={styles.frame55}>
-                <img src={starIcon.src} alt="Зірочка" className={styles.starIcon}/>                
-                <h3 className={styles.benefitTitle}>Індивідуальний підхід</h3>
+                <img src={starIcon.src} alt={t('starAlt')} className={styles.starIcon}/>
+                <h3 className={styles.benefitTitle}>{t('individualApproachTitle')}</h3>
                 <p className={styles.benefitText}>
-                  Наша команда завжди готова дати консультацію та допомогти на кожному етапі.
+                  {t('individualApproachText')}
                 </p>
               </div>
               <div className={styles.frame57}>
-                <img src={starIcon.src} alt="Зірочка" className={styles.starIcon}/>
-                <h3 className={styles.benefitTitle}>Безпечні угоди</h3>
+                <img src={starIcon.src} alt={t('starAlt')} className={styles.starIcon}/>
+                <h3 className={styles.benefitTitle}>{t('secureDealsTitle')}</h3>
                 <p className={styles.benefitText}>
-                  Ми гарантуємо, що кожна угода буде на 100% безпечною та прозорою.
+                  {t('secureDealsText')}
                 </p>
               </div>
             </div>

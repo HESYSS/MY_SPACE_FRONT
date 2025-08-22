@@ -1,0 +1,118 @@
+/* src/pages/privacy-policy/privacy-policy.module.css */
+
+.privacyPolicyContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 1920px;
+  height: auto;
+  background-color: transparent;
+  margin: 0 auto;
+}
+
+.glowingOval {
+  position: absolute;
+  width: 872px;
+  height: 411px;
+  right: 0px;
+  top: 500px; /* Позиционирование может потребовать корректировки */
+  background: rgba(3, 185, 179, 0.5);
+  filter: blur(250px);
+  z-index: 1;
+  left: 850px;
+}
+
+.content {
+  max-width: 1200px;
+  width: 100%;
+  margin-left: 360px;
+  margin-right: 360px;
+  position: relative;
+  z-index: 2; /* Убедимся, что контент поверх овала */
+  color: #ebebeb;
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0px;
+  gap: 30px;
+  width: 100%;
+  height: 75px;
+  position: relative;
+  z-index: 1;
+  margin-top: 80px;
+  margin-bottom: 80px;
+}
+
+.line {
+  height: 1px;
+  width: 100%;
+  background: linear-gradient(to right, #050505 0%, #03b9b3 100%);
+  flex-grow: 1;
+}
+
+.title {
+  width: 100%;
+  height: 75px;
+  font-family: "Raleway", sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 64px;
+  line-height: 75px;
+  text-transform: uppercase;
+  color: #ebebeb;
+  margin: 0;
+  flex-grow: 0;
+  white-space: nowrap;
+}
+
+.section {
+  margin-bottom: 40px;
+}
+
+.sectionTitle {
+  font-family: "Raleway", sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 28px;
+  line-height: 28px;
+  color: #ebebeb;
+  margin-bottom: 20px;
+}
+
+.text {
+  font-family: "Inter", sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.6;
+  color: #ebebeb;
+  margin-bottom: 15px;
+}
+
+.list {
+  list-style-type: disc;
+  padding-left: 20px;
+  margin-top: 10px;
+}
+
+.list li {
+  font-family: "Inter", sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.6;
+  color: #ebebeb;
+  margin-bottom: 5px;
+}
+
+.link {
+  color: #ebebeb;
+  text-decoration: underline;
+}
+
+.link:hover {
+  text-decoration: none;
+}

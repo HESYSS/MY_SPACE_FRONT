@@ -4,8 +4,10 @@ import styles from "./main.module.css";
 import CoworkingSection from "./CoworkingSection";
 import ImageCarousel from "./ImageCarousel";
 import VideoSearchOverlay from "./VideoSearchOverlay";
+import { useTranslation } from "react-i18next"; // Импортируем хук
 
 export default function HomePage() {
+  const { t } = useTranslation('common');
   const images = [
     "/images/house1.jpg",
     "/images/house2.jpg",
@@ -18,7 +20,7 @@ export default function HomePage() {
       <div className={styles.mainP}>
         <div className={styles.lightEffect1}></div>
         <div className={styles.titleMain}>
-          <h2 className={styles.mainTitle}>РАЙОНИ КИЄВА</h2>
+          <h2 className={styles.mainTitle}>{t('kyivDistrictsTitle')}</h2>
           <div className={styles.line9}></div>
         </div>
       </div>
@@ -28,7 +30,7 @@ export default function HomePage() {
       <RealEstateCategories />
       <div className={styles.mainP}>
         <div className={styles.titleMain}>
-          <h2 className={styles.mainTitle}>ПРО НАС</h2>
+          <h2 className={styles.mainTitle}>{t('aboutUsTitle')}</h2>
           <div className={styles.line8}></div>
         </div>
       </div>

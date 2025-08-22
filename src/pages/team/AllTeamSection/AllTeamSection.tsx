@@ -1,6 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
 import styles from './AllTeamSection.module.css';
+import { useTranslation } from 'react-i18next'; // Импортируем хук
 
 // Импортируем изображения
 import vitaliyPenc from '../../../../public/icons/vitaliyPenc.png'
@@ -14,9 +15,11 @@ const teamMembers = [
 ];
 
 const AllTeamSection = () => {
+  const { t } = useTranslation('common');
+
   return (
     <div className={styles.allTeamContainer}>
-      <h2 className={styles.sectionTitle}>Вся команда</h2>
+      <h2 className={styles.sectionTitle}>{t('allTeamTitle')}</h2>
       <div className={styles.carouselContainer}>
         <div className={styles.teamRow}>
           {teamMembers.map((member, index) => (

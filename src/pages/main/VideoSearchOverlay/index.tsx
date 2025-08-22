@@ -1,7 +1,9 @@
 import React, { useRef } from "react";
 import styles from "./style.module.css";
+import { useTranslation } from "react-i18next";
 
 const VideoSearchOverlay = () => {
+  const { t } = useTranslation("common"); // Используем файл common.json
   const videoRef = useRef<HTMLVideoElement>(null);
 
   return (
@@ -13,12 +15,12 @@ const VideoSearchOverlay = () => {
             src="https://www.myspace.in.ua/wp-content/uploads/2025/05/kyivGIFFlagAtStart.mp4"
             type="video/mp4"
           />
-          Ваш браузер не поддерживает видео тег.
+          {t('videoNotSupported')}
         </video>
 
         {/* Заголовок */}
         <div className={styles.heroTitleContainer}>
-          <h1 className={styles.heroTitle}>Мрії мають свою адресу</h1>
+          <h1 className={styles.heroTitle}>{t('heroTitle')}</h1>
         </div>
       </div>
 
@@ -27,36 +29,36 @@ const VideoSearchOverlay = () => {
         <div className={styles.searchForm}>
           {/* Тип послуги */}
           <div className={styles.dropdown}>
-            <label htmlFor="serviceType">ТИП ПОСЛУГИ</label>
+            <label htmlFor="serviceType">{t('serviceTypeLabel')}</label>
             <select id="serviceType">
-              <option>Оренда</option>
-              <option>Продаж</option>
-              <option>Подобово</option>
+              <option>{t('serviceRent')}</option>
+              <option>{t('serviceSale')}</option>
+              <option>{t('serviceDaily')}</option>
             </select>
           </div>
 
           {/* Категорія */}
           <div className={styles.dropdown}>
-            <label htmlFor="category">КАТЕГОРІЯ</label>
+            <label htmlFor="category">{t('categoryLabel')}</label>
             <select id="category">
-              <option>Житлова нерухомість</option>
-              <option>Комерційна нерухомість</option>
+              <option>{t('categoryResidential')}</option>
+              <option>{t('categoryCommercial')}</option>
             </select>
           </div>
 
           {/* Область */}
           <div className={styles.dropdown}>
-            <label htmlFor="region">ОБЛАСТЬ</label>
+            <label htmlFor="region">{t('regionLabel')}</label>
             <select id="region">
-              <option>Київська</option>
-              <option>Одеська</option>
-              <option>Львівська</option>
+              <option>{t('regionKyiv')}</option>
+              <option>{t('regionOdesa')}</option>
+              <option>{t('regionLviv')}</option>
             </select>
           </div>
 
           {/* Кнопка поиска */}
           <div className={styles.searchBtnWrapper}>
-            <button className={styles.searchButton}>ПОШУК</button>
+            <button className={styles.searchButton}>{t('searchButton')}</button>
           </div>
         </div>
       </div>

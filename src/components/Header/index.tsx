@@ -1,32 +1,38 @@
-import { Link } from "react-router-dom";
-import styles from "./styles.module.css";
+// components/Header/Header.jsx
+
+import Link from 'next/link';
+import { useTranslation } from 'react-i18next'; // Используем react-i18next
+import styles from './styles.module.css';
 import mySpaceLogo from "../../../public/icons/MySpace_LOGO_1[SVG].png";
 import ConsultationModal from "./ConsultationModal/ConsultationModal";
 import { useState } from "react";
+import LanguageSwitcher from '../LanguageSwitcher/LanguageSwitcher';
 
 export default function Header() {
+  const { t } = useTranslation('common'); // 'common' - это имя файла перевода (common.json)
   const [isModalOpen, setModalOpen] = useState(false);
+
   return (
     <header className={styles.header}>
       <nav className={styles.navbar}>
         <div className={styles.leftNav}>
           <div className={styles.logo}>
-            <Link to="/">
+            <Link href="/">
               <img src={mySpaceLogo.src} alt="MySpace Logo" />
             </Link>
           </div>
           <ul className={styles.navLinks}>
             <li>
-              <Link to="/sale">{`ПРОДАЖ`}</Link>
+              <Link href="/sale">{t('sale')}</Link>
             </li>
             <li>
-              <Link to="/rent" className={styles.activeLink}>{`ОРЕНДА`}</Link>
+              <Link href="/rent" className={styles.activeLink}>{t('rent')}</Link>
             </li>
             <li>
-              <Link to="/team">{`НАША КОМАНДА`}</Link>
+              <Link href="/team">{t('ourTeam')}</Link>
             </li>
             <li>
-              <Link to="/contacts">{`КОНТАКТИ`}</Link>
+              <Link href="/contacts">{t('contacts')}</Link>
             </li>
           </ul>
         </div>
@@ -34,11 +40,13 @@ export default function Header() {
           <p
             className={styles.ctaButton}
             onClick={() => setModalOpen(true)}
-          >{`КОНСУЛЬТАЦІЯ`}</p>
+          >
+            {t('consultation')}
+          </p>
           <div className={styles.contactInfo}>
-            <span className={styles.langSelector}>{`UA`}</span>
+            <LanguageSwitcher />
             <a href="tel:+3801234567" className={styles.phone}>
-              {`+380 123 4567`}
+              {t('phoneNumber')}
             </a>
           </div>
         </div>

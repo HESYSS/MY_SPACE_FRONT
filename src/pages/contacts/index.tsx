@@ -1,6 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import styles from "./contacts.module.css";
+import { useTranslation } from "react-i18next";
 
 // Импорт изображений, если они нужны для контактов
 import youtubeIcon from "../../../public/icons/youtube.svg";
@@ -9,6 +10,8 @@ import arrowRight from "../../../public/icons/line.svg";
 import star from "../../../public/icons/star.svg";
 
 const ContactsPage: React.FC = () => {
+  const { t } = useTranslation("common");
+
   return (
     <div className={styles.containerWithOval}>
       {/* Овал со свечением, который теперь позиционируется относительно containerWithOval */}
@@ -17,7 +20,7 @@ const ContactsPage: React.FC = () => {
       {/* Title block */}
       <div className={styles.titleArea}>
         <div className={styles.titleLine}></div>
-        <h2 className={styles.readMoreTitle}>КОНТАКТИ</h2>
+        <h2 className={styles.readMoreTitle}>{t('contactsTitle')}</h2>
       </div>
 
       {/* Contacts block wrapper */}
@@ -30,12 +33,12 @@ const ContactsPage: React.FC = () => {
                 <div className={styles.contactIconContainer}>
                   <Image
                     src={star}
-                    alt="Star icon"
+                    alt={t('starAlt')}
                     className={styles.starIcon}
                   />
                 </div>
                 <div className={styles.contactDetails}>
-                  <h4 className={styles.contactTitle}>Соціальні мережі</h4>
+                  <h4 className={styles.contactTitle}>{t('socialNetworksTitle')}</h4>
                   <div className={styles.socialLinks}>
                     <div className={styles.socialLink}>
                       <Image
@@ -64,12 +67,12 @@ const ContactsPage: React.FC = () => {
                 <div className={styles.contactIconContainer}>
                   <Image
                     src={star}
-                    alt="Star icon"
+                    alt={t('starAlt')}
                     className={styles.starIcon}
                   />
                 </div>
                 <div className={styles.contactDetails}>
-                  <h4 className={styles.contactTitle}>Електронна пошта</h4>
+                  <h4 className={styles.contactTitle}>{t('emailTitle')}</h4>
                   <p className={styles.contactInfo}>office@myspace.in.ua</p>
                 </div>
               </div>
@@ -79,12 +82,12 @@ const ContactsPage: React.FC = () => {
                 <div className={styles.contactIconContainer}>
                   <Image
                     src={star}
-                    alt="Star icon"
+                    alt={t('starAlt')}
                     className={styles.starIcon}
                   />
                 </div>
                 <div className={styles.contactDetails}>
-                  <h4 className={styles.contactTitle}>Номер телефону</h4>
+                  <h4 className={styles.contactTitle}>{t('phoneNumberTitle')}</h4>
                   <p className={styles.contactInfo}>+38 068 777 73 37</p>
                 </div>
               </div>
@@ -94,14 +97,14 @@ const ContactsPage: React.FC = () => {
                 <div className={styles.contactIconContainer}>
                   <Image
                     src={star}
-                    alt="Star icon"
+                    alt={t('starAlt')}
                     className={styles.starIcon}
                   />
                 </div>
                 <div className={styles.contactDetails}>
-                  <h4 className={styles.contactTitle}>Адреса</h4>
+                  <h4 className={styles.contactTitle}>{t('addressTitle')}</h4>
                   <p className={styles.contactInfo}>
-                    вул. В’ячеслава Липинського 8, Київ, 01030, Україна
+                    {t('addressText')}
                   </p>
                 </div>
               </div>
@@ -110,24 +113,19 @@ const ContactsPage: React.FC = () => {
             {/* Зв’язок та Години роботи */}
             <div className={styles.bottomRow}>
               <div className={styles.contactTextSection}>
-                <h4 className={styles.contactTitle}>Зв’язок</h4>
+                <h4 className={styles.contactTitle}>{t('connectionTitle')}</h4>
                 <p className={styles.contactInfoSmall}>
-                  Це допомагає намітити візуальні елементи в документ або
-                  презентацію, наприклад, друкарня, шрифт, або макет. Lorem
-                  Ipsum в основному частиною латинського тексту за класичною
-                  автор і філософа Цицерона. Це слова і букви були змінені
-                  додаванням або видаленням, так навмисно роблять його зміст
-                  безглуздо, це не є справжньою.
+                  {t('connectionText')}
                 </p>
               </div>
               <div className={styles.workHours}>
-                <h4 className={styles.contactTitle}>Години роботи</h4>
+                <h4 className={styles.contactTitle}>{t('workHoursTitle')}</h4>
                 <div className={styles.line}></div>
                 <div className={styles.hoursDetails}>
-                  <p className={styles.workDay}>Пн-Сб</p>
-                  <p className={styles.workDay}>Нд</p>
+                  <p className={styles.workDay}>{t('workDays')}</p>
+                  <p className={styles.workDay}>{t('weekend')}</p>
                   <p className={styles.workTime}>09:00-19:00</p>
-                  <p className={styles.workTime}>за домовленістю</p>
+                  <p className={styles.workTime}>{t('byAppointment')}</p>
                 </div>
               </div>
             </div>
@@ -137,17 +135,17 @@ const ContactsPage: React.FC = () => {
 
       {/* Coworking block */}
       <div className={styles.coworking}>
-        <h3 className={styles.callToAction}>Бажаєте отримати консультацію?</h3>
+        <h3 className={styles.callToAction}>{t('consultationCallToAction')}</h3>
         <div className={styles.frame89}>
           <div className={styles.frame88}>
             <div className={styles.optionRow}>
               <div className={styles.frame87}>
                 <div className={styles.line16}></div>
                 <div className={styles.frame86}>
-                  <p className={styles.optionText}>Продавцям/Орендодавцям</p>
+                  <p className={styles.optionText}>{t('forSellersLandlords')}</p>
                   <Image
                     src={arrowRight}
-                    alt="Стрілка вправо"
+                    alt={t('arrowRightAlt')}
                     className={styles.arrowIcon}
                   />
                 </div>
@@ -157,10 +155,10 @@ const ContactsPage: React.FC = () => {
               <div className={styles.frame85}>
                 <div className={styles.line17}></div>
                 <div className={styles.frame84}>
-                  <p className={styles.optionText}>Покупцям/Орендарям</p>
+                  <p className={styles.optionText}>{t('forBuyersTenants')}</p>
                   <Image
                     src={arrowRight}
-                    alt="Стрілка вправо"
+                    alt={t('arrowRightAlt')}
                     className={styles.arrowIcon}
                   />
                 </div>
@@ -172,4 +170,5 @@ const ContactsPage: React.FC = () => {
     </div>
   );
 };
+
 export default ContactsPage;

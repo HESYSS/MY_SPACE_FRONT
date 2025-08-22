@@ -2,6 +2,7 @@ import React from 'react';
 import Image from 'next/image';
 import styles from './OurTeamSection.module.css';
 import arrow from '../../../../public/icons/Vector10.svg'
+import { useTranslation } from 'react-i18next'; // Импортируем хук
 
 // Импортируем все изображения
 import irinaBubenko from '../../../../public/icons/Бубенко_Ірина.png';
@@ -31,17 +32,19 @@ const teamMembersColumns = [
 ];
 
 const OurTeamSection = () => {
+  const { t } = useTranslation('common');
+
   return (
     <div className={styles.container}>
       {/* Title section */}
       <div className={styles.titleSection}>
         <div className={styles.line}></div>
-        <h2 className={styles.mainTitle}>НАША КОМАНДА</h2>
+        <h2 className={styles.mainTitle}>{t('ourTeamTitle')}</h2>
       </div>
       
       {/* Active team section */}
       <div className={styles.activeTeam}>
-        <h3 className={styles.activeTeamTitle}>Найактивніші члени команди по продажам</h3>
+        <h3 className={styles.activeTeamTitle}>{t('activeTeamTitle')}</h3>
         
         {/* Container for the member columns */}
         <div className={styles.bestMembers}>

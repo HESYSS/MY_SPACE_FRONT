@@ -1,6 +1,8 @@
 // components/ConsultationModal.tsx
+
 import { useEffect } from "react";
 import styles from "./ConsultationModal.module.css";
+import { useTranslation } from "react-i18next"; // Импортируем хук
 
 interface ConsultationModalProps {
   isOpen: boolean;
@@ -11,6 +13,8 @@ export default function ConsultationModal({
   isOpen,
   onClose,
 }: ConsultationModalProps) {
+  const { t } = useTranslation("common"); // Подключаем переводы из common.json
+
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
@@ -24,34 +28,34 @@ export default function ConsultationModal({
   return (
     <div className={styles.modalOverlay} onClick={onClose}>
       <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
-        <h2 className={styles.modalTitle}>Отримати консультацію</h2>
+        <h2 className={styles.modalTitle}>{t("modalTitle")}</h2>
         <form className={styles.form}>
           <div className={styles.formItem}>
-            <label className={styles.formLabel}>Ваше Ім&apos;я</label>
-            <input type="text" placeholder="Ім'я" required />
+            <label className={styles.formLabel}>{t("yourName")}</label>
+            <input type="text" placeholder={t("namePlaceholder")} required />
           </div>
 
           <div className={styles.formItem}>
-            <label className={styles.formLabel}>Ваш телефон</label>
-            <input type="tel" placeholder="+380 -- --- -- --" required />
+            <label className={styles.formLabel}>{t("yourPhone")}</label>
+            <input type="tel" placeholder={t("phonePlaceholder")} required />
           </div>
 
           <div className={styles.formItem}>
-            <label className={styles.formLabel}>Профіль нерухомості</label>
+            <label className={styles.formLabel}>{t("propertyProfile")}</label>
             <select required>
-              <option value="residential">Житлова</option>
+              <option value="residential">{t("residential")}</option>
             </select>
           </div>
 
           <div className={styles.formItem}>
-            <label className={styles.formLabel}>Для кого консультація?</label>
+            <label className={styles.formLabel}>{t("forWhom")}</label>
             <select required>
-              <option value="sellers">Продавцям/Орендодавцям</option>
+              <option value="sellers">{t("forSellers")}</option>
             </select>
           </div>
 
           <div className={styles.formFooter}>
-            <button type="submit">Відправити</button>
+            <button type="submit">{t("send")}</button>
           </div>
         </form>
 
