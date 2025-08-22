@@ -1,8 +1,11 @@
 import { Link } from "react-router-dom";
 import styles from "./styles.module.css";
 import mySpaceLogo from "../../../public/icons/MySpace_LOGO_1[SVG].png";
+import ConsultationModal from "./ConsultationModal/ConsultationModal";
+import { useState } from "react";
 
 export default function Header() {
+  const [isModalOpen, setModalOpen] = useState(false);
   return (
     <header className={styles.header}>
       <nav className={styles.navbar}>
@@ -28,9 +31,10 @@ export default function Header() {
           </ul>
         </div>
         <div className={styles.navRight}>
-          <a href="#" className={styles.ctaButton}>
-            {`КОНСУЛЬТАЦІЯ`}
-          </a>
+          <p
+            className={styles.ctaButton}
+            onClick={() => setModalOpen(true)}
+          >{`КОНСУЛЬТАЦІЯ`}</p>
           <div className={styles.contactInfo}>
             <span className={styles.langSelector}>{`UA`}</span>
             <a href="tel:+3801234567" className={styles.phone}>
@@ -39,6 +43,10 @@ export default function Header() {
           </div>
         </div>
       </nav>
+      <ConsultationModal
+        isOpen={isModalOpen}
+        onClose={() => setModalOpen(false)}
+      />
     </header>
   );
 }
