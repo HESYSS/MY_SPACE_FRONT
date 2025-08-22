@@ -1,7 +1,7 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
-import LanguageDetector from 'i18next-browser-languagedetector';
 import Backend from 'i18next-http-backend';
+import LanguageDetector from 'i18next-browser-languagedetector';
 
 i18n
   .use(Backend)
@@ -9,18 +9,22 @@ i18n
   .use(initReactI18next)
   .init({
     fallbackLng: 'ua',
-    debug: true,
-    interpolation: {
-      escapeValue: false, // react already safes from xss
-    },
+    supportedLngs: ['ua', 'en'],
+    debug: false, // Установите это значение в false, чтобы отключить все логи i18next
+    ns: ['common'],
+    defaultNS: 'common',
     backend: {
-      // Здесь указываем путь, где хранятся наши файлы переводов
-      // public/locales/{{lng}}/{{ns}}.json
       loadPath: '/locales/{{lng}}/{{ns}}.json',
+      allowMultiLoading: true, // Позволяет загружать несколько файлов, даже если один из них не загрузится
+      crossDomain: true, // Предотвращает отображение ошибок, связанных с кросс-доменными запросами, в консоли
     },
-    react: {
-      useSuspense: false // Отключаем Suspense для простоты
-    }
+    interpolation: {
+      escapeValue: false,
+    },
+    detection: {
+      order: ['queryString', 'cookie', 'localStorage', 'sessionStorage', 'navigator', 'htmlTag', 'path', 'subdomain'],
+      caches: ['cookie'],
+    },
   });
 
 export default i18n;

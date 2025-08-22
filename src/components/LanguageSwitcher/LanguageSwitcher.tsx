@@ -6,7 +6,7 @@ import styles from './styles.module.css';
 type Locale = 'ua' | 'en';
 
 export default function LanguageSwitcher() {
-  const { i18n } = useTranslation();
+  const { i18n } = useTranslation('common');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   // Явно указываем, что newLocale имеет тип Locale
