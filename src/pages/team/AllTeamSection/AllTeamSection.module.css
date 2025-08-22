@@ -8,7 +8,6 @@
   width: 1200px;
   height: 371px; /* Высота по макету */
   flex-grow: 0;
-  margin-left: 360px;
   margin-bottom: 80px;
 }
 
@@ -16,13 +15,13 @@
 .sectionTitle {
   width: 100%;
   height: 56px;
-  font-family: 'Raleway';
+  font-family: "Raleway";
   font-style: normal;
   font-weight: 400;
   font-size: 48px;
   line-height: 56px;
   text-align: center;
-  color: #EBEBEB;
+  color: #ebebeb;
   margin: 0;
 }
 
@@ -87,7 +86,11 @@
   position: absolute;
   width: 100%;
   height: 100%;
-  background: linear-gradient(180.05deg, rgba(0, 0, 0, 0) 50.39%, rgba(0, 0, 0, 0.8) 99.95%);
+  background: linear-gradient(
+    180.05deg,
+    rgba(0, 0, 0, 0) 50.39%,
+    rgba(0, 0, 0, 0.8) 99.95%
+  );
   border-radius: 4px;
   z-index: 1;
 }
@@ -109,25 +112,25 @@
 
 /* Member name */
 .memberName {
-  font-family: 'Raleway';
+  font-family: "Raleway";
   font-style: normal;
   font-weight: 700;
   font-size: 16px;
   line-height: 19px;
   text-transform: capitalize;
-  color: #EBEBEB;
+  color: #ebebeb;
   margin: 0;
 }
 
 /* Member role */
 .memberRole {
-  font-family: 'Raleway';
+  font-family: "Raleway";
   font-style: normal;
   font-weight: 700;
   font-size: 12px;
   line-height: 14px;
   text-transform: lowercase;
-  color: #9C9C9C;
+  color: #9c9c9c;
   margin: 0;
 }
 
@@ -146,13 +149,13 @@
 .dot {
   width: 8px;
   height: 8px;
-  background: #EBEBEB;
+  background: #ebebeb;
   border-radius: 50%;
 }
 
 .dotActive {
   width: 8px;
   height: 8px;
-  background: #03B9B3;
+  background: #03b9b3;
   border-radius: 50%;
 }
