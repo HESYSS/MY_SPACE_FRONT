@@ -5,12 +5,11 @@
   padding: 40px;
   width: 1200px;
   height: 481px;
-  background: #EBEBEB;
+  background: #ebebeb;
   border-radius: 20px;
   box-sizing: border-box;
   margin-bottom: 150px;
   margin-top: 80px;
-  margin-left: 390px;
 }
 
 .frame142 {
@@ -46,7 +45,7 @@
 .pretitle {
   width: 686px;
   height: 14px;
-  font-family: 'Raleway', sans-serif;
+  font-family: "Raleway", sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 12px;
@@ -58,7 +57,7 @@
 .title {
   width: 686px;
   height: 56px;
-  font-family: 'Raleway', sans-serif;
+  font-family: "Raleway", sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 48px;
@@ -100,7 +99,7 @@
   padding: 0px;
   gap: 12px;
   width: 202px;
-  background: #EBEBEB;
+  background: #ebebeb;
 }
 
 .starIcon {
@@ -110,7 +109,7 @@
 .benefitTitle {
   width: 202px;
   height: 16px;
-  font-family: 'Raleway', sans-serif;
+  font-family: "Raleway", sans-serif;
   font-style: normal;
   font-weight: 700;
   font-size: 14px;
@@ -121,7 +120,7 @@
 
 .benefitText {
   width: 182px;
-  font-family: 'Raleway', sans-serif;
+  font-family: "Raleway", sans-serif;
   font-style: normal;
   font-weight: 700;
   font-size: 11px;
@@ -134,7 +133,7 @@
 .photo {
   width: 374px;
   height: 401px;
-  background-image: url('../../../public/icons/Home.svg');
+  background-image: url("../../../public/icons/Home.svg");
   background-size: cover;
   background-position: center;
   border-radius: 20px;

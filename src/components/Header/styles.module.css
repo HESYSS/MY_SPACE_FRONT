@@ -47,24 +47,24 @@
 }
 
 .navLinks a {
-  font-family: 'Raleway', sans-serif;
+  font-family: "Raleway", sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 20px;
   line-height: 23px;
   text-transform: uppercase;
-  color: #EBEBEB;
+  color: #ebebeb;
   text-decoration: none;
   transition: color 0.3s;
 }
 
 .navLinks a:hover {
-  color: #03B9B3;
+  color: #03b9b3;
 }
 
 /* Active link */
 .navLinks .activeLink {
-  color: #03B9B3; /* Цвет для активной ссылки */
+  color: #03b9b3; /* Цвет для активной ссылки */
 }
 
 /* Right Nav */
@@ -72,7 +72,7 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 20px;
+  gap: 41px;
 }
 
 /* CTA Button */
@@ -81,47 +81,51 @@
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  padding: 12px 20px;
+  margin-left: -20px;
   gap: 10px;
   width: 192px;
   height: 47px;
   background: #051818;
   border-radius: 4px;
-  font-family: 'Raleway', sans-serif;
+  font-family: "Raleway", sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 20px;
   line-height: 23px;
   text-transform: uppercase;
-  color: #EBEBEB;
+  color: #ebebeb;
   text-decoration: none;
   white-space: nowrap;
 }
-
+.ctaButton:hover {
+  background: #092b2b; /* Цвет при наведении */
+  color: #ffffff; /* Цвет текста при наведении */
+}
 /* Contact Info */
 .contactInfo {
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 10px;
+  gap: 41px;
 }
 
 .langSelector {
-  font-family: 'Raleway', sans-serif;
+  font-family: "Raleway", sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 20px;
   line-height: 23px;
-  color: #FFFFFF;
+  color: #ffffff;
+  gap: 41px;
 }
 
 /* Phone number */
 .phone {
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
   font-style: normal;
   font-weight: 300;
   font-size: 20px;
   line-height: 24px;
-  color: #EBEBEB;
+  color: #ebebeb;
   text-decoration: none;
 }

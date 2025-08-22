@@ -8,7 +8,7 @@
   width: 1200px;
   height: 451px;
   box-sizing: border-box;
-  margin-left: 360px;
+
   margin-top: 80px;
   margin-bottom: 80px;
 }
@@ -28,13 +28,13 @@
 .mainTitle {
   width: 283px;
   height: 75px;
-  font-family: 'Raleway';
+  font-family: "Raleway";
   font-style: normal;
   font-weight: 400;
   font-size: 64px;
   line-height: 75px;
   text-transform: uppercase;
-  color: #EBEBEB;
+  color: #ebebeb;
   margin: 0;
   white-space: nowrap;
 }
@@ -43,7 +43,7 @@
 .line8 {
   width: 887px;
   height: 1px;
-  background: linear-gradient(to left, #191919, #03B9B3);
+  background: linear-gradient(to left, #191919, #03b9b3);
 }
 
 /* Frame 275 - Content section */
@@ -80,7 +80,7 @@
   gap: 10px;
   width: 654px;
   height: 316px;
-  background: #EBEBEB;
+  background: #ebebeb;
   border-radius: 0px 20px 20px 0px;
 }
 
@@ -101,7 +101,7 @@
 .textHeading {
   width: 574px;
   height: 84px;
-  font-family: 'Raleway';
+  font-family: "Raleway";
   font-style: normal;
   font-weight: 700;
   font-size: 24px;
@@ -115,7 +115,7 @@
 .textBody {
   width: 574px;
   height: 64px;
-  font-family: 'Raleway';
+  font-family: "Raleway";
   font-style: bold;
   font-weight: 700;
   font-size: 14px;
