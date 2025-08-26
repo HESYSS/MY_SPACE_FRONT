@@ -8,8 +8,6 @@
   width: 1200px;
   height: 885px;
   box-sizing: border-box;
-
-  margin-bottom: 80px;
 }
 
 /* Titles container */
@@ -40,24 +38,23 @@
 /* Container for all team member cards (Par&Man) */
 .teamMembersContainer {
   display: flex;
-  flex-direction: column;
+  /* Изменено на row, чтобы дочерние элементы выстраивались в строку */
+  flex-direction: row; 
+  /* Выравнивание элементов по горизонтали */
+  justify-content: space-between;
+  /* Вертикальное выравнивание элементов */
   align-items: flex-start;
   padding: 0px;
-  gap: 30px;
+  gap: 30px; /* Отступ между колонками */
   width: 1200px;
-  height: 789px;
   box-sizing: border-box;
 }
 
-/* Row for team member cards */
-.row {
+.column {
   display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  padding: 0px;
-  gap: 58px;
-  width: 1200px;
-  box-sizing: border-box;
+  flex-direction: column; /* Элементы внутри колонки выстраиваются вертикально */
+  gap: 20px; /* Отступ между карточками */
+  flex-grow: 1; /* Позволяет колонкам занимать доступное пространство */
 }
 
 /* Team member card */
