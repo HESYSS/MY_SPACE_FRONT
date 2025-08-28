@@ -2,10 +2,6 @@
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
-  i18n: {
-    locales: ["ua", "en"],
-    defaultLocale: "ua",
-  },
   images: {
     domains: ["example.com"],
   },

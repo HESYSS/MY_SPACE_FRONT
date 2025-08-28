@@ -4,6 +4,7 @@ import Image from 'next/image';
 import styles from './OurTeamSection.module.css';
 import arrow from '../../../../public/icons/Vector10.svg'
 import { useTranslation } from 'react-i18next';
+import Link from 'next/link'; // Импортируем компонент Link
 
 // Пока что используем одно локальное изображение для всех
 import defaultTeamImage from '../../../../public/icons/Бубенко_Ірина.png';
@@ -121,14 +122,15 @@ const OurTeamSection = () => {
                           <br />
                           {lastName}
                         </h4>
-                        <div className={styles.memberRole}>
+                        {/* Оборачиваем роль и стрелку в компонент Link */}
+                        <Link href={`/worker/${member.id}`} className={styles.memberRole}>
                           <Image 
                             src={arrow}
                             alt="Arrow"
                             className={styles.arrow}
                           />
                           <p className={styles.roleText}>{role}</p>
-                        </div>
+                        </Link>
                       </div>
                     </div>
                   );

@@ -11,11 +11,11 @@ import defaultTeamImage from '../../../../public/icons/vitaliyPenc.png';
 interface Employee {
   id: number;
   firstName: string; // Используется для украинского имени
-  lastName: string;  // Используется для украинской фамилии
-  position: string;  // Используется для украинской должности
+  lastName: string;  // Используется для украинской фамилии
+  position: string;  // Используется для украинской должности
   firstNameEn?: string; // Используется для английского имени
-  lastNameEn?: string;  // Используется для английской фамилии
-  positionEn?: string;  // Используется для английской должности
+  lastNameEn?: string;  // Используется для английской фамилии
+  positionEn?: string;  // Используется для английской должности
   isPARTNER: boolean;
   isMANAGER: boolean;
   isACTIVE: boolean;
@@ -96,6 +96,7 @@ export default function TeamSection() {
             return (
               <TeamMemberCard
                 key={member.id}
+                id={member.id} // Передаем id работника
                 name={name}
                 position={position}
                 photoSrc={defaultTeamImage.src}
@@ -110,6 +111,7 @@ export default function TeamSection() {
             return (
               <TeamMemberCard
                 key={member.id}
+                id={member.id} // Передаем id работника
                 name={name}
                 position={position}
                 photoSrc={defaultTeamImage.src}
@@ -124,6 +126,7 @@ export default function TeamSection() {
             return (
               <TeamMemberCard
                 key={member.id}
+                id={member.id} // Передаем id работника
                 name={name}
                 position={position}
                 photoSrc={defaultTeamImage.src}
@@ -138,6 +141,7 @@ export default function TeamSection() {
             return (
               <TeamMemberCard
                 key={member.id}
+                id={member.id} // Передаем id работника
                 name={name}
                 position={position}
                 photoSrc={defaultTeamImage.src}

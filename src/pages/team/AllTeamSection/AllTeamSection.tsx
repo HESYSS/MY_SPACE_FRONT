@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import styles from './AllTeamSection.module.css';
 import { useTranslation } from 'react-i18next';
+import Link from 'next/link'; // Импортируем компонент Link
 
 import vitaliyPenc from '../../../../public/icons/vitaliyPenc.png';
 
@@ -69,16 +70,9 @@ const AllTeamSection: React.FC = () => {
     <div className={styles.allTeamContainer}>
       <h2 className={styles.sectionTitle}>{t('allTeamTitle')}</h2>
       
-      {/* <--- Временный отладочный блок, можно удалить ---> */}
-      {/* <div>
-          <p>Общее количество сотрудников: {employees.length}</p>
-          <p>Количество страниц: {totalPages}</p>
-      </div> */}
-
       <div className={styles.carouselContainer}>
         <div 
           className={styles.teamRow}
-          // ИСПРАВЛЕННАЯ ЛОГИКА: Перемещаем на 100% ширины страницы за каждый клик
           style={{ transform: `translateX(-${(currentPage - 1) * 100}%)` }}
         >
           {employees.length === 0 ? (
@@ -97,7 +91,10 @@ const AllTeamSection: React.FC = () => {
                       />
                       <div className={styles.gradientOverlay}></div>
                       <div className={styles.textContainer}>
-                        <p className={styles.memberName}>{name}</p>
+                        {/* Оборачиваем имя в компонент Link */}
+                        <Link href={`/worker/${member.id}`} className={styles.memberName}>
+                          {name}
+                        </Link>
                         <p className={styles.memberRole}>{role}</p>
                       </div>
                     </div>

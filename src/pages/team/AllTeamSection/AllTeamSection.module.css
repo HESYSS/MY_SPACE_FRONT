@@ -121,6 +121,7 @@
   text-transform: capitalize;
   color: #ebebeb;
   margin: 0;
+  text-decoration: none; /* Это убирает подчеркивание */
 }
 
 /* Member role */
