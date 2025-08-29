@@ -8,6 +8,7 @@ export interface Property {
   firstImage: string;
   street: string;
   type: string;
+  сreatedAt: string;
 }
 interface Price {
   value: number;

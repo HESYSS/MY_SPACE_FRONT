@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import Image from 'next/image';
-import styles from './AllTeamSection.module.css';
-import { useTranslation } from 'react-i18next';
-import Link from 'next/link'; // Импортируем компонент Link
+import React, { useState, useEffect } from "react";
+import Image from "next/image";
+import styles from "./AllTeamSection.module.css";
+import { useTranslation } from "react-i18next";
+import Link from "next/link";
 
-import vitaliyPenc from '../../../../public/icons/vitaliyPenc.png';
+import vitaliyPenc from "../../../../public/icons/vitaliyPenc.png";
 
 interface Employee {
   id: number;
@@ -22,7 +22,7 @@ interface Employee {
 const ITEMS_PER_PAGE = 5;
 
 const AllTeamSection: React.FC = () => {
-  const { t, i18n } = useTranslation('common');
+  const { t, i18n } = useTranslation("common");
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -32,9 +32,7 @@ const AllTeamSection: React.FC = () => {
     const fetchEmployees = async () => {
       try {
         const response = await fetch("http://localhost:3001/employee");
-        if (!response.ok) {
-          throw new Error('Failed to fetch employees');
-        }
+        if (!response.ok) throw new Error("Failed to fetch employees");
         const data: Employee[] = await response.json();
         setEmployees(data);
       } catch (err) {
@@ -49,29 +47,31 @@ const AllTeamSection: React.FC = () => {
 
   const totalPages = Math.ceil(employees.length / ITEMS_PER_PAGE);
 
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
+  const handlePageChange = (page: number) => setCurrentPage(page);
+
+  const getEmployeeData = (employee: Employee, language: string) => {
+    const isEnglish = language === "en";
+    return {
+      name:
+        isEnglish && employee.firstNameEn && employee.lastNameEn
+          ? `${employee.firstNameEn} ${employee.lastNameEn}`
+          : `${employee.firstName} ${employee.lastName}`,
+      role:
+        isEnglish && employee.positionEn
+          ? employee.positionEn
+          : employee.position,
+    };
   };
 
   if (loading) return <div>Загрузка...</div>;
   if (error) return <div>Ошибка: {error}</div>;
 
-  const getEmployeeData = (employee: Employee, language: string) => {
-    const isEnglish = language === 'en';
-    return {
-      name: isEnglish && employee.firstNameEn && employee.lastNameEn
-        ? `${employee.firstNameEn} ${employee.lastNameEn}`
-        : `${employee.firstName} ${employee.lastName}`,
-      role: isEnglish && employee.positionEn ? employee.positionEn : employee.position,
-    };
-  };
-
   return (
     <div className={styles.allTeamContainer}>
-      <h2 className={styles.sectionTitle}>{t('allTeamTitle')}</h2>
-      
+      <h2 className={styles.sectionTitle}>{t("allTeamTitle")}</h2>
+
       <div className={styles.carouselContainer}>
-        <div 
+        <div
           className={styles.teamRow}
           style={{ transform: `translateX(-${(currentPage - 1) * 100}%)` }}
         >
@@ -91,8 +91,11 @@ const AllTeamSection: React.FC = () => {
                       />
                       <div className={styles.gradientOverlay}></div>
                       <div className={styles.textContainer}>
-                        {/* Оборачиваем имя в компонент Link */}
-                        <Link href={`/worker/${member.id}`} className={styles.memberName}>
+                        {/* Динамическая ссылка на страницу сотрудника */}
+                        <Link
+                          href={`/worker/${member.id}`}
+                          className={styles.memberName}
+                        >
                           {name}
                         </Link>
                         <p className={styles.memberRole}>{role}</p>
@@ -104,13 +107,15 @@ const AllTeamSection: React.FC = () => {
             })
           )}
         </div>
-        {/* Пагинация */}
+
         {totalPages > 1 && (
           <div className={styles.pagination}>
             {Array.from({ length: totalPages }, (_, index) => (
               <div
                 key={index}
-                className={index + 1 === currentPage ? styles.dotActive : styles.dot}
+                className={
+                  index + 1 === currentPage ? styles.dotActive : styles.dot
+                }
                 onClick={() => handlePageChange(index + 1)}
               ></div>
             ))}

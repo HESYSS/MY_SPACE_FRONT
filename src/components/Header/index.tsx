@@ -1,24 +1,29 @@
-// components/Header/Header.jsx
-
+// components/Header/Header.tsx
 import Link from "next/link";
+import Image from "next/image";
 import { useTranslation } from "react-i18next";
 import styles from "./styles.module.css";
 import mySpaceLogo from "../../../public/icons/MySpace_LOGO_1[SVG].png";
 import ConsultationModal from "./ConsultationModal/ConsultationModal";
-import { useState } from "react";
+import { useState, FC } from "react";
 import LanguageSwitcher from "../LanguageSwitcher/LanguageSwitcher";
 
-export default function Header() {
+const Header: FC = () => {
   const { t } = useTranslation("common"); // 'common.json'
-  const [isModalOpen, setModalOpen] = useState(false);
+  const [isModalOpen, setModalOpen] = useState<boolean>(false);
 
   return (
     <header className={styles.header}>
       <nav className={styles.navbar}>
         <div className={styles.leftNav}>
           <div className={styles.logo}>
-            <Link href="/">
-              <img src={mySpaceLogo.src} alt="MySpace Logo" />
+            <Link href="/main">
+              <Image
+                src={mySpaceLogo}
+                alt="MySpace Logo"
+                width={150}
+                height={50}
+              />
             </Link>
           </div>
           <ul className={styles.navLinks}>
@@ -38,6 +43,7 @@ export default function Header() {
             </li>
           </ul>
         </div>
+
         <div className={styles.navRight}>
           <p className={styles.ctaButton} onClick={() => setModalOpen(true)}>
             {t("consultation") || "Консультація"}
@@ -57,4 +63,6 @@ export default function Header() {
       />
     </header>
   );
-}
+};
+
+export default Header;

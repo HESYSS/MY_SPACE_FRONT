@@ -1,4 +1,5 @@
-import { useParams } from "react-router-dom";
+// pages/catalog/[type].tsx
+import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import Filter from "@/components/Filter";
 import MapWrapper from "@/components/Map/MapWrapper";
@@ -10,14 +11,18 @@ const typeMap: Record<string, string> = {
 };
 
 export default function CatalogPage() {
-  const { type } = useParams<{ type: string }>();
-  const [filterType, setFilterType] = useState(typeMap[type || "rent"]);
+  const router = useRouter();
+  const { type } = router.query; // type из URL
+  const currentType = typeof type === "string" ? type : "rent";
+
+  const [filterType, setFilterType] = useState(typeMap[currentType]);
   const [properties, setProperties] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   const [page, setPage] = useState(1);
   const limit = 6;
 
+  // Данные для PropertyList
   useEffect(() => {
     async function fetchData() {
       setLoading(true);
@@ -36,6 +41,7 @@ export default function CatalogPage() {
     fetchData();
   }, [filterType, page]);
 
+  // Данные для карты
   const [allProperties, setAllProperties] = useState<any[]>([]);
   useEffect(() => {
     async function fetchAll() {
@@ -64,10 +70,8 @@ export default function CatalogPage() {
         }}
       />
 
-      {/* Список с PropertyList */}
       <PropertyList properties={properties} loading={loading} />
 
-      {/* Карта со всеми объектами */}
       <h2>Мапа об’єктів</h2>
       <MapWrapper properties={allProperties} />
     </div>

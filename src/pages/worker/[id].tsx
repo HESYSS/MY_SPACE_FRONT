@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import styles from "./worker.module.css";
+import { useRouter } from "next/router";
 
 // Определяем интерфейс для данных работника, чтобы обеспечить безопасность типов
 interface Employee {
@@ -20,7 +21,8 @@ interface Employee {
 }
 
 const EmployeePage = () => {
-  const { id } = useParams<{ id: string }>();
+  const router = useRouter();
+  const { id } = router.query;
   const { i18n } = useTranslation();
 
   // Состояние для хранения данных работника и статуса загрузки
@@ -34,7 +36,7 @@ const EmployeePage = () => {
       try {
         const response = await fetch(`http://localhost:3001/employee/${id}`);
         if (!response.ok) {
-          throw new Error('Network response was not ok');
+          throw new Error("Network response was not ok");
         }
         const data = await response.json();
         setEmployee(data);
@@ -64,13 +66,24 @@ const EmployeePage = () => {
 
   // Функция для получения данных в зависимости от текущего языка
   const getEmployeeData = () => {
-    const isEnglish = i18n.language === 'en';
+    const isEnglish = i18n.language === "en";
     return {
-      firstName: isEnglish && employee.firstNameEn ? employee.firstNameEn : employee.firstName,
-      lastName: isEnglish && employee.lastNameEn ? employee.lastNameEn : employee.lastName,
-      position: isEnglish && employee.positionEn ? employee.positionEn : employee.position,
-      profile: isEnglish && employee.profileEn ? employee.profileEn : employee.profile,
-      aboutMe: isEnglish && employee.aboutMeEn ? employee.aboutMeEn : employee.aboutMe,
+      firstName:
+        isEnglish && employee.firstNameEn
+          ? employee.firstNameEn
+          : employee.firstName,
+      lastName:
+        isEnglish && employee.lastNameEn
+          ? employee.lastNameEn
+          : employee.lastName,
+      position:
+        isEnglish && employee.positionEn
+          ? employee.positionEn
+          : employee.position,
+      profile:
+        isEnglish && employee.profileEn ? employee.profileEn : employee.profile,
+      aboutMe:
+        isEnglish && employee.aboutMeEn ? employee.aboutMeEn : employee.aboutMe,
     };
   };
 
@@ -84,7 +97,7 @@ const EmployeePage = () => {
         <div className={styles.titleArea}>
           <div className={styles.titleLine}></div>
           <h2 className={styles.readMoreTitle}>
-            {i18n.language === 'en' ? 'Read more' : 'Читать далее'}
+            {i18n.language === "en" ? "Read more" : "Читать далее"}
           </h2>
         </div>
         {/* Employee information block wrapped in a new container */}
@@ -103,7 +116,9 @@ const EmployeePage = () => {
               {/* Details on the right */}
               <div className={styles.infoContainer}>
                 <div className={styles.nameAndRole}>
-                  <h3 className={styles.employeeName}>{currentData.firstName} {currentData.lastName}</h3>
+                  <h3 className={styles.employeeName}>
+                    {currentData.firstName} {currentData.lastName}
+                  </h3>
                   <p className={styles.employeeRole}>{currentData.position}</p>
                 </div>
 
@@ -113,29 +128,26 @@ const EmployeePage = () => {
                 <div className={styles.additionalInfo}>
                   <div className={styles.infoSection}>
                     <h4 className={styles.infoTitle}>
-                      {i18n.language === 'en' ? 'Experience' : 'Досвід'}
+                      {i18n.language === "en" ? "Experience" : "Досвід"}
                     </h4>
                     <p className={styles.infoText}>
-                      {employee.experienceYears} {i18n.language === 'en' ? 'years' : 'років'}
+                      {employee.experienceYears}{" "}
+                      {i18n.language === "en" ? "years" : "років"}
                     </p>
                   </div>
 
                   <div className={styles.infoSection}>
                     <h4 className={styles.infoTitle}>
-                      {i18n.language === 'en' ? 'Profile' : 'Профіль'}
+                      {i18n.language === "en" ? "Profile" : "Профіль"}
                     </h4>
-                    <p className={styles.infoText}>
-                      {currentData.profile}
-                    </p>
+                    <p className={styles.infoText}>{currentData.profile}</p>
                   </div>
 
                   <div className={styles.infoSection}>
                     <h4 className={styles.infoTitle}>
-                      {i18n.language === 'en' ? 'About me' : 'Про себе'}
+                      {i18n.language === "en" ? "About me" : "Про себе"}
                     </h4>
-                    <p className={styles.infoText}>
-                      {currentData.aboutMe}
-                    </p>
+                    <p className={styles.infoText}>{currentData.aboutMe}</p>
                   </div>
                 </div>
               </div>
@@ -144,7 +156,9 @@ const EmployeePage = () => {
         </div>
         <div className={styles.coworking}>
           <h3 className={styles.callToAction}>
-            {i18n.language === 'en' ? 'Sign up for a consultation' : 'Запишитесь на консультацию'}
+            {i18n.language === "en"
+              ? "Sign up for a consultation"
+              : "Запишитесь на консультацию"}
           </h3>
           <div className={styles.frame89}>
             <div className={styles.frame88}>
@@ -153,9 +167,21 @@ const EmployeePage = () => {
                   <div className={styles.line16}></div>
                   <div className={styles.frame86}>
                     <p className={styles.optionText}>
-                      {i18n.language === 'en' ? 'For sellers and landlords' : 'Для продавцов и арендодателей'}
+                      {i18n.language === "en"
+                        ? "For sellers and landlords"
+                        : "Для продавцов и арендодателей"}
                     </p>
-                    <svg className={styles.arrowIcon} width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <svg
+                      className={styles.arrowIcon}
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
                       <line x1="5" y1="12" x2="19" y2="12"></line>
                       <polyline points="12 5 19 12 12 19"></polyline>
                     </svg>
@@ -167,9 +193,21 @@ const EmployeePage = () => {
                   <div className={styles.line17}></div>
                   <div className={styles.frame84}>
                     <p className={styles.optionText}>
-                      {i18n.language === 'en' ? 'For buyers and tenants' : 'Для покупателей и арендаторов'}
+                      {i18n.language === "en"
+                        ? "For buyers and tenants"
+                        : "Для покупателей и арендаторов"}
                     </p>
-                    <svg className={styles.arrowIcon} width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <svg
+                      className={styles.arrowIcon}
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
                       <line x1="5" y1="12" x2="19" y2="12"></line>
                       <polyline points="12 5 19 12 12 19"></polyline>
                     </svg>
