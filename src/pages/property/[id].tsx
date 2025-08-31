@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import Map from "@/components/Map";
+import MapWrapper from "@/components/Map/MapWrapper";
 import { properties } from "@/services/mockData";
 
 export default function PropertyPage() {
@@ -18,7 +18,6 @@ export default function PropertyPage() {
         <p>Ціна: {property.price} грн</p>
         <p>Кімнат: {property.rooms}</p>
         <p>Площа: {property.area} м²</p>
-        <Map lat={property.location.lat} lng={property.location.lng} />
       </main>
     </div>
   );

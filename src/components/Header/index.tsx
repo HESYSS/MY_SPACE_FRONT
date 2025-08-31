@@ -1,60 +1,68 @@
-// components/Header/Header.jsx
-
-import Link from 'next/link';
-import { useTranslation } from 'react-i18next'; // Используем react-i18next
-import styles from './styles.module.css';
+// components/Header/Header.tsx
+import Link from "next/link";
+import Image from "next/image";
+import { useTranslation } from "react-i18next";
+import styles from "./styles.module.css";
 import mySpaceLogo from "../../../public/icons/MySpace_LOGO_1[SVG].png";
 import ConsultationModal from "./ConsultationModal/ConsultationModal";
-import { useState } from "react";
-import LanguageSwitcher from '../LanguageSwitcher/LanguageSwitcher';
+import { useState, FC } from "react";
+import LanguageSwitcher from "../LanguageSwitcher/LanguageSwitcher";
 
-export default function Header() {
-  const { t } = useTranslation('common'); // 'common' - это имя файла перевода (common.json)
-  const [isModalOpen, setModalOpen] = useState(false);
+const Header: FC = () => {
+  const { t } = useTranslation("common"); // 'common.json'
+  const [isModalOpen, setModalOpen] = useState<boolean>(false);
 
   return (
     <header className={styles.header}>
       <nav className={styles.navbar}>
         <div className={styles.leftNav}>
           <div className={styles.logo}>
-            <Link href="/">
-              <img src={mySpaceLogo.src} alt="MySpace Logo" />
+            <Link href="/main">
+              <Image
+                src={mySpaceLogo}
+                alt="MySpace Logo"
+                width={150}
+                height={50}
+              />
             </Link>
           </div>
           <ul className={styles.navLinks}>
             <li>
-              <Link href="/sale">{t('sale')}</Link>
+              <Link href="/catalog/sale">{t("sale") || "Продаж"}</Link>
             </li>
             <li>
-              <Link href="/rent" className={styles.activeLink}>{t('rent')}</Link>
+              <Link href="/catalog/rent" className={styles.activeLink}>
+                {t("rent") || "Оренда"}
+              </Link>
             </li>
             <li>
-              <Link href="/team">{t('ourTeam')}</Link>
+              <Link href="/team">{t("ourTeam") || "Наша команда"}</Link>
             </li>
             <li>
-              <Link href="/contacts">{t('contacts')}</Link>
+              <Link href="/contacts">{t("contacts") || "Контакти"}</Link>
             </li>
           </ul>
         </div>
+
         <div className={styles.navRight}>
-          <p
-            className={styles.ctaButton}
-            onClick={() => setModalOpen(true)}
-          >
-            {t('consultation')}
+          <p className={styles.ctaButton} onClick={() => setModalOpen(true)}>
+            {t("consultation") || "Консультація"}
           </p>
           <div className={styles.contactInfo}>
             <LanguageSwitcher />
             <a href="tel:+3801234567" className={styles.phone}>
-              {t('phoneNumber')}
+              {t("phoneNumber") || "+3801234567"}
             </a>
           </div>
         </div>
       </nav>
+
       <ConsultationModal
         isOpen={isModalOpen}
         onClose={() => setModalOpen(false)}
       />
     </header>
   );
-}
+};
+
+export default Header;
