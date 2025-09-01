@@ -1,0 +1,174 @@
+.mainDiv {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 1200px;
+  height: auto;
+  background-color: transparent;
+  margin-left: 365px;
+}
+
+.propertyPage {
+  background-color: #0d1a26; /* Темный фон */
+  color: #ebebeb; /* Светлый текст */
+  font-family: "Raleway", sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 80px;
+  padding: 0 20px;
+}
+
+.mainContent {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 1200px; /* Соответствует ширине макета */
+  gap: 40px;
+}
+
+.column1 {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.column2 {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding-top: 40px; /* Отступ сверху для выравнивания */
+}
+
+.title {
+  font-size: 36px;
+  font-weight: 700;
+  line-height: 42px;
+  text-transform: capitalize;
+  margin-bottom: 20px;
+}
+
+.subtitle {
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 28px;
+  text-transform: capitalize;
+  color: #ebebeb;
+}
+
+.infoLine {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #565656;
+}
+
+.price {
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 28px;
+  text-align: right;
+  text-transform: capitalize;
+  color: #ebebeb;
+  margin-top: 20px;
+}
+
+.button {
+  background-color: #ebebeb;
+  color: #050505;
+  border-radius: 40px;
+  padding: 14px 28px;
+  font-size: 16px;
+  font-weight: 400;
+  text-transform: uppercase;
+  border: none;
+  cursor: pointer;
+  align-self: flex-end;
+}
+
+.descriptionBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.divider {
+  width: 100%;
+  border-top: 1px solid #565656;
+}
+
+.sectionTitle {
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 28px;
+  text-transform: capitalize;
+  color: #ebebeb;
+}
+
+.sectionText {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 17px;
+  text-transform: capitalize;
+  color: #ffffff;
+}
+
+.consultationSection {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 1200px; /* Соответствует ширине макета */
+  gap: 267px; /* Зазор между текстом и блоком */
+}
+
+.consultationTitle {
+  font-size: 48px;
+  font-weight: 400;
+  line-height: 56px;
+  text-transform: uppercase;
+  color: #ebebeb;
+  width: 403px; /* Фиксированная ширина */
+}
+
+.consultationForm {
+  background-color: #0a0a0a;
+  border-radius: 20px;
+  padding: 30px 36px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 525px; /* Фиксированная ширина */
+}
+
+.formItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0;
+  gap: 192px;
+  border-bottom: 1px solid #303030;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+}
+
+.formItemText {
+  font-size: 36px;
+  font-weight: 400;
+  line-height: 42px;
+  text-transform: uppercase;
+  color: #ebebeb;
+}
+
+.arrowIcon {
+  width: 26px;
+  height: 26px;
+  border: 2px solid #ebebeb;
+}

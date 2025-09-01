@@ -3,7 +3,7 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   images: {
-    domains: ["example.com"],
+    domains: ["crm-08498194.s3.eu-west-1.amazonaws.com"],
   },
   env: {
     API_URL: process.env.API_URL || "http://localhost:3000/api",
