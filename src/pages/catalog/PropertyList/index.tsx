@@ -1,6 +1,7 @@
 import { useState } from "react";
 import PropertyCard from "@/components/PropertyCard";
 import { Property } from "@/types/property";
+import styles from "./PropertyList.module.css"; // Импортируем новый CSS-модуль
 
 interface Props {
   properties: Property[];
@@ -15,18 +16,11 @@ export default function PropertyList({ properties, loading }: Props) {
   const paginatedProperties = properties.slice(start, end);
 
   return (
-    <div>
+    <div className={styles.propertyListContainer}>
       {loading ? (
         <p>Завантаження...</p>
       ) : (
-        <div
-          className="properties"
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(3, 1fr)",
-            gap: "20px",
-          }}
-        >
+        <div className={styles.propertiesGrid}>
           {paginatedProperties.map((p) => (
             <PropertyCard key={p.id} property={p} />
           ))}
@@ -34,7 +28,7 @@ export default function PropertyList({ properties, loading }: Props) {
       )}
 
       {/* Пагинация */}
-      <div style={{ display: "flex", gap: "10px", marginTop: "20px" }}>
+      <div className={styles.pagination}>
         <button
           onClick={() => setPage((p) => Math.max(1, p - 1))}
           disabled={page === 1}

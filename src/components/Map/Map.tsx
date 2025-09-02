@@ -10,6 +10,7 @@ import Feature from "ol/Feature";
 import Point from "ol/geom/Point";
 import { fromLonLat, toLonLat } from "ol/proj";
 import { defaults as defaultInteractions, DragPan } from "ol/interaction";
+import styles from "./mapStyle.module.css";
 
 interface Property {
   id: number;
@@ -72,6 +73,7 @@ export default function MapDrawFilter({
         zoom: 12,
       }),
       interactions: defaultInteractions(),
+      controls: [],
     });
 
     mapInstance.current = map;
@@ -157,15 +159,41 @@ export default function MapDrawFilter({
     return () => map.setTarget(undefined);
   }, [active, properties]);
 
+  const handleZoom = (delta: number) => {
+    if (mapInstance.current) {
+      const view = mapInstance.current.getView();
+      const newZoom = view.getZoom()! + delta;
+      view.animate({
+        zoom: newZoom,
+        duration: 250,
+      });
+    }
+  };
+
   return (
-    <div>
-      <button
-        onClick={() => setActive(!active)}
-        style={{ marginBottom: "10px" }}
-      >
-        {active ? "✅ Завершить рисование" : "✏️ Нарисовать фильтр"}
-      </button>
-      <div ref={mapRef} style={{ width: "100%", height: "600px" }} />
+    <div className={styles.mapContainer}>
+      {/* Кнопка рисования (в левом верхнем углу) */}
+      <div className={styles.drawButtonContainer}>
+        <button onClick={() => setActive(!active)} className={styles.mapButton}>
+          {active ? "✅" : "✏️"}
+        </button>
+      </div>
+
+      {/* Контейнер для кнопок зума (в правом верхнем углу) */}
+      <div className={styles.zoomButtonsContainer}>
+        <button onClick={() => handleZoom(1)} className={styles.mapButton}>
+          +
+        </button>
+        <button onClick={() => handleZoom(-1)} className={styles.mapButton}>
+          -
+        </button>
+      </div>
+
+      {/* Контейнер карты */}
+      <div
+        ref={mapRef}
+        className={styles.mapCanvas} // <-- Применяем новый класс
+      />
     </div>
   );
 }

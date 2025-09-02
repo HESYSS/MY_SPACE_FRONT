@@ -1,7 +1,7 @@
+// components/PropertyCard.tsx
 import { Property } from "../../types/property";
-import Link from "next/link";
 import Image from "next/image";
-import styles from "./styles.module.css";
+import styles from "./styles.module.css"; // Импортируем стили
 
 interface Props {
   property: Property;
@@ -100,13 +100,6 @@ export default function PropertyCard({ property }: Props) {
             {formatDate(property.сreatedAt)}
           </span>
         </div>
-
-        <Link
-          href={`/property/${property.id}`}
-          className={styles["property-card-link"]}
-        >
-          Детальніше
-        </Link>
       </div>
     </div>
   );

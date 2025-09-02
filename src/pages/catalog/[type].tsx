@@ -1,9 +1,9 @@
-// pages/catalog/[type].tsx
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import Filter from "@/components/Filter";
 import MapWrapper from "@/components/Map/MapWrapper";
 import PropertyList from "./PropertyList";
+import styles from "./CatalogPage.module.css"; // Импортируем стили
 
 const typeMap: Record<string, string> = {
   rent: "Оренда",
@@ -12,7 +12,7 @@ const typeMap: Record<string, string> = {
 
 export default function CatalogPage() {
   const router = useRouter();
-  const { type } = router.query; // type из URL
+  const { type } = router.query;
   const currentType = typeof type === "string" ? type : "rent";
 
   const [filterType, setFilterType] = useState(typeMap[currentType]);
@@ -59,21 +59,30 @@ export default function CatalogPage() {
   }, [filterType]);
 
   return (
-    <div>
-      <h1>Каталог: {filterType}</h1>
+    <div className={styles.catalogContainer}>
+      {/* Левая колонка - объекты и фильтры */}
+      <div className={styles.leftColumn}>
+        <div>
+          <h1 className={styles.catalogTitle}>Каталог: {filterType}</h1>
+          <Filter
+            type={filterType}
+            onTypeChange={(t) => {
+              setFilterType(t);
+              setPage(1);
+            }}
+          />
+        </div>
 
-      <Filter
-        type={filterType}
-        onTypeChange={(t) => {
-          setFilterType(t);
-          setPage(1);
-        }}
-      />
+        {/* Контейнер для прокручиваемого списка */}
+        <div className={styles.listContainer}>
+          <PropertyList properties={properties} loading={loading} />
+        </div>
+      </div>
 
-      <PropertyList properties={properties} loading={loading} />
-
-      <h2>Мапа об’єктів</h2>
-      <MapWrapper properties={allProperties} />
+      {/* Правая колонка - карта */}
+      <div className={styles.rightColumn}>
+        <MapWrapper properties={allProperties} />
+      </div>
     </div>
   );
 }
