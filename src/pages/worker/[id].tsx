@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import { useTranslation } from "react-i18next";
-import styles from "./worker.module.css";
 import { useRouter } from "next/router";
+import { useTranslation } from "react-i18next";
+import Image from "next/image"; // Импортируем компонент Image
+import arrowRight from "../../../public/icons/line.svg"; // Укажите правильный путь к иконке
+import styles from "./worker.module.css";
 
 // Определяем интерфейс для данных работника, чтобы обеспечить безопасность типов
 interface Employee {
@@ -23,7 +24,7 @@ interface Employee {
 const EmployeePage = () => {
   const router = useRouter();
   const { id } = router.query;
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   // Состояние для хранения данных работника и статуса загрузки
   const [employee, setEmployee] = useState<Employee | null>(null);
@@ -53,15 +54,15 @@ const EmployeePage = () => {
   }, [id]);
 
   if (loading) {
-    return <div>Загрузка...</div>;
+    return <div>{t("loading")}...</div>;
   }
 
   if (error) {
-    return <div>Ошибка: {error}</div>;
+    return <div>{t("error")}: {error}</div>;
   }
 
   if (!employee) {
-    return <div>Сотрудник не найден.</div>;
+    return <div>{t("employeeNotFound")}</div>;
   }
 
   // Функция для получения данных в зависимости от текущего языка
@@ -97,7 +98,7 @@ const EmployeePage = () => {
         <div className={styles.titleArea}>
           <div className={styles.titleLine}></div>
           <h2 className={styles.readMoreTitle}>
-            {i18n.language === "en" ? "Read more" : "Читать далее"}
+            {t("readMoreTitle")}
           </h2>
         </div>
         {/* Employee information block wrapped in a new container */}
@@ -128,24 +129,24 @@ const EmployeePage = () => {
                 <div className={styles.additionalInfo}>
                   <div className={styles.infoSection}>
                     <h4 className={styles.infoTitle}>
-                      {i18n.language === "en" ? "Experience" : "Досвід"}
+                      {t("experience")}
                     </h4>
                     <p className={styles.infoText}>
                       {employee.experienceYears}{" "}
-                      {i18n.language === "en" ? "years" : "років"}
+                      {t("years")}
                     </p>
                   </div>
 
                   <div className={styles.infoSection}>
                     <h4 className={styles.infoTitle}>
-                      {i18n.language === "en" ? "Profile" : "Профіль"}
+                      {t("profile")}
                     </h4>
                     <p className={styles.infoText}>{currentData.profile}</p>
                   </div>
 
                   <div className={styles.infoSection}>
                     <h4 className={styles.infoTitle}>
-                      {i18n.language === "en" ? "About me" : "Про себе"}
+                      {t("aboutMe")}
                     </h4>
                     <p className={styles.infoText}>{currentData.aboutMe}</p>
                   </div>
@@ -154,37 +155,22 @@ const EmployeePage = () => {
             </div>
           </div>
         </div>
+        
+        {/* Исправленный блок сотрудничества */}
         <div className={styles.coworking}>
-          <h3 className={styles.callToAction}>
-            {i18n.language === "en"
-              ? "Sign up for a consultation"
-              : "Запишитесь на консультацию"}
-          </h3>
+          <h3 className={styles.callToAction}>{t('consultationCallToAction')}</h3>
           <div className={styles.frame89}>
             <div className={styles.frame88}>
               <div className={styles.optionRow}>
                 <div className={styles.frame87}>
                   <div className={styles.line16}></div>
                   <div className={styles.frame86}>
-                    <p className={styles.optionText}>
-                      {i18n.language === "en"
-                        ? "For sellers and landlords"
-                        : "Для продавцов и арендодателей"}
-                    </p>
-                    <svg
+                    <p className={styles.optionText}>{t('forSellersLandlords')}</p>
+                    <Image
+                      src={arrowRight}
+                      alt={t('arrowRightAlt')}
                       className={styles.arrowIcon}
-                      width="20"
-                      height="20"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <line x1="5" y1="12" x2="19" y2="12"></line>
-                      <polyline points="12 5 19 12 12 19"></polyline>
-                    </svg>
+                    />
                   </div>
                 </div>
               </div>
@@ -192,31 +178,19 @@ const EmployeePage = () => {
                 <div className={styles.frame85}>
                   <div className={styles.line17}></div>
                   <div className={styles.frame84}>
-                    <p className={styles.optionText}>
-                      {i18n.language === "en"
-                        ? "For buyers and tenants"
-                        : "Для покупателей и арендаторов"}
-                    </p>
-                    <svg
+                    <p className={styles.optionText}>{t('forBuyersTenants')}</p>
+                    <Image
+                      src={arrowRight}
+                      alt={t('arrowRightAlt')}
                       className={styles.arrowIcon}
-                      width="20"
-                      height="20"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <line x1="5" y1="12" x2="19" y2="12"></line>
-                      <polyline points="12 5 19 12 12 19"></polyline>
-                    </svg>
+                    />
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
+
       </div>
     </div>
   );

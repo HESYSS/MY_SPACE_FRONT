@@ -1,48 +1,48 @@
+/* ==========================================================================
+   Базовые стили для ПК (широких экранов)
+   ========================================================================== */
 .mainDiv {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 1200px;
+  width: 100%;
+  max-width: 1920px;
   height: auto;
   background-color: transparent;
-  margin-left: 365px;
+  margin: 0 auto;
+  padding: 0 20px; /* Отступ для предотвращения прилипания к краям */
 }
 
 /* Новый контейнер для всего содержимого */
 .containerWithOval {
   position: relative;
-  overflow: visible; /* Убеждаемся, что ничего не обрезается */
-  width: 1920px;
+  overflow: hidden; /* Меняем на hidden, чтобы овал не выходил за пределы */
+  width: 100%;
 }
 
-/* Container for the title and line */
+/* Контейнер для заголовка и линии */
 .titleArea {
   display: flex;
   flex-direction: row;
   align-items: center;
-  padding: 0px;
   gap: 30px;
-  width: 1200px;
-  height: 75px;
-  position: relative; /* Добавляем позиционирование */
-  z-index: 1; /* Чтобы был над овалом */
-  margin-left: 360px;
-  margin-top: 80px;
-  margin-bottom: 80px;
+  width: 100%;
+  max-width: 1200px;
+  height: auto;
+  position: relative;
+  z-index: 1;
+  margin: 80px auto;
+  padding: 0 20px;
 }
 
-/* Line before the title */
 .titleLine {
   height: 1px;
-  width: 659px;
-  background: linear-gradient(to right, #050505 0%, #03b9b3 100%);
+  width: auto;
   flex-grow: 1;
+  background: linear-gradient(to right, #050505 0%, #03b9b3 100%);
 }
 
-/* "ЧИТАТИ БІЛЬШЕ" title */
 .readMoreTitle {
-  width: 511px;
-  height: 75px;
   font-family: "Raleway";
   font-style: normal;
   font-weight: 400;
@@ -51,23 +51,21 @@
   text-transform: uppercase;
   color: #ebebeb;
   margin: 0;
-  flex-grow: 0;
+  flex-shrink: 0;
 }
 
 .contactsBlockWrapper {
   padding: 1px;
   border-radius: 20px;
   background: linear-gradient(90deg, #ffffff 0%, #000000 50%, #000000 100%);
-  margin: 40px auto;
-  width: 1200px;
-  height: 560px;
-  margin-bottom: 80px;
+  width: 100%;
+  max-width: 1200px;
+  height: auto;
+  margin: 40px auto 80px auto;
   position: relative;
-  z-index: 2; /* Устанавливаем z-index, чтобы он был над овалом */
-  margin-left: 360px;
+  z-index: 2;
 }
 
-/* Original contacts block with modified styles */
 .contactsBlock {
   box-sizing: border-box;
   display: flex;
@@ -79,7 +77,6 @@
   height: 100%;
   background: #0a0a0a;
   border-radius: 20px;
-  flex-grow: 0;
   z-index: 2;
 }
 
@@ -90,11 +87,9 @@
   padding: 0px;
   gap: 40px;
   width: 100%;
-  height: 480px;
-  flex-grow: 0;
+  height: auto;
 }
 
-/* Employee photo container */
 .photoContainer {
   display: flex;
   flex-direction: row;
@@ -103,18 +98,16 @@
   gap: 10px;
   width: 320px;
   height: 480px;
-  flex-grow: 0;
+  flex-shrink: 0;
 }
 
-/* Employee photo */
 .employeePhoto {
-  width: 320px;
-  height: 480px;
+  width: 100%;
+  height: 100%;
   border-radius: 4px;
   object-fit: cover;
 }
 
-/* Employee name */
 .employeeName {
   width: 100%;
   height: 42px;
@@ -128,34 +121,29 @@
   margin: 0;
 }
 
-/* Container for all info (name, role, experience, etc.) */
 .infoContainer {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   padding: 0px;
   gap: 40px;
-  width: 760px;
-  height: 480px;
-  flex-grow: 1;
+  width: 100%;
+  height: auto;
 }
 
-/* Name and role block */
 .nameAndRole {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
-  padding: 40px 0px 0px;
+  align-items: flex-start;
+  padding: 0;
   gap: 20px;
   width: 100%;
-  height: 130px;
 }
 
-/* Employee role */
 .employeeRole {
   width: 100%;
-  height: 28px;
+  height: auto;
   font-family: "Raleway";
   font-style: normal;
   font-weight: 700;
@@ -166,14 +154,12 @@
   margin: 0;
 }
 
-/* Divider line */
 .line17 {
   width: 100%;
   height: 0px;
   border-top: 1px solid #303030;
 }
 
-/* Container for experience, profile, and about me blocks */
 .additionalInfo {
   display: flex;
   flex-direction: column;
@@ -184,7 +170,6 @@
   height: auto;
 }
 
-/* Individual info section (experience, profile, about me) */
 .infoSection {
   display: flex;
   flex-direction: column;
@@ -195,10 +180,9 @@
   width: 100%;
 }
 
-/* Title for info sections (Досвід, Профіль, Про себе) */
 .infoTitle {
   width: 100%;
-  height: 28px;
+  height: auto;
   font-family: "Raleway";
   font-style: normal;
   font-weight: 700;
@@ -209,7 +193,6 @@
   text-align: left;
 }
 
-/* Text for info sections */
 .infoText {
   width: 100%;
   height: auto;
@@ -223,26 +206,23 @@
   text-align: left;
 }
 
-/* Coworking */
 .coworking {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   justify-content: space-between;
-  align-items: center;
-  padding: 0px;
-  gap: 267px;
-  width: 1200px;
-  height: 344px;
-  margin-left: 360px;
-  margin-bottom: 80px;
+  align-items: flex-start;
+  padding: 0 20px;
+  gap: 20px;
+  width: 100%;
+  max-width: 1200px;
+  height: auto;
+  margin: 0 auto 80px auto;
   position: relative;
-  z-index: 1; /* Устанавливаем z-index, чтобы он был поверх овала */
+  z-index: 1;
 }
 
-/* Бажаєте отримати консультацію? */
 .callToAction {
-  width: 403px;
-  height: 168px;
   font-family: "Raleway", sans-serif;
   font-style: normal;
   font-weight: 400;
@@ -250,59 +230,55 @@
   line-height: 56px;
   text-transform: uppercase;
   color: #ebebeb;
+  flex: 1 1 400px;
 }
 
-/* Frame 89 */
 .frame89 {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   padding: 30px 36px;
   gap: 10px;
-  width: 525px;
-  height: 226px;
+  flex: 1 1 500px;
+  max-width: 525px;
+  height: auto;
   background: #0a0a0a;
   border-radius: 20px;
   box-sizing: border-box;
   z-index: 2;
 }
 
-/* Frame 88 */
 .frame88 {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   padding: 0px;
   gap: 64px;
-  width: 453px;
-  height: 284px;
+  width: 100%;
+  height: auto;
 }
 
-/* Общие стили для строк с опциями */
 .frame87,
-.frame85,
-.frame83 {
+.frame85 {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   padding: 0px;
   gap: 10px;
-  width: 453px;
-  height: 52px;
+  width: 100%;
+  height: auto;
   box-sizing: border-box;
 }
 
-/* Линии разделители */
 .line16,
 .line17,
 .line18 {
-  width: 453px;
+  width: 100%;
   height: 1px;
   border-top: 1px solid #303030;
   box-sizing: border-box;
 }
 
-/* Общие стили для фреймов с текстом и стрелкой */
 .frame86,
 .frame84,
 .frame82 {
@@ -311,12 +287,11 @@
   justify-content: space-between;
   align-items: center;
   padding: 0px;
-  width: 453px;
-  height: 42px;
+  width: 100%;
+  height: auto;
   box-sizing: border-box;
 }
 
-/* Текст опций */
 .optionText {
   font-family: "Raleway", sans-serif;
   font-style: normal;
@@ -326,24 +301,216 @@
   color: #ebebeb;
   margin: 0;
   white-space: nowrap;
-  font-family: Raleway;
   font-variant: small-caps;
 }
 
-/* Стили для изображений стрелок */
 .arrowIcon {
   width: 26px;
   height: 26px;
+  flex-shrink: 0;
 }
 
 .glowingOval {
   position: absolute;
   width: 872px;
   height: 411px;
-  right: 0px;
+  right: 0;
   top: 500px;
   background: rgba(3, 185, 179, 0.5);
   filter: blur(250px);
   z-index: 1;
-  left: 850px;
+  transform: translateX(50%); /* Центрируем по горизонтали */
+}
+
+/* ==========================================================================
+   Медиазапросы для планшетов
+   ========================================================================== */
+@media (min-width: 769px) and (max-width: 1800px) {
+  .mainDiv {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 1800px;
+    height: auto;
+    background-color: transparent;
+    margin-left: -30px;
+    padding: 0 20px;
+  }
+
+  /* Контейнер для заголовка и линии */
+  .titleArea {
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    max-width: 1200px;
+    margin: 80px 120px auto;
+    padding: 0 20px;
+  }
+  
+  /* Градиентная линия */
+  .titleLine {
+    height: 1px;
+    width: 500px;
+    max-width: 500px;
+    background: linear-gradient(to right, #050505 0%, #03b9b3 100%);
+    flex-grow: 0;
+    margin-left: -120px;
+  }
+  
+  /* Заголовок "ЧИТАТИ БІЛЬШЕ" */
+  .readMoreTitle {
+    font-size: 48px;
+    line-height: 56px;
+    width: auto;
+    text-align: center;
+  }
+
+  /* Обертка для блока контактов (информация о сотруднике) */
+  .contactsBlockWrapper {
+    width: 729px;
+    margin-bottom: 80px;
+  }
+  
+  .contactsBlock {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 40px;
+    gap: 40px;
+    width: 100%;
+    height: 100%;
+    background: #0a0a0a;
+    border-radius: 20px;
+  }
+  
+  .frame301 {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 40px;
+    width: 100%;
+    height: auto;
+  }
+
+  .photoContainer {
+    width: 320px;
+    height: 480px;
+    flex-shrink: 0;
+  }
+  
+  .employeePhoto {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .infoContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 40px;
+    width: 100%;
+    height: auto;
+  }
+  
+  .employeeName,
+  .employeeRole {
+    text-align: left;
+    width: 100%;
+  }
+
+  .nameAndRole {
+    align-items: flex-start;
+  }
+
+  .infoTitle,
+  .infoText {
+    text-align: left;
+    width: 100%;
+  }
+  
+  /* Блок "Бажаєте отримати консультацію?" */
+  .coworking {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between; /* Изменили на space-between для выравнивания по краям */
+    align-items: flex-start;
+    gap: 40px;
+    width: 100%;
+    max-width: 769px;
+    margin: 0 auto 80px auto;
+    padding: 0 20px;
+  }
+
+  /* Заголовок "Бажаєте отримати консультацію?" */
+  .callToAction {
+    font-size: 36px;
+    line-height: 1.2;
+    text-align: left;
+    flex: 1; /* Позволяем занимать доступное пространство */
+    min-width: 300px; /* Установили минимальную ширину */
+    max-width: 500px;
+    margin: 0;
+  }
+
+  /* Контейнер с двумя опциями */
+  .frame89 {
+    padding: 20px;
+    flex: 1; /* Позволяем занимать оставшееся пространство */
+    width: auto; /* Убрали фиксированную ширину */
+    height: auto;
+    gap: 10px;
+    background: #0a0a0a;
+    border-radius: 20px;
+    box-sizing: border-box;
+  }
+  
+  /* Внутренний контейнер опций */
+  .frame88 {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+    width: 100%;
+    height: auto;
+  }
+
+  /* Строка с текстом и стрелкой */
+  .frame86,
+  .frame84 {
+    justify-content: space-between;
+    width: 100%;
+    height: auto;
+    padding: 0;
+  }
+
+  /* Текст опций */
+  .optionText {
+    font-size: 20px;
+    line-height: 1.5;
+    white-space: normal;
+  }
+
+  /* Стрелка */
+  .arrowIcon {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    margin-left: 25px;
+  }
+  
+  /* Овал */
+  .glowingOval {
+    width: 70vw;
+    height: 30vw;
+    top: 500px;
+    right: 0;
+    left: auto;
+    transform: translateX(0);
+  }
 }

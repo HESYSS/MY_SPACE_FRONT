@@ -6,4 +6,41 @@ body {
   height: 100%;
   background-color: #050505;
   color: #ffffff;
+  /* Добавим системный шрифт для лучшей кроссплатформенности */
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Стили для контейнера всего макета */
+.layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Убедимся, что контейнер занимает всю высоту экрана */
+  overflow: hidden; /* Предотвращаем горизонтальный скроллинг */
+}
+
+/* Стили для основного контента */
+main {
+  flex-grow: 1; /* Позволяет main-контейнеру занимать все доступное пространство */
+  padding: 20px; /* Базовый отступ для десктопов */
+  max-width: 1920px; /* Ограничиваем максимальную ширину для больших экранов */
+  margin: 0 auto; /* Центрируем контент */
+  width: 100%;
+}
+
+/* Медиа-запросы для адаптации */
+
+/* Планшеты (до 1024px) */
+@media (max-width: 1024px) {
+  main {
+    padding: 15px;
+  }
+}
+
+/* Мобильные устройства (до 768px) */
+@media (max-width: 768px) {
+  main {
+    padding: 10px;
+  }
 }
