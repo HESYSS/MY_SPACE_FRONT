@@ -1,7 +1,8 @@
 import { useState } from "react";
+import Link from "next/link"; // Импортируем компонент Link
 import PropertyCard from "@/components/PropertyCard";
 import { Property } from "@/types/property";
-import styles from "./PropertyList.module.css"; // Импортируем новый CSS-модуль
+import styles from "./PropertyList.module.css";
 
 interface Props {
   properties: Property[];
@@ -10,7 +11,7 @@ interface Props {
 
 export default function PropertyList({ properties, loading }: Props) {
   const [page, setPage] = useState(1);
-  const pageSize = 9; // чтобы 3x3 в ряд
+  const pageSize = 9;
   const start = (page - 1) * pageSize;
   const end = start + pageSize;
   const paginatedProperties = properties.slice(start, end);
@@ -22,7 +23,10 @@ export default function PropertyList({ properties, loading }: Props) {
       ) : (
         <div className={styles.propertiesGrid}>
           {paginatedProperties.map((p) => (
-            <PropertyCard key={p.id} property={p} />
+            // Оборачиваем PropertyCard в компонент Link
+            <Link key={p.id} href={`/property/${p.id}`} passHref>
+              <PropertyCard property={p} />
+            </Link>
           ))}
         </div>
       )}

@@ -1,174 +1,289 @@
-.mainDiv {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 1200px;
-  height: auto;
-  background-color: transparent;
-  margin-left: 365px;
+/* PropertyPage.module.css */
+
+/*
+* Глобальные стили
+*/
+
+.glowingEllipse {
+  position: absolute;
+  width: 872px;
+  height: 411px;
+  right: 0px;
+  top: 844px;
+  background: rgba(3, 185, 179, 0.5);
+  filter: blur(350px);
+  z-index: 0;
+  pointer-events: none;
 }
 
 .propertyPage {
-  background-color: #0d1a26; /* Темный фон */
-  color: #ebebeb; /* Светлый текст */
-  font-family: "Raleway", sans-serif;
-  min-height: 100vh;
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 80px;
-  padding: 0 20px;
+  padding: 40px;
+  background-color: #050505;
+  color: #c9d1d9;
+  font-family: Arial, sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
 }
 
-.mainContent {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+.contentWrapper {
   width: 100%;
-  max-width: 1200px; /* Соответствует ширине макета */
-  gap: 40px;
-}
-
-.column1 {
-  flex: 1;
+  max-width: 1200px;
   display: flex;
   flex-direction: column;
   gap: 40px;
 }
 
-.column2 {
-  flex: 1;
+/*
+* Стили для десктопов (1101px и больше)
+*/
+
+.mainInfoSection {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 40px;
+}
+
+.imageGallery {
   display: flex;
   flex-direction: column;
   gap: 20px;
-  padding-top: 40px; /* Отступ сверху для выравнивания */
+}
+
+.infoSection {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-left: -75px;
 }
 
 .title {
-  font-size: 36px;
-  font-weight: 700;
-  line-height: 42px;
-  text-transform: capitalize;
-  margin-bottom: 20px;
+  font-size: 2.5em;
+  font-weight: bold;
+  margin-bottom: 0;
 }
 
-.subtitle {
-  font-size: 24px;
-  font-weight: 400;
-  line-height: 28px;
-  text-transform: capitalize;
-  color: #ebebeb;
+.location {
+  font-size: 1.2em;
+  color: #8b949e;
+  margin-top: 0;
 }
 
-.infoLine {
+.type {
+  font-size: 1.1em;
+  font-weight: 500;
+  color: #c9d1d9;
+}
+
+.featuresRow {
   display: flex;
-  flex-direction: row;
-  align-items: center;
   gap: 20px;
-  padding-bottom: 20px;
-  border-bottom: 1px solid #565656;
+  align-items: center;
+  border-top: 1px solid #30363d;
+  border-bottom: 1px solid #30363d;
+  padding: 15px 0;
+}
+
+.featureItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #c9d1d9;
+}
+
+.priceAndButton {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: flex-start;
 }
 
 .price {
-  font-size: 24px;
-  font-weight: 400;
-  line-height: 28px;
-  text-align: right;
-  text-transform: capitalize;
-  color: #ebebeb;
-  margin-top: 20px;
+  font-size: 2em;
+  font-weight: bold;
+  color: #EBEBEB;
 }
 
-.button {
-  background-color: #ebebeb;
-  color: #050505;
-  border-radius: 40px;
-  padding: 14px 28px;
-  font-size: 16px;
-  font-weight: 400;
-  text-transform: uppercase;
+.contactButton {
+  background-color: #EBEBEB;
+  color: #0d1117;
   border: none;
+  padding: 15px 30px;
+  font-size: 1em;
+  font-weight: bold;
   cursor: pointer;
-  align-self: flex-end;
-}
-
-.descriptionBlock {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.divider {
+  border-radius: 8px;
+  transition: background-color 0.2s;
   width: 100%;
-  border-top: 1px solid #565656;
+}
+
+.contactButton:hover {
+  background-color: #03B9B3;
+}
+
+.detailsContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 40px;
+}
+
+.sectionBlock {
+  background-color: #050505;
+  border-radius: 12px;
+  padding: 30px;
+  flex: 1;
 }
 
 .sectionTitle {
-  font-size: 24px;
-  font-weight: 400;
-  line-height: 28px;
-  text-transform: capitalize;
-  color: #ebebeb;
+  font-size: 1.5em;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #c9d1d9;
 }
 
-.sectionText {
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 17px;
-  text-transform: capitalize;
-  color: #ffffff;
-}
-
-.consultationSection {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  max-width: 1200px; /* Соответствует ширине макета */
-  gap: 267px; /* Зазор между текстом и блоком */
-}
-
-.consultationTitle {
-  font-size: 48px;
-  font-weight: 400;
-  line-height: 56px;
-  text-transform: uppercase;
-  color: #ebebeb;
-  width: 403px; /* Фиксированная ширина */
-}
-
-.consultationForm {
-  background-color: #0a0a0a;
-  border-radius: 20px;
-  padding: 30px 36px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  width: 525px; /* Фиксированная ширина */
-}
-
-.formItem {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.featuresList {
+  list-style-type: none;
   padding: 0;
-  gap: 192px;
-  border-bottom: 1px solid #303030;
-  padding-bottom: 10px;
-  margin-bottom: 10px;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
 }
 
-.formItemText {
-  font-size: 36px;
-  font-weight: 400;
-  line-height: 42px;
-  text-transform: uppercase;
-  color: #ebebeb;
+.featuresList li {
+  font-size: 1em;
+  color: #8b949e;
 }
 
-.arrowIcon {
-  width: 26px;
-  height: 26px;
-  border: 2px solid #ebebeb;
+.description {
+  font-size: 1em;
+  line-height: 1.6;
+  color: #c9d1d9;
+  white-space: pre-wrap;
+}
+
+.mapColumn {
+  border-radius: 12px;
+  overflow: hidden;
+  height: 500px;
+  margin-left: 200px;
+}
+
+@media (min-width: 769px) and (max-width: 1100px) {
+  .contentWrapper {
+    gap: 20px;
+  }
+
+  .mainInfoSection {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .infoSection {
+    margin-left: 0;
+  }
+  
+  .imageGallery {
+    width: 100%;
+  }
+
+  .priceAndButton {
+    align-items: flex-start;
+  }
+  
+  .detailsContainer {
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  .mapColumn {
+    width: 100%;
+    margin-left: 0;
+  }
+}
+
+
+@media (min-width: 375px) and (max-width: 768px) {
+  .propertyPage {
+    padding: 20px;
+  }
+
+  .contentWrapper {
+    gap: 20px;
+  }
+
+  .mainInfoSection {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .infoSection {
+    margin-left: 0;
+  }
+  
+  .title {
+    font-size: 2em;
+  }
+
+  .location {
+    font-size: 1.1em;
+  }
+
+  .type {
+    font-size: 1em;
+  }
+
+  .featuresRow {
+    gap: 15px;
+    padding: 10px 0;
+  }
+
+  .featureItem {
+    font-size: 0.9em;
+  }
+
+  .price {
+    font-size: 1.8em;
+  }
+
+  .contactButton {
+    font-size: 0.9em;
+    padding: 12px 20px;
+  }
+
+  .detailsContainer {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .sectionBlock {
+    padding: 20px;
+  }
+
+  .sectionTitle {
+    font-size: 1.3em;
+  }
+
+  .featuresList {
+    grid-template-columns: 1fr;
+  }
+
+  .featuresList li {
+    font-size: 0.9em;
+  }
+
+  .description {
+    font-size: 0.9em;
+  }
+
+  .mapColumn {
+    width: 100%;
+    margin-left: 0;
+    height: 300px;
+  }
 }
