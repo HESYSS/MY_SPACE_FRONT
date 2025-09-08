@@ -107,5 +107,9 @@
   "cookieControl": "Please note that cookies do not allow us to control your computer in any way. They are used exclusively to monitor which pages you find useful and which you don't, so we can provide you with a better experience.",
   "cookieDisableInfo": "If you want to disable cookies, you can do so by going to the settings of your internet browser. You can visit ",
   "cookieDisableInfo2": ", which contains comprehensive information on how to do this in a wide range of browsers and devices.",
-  "dataDistributionPolicy": "MySpace will not rent, sell, or distribute your personal information to third parties without your permission. We may do so if required by law. Your personal information will be used when we need to send you promotional materials if you agree to this privacy policy."
+  "dataDistributionPolicy": "MySpace will not rent, sell, or distribute your personal information to third parties without your permission. We may do so if required by law. Your personal information will be used when we need to send you promotional materials if you agree to this privacy policy.",
+  "experience": "Experience",
+  "years": "years",
+  "profile": "Profile",
+  "aboutMe": "About Me"
 }

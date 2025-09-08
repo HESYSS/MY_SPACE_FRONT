@@ -2,11 +2,11 @@
 .teamSection {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
   padding: 0px;
   gap: 40px;
   width: 1200px;
-  height: 885px;
+  height: auto;
   box-sizing: border-box;
 }
 
@@ -15,8 +15,8 @@
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: space-between;
   padding: 0px;
-  gap: 400px; /* Adjust this gap if needed for different screen sizes */
   width: 1200px;
   height: 56px;
   box-sizing: border-box;
@@ -38,23 +38,21 @@
 /* Container for all team member cards (Par&Man) */
 .teamMembersContainer {
   display: flex;
-  /* Изменено на row, чтобы дочерние элементы выстраивались в строку */
-  flex-direction: row; 
-  /* Выравнивание элементов по горизонтали */
+  flex-direction: row;
   justify-content: space-between;
-  /* Вертикальное выравнивание элементов */
   align-items: flex-start;
   padding: 0px;
-  gap: 30px; /* Отступ между колонками */
+  gap: 30px;
   width: 1200px;
   box-sizing: border-box;
 }
 
-.column {
-  display: flex;
-  flex-direction: column; /* Элементы внутри колонки выстраиваются вертикально */
-  gap: 20px; /* Отступ между карточками */
-  flex-grow: 1; /* Позволяет колонкам занимать доступное пространство */
+/* Container for each group (Partners or Managers) */
+.teamGroup {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  flex: 1;
 }
 
 /* Team member card */
@@ -64,8 +62,8 @@
   justify-content: center;
   align-items: flex-start;
   padding: 20px;
-  width: 257px;
-  height: auto; /* Changed from fixed height to auto for flexibility */
+  width: auto;
+  height: auto;
   background: #0a0a0a;
   border-radius: 6px;
   box-sizing: border-box;
@@ -73,32 +71,31 @@
 
 /* Card content */
 .cardContent {
+  width: 100%;
+  gap: 10px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   padding: 0px;
-  gap: 10px;
-  width: 217px;
-  height: auto;
 }
 
 /* Photo and name container */
 .photoAndName {
+  width: 100%;
+  height: 232px;
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
   align-items: flex-end;
   padding: 5px;
-  width: 217px;
-  height: 232px;
-  position: relative;
 }
 
 /* Photo of team member */
 .memberPhoto {
   position: absolute;
-  width: 217px;
-  height: 232px;
+  width: 100%;
+  height: 100%;
   top: 0;
   left: 0;
   object-fit: cover;
@@ -118,7 +115,6 @@
   margin: 0;
   position: relative;
   z-index: 2;
-  /* Добавляем эти свойства для переноса слов */
   white-space: pre-line;
   word-wrap: break-word;
 }
@@ -130,7 +126,7 @@
   align-items: flex-start;
   padding: 0px;
   gap: 20px;
-  width: 217px;
+  width: 100%;
   height: auto;
 }
 
@@ -141,7 +137,7 @@
   flex-direction: column;
   align-items: flex-end;
   padding: 10px 0px 0px;
-  width: 217px;
+  width: 100%;
   border-top: 1px solid #303030;
 }
 
@@ -165,7 +161,7 @@
   justify-content: space-between;
   align-items: flex-end;
   padding: 0px;
-  width: 217px;
+  width: 100%;
   height: 20px;
 }
 
@@ -177,4 +173,69 @@
 .arrowIcon {
   width: 20px;
   height: 20px;
+}
+
+/* --- Планшетная адаптация --- */
+@media (min-width: 769px) and (max-width: 1300px) {
+  /* Основной контейнер */
+  .teamSection {
+    width: 90%; /* Адаптируем ширину под планшет */
+    max-width: 100%;
+    margin: 0 auto;
+    gap: 30px;
+  }
+
+  /* Контейнер заголовков */
+  .titles {
+    width: 100%;
+    gap: 20px;
+  }
+  
+  /* Заголовки */
+  .title {
+    font-size: 4.5vw; /* Уменьшаем размер шрифта в зависимости от ширины вьюпорта */
+    line-height: 5vw;
+  }
+  .title:first-child {
+    font-size: 4.5vw;
+  }
+
+  /* Основной контейнер для групп */
+  .teamMembersContainer {
+    width: 100%;
+    gap: 20px;
+  }
+
+  /* Контейнер каждой группы */
+  .teamGroup {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+  }
+  
+  /* Фото и имя */
+  .photoAndName {
+    height: 15vw; /* Уменьшаем высоту относительно вьюпорта */
+  }
+  
+  /* Имя */
+  .memberName {
+    font-size: 2vw;
+    line-height: 2.2vw;
+  }
+  
+  /* Должность */
+  .positionText {
+    font-size: 1.5vw;
+    line-height: 1.7vw;
+  }
+
+  /* Иконки */
+  .mySpaceLogo {
+    width: 4vw;
+  }
+  
+  .arrowIcon {
+    width: 2vw;
+    height: 2vw;
+  }
 }

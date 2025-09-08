@@ -10,12 +10,12 @@ import defaultTeamImage from '../../../../public/icons/vitaliyPenc.png';
 // Интерфейс для данных, получаемых с бэкенда
 interface Employee {
   id: number;
-  firstName: string; // Используется для украинского имени
-  lastName: string;  // Используется для украинской фамилии
-  position: string;  // Используется для украинской должности
-  firstNameEn?: string; // Используется для английского имени
-  lastNameEn?: string;  // Используется для английской фамилии
-  positionEn?: string;  // Используется для английской должности
+  firstName: string; 
+  lastName: string;  
+  position: string;  
+  firstNameEn?: string; 
+  lastNameEn?: string;  
+  positionEn?: string;  
   isPARTNER: boolean;
   isMANAGER: boolean;
   isACTIVE: boolean;
@@ -72,84 +72,45 @@ export default function TeamSection() {
     };
   };
 
-  // Разделение партнеров на две колонки
-  const partnersMidpoint = Math.ceil(partners.length / 2);
-  const partnersCol1 = partners.slice(0, partnersMidpoint);
-  const partnersCol2 = partners.slice(partnersMidpoint);
-
-  // Разделение менеджеров на две колонки
-  const managersMidpoint = Math.ceil(managers.length / 2);
-  const managersCol1 = managers.slice(0, managersMidpoint);
-  const managersCol2 = managers.slice(managersMidpoint);
-
   return (
-    <div className={styles.teamSection}>
-      <div className={styles.titles}>
-        <h2 className={styles.title}>{t('partnersTitle')}</h2>
-        <h2 className={styles.title}>{t('managersTitle')}</h2>
+  <div className={styles.teamSection}>
+    <div className={styles.titles}>
+      <h2 className={styles.title}>{t('partnersTitle')}</h2>
+      <h2 className={styles.title}>{t('managersTitle')}</h2>
+    </div>
+    {/* Основной контейнер, который будет держать обе группы */}
+    <div className={styles.teamMembersContainer}>
+      {/* Контейнер для партнеров */}
+      <div className={styles.teamGroup}>
+        {partners.map((member) => {
+          const { name, position } = getMemberData(member, i18n.language);
+          return (
+            <TeamMemberCard
+              key={member.id}
+              id={member.id}
+              name={name}
+              position={position}
+              photoSrc={defaultTeamImage.src}
+            />
+          );
+        })}
       </div>
-      <div className={styles.teamMembersContainer}>
-        {/* Первая колонка для партнеров */}
-        <div className={styles.teamColumn}>
-          {partnersCol1.map((member) => {
-            const { name, position } = getMemberData(member, i18n.language);
-            return (
-              <TeamMemberCard
-                key={member.id}
-                id={member.id} // Передаем id работника
-                name={name}
-                position={position}
-                photoSrc={defaultTeamImage.src}
-              />
-            );
-          })}
-        </div>
-        {/* Вторая колонка для партнеров */}
-        <div className={styles.teamColumn}>
-          {partnersCol2.map((member) => {
-            const { name, position } = getMemberData(member, i18n.language);
-            return (
-              <TeamMemberCard
-                key={member.id}
-                id={member.id} // Передаем id работника
-                name={name}
-                position={position}
-                photoSrc={defaultTeamImage.src}
-              />
-            );
-          })}
-        </div>
-        {/* Третья колонка для менеджеров */}
-        <div className={styles.teamColumn}>
-          {managersCol1.map((member) => {
-            const { name, position } = getMemberData(member, i18n.language);
-            return (
-              <TeamMemberCard
-                key={member.id}
-                id={member.id} // Передаем id работника
-                name={name}
-                position={position}
-                photoSrc={defaultTeamImage.src}
-              />
-            );
-          })}
-        </div>
-        {/* Четвертая колонка для менеджеров */}
-        <div className={styles.teamColumn}>
-          {managersCol2.map((member) => {
-            const { name, position } = getMemberData(member, i18n.language);
-            return (
-              <TeamMemberCard
-                key={member.id}
-                id={member.id} // Передаем id работника
-                name={name}
-                position={position}
-                photoSrc={defaultTeamImage.src}
-              />
-            );
-          })}
-        </div>
+      {/* Контейнер для менеджеров */}
+      <div className={styles.teamGroup}>
+        {managers.map((member) => {
+          const { name, position } = getMemberData(member, i18n.language);
+          return (
+            <TeamMemberCard
+              key={member.id}
+              id={member.id}
+              name={name}
+              position={position}
+              photoSrc={defaultTeamImage.src}
+            />
+          );
+        })}
       </div>
     </div>
-  );
+  </div>
+);
 }

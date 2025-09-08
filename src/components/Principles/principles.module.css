@@ -1,28 +1,31 @@
+/* Основной контейнер */
 .advantages {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
   padding: 40px;
   width: 1200px;
-  height: 481px;
-  background: #ebebeb;
+  height: auto;
+  background: #EBEBEB;
   border-radius: 20px;
   box-sizing: border-box;
   margin-bottom: 150px;
   margin-top: 80px;
 }
 
+/* Контейнер для текста и фото */
 .frame142 {
   display: flex;
   flex-direction: row;
   justify-content: center;
-  align-items: flex-end;
+  align-items: flex-start;
   padding: 0px;
   gap: 60px;
   width: 1120px;
-  height: 401px;
+  height: auto;
 }
 
+/* Контейнер для текстовых блоков */
 .info {
   display: flex;
   flex-direction: column;
@@ -30,21 +33,17 @@
   padding: 0px;
   gap: 40px;
   width: 686px;
-  height: 401px;
+  height: auto;
 }
 
+/* Заголовки */
 .frame63 {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  padding: 0px;
-  width: 686px;
-  height: 80px;
+  width: 100%;
+  height: auto;
 }
 
 .pretitle {
-  width: 686px;
-  height: 14px;
+  width: 100%;
   font-family: "Raleway", sans-serif;
   font-style: normal;
   font-weight: 400;
@@ -55,8 +54,7 @@
 }
 
 .title {
-  width: 686px;
-  height: 56px;
+  width: 100%;
   font-family: "Raleway", sans-serif;
   font-style: normal;
   font-weight: 400;
@@ -64,51 +62,42 @@
   line-height: 56px;
   text-transform: uppercase;
   color: #050505;
-  margin-top: 15px;
 }
 
+/* Контейнер для 6 блоков с ценностями */
 .aboutUsExamples {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  padding: 0px;
-  gap: 50px;
+  /* Используем Grid для создания двух колонок */
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px 40px; /* Вертикальный и горизонтальный отступ */
   width: 686px;
-  height: 281px;
+  height: auto;
+  margin-top: -35px;
 }
 
+/* Убираем стили для frame394 и frame395, так как Grid будет управлять макетом */
 .frame394,
 .frame395 {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  padding: 0px;
-  gap: 40px;
-  width: 686px;
+  display: contents; /* Позволяет дочерним элементам участвовать в сетке родителя */
 }
 
-.frame60,
-.frame59,
-.frame62,
-.frame61,
-.frame55,
-.frame57 {
+/* Устанавливаем ширину для каждого блока */
+.frame60, .frame59, .frame62, .frame61, .frame55, .frame57 {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   padding: 0px;
   gap: 12px;
-  width: 202px;
+  width: auto; /* Ширина определяется сеткой */
   background: #ebebeb;
 }
 
 .starIcon {
-  margin-bottom: -20px; /* Настройте это значение по необходимости */
+  margin-bottom: -20px;
 }
 
 .benefitTitle {
-  width: 202px;
-  height: 16px;
+  width: 100%;
   font-family: "Raleway", sans-serif;
   font-style: normal;
   font-weight: 700;
@@ -119,7 +108,7 @@
 }
 
 .benefitText {
-  width: 182px;
+  width: 100%;
   font-family: "Raleway", sans-serif;
   font-style: normal;
   font-weight: 700;
@@ -132,9 +121,64 @@
 
 .photo {
   width: 374px;
-  height: 401px;
+  height: 555px;
   background-image: url("../../../public/icons/Home.svg");
   background-size: cover;
   background-position: center;
   border-radius: 20px;
+}
+
+/* --- Планшетная адаптация --- */
+@media (min-width: 769px) and (max-width: 1300px) {
+  .advantages {
+    width: 90%;
+    padding: 20px;
+  }
+
+  .frame142 {
+    flex-direction: row-reverse;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    width: 100%;
+    gap: 20px;
+  }
+
+  .info {
+    width: 50%;
+    gap: 20px;
+  }
+
+  .pretitle {
+    font-size: 10px;
+    line-height: 12px;
+  }
+
+  .title {
+    font-size: 32px;
+    line-height: 36px;
+    margin-top: 10px;
+  }
+
+  .aboutUsExamples {
+    /* На планшете тоже 2 колонки */
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    width: 100%;
+  }
+
+  .benefitTitle {
+    font-size: 12px;
+    line-height: 14px;
+  }
+
+  .benefitText {
+    font-size: 10px;
+    line-height: 12px;
+  }
+
+  .photo {
+    width: 45%;
+    height: 555px;
+    align-self: flex-start;
+  }
 }

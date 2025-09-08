@@ -41,19 +41,17 @@
   flex-direction: row;
   align-items: flex-start;
   padding: 0px;
-  gap: 30px;
-  width: 100%;
+  gap: var(--gap);
+  width: 100%; /* Устанавливаем ширину в 100% от родителя */
   transition: transform 0.5s ease-in-out;
 }
 
 /* Карточка сотрудника */
 .teamMemberCard {
-    /* ИСПРАВЛЕНИЕ: Точный расчет, который учитывает отступы. 
-       (1200px - 4*30px) / 5 = 216px
-    */
-    flex: 0 0 216px;
-    /* Убедитесь, что ширина задана явно, чтобы flexbox работал корректно */
-    width: 216px;
+  /* Динамически рассчитываем ширину, чтобы она всегда была целой */
+  width: calc((100% - (var(--items-per-page) - 1) * var(--gap)) / var(--items-per-page));
+  flex-shrink: 0;
+  flex-grow: 0;
 }
 
 /* Photo and name container */
@@ -64,8 +62,8 @@
   align-items: center;
   padding: 6px;
   gap: 10px;
-  width: 216px;
-  height: 247px;
+  width: 100%;
+  aspect-ratio: 216 / 247;
   position: relative;
   border-radius: 4px;
   overflow: hidden;
@@ -103,7 +101,7 @@
   align-items: flex-start;
   padding: 8px;
   gap: 10px;
-  width: 204px;
+  width: 90%;
   height: 50px;
   background: rgba(10, 10, 10, 0.8);
   border-radius: 2px;
@@ -121,7 +119,7 @@
   text-transform: capitalize;
   color: #ebebeb;
   margin: 0;
-  text-decoration: none; /* Это убирает подчеркивание */
+  text-decoration: none;
 }
 
 /* Member role */
@@ -162,4 +160,16 @@
   background: #03b9b3;
   border-radius: 50%;
   cursor: pointer;
+}
+
+/* --- Планшетная адаптация --- */
+@media (min-width: 769px) and (max-width: 1300px) {
+  .allTeamContainer {
+    width: 90%;
+  }
+
+  .carouselContainer {
+    width: 100%;
+    gap: 15px;
+  }
 }
