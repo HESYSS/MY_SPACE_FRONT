@@ -152,3 +152,147 @@
   width: 26px;
   height: 26px;
 }
+
+/* --- Планшетная адаптация (769px - 1300px) --- */
+@media (min-width: 769px) and (max-width: 1300px) {
+  .coworkingP {
+    width: 90%;
+    height: auto;
+    padding: 0 20px;
+    gap: 40px;
+  }
+
+  .coworkingTitle {
+    width: 100%;
+    height: auto;
+    flex-direction: column-reverse;
+    align-items: flex-end;
+    gap: 15px;
+  }
+
+  .line8 {
+    margin-top: -25px;
+  }
+
+  .mainTitle {
+    font-size: 48px;
+    line-height: 56px;
+    height: auto;
+    white-space: normal;
+  }
+  .coworking {
+    width: 100%;
+    height: auto;
+    gap: 40px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .callToAction, .frame89 {
+    width: 45%;
+    height: auto;
+  }
+  .callToAction {
+    font-size: 36px;
+    line-height: 42px;
+    height: auto;
+  }
+  .frame89 {
+    padding: 20px 25px;
+  }
+  .frame88 {
+    width: 100%;
+    height: auto;
+    gap: 40px;
+  }
+  .frame87, .frame85 {
+    width: 100%;
+    height: auto;
+  }
+  .line16, .line17 {
+    width: 100%;
+  }
+  .frame86, .frame84 {
+    width: 100%;
+    height: auto;
+  }
+  .optionText {
+    font-size: 20px;
+    line-height: 30px;
+  }
+  .arrowIcon {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+/* --- Мобильная адаптация (375px - 768px) --- */
+@media (max-width: 768px) {
+  .coworkingP {
+    width: 90%;
+    height: auto;
+    padding: 0 10px;
+    gap: 30px;
+  }
+  .coworkingTitle {
+    width: 100%;
+    height: auto;
+    flex-direction: column-reverse;
+    align-items: flex-end;
+    gap: 15px;
+  }
+
+  .line8 {
+    margin-top: -25px;
+  }
+
+  .mainTitle {
+    font-size: 28px;
+    line-height: 32px;
+    height: auto;
+    white-space: normal;
+  }
+  .coworking {
+    width: 100%;
+    height: auto;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 10px;
+  }
+  .callToAction, .frame89 {
+    width: 48%; /* Уменьшаем ширину, чтобы они поместились в одну строку */
+    height: auto;
+  }
+  .callToAction {
+    font-size: 16px;
+    line-height: 20px;
+  }
+  .frame89 {
+    padding: 10px;
+  }
+  .frame88 {
+    width: 100%;
+    height: auto;
+    gap: 20px;
+  }
+  .frame87, .frame85 {
+    width: 100%;
+    height: auto;
+    gap: 5px;
+  }
+  .line16, .line17 {
+    width: 100%;
+  }
+  .frame86, .frame84 {
+    width: 100%;
+    height: auto;
+  }
+  .optionText {
+    font-size: 10px;
+    line-height: 12px;
+    white-space: normal;
+  }
+  .arrowIcon {
+    width: 12px;
+    height: 12px;
+  }
+}

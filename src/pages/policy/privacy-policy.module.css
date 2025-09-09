@@ -116,3 +116,95 @@
 .link:hover {
   text-decoration: none;
 }
+
+/* --- Адаптация для планшетов (769px - 1300px) --- */
+@media (min-width: 769px) and (max-width: 1300px) {
+  .privacyPolicyContainer {
+    width: 100%;
+  }
+
+  .content {
+    max-width: 95%;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  .header {
+    margin-top: 60px;
+    margin-bottom: 60px;
+    gap: 20px;
+  }
+
+  .title {
+    font-size: 48px;
+    line-height: 56px;
+    white-space: normal;
+  }
+
+  .sectionTitle {
+    font-size: 24px;
+    line-height: 28px;
+  }
+
+  .text,
+  .list li {
+    font-size: 14px;
+  }
+}
+
+/* --- Адаптация для мобильных устройств (до 768px) --- */
+@media (max-width: 768px) {
+  .privacyPolicyContainer {
+    width: 100%;
+  }
+
+  .content {
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 0 15px;
+  }
+
+  .header {
+    flex-direction: column-reverse;
+    align-items: flex-end;
+    margin-top: 40px;
+    margin-bottom: 40px;
+    gap: 10px;
+    height: auto;
+  }
+  
+  .line {
+    width: 90%;
+    align-self: flex-end;
+  }
+  
+  .title {
+    font-size: 22px;
+    line-height: 32px;
+    white-space: normal;
+    width: 100%;
+    height: auto;
+    white-space: nowrap;
+  }
+
+  .section {
+    margin-bottom: 30px;
+  }
+
+  .sectionTitle {
+    font-size: 20px;
+    line-height: 24px;
+  }
+
+  .text,
+  .list li {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  
+  .link {
+    display: inline-block;
+    white-space: normal;
+    word-break: break-all;
+  }
+}

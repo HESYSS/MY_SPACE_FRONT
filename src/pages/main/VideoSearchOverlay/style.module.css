@@ -1,15 +1,19 @@
-/* style.module.css */
-
+/*
+ * Основные стили для десктопа (по умолчанию)
+ */
 .hero {
   position: relative;
-  width: 1200px;
+  width: 100%;
+  max-width: 1200px;
   height: 550px;
-  /* Центрирует блок по горизонтали */
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end; /* Прижимает содержимое к низу */
-  align-items: center; /* Центрирует содержимое по горизонтали */
+  justify-content: flex-end;
+  align-items: center;
   overflow: hidden;
+  border-top-left-radius: 25px;
+  border-top-right-radius: 25px;
 }
 
 .video {
@@ -30,21 +34,19 @@
     rgba(0, 0, 0, 1) 10%,
     rgba(0, 0, 0, 0.01) 90%
   );
-  border-top-left-radius: 25px; /* Закругление сверху */
-  border-top-right-radius: 25px;
 }
 
 .heroTitleContainer {
   position: absolute;
-  bottom: -40px; /* Небольшой отступ снизу */
-  left: 10px; /* Небольшой отступ слева */
-  transform: translateX(0); /* Убираем горизонтальное смещение */
-  width: auto; /* Позволяем ширине подстраиваться под текст */
-  max-width: 80%; /* Ограничиваем максимальную ширину, чтобы текст не выходил за края на узких экранах */
+  bottom: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 80%;
   padding: 0;
   box-sizing: border-box;
   z-index: 10;
-  text-align: left; /* Выравниваем текст по левому краю */
+  text-align: center;
 }
 
 .heroTitle {
@@ -54,15 +56,14 @@
   font-weight: 400;
   font-size: 64px;
   line-height: 75px;
-
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  white-space: nowrap;
 }
 
 .searchFormContainer {
-  margin-top: 10px;
-  margin-bottom: 80px; /* Отступ снизу для формы поиска */
-  width: 1200px; /* Задаем ширину, чтобы она совпадала с .hero */
-  /* Центрируем и добавляем отступ сверху */
+  width: 100%;
+  max-width: 1200px;
+  margin: 10px auto 80px;
   padding: 0 20px;
   box-sizing: border-box;
 }
@@ -133,4 +134,89 @@
 .searchButton:hover {
   background-color: #03b9b3;
   color: #ffffff;
+}
+
+/*
+ * Адаптация для планшетов (769px - 1300px)
+ */
+@media (min-width: 769px) and (max-width: 1300px) {
+  .hero {
+    height: 450px;
+  }
+  .heroTitleContainer {
+    bottom: 0px;
+  }
+  .heroTitle {
+    font-size: 48px;
+    line-height: 56px;
+  }
+  .searchFormContainer {
+    padding: 0 40px;
+  }
+  .searchForm {
+    gap: 15px;
+  }
+  .searchBtnWrapper {
+    width: auto;
+    flex: 1;
+  }
+  .searchButton {
+    width: 100%;
+  }
+}
+
+/*
+ * Адаптация для мобильных устройств (375px - 768px)
+ */
+@media (max-width: 768px) {
+  .hero {
+    height: 300px;
+  }
+  .video {
+    mask-image: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 1) 30%,
+      rgba(0, 0, 0, 0.01) 100%
+    );
+    -webkit-mask-image: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 1) 30%,
+      rgba(0, 0, 0, 0.01) 100%
+    );
+  }
+  .heroTitleContainer {
+    bottom: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: calc(100% - 40px);
+    text-align: center;
+  }
+  .heroTitle {
+    font-size: 24px;
+    line-height: 32px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .searchFormContainer {
+    /* Удалена строка 'width: 100%;' */
+    max-width: calc(100% - 40px);
+    margin: 30px auto 80px;
+    padding: 0;
+    margin-right: 20px;
+  }
+  .searchForm {
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+    width: 100%;
+  }
+  .dropdown,
+  .dropdown select,
+  .searchBtnWrapper,
+  .searchButton {
+    width: 100%;
+    min-width: auto;
+  }
 }

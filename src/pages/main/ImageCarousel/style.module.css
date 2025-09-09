@@ -1,15 +1,98 @@
+/* style.module.css */
+
+/*
+ * Основные стили для десктопа (Carousel Wrapper)
+ */
+.carouselWrapper {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 1200px;
+  height: 552px;
+  margin: 0 auto;
+  overflow: hidden;
+  perspective: 1200px;
+  z-index: 1;
+}
+
+.slidesContainer {
+  position: relative;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  height: 551px;
+}
+
+.slide {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.centerSlide {
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+}
+
+.slideImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.textOverlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 80%;
+  background: linear-gradient(to top, rgba(0, 0, 0, 1) 1%, rgba(0, 0, 0, 0.01) 100%);
+}
+
+.slideTextContainer {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: white;
+  text-align: center;
+}
+
+.slideSubtitle {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  opacity: 0.8;
+  margin-bottom: 5px;
+  display: block;
+}
+
+.slideTitle {
+  font-size: 24px;
+  font-weight: bold;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+
+/*
+ * Стили стрелок
+ */
 .arrows {
   position: absolute;
   left: 50%;
   top: 50%;
-  transform: translate(-50%, -50%); /* центр по X и Y */
-  width: 1200px;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  max-width: 1200px;
   height: 16.7px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   z-index: 20;
-  pointer-events: none; /* контейнер не ловит клики */
+  pointer-events: none;
 }
 
 .arrowBtn {
@@ -20,18 +103,17 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  pointer-events: auto; /* кнопки кликабельны */
+  pointer-events: auto;
 }
 
 .leftArrow {
-  transform: rotate(180deg) translateX(-70px);
+  transform: rotate(180deg);
 }
 
 .rightArrow {
-  transform: translateX(-70px);
+  transform: none;
 }
 
-/* Анимация наводки — масштабируем SVG, чтобы не перетирать rotate/translate */
 .arrowBtn svg {
   transition: transform 0.25s ease, filter 0.25s ease;
 }
@@ -41,7 +123,66 @@
   filter: drop-shadow(0 0 6px #03b9b3);
 }
 
-/* Подсветка штриха */
 .arrowBtn:hover path {
   stroke: #09d5cf;
+}
+
+
+/*
+ * Адаптация для планшетов (769px - 1300px)
+ */
+@media (min-width: 769px) and (max-width: 1300px) {
+  .carouselWrapper {
+    width: 100%;
+    max-width: 900px;
+    height: 480px;
+    perspective: 900px;
+  }
+
+  .slidesContainer {
+    max-width: 900px;
+    height: 480px;
+  }
+  
+  .arrows {
+    max-width: 900px;
+  }
+}
+
+/*
+ * Адаптация для мобильных устройств (375px - 768px)
+ */
+@media (max-width: 768px) {
+  .carouselWrapper {
+    width: 100%;
+    height: 250px;
+    padding: 0; /* Убран внутренний отступ */
+    perspective: 700px;
+  }
+  
+  .slidesContainer {
+    height: 250px;
+  }
+
+  .arrows {
+    display: flex;
+    max-width: calc(100% - 20px); /* Уменьшаем ширину, чтобы не выходить за границы экрана */
+  }
+
+  .arrowBtn svg {
+    width: 12px;
+    height: 12px;
+  }
+
+  .slideTextContainer {
+    bottom: 5px;
+  }
+
+  .slideSubtitle {
+    font-size: 8px;
+  }
+
+  .slideTitle {
+    font-size: 14px;
+  }
 }

@@ -171,7 +171,7 @@ const PropertyImagesGallery: React.FC<Props> = ({ images, onImageClick }) => {
               className={styles.viewAllButton}
               onClick={() => setShowModal(true)}
             >
-              {`Еще ${remainingImagesCount} фото`}
+              {`Ще ${remainingImagesCount} фото`}
             </button>
           )}
         </div>

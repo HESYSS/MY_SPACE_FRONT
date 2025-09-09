@@ -111,5 +111,9 @@
   "experience": "Experience",
   "years": "years",
   "profile": "Profile",
-  "aboutMe": "About Me"
+  "aboutMe": "About Me",
+  "build": "House",
+  "Commercial": "Commercial real estate",
+  "apartment": "Apartments",
+  "LandPlots": "Land plots"
 }

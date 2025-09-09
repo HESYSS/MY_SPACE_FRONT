@@ -103,7 +103,7 @@
   font-weight: 700;
   font-size: 14px;
   line-height: 16px;
-  text-transform: capitalize; /* changed from all-small-caps */
+  text-transform: capitalize;
   color: #050505;
 }
 
@@ -114,7 +114,7 @@
   font-weight: 700;
   font-size: 11px;
   line-height: 13px;
-  text-transform: capitalize; /* changed from all-small-caps */
+  text-transform: capitalize;
   color: #565656;
   margin-top: -5px;
 }
@@ -160,7 +160,6 @@
   }
 
   .aboutUsExamples {
-    /* На планшете тоже 2 колонки */
     grid-template-columns: repeat(2, 1fr);
     gap: 15px;
     width: 100%;
@@ -180,5 +179,60 @@
     width: 45%;
     height: 555px;
     align-self: flex-start;
+  }
+}
+
+/* --- Мобильная адаптация (375px - 768px) --- */
+@media (max-width: 768px) {
+  .advantages {
+    width: 90%;
+    padding: 20px;
+    margin-bottom: 50px;
+    margin-top: 40px;
+  }
+
+  .frame142 {
+    flex-direction: column; /* Картинка теперь сверху на мобильных */
+    gap: 30px;
+    width: 100%;
+  }
+
+  .info {
+    width: 100%;
+    gap: 20px;
+  }
+
+  .pretitle {
+    font-size: 10px;
+    line-height: 12px;
+  }
+
+  .title {
+    font-size: 28px;
+    line-height: 32px;
+    margin-top: 5px;
+  }
+
+  .aboutUsExamples {
+    grid-template-columns: repeat(2, 1fr); /* Изменено на две колонки */
+    gap: 15px;
+    width: 100%;
+    margin-top: -15px;
+  }
+
+  .benefitTitle {
+    font-size: 14px;
+    line-height: 16px;
+  }
+
+  .benefitText {
+    font-size: 12px;
+    line-height: 14px;
+  }
+
+  .photo {
+    width: 100%;
+    height: 250px;
+    align-self: center;
   }
 }

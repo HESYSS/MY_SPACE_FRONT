@@ -33,7 +33,7 @@ export default function Footer() {
           <h4 className={styles.footerHeading}>{t('infoHeading')}</h4>
           <ul className={styles.footerLinks}>
             <li>
-              <a href="/privacy">{t('privacyPolicy')}</a>
+              <a href="/policy">{t('privacyPolicy')}</a>
             </li>
           </ul>
         </div>
