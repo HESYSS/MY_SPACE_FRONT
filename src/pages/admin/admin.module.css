@@ -252,3 +252,79 @@
 .statusTag.active {
   background-color: #28a745; /* Зелёный для активного */
 }
+
+.offersSection {
+  margin-top: 20px;
+}
+
+.offerList {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.offerCard {
+  background-color: #1a1a1a;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  border: 1px solid #03B9B3;
+  color: #fff;
+}
+
+.offerCardContent {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.offerCard p {
+  margin: 0;
+  line-height: 1.5;
+}
+
+.statusBadge {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-weight: bold;
+  font-size: 0.9em;
+  color: #050505;
+}
+
+.statusBadge.pending {
+  background-color: #ffc107; /* Желтый */
+}
+
+.statusBadge.processed {
+  background-color: #17a2b8; /* Синий */
+}
+
+.statusBadge.completed {
+  background-color: #28a745; /* Зеленый */
+}
+
+.offerActions {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+
+.statusBtn {
+  background-color: #03B9B3;
+  color: #fff;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.statusBtn:hover {
+  background-color: #051818;
+}
+
+.statusBtn:disabled {
+  background-color: #555;
+  cursor: not-allowed;
+}

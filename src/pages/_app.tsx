@@ -1,4 +1,5 @@
 // pages/_app.tsx
+
 import { AppProps } from "next/app";
 import Layout from "@/components/Layout";
 import { I18nextProvider } from "react-i18next";

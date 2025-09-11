@@ -2,15 +2,25 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useTranslation } from "react-i18next";
+import { FC, useState } from "react";
 import styles from "./styles.module.css";
 import mySpaceLogo from "../../../public/icons/MySpace_LOGO_1[SVG].png";
-import ConsultationModal from "./ConsultationModal/ConsultationModal";
-import { useState, FC } from "react";
 import LanguageSwitcher from "../LanguageSwitcher/LanguageSwitcher";
+import { useModal } from '../../hooks/useModal';
 
 const Header: FC = () => {
-  const { t } = useTranslation("common"); // 'common.json'
-  const [isModalOpen, setModalOpen] = useState<boolean>(false);
+  const { t } = useTranslation("common");
+  const { openModal } = useModal();
+  const [isMenuOpen, setMenuOpen] = useState<boolean>(false);
+
+  const toggleMenu = () => {
+    setMenuOpen(!isMenuOpen);
+  };
+
+  const handleOpenModal = () => {
+    openModal(null); // Passing null as no specific value is needed
+    setMenuOpen(false); // Close the mobile menu after opening the modal
+  };
 
   return (
     <header className={styles.header}>
@@ -26,6 +36,8 @@ const Header: FC = () => {
               />
             </Link>
           </div>
+
+          {/* Desktop Navigation Links */}
           <ul className={styles.navLinks}>
             <li>
               <Link href="/catalog/sale">{t("sale") || "Продаж"}</Link>
@@ -44,8 +56,9 @@ const Header: FC = () => {
           </ul>
         </div>
 
+        {/* Desktop Right Side */}
         <div className={styles.navRight}>
-          <p className={styles.ctaButton} onClick={() => setModalOpen(true)}>
+          <p className={styles.ctaButton} onClick={handleOpenModal}>
             {t("consultation") || "Консультація"}
           </p>
           <div className={styles.contactInfo}>
@@ -55,12 +68,61 @@ const Header: FC = () => {
             </a>
           </div>
         </div>
+
+        {/* Mobile Menu Buttons */}
+        <div className={styles.mobileMenuToggle}>
+          {isMenuOpen ? (
+            <button className={styles.closeButton} onClick={toggleMenu}>
+              <div className={styles.closeIcon}></div>
+            </button>
+          ) : (
+            <button className={styles.hamburgerButton} onClick={toggleMenu}>
+              <div className={styles.hamburgerIcon}></div>
+            </button>
+          )}
+        </div>
       </nav>
 
-      <ConsultationModal
-        isOpen={isModalOpen}
-        onClose={() => setModalOpen(false)}
-      />
+      {/* Mobile Dropdown Menu */}
+      {isMenuOpen && (
+        <div className={styles.mobileMenuWrapper}>
+          <ul className={styles.mobileNavLinks}>
+            <li>
+              <Link href="/catalog/sale" onClick={toggleMenu}>
+                {t("sale") || "Продаж"}
+              </Link>
+            </li>
+            <li>
+              <Link href="/catalog/rent" onClick={toggleMenu}>
+                {t("rent") || "Оренда"}
+              </Link>
+            </li>
+            <li>
+              <Link href="/team" onClick={toggleMenu}>
+                {t("ourTeam") || "Наша команда"}
+              </Link>
+            </li>
+            <li>
+              <Link href="/contacts" onClick={toggleMenu}>
+                {t("contacts") || "Контакти"}
+              </Link>
+            </li>
+            <li>
+              <p className={styles.ctaButton} onClick={handleOpenModal}>
+                {t("consultation") || "Консультація"}
+              </p>
+            </li>
+            <li>
+              <a href="tel:+3801234567" className={styles.phone} onClick={toggleMenu}>
+                {t("phoneNumber") || "+3801234567"}
+              </a>
+            </li>
+            <li className={styles.langItem}>
+              <LanguageSwitcher />
+            </li>
+          </ul>
+        </div>
+      )}
     </header>
   );
 };

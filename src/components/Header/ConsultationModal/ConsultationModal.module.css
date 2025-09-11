@@ -12,11 +12,12 @@
 
 .modalContent {
   background: #050505;
-  margin-left: 65px; /* Corrected background color */
   padding: 40px;
-  width: 1120px; /* Adjusted width to better match the image */
+  width: 90%;
+  max-width: 1120px;
   position: relative;
-  text-align: center; /* Центруем текст */
+  text-align: center;
+  box-sizing: border-box;
 }
 
 .modalTitle {
@@ -49,35 +50,85 @@
 .formItem {
   display: flex;
   flex-direction: column;
+  text-align: left;
 }
 
 .formLabel {
   color: #d1d1d1;
   font-size: 14px;
   margin-bottom: 5px;
+  text-align: left;
 }
 
-.form input,
-.form select {
+/* Base styles for all form inputs and selects */
+.form input {
   padding: 15px 12px;
-  border: 1px solid #4a4a4a; /* Border color from the image */
+  border: 1px solid #4a4a4a;
   background: #2c2c2c;
   color: #ebebeb;
   font-size: 14px;
-  appearance: none; /* Removes default select arrow */
+  box-sizing: border-box;
+  width: 100%;
+  transition: all 0.3s ease;
 }
 
-/* Specific styling for the phone field placeholder */
 .form input[type="tel"]::placeholder {
   color: #ebebeb;
   font-weight: bold;
 }
 
-.form select {
-  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>')
-    no-repeat right 12px center;
-  background-size: 16px;
+/* Custom Select Styles */
+.customSelect {
+  position: relative;
+  width: 100%;
+}
+
+.selectHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 12px;
+  border: 1px solid #4a4a4a;
+  background: #2c2c2c;
   color: #ebebeb;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.arrow {
+  font-size: 12px;
+  transition: transform 0.3s ease;
+}
+
+.customSelect.open .arrow {
+  transform: rotate(180deg);
+}
+
+.optionsList {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background-color: #2c2c2c;
+  border: 1px solid #4a4a4a;
+  border-top: none;
+  z-index: 10;
+  max-height: 200px;
+  overflow-y: auto;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.optionItem {
+  padding: 15px 12px;
+  color: #ebebeb;
+  cursor: pointer;
+  text-align: left;
+  transition: background-color 0.2s ease;
+}
+
+.optionItem:hover {
+  background-color: #3e3e3e;
 }
 
 .formFooter {
@@ -88,7 +139,8 @@
 }
 
 .form button {
-  width: 100%;
+  width: auto;
+  min-width: 150px;
   background-color: #051818;
   color: #fff;
   border: none;
@@ -97,10 +149,13 @@
   font-size: 16px;
   text-transform: uppercase;
   font-weight: bold;
+  transition: background-color 0.3s;
 }
+
 .form button:hover {
   background-color: #092b2b;
 }
+
 .closeBtn {
   position: absolute;
   top: 15px;
@@ -111,4 +166,52 @@
   color: #fff;
   cursor: pointer;
   line-height: 1;
+}
+
+/* ==========================================================================
+   Адаптивные стили для мобильных устройств (<= 768px)
+   ========================================================================== */
+@media (max-width: 768px) {
+  .modalContent {
+    padding: 20px;
+  }
+
+  .form {
+    grid-template-columns: 1fr;
+    grid-gap: 15px;
+  }
+
+  .formItem {
+    padding: 0;
+  }
+
+  .form input,
+  .form select,
+  .selectHeader {
+    padding: 12px;
+    font-size: 16px;
+  }
+
+  .optionsList {
+    font-size: 16px;
+  }
+  
+  .optionItem {
+    padding: 12px;
+    font-size: 16px;
+  }
+
+  .formFooter {
+    grid-column: span 1;
+    justify-content: center;
+  }
+
+  .form button {
+    width: 100%;
+    min-width: unset;
+  }
+
+  .modalTitle {
+    font-size: 20px;
+  }
 }
