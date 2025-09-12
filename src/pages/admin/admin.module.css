@@ -8,6 +8,7 @@
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     font-family: Arial, sans-serif;
+    position: relative; /* Добавьте эту строку */
 }
 
 .adminTitle {
@@ -467,4 +468,94 @@
 
 .modalActions .submitBtn {
     flex-grow: 1;
+}
+
+.loginForm, .adminForm {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #1a1a1a;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.loginForm .formGroup, .adminForm .formGroup {
+    margin-bottom: 15px;
+}
+
+.loginForm label, .adminForm label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #fff;
+}
+
+.loginForm input, .adminForm input, .adminForm select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #03B9B3;
+    border-radius: 4px;
+    box-sizing: border-box;
+    background: #051818;
+    color: #fff;
+}
+
+.loginForm input:focus, .adminForm input:focus, .adminForm select:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.25);
+}
+
+.loginForm .submitBtn, .adminForm .submitBtn {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    background-color: #03B9B3;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.loginForm .submitBtn:hover, .adminForm .submitBtn:hover {
+    background-color: #051818;
+}
+
+.logoutBtn {
+    background-color: #d9534f;
+    color: #fff;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+
+.logoutBtn:hover {
+    background-color: #c9302c;
+}
+
+/* Стили для списка админов */
+.adminList {
+    display: grid;
+    gap: 15px;
+}
+
+.adminCard {
+    background-color: #1a1a1a;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    border: 1px solid #03B9B3;
+    color: #fff;
+}
+
+.adminCard p {
+    margin: 0;
+    line-height: 1.5;
 }
