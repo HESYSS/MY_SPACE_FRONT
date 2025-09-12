@@ -120,5 +120,6 @@
   "commercial": "Commercial real estate",
   "land": "Land plots",
   "successTitle": "Application sent successfully!",
-  "successMessage": "Our manager will contact you shortly to discuss the details. Thank you!"
+  "successMessage": "Our manager will contact you shortly to discuss the details. Thank you!",
+  "district": "District"
 }

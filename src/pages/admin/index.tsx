@@ -30,11 +30,19 @@ interface Offer {
   status: 'PENDING' | 'PROCESSED' | 'COMPLETED';
 }
 
+// Интерфейс для изображений
+interface SiteImage {
+  id: number;
+  name: string;
+  url: string;
+}
+
 const AdminPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState("employees");
   const [isFormVisible, setIsFormVisible] = useState(false);
   const [employees, setEmployees] = useState<Employee[]>([]);
-  const [offers, setOffers] = useState<Offer[]>([]); // Состояние для офферов
+  const [offers, setOffers] = useState<Offer[]>([]);
+  const [images, setImages] = useState<SiteImage[]>([]);
 
   // Состояния для полей
   const [firstName, setFirstName] = useState("");
@@ -48,14 +56,20 @@ const AdminPage: React.FC = () => {
   const [positionEn, setPositionEn] = useState("");
   const [profileEn, setProfileEn] = useState("");
   const [aboutMeEn, setAboutMeEn] = useState("");
-  
-  // Новые состояния для булевых полей
+
   const [isPartner, setIsPartner] = useState(false);
   const [isManager, setIsManager] = useState(false);
   const [isActive, setIsActive] = useState(false);
 
+  // Новое состояние для загрузки файла
+  const [file, setFile] = useState<File | null>(null);
+  const [uploading, setUploading] = useState(false);
+  
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // Новое состояние для обновления изображения
+  const [selectedImageToUpdate, setSelectedImageToUpdate] = useState<SiteImage | null>(null);
 
   // Функции для работы с данными
   const fetchEmployees = async () => {
@@ -95,6 +109,127 @@ const AdminPage: React.FC = () => {
       setLoading(false);
     }
   };
+  
+  // Новая функция для получения списка изображений
+  const fetchImages = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await fetch("http://localhost:3001/images");
+      if (response.ok) {
+        const data: SiteImage[] = await response.json();
+        setImages(data);
+      } else {
+        setError("Не удалось получить список изображений.");
+      }
+    } catch (err) {
+      console.error("Ошибка сети:", err);
+      setError("Ошибка сети при получении данных.");
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+  // Новая функция для загрузки изображений
+  const handleImageUpload = async (event: React.FormEvent) => {
+    event.preventDefault();
+    if (!file) {
+      alert("Пожалуйста, выберите файл для загрузки.");
+      return;
+    }
+    setUploading(true);
+    setError(null);
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      const response = await fetch("http://localhost:3001/images/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (response.ok) {
+        alert("Изображение успешно загружено!");
+        setFile(null);
+        await fetchImages(); // Обновляем список изображений
+      } else {
+        const errorData = await response.json();
+        setError(`Ошибка при загрузке: ${errorData.message}`);
+        alert(`Ошибка при загрузке: ${errorData.message}`);
+      }
+    } catch (err) {
+      console.error("Ошибка сети:", err);
+      setError("Ошибка сети при загрузке файла.");
+      alert("Ошибка сети при загрузке файла.");
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  // Новая функция для обновления изображения
+  const handleUpdate = async (event: React.FormEvent) => {
+    event.preventDefault();
+    if (!file || !selectedImageToUpdate) {
+      alert("Пожалуйста, выберите файл для обновления.");
+      return;
+    }
+    setUploading(true);
+    setError(null);
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      const response = await fetch(`http://localhost:3001/images/${selectedImageToUpdate.id}`, {
+        method: "PATCH",
+        body: formData,
+      });
+
+      if (response.ok) {
+        alert("Изображение успешно обновлено!");
+        setSelectedImageToUpdate(null);
+        setFile(null);
+        await fetchImages();
+      } else {
+        const errorData = await response.json();
+        setError(`Ошибка при обновлении: ${errorData.message}`);
+        alert(`Ошибка при обновлении: ${errorData.message}`);
+      }
+    } catch (err) {
+      console.error("Ошибка сети:", err);
+      setError("Ошибка сети при обновлении файла.");
+      alert("Ошибка сети при обновлении файла.");
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  // Новая функция для удаления изображения
+  const handleImageDelete = async (imageId: number) => {
+    const confirmation = window.confirm("Вы уверены, что хотите удалить это изображение? Это действие необратимо.");
+    if (!confirmation) {
+      return;
+    }
+
+    try {
+      const response = await fetch(`http://localhost:3001/images/${imageId}`, {
+        method: "DELETE",
+      });
+
+      if (response.ok) {
+        alert("Изображение успешно удалено!");
+        await fetchImages(); // Обновляем список изображений после удаления
+      } else {
+        const errorData = await response.json();
+        alert(`Ошибка при удалении: ${errorData.message}`);
+      }
+    } catch (error) {
+      console.error("Ошибка сети:", error);
+      alert("Ошибка сети при удалении изображения.");
+    }
+  };
+
 
   // Изменение статуса оффера
   const handleUpdateStatus = async (offerId: number, newStatus: Offer['status']) => {
@@ -130,6 +265,8 @@ const AdminPage: React.FC = () => {
       fetchEmployees();
     } else if (activeTab === "offers") {
       fetchOffers();
+    } else if (activeTab === "images") {
+      fetchImages();
     }
   }, [activeTab]);
 
@@ -151,7 +288,6 @@ const AdminPage: React.FC = () => {
       if (response.ok) {
         alert("Работник успешно добавлен!");
         fetchEmployees();
-        // Reset form
         setFirstName(""); setLastName(""); setPosition(""); setExperienceYears(undefined);
         setProfile(""); setAboutMe(""); setFirstNameEn(""); setLastNameEn("");
         setPositionEn(""); setProfileEn(""); setAboutMeEn("");
@@ -184,7 +320,6 @@ const AdminPage: React.FC = () => {
     }
   };
   
-  // Хелпер-функция для перевода статусов
   const getStatusLabel = (status: Offer['status']) => {
     switch(status) {
       case 'PENDING': return 'Не рассмотрен';
@@ -209,6 +344,12 @@ const AdminPage: React.FC = () => {
           onClick={() => setActiveTab("offers")}
         >
           Офферы
+        </button>
+        <button
+          className={`${styles.tabButton} ${activeTab === "images" ? styles.activeTab : ""}`}
+          onClick={() => setActiveTab("images")}
+        >
+          Изображения
         </button>
         <button
           className={`${styles.tabButton} ${activeTab === "products" ? styles.activeTab : ""}`}
@@ -236,7 +377,7 @@ const AdminPage: React.FC = () => {
                 {isFormVisible ? "Скрыть форму" : "Добавить нового работника"}
               </button>
             </div>
-            
+
             {isFormVisible && (
               <form onSubmit={handleSubmit} className={styles.employeeForm}>
                 {/* ... existing form ... */}
@@ -269,8 +410,8 @@ const AdminPage: React.FC = () => {
                         {employee.profileEn && <p>Profile: {employee.profileEn}</p>}
                         {employee.aboutMeEn && <p>About Me: {employee.aboutMeEn}</p>}
                       </div>
-                      <button 
-                        className={styles.deleteBtn} 
+                      <button
+                        className={styles.deleteBtn}
                         onClick={() => handleDelete(employee.id)}
                       >
                         Удалить
@@ -336,6 +477,89 @@ const AdminPage: React.FC = () => {
             {!loading && !error && offers.length === 0 && (
               <p>Список офферов пуст.</p>
             )}
+          </div>
+        )}
+        {activeTab === "images" && (
+          <div>
+            <h2 className={styles.sectionTitle}>Управление изображениями</h2>
+            <div className={styles.formGroup}>
+              <form onSubmit={handleImageUpload} className={styles.imageForm}>
+                <input
+                  type="file"
+                  onChange={(e) => setFile(e.target.files ? e.target.files[0] : null)}
+                  required
+                />
+                <button type="submit" className={styles.submitBtn} disabled={uploading}>
+                  {uploading ? "Загрузка..." : "Загрузить изображение"}
+                </button>
+              </form>
+            </div>
+            
+            <hr className={styles.divider} />
+
+            <h2 className={styles.sectionTitle}>Список загруженных изображений</h2>
+            {loading && <p>Загрузка...</p>}
+            {error && <p className={styles.errorMessage}>{error}</p>}
+            {!loading && !error && images.length > 0 && (
+              <div className={styles.imageList}>
+                {images.map(image => (
+                  <div key={image.id} className={styles.imageCard}>
+                    <img src={image.url} alt={image.name} className={styles.imagePreview} />
+                    <div className={styles.imageInfo}>
+                      <p><strong>Название:</strong> {image.name}</p>
+                      <p><strong>URL:</strong> <a href={image.url} target="_blank" rel="noopener noreferrer">{image.url}</a></p>
+                      <div className={styles.imageActions}>
+                        <button
+                          className={styles.updateBtn}
+                          onClick={() => setSelectedImageToUpdate(image)}
+                        >
+                          Обновить
+                        </button>
+                        <button 
+                          className={styles.deleteBtn}
+                          onClick={() => handleImageDelete(image.id)}
+                        >
+                          Удалить
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+            {!loading && !error && images.length === 0 && (
+              <p>Список изображений пуст. Загрузите первое изображение.</p>
+            )}
+          </div>
+        )}
+        {selectedImageToUpdate && (
+          <div className={styles.modalOverlay}>
+            <div className={styles.modalContent}>
+              <h3>Обновить изображение: {selectedImageToUpdate.name}</h3>
+              <p>Выберите новый файл для замены текущего.</p>
+              <form onSubmit={handleUpdate}>
+                <input
+                  type="file"
+                  onChange={(e) => setFile(e.target.files ? e.target.files[0] : null)}
+                  required
+                />
+                <div className={styles.modalActions}>
+                  <button type="submit" className={styles.submitBtn} disabled={uploading}>
+                    {uploading ? "Обновление..." : "Обновить"}
+                  </button>
+                  <button
+                    type="button"
+                    className={styles.cancelBtn}
+                    onClick={() => {
+                      setSelectedImageToUpdate(null);
+                      setFile(null);
+                    }}
+                  >
+                    Отмена
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
         )}
         {activeTab === "products" && (

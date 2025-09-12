@@ -117,11 +117,10 @@
   padding: 20px;
   width: 85%;
   height: 214px;
-  background-image: url("../../../../public/icons/TownHouse.png");
   background-size: cover;
   background-position: center;
   border-radius: 10px;
-  box-sizing: border-box; /* Добавлено */
+  box-sizing: border-box;
 }
 
 /* Common styles for arrow circles */
@@ -159,7 +158,7 @@
   color: #ebebeb;
   margin: 0;
   white-space: normal;
-  box-sizing: border-box; /* Добавлено */
+  box-sizing: border-box;
 }
 
 /* Frame 369 */
@@ -182,11 +181,10 @@
   padding: 20px;
   width: 100%;
   height: 406px;
-  background-image: url("../../../../public/icons/Commercial.png");
   background-size: cover;
   background-position: center;
   border-radius: 10px;
-  box-sizing: border-box; /* Добавлено */
+  box-sizing: border-box;
 }
 
 /* column3 */
@@ -209,11 +207,10 @@
   padding: 20px;
   width: 85%;
   height: 304px;
-  background-image: url("../../../../public/icons/apartment.png");
   background-size: cover;
   background-position: center;
   border-radius: 10px;
-  box-sizing: border-box; /* Добавлено */
+  box-sizing: border-box;
 }
 
 /* Frame 47 */
@@ -250,11 +247,10 @@
   padding: 20px;
   width: 100%;
   height: 406px;
-  background-image: url("../../../../public/icons/LandPlots.png");
   background-size: cover;
   background-position: center;
   border-radius: 10px;
-  box-sizing: border-box; /* Добавлено */
+  box-sizing: border-box;
 }
 
 /*
