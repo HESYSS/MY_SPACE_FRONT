@@ -1,0 +1,209 @@
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.75);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.filtersModalContent {
+  background-color: #2a2a2a;
+  color: #fff;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 600px;
+  padding: 2rem;
+  border: 1px solid #444;
+  position: relative;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.modalTitle {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+}
+
+.closeButton svg {
+  fill: #fff;
+}
+
+.filtersBody {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.filterGroup {
+  border-bottom: 1px solid #3a3a3a;
+  padding-bottom: 1.5rem;
+}
+
+.filterLabel {
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: 0.75rem;
+  color: #bbb;
+}
+
+.categoryToggle,
+.serviceTypeToggle {
+  display: flex;
+  border-radius: 5px;
+  overflow: hidden;
+  border: 1px solid #4a4a4a;
+}
+
+.categoryButton,
+.serviceButton,
+.propertyButton {
+  flex: 1;
+  background-color: #3a3a3a;
+  color: #fff;
+  padding: 0.75rem;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+.categoryButton.active,
+.serviceButton.active,
+.propertyButton.active {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.propertyTypeToggle {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.propertyButton {
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  border: 1px solid #4a4a4a;
+  background-color: #3a3a3a;
+}
+
+.propertyButton.active {
+  background-color: #007bff;
+  border-color: #007bff;
+}
+
+.inputRange {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.rangeInput {
+  flex: 1;
+  background-color: #3a3a3a;
+  border: 1px solid #555;
+  color: #fff;
+  padding: 0.5rem 0.75rem;
+  border-radius: 5px;
+}
+
+.rangeInput::placeholder {
+  color: #888;
+}
+
+.rangeSeparator {
+  color: #888;
+}
+
+.unit {
+  color: #888;
+  margin-left: 0.5rem;
+}
+
+.currencyToggle {
+  display: flex;
+  border: 1px solid #555;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.currencyButton {
+  background-color: #3a3a3a;
+  color: #888;
+  padding: 0.5rem;
+  border: none;
+  cursor: pointer;
+}
+
+.currencyButton.active {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.roomButtons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.roomButton {
+  background-color: #3a3a3a;
+  color: #fff;
+  border: 1px solid #555;
+  border-radius: 5px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+
+.roomButton.active {
+  background-color: #007bff;
+  border-color: #007bff;
+}
+
+.modalActions {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #3a3a3a;
+  margin-top: 1.5rem;
+}
+
+.resetButton,
+.showResultsButton {
+  padding: 0.75rem 1.5rem;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.resetButton {
+  background: none;
+  color: #fff;
+  border: 1px solid #555;
+}
+
+.showResultsButton {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+}

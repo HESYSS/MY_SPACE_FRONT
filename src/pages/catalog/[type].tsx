@@ -4,32 +4,85 @@ import Filter from "@/components/Filter";
 import MapWrapper from "@/components/Map/MapWrapper";
 import PropertyList from "./PropertyList";
 import styles from "./CatalogPage.module.css"; // Импортируем стили
+import { standardizeFilters } from "@/utils/filterMap";
 
-const typeMap: Record<string, string> = {
+const dealMap: Record<string, string> = {
   rent: "Оренда",
   sale: "Продаж",
 };
 
+const reverseDealMap: Record<string, string> = {
+  Оренда: "rent",
+  Продаж: "sale",
+};
+
+// Универсальная функция сериализации фильтров
+function buildQueryFromFilters(
+  filters: Record<string, any>
+): Record<string, string> {
+  const params: Record<string, string> = {};
+  Object.entries(filters).forEach(([key, val]) => {
+    if (val == null || val === "" || (Array.isArray(val) && val.length === 0))
+      return;
+
+    if (Array.isArray(val)) {
+      params[key] = val.join(",");
+    } else if (typeof val === "object") {
+      // Игнорируем вложенные объекты
+      return;
+    } else {
+      params[key] = String(val);
+    }
+  });
+  return params;
+}
+
 export default function CatalogPage() {
   const router = useRouter();
   const { type } = router.query;
-  const currentType = typeof type === "string" ? type : "rent";
 
-  const [filterType, setFilterType] = useState(typeMap[currentType]);
+  const currentDeal = typeof type === "string" ? type : "Оренда";
+  const [propertyType, setPropertyType] = useState<"Оренда" | "Продаж">(
+    currentDeal === "rent" || currentDeal === "Оренда" ? "Оренда" : "Продаж"
+  );
+
   const [properties, setProperties] = useState<any[]>([]);
+  const [allProperties, setAllProperties] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-
   const [page, setPage] = useState(1);
   const limit = 6;
 
-  // Данные для PropertyList
+  const [locationFilter, setLocationFilter] = useState<any>(() => {
+    const saved = localStorage.getItem("locationFilters");
+    return saved ? JSON.parse(saved) : {};
+  });
+  const [otherFilters, setOtherFilters] = useState<any>(() => {
+    const saved = localStorage.getItem("otherFilters");
+    return saved ? JSON.parse(saved) : {};
+  });
+
+  const handleApply = (location: any, filters: any) => {
+    setLocationFilter({ ...location });
+    setOtherFilters({ ...filters });
+    setPage(1);
+  };
+
+  // PropertyList
   useEffect(() => {
     async function fetchData() {
       setLoading(true);
       try {
-        const res = await fetch(
-          `http://localhost:3001/items?deal=${filterType}&page=${page}&limit=${limit}`
-        );
+        const standardizedLocation = standardizeFilters(locationFilter);
+        const standardizedFilters = standardizeFilters(otherFilters);
+
+        const params = new URLSearchParams({
+          page: page.toString(),
+          limit: limit.toString(),
+          ...buildQueryFromFilters(standardizedLocation),
+          ...buildQueryFromFilters(standardizedFilters),
+        });
+
+        const res = await fetch(`http://localhost:3001/items?${params}`);
         const data = await res.json();
         setProperties(data);
       } catch (err) {
@@ -39,16 +92,23 @@ export default function CatalogPage() {
       }
     }
     fetchData();
-  }, [filterType, page]);
+  }, [page, locationFilter, otherFilters]);
 
-  // Данные для карты
-  const [allProperties, setAllProperties] = useState<any[]>([]);
+  // MapWrapper
   useEffect(() => {
     async function fetchAll() {
       try {
-        const res = await fetch(
-          `http://localhost:3001/items/coords?deal=${filterType}`
-        );
+        const standardizedLocation = standardizeFilters(locationFilter);
+        const standardizedFilters = standardizeFilters(otherFilters);
+
+        const params = new URLSearchParams({
+          page: page.toString(),
+          limit: limit.toString(),
+          ...buildQueryFromFilters(standardizedLocation),
+          ...buildQueryFromFilters(standardizedFilters),
+        });
+
+        const res = await fetch(`http://localhost:3001/items/coords?${params}`);
         const data = await res.json();
         setAllProperties(data);
       } catch (err) {
@@ -56,30 +116,30 @@ export default function CatalogPage() {
       }
     }
     fetchAll();
-  }, [filterType]);
+  }, [locationFilter, otherFilters]);
 
   return (
     <div className={styles.catalogContainer}>
-      {/* Левая колонка - объекты и фильтры */}
       <div className={styles.leftColumn}>
         <div>
-          <h1 className={styles.catalogTitle}>Каталог: {filterType}</h1>
+          <h1 className={styles.catalogTitle}>
+            Каталог: {propertyType && `— ${propertyType}`}
+          </h1>
+
           <Filter
-            type={filterType}
-            onTypeChange={(t) => {
-              setFilterType(t);
-              setPage(1);
+            type={propertyType}
+            onApply={(appliedFilters: any) => {
+              const { location = {}, filters = {} } = appliedFilters;
+              handleApply({ ...location }, { ...filters });
             }}
           />
         </div>
 
-        {/* Контейнер для прокручиваемого списка */}
         <div className={styles.listContainer}>
           <PropertyList properties={properties} loading={loading} />
         </div>
       </div>
 
-      {/* Правая колонка - карта */}
       <div className={styles.rightColumn}>
         <MapWrapper properties={allProperties} />
       </div>
