@@ -155,12 +155,25 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     border: 1px solid #03B9B3;
     color: #fff;
+    display: flex; /* Добавляем flex-контейнер */
+    gap: 15px; /* Задаем расстояние между фото и текстом */
+    align-items: center; /* Выравниваем элементы по центру */
 }
 
 .employeeCardContent {
-    display: flex;
+    display: flex; /* Делаем его flex-контейнером */
+    flex-direction: column; /* Элементы идут сверху вниз */
     justify-content: space-between;
     align-items: flex-start;
+    flex-grow: 1; /* Разрешаем ему занимать все доступное пространство */
+}
+
+.employeePhoto {
+    width: 80px;  /* Уменьшаем ширину */
+    height: 80px; /* Уменьшаем высоту */
+    object-fit: cover; /* Обрезаем изображение, чтобы оно вписывалось без искажений */
+    border-radius: 50%; /* Делаем изображение круглым */
+    border: 2px solid #03B9B3; /* Добавляем рамку для красоты */
 }
 
 .employeeCard p {

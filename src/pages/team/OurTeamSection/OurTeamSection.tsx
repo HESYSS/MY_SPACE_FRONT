@@ -8,6 +8,7 @@ import Link from 'next/link';
 // Пока что используем одно локальное изображение для всех
 import defaultTeamImage from '../../../../public/icons/Бубенко_Ірина.png';
 
+// ОБНОВЛЕННЫЙ ИНТЕРФЕЙС Employee
 interface Employee {
   id: number;
   firstName: string;
@@ -17,6 +18,7 @@ interface Employee {
   lastNameEn?: string;
   positionEn?: string;
   isACTIVE: boolean;
+  photoUrl?: string; // <-- ДОБАВЛЕНО ПОЛЕ ДЛЯ URL ФОТОГРАФИИ
 }
 
 const OurTeamSection = () => {
@@ -78,11 +80,14 @@ const OurTeamSection = () => {
                 const lastName = currentLanguage === 'en' && member.lastNameEn ? member.lastNameEn : member.lastName;
                 const role = currentLanguage === 'en' && member.positionEn ? member.positionEn : member.position;
 
+                // ОПРЕДЕЛЯЕМ ИСТОЧНИК ИЗОБРАЖЕНИЯ
+                const imageUrl = member.photoUrl || defaultTeamImage.src;
+
                 return (
                   <div className={styles.memberCard} key={member.id}>
                     <div className={styles.imageWrapper}>
                       <Image 
-                        src={defaultTeamImage}
+                        src={imageUrl} // <-- ИСПОЛЬЗУЕМ РЕАЛЬНЫЙ URL ИЛИ ЗАГЛУШКУ
                         alt={`${firstName} ${lastName}`} 
                         className={styles.memberImage} 
                         fill
@@ -115,11 +120,14 @@ const OurTeamSection = () => {
                 const lastName = currentLanguage === 'en' && member.lastNameEn ? member.lastNameEn : member.lastName;
                 const role = currentLanguage === 'en' && member.positionEn ? member.positionEn : member.position;
 
+                // ОПРЕДЕЛЯЕМ ИСТОЧНИК ИЗОБРАЖЕНИЯ
+                const imageUrl = member.photoUrl || defaultTeamImage.src;
+
                 return (
                   <div className={styles.memberCard} key={member.id}>
                     <div className={styles.imageWrapper}>
                       <Image 
-                        src={defaultTeamImage}
+                        src={imageUrl} // <-- ИСПОЛЬЗУЕМ РЕАЛЬНЫЙ URL ИЛИ ЗАГЛУШКУ
                         alt={`${firstName} ${lastName}`} 
                         className={styles.memberImage} 
                         fill

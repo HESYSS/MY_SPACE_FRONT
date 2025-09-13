@@ -4,9 +4,9 @@ import { useTranslation } from "react-i18next";
 import Image from "next/image";
 import arrowRight from "../../../public/icons/line.svg";
 import styles from "./worker.module.css";
-import { useModal } from '../../hooks/useModal'; // Импортируем наш хук
+import { useModal } from '../../hooks/useModal';
 
-// Определяем интерфейс для данных работника
+// Обновленный интерфейс для данных работника с полем photoUrl
 interface Employee {
   id: number;
   firstName: string;
@@ -20,13 +20,14 @@ interface Employee {
   positionEn?: string;
   profileEn?: string;
   aboutMeEn?: string;
+  photoUrl?: string; // <-- ДОБАВЛЕНО
 }
 
 const EmployeePage = () => {
   const router = useRouter();
   const { id } = router.query;
   const { t, i18n } = useTranslation();
-  const { openModal } = useModal(); // Используем хук для доступа к функции открытия модалки
+  const { openModal } = useModal();
 
   const [employee, setEmployee] = useState<Employee | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -105,13 +106,21 @@ const EmployeePage = () => {
           <div className={styles.contactsBlock}>
             <div className={styles.frame301}>
               <div className={styles.photoContainer}>
-                <img
-                  src={`https://placehold.co/200x200/cccccc/000000?text=${currentData.firstName[0]}${currentData.lastName[0]}`}
-                  alt={`${currentData.firstName} ${currentData.lastName}`}
-                  className={styles.employeePhoto}
-                />
+                {/* Условный рендеринг: если есть photoUrl, используем его, иначе - заглушку */}
+                {employee.photoUrl ? (
+                  <img
+                    src={employee.photoUrl} // <-- ИСПОЛЬЗУЕМ РЕАЛЬНЫЙ URL
+                    alt={`${currentData.firstName} ${currentData.lastName}`}
+                    className={styles.employeePhoto}
+                  />
+                ) : (
+                  <img
+                    src={`https://placehold.co/200x200/cccccc/000000?text=${currentData.firstName[0]}${currentData.lastName[0]}`}
+                    alt={`${currentData.firstName} ${currentData.lastName}`}
+                    className={styles.employeePhoto}
+                  />
+                )}
               </div>
-
               <div className={styles.infoContainer}>
                 <div className={styles.nameAndRole}>
                   <h3 className={styles.employeeName}>
@@ -195,4 +204,4 @@ const EmployeePage = () => {
   );
 };
 
-export default memo(EmployeePage); // Оборачиваем страницу в `memo`
+export default memo(EmployeePage);

@@ -1,4 +1,5 @@
 // src/components/TeamSection/TeamSection.js
+
 import { useState, useEffect } from 'react';
 import styles from './TeamSection.module.css';
 import TeamMemberCard from './TeamMemberCard';
@@ -7,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 // Импорт изображений членов команды (пока что один для всех)
 import defaultTeamImage from '../../../../public/icons/vitaliyPenc.png';
 
-// Интерфейс для данных, получаемых с бэкенда
+// Обновленный интерфейс для данных, получаемых с бэкенда
 interface Employee {
   id: number;
   firstName: string; 
@@ -19,6 +20,7 @@ interface Employee {
   isPARTNER: boolean;
   isMANAGER: boolean;
   isACTIVE: boolean;
+  photoUrl?: string; // <-- ДОБАВЛЕНО
 }
 
 export default function TeamSection() {
@@ -37,6 +39,8 @@ export default function TeamSection() {
         }
         const data: Employee[] = await response.json();
 
+        // Проверяем, что isPARTNER, isMANAGER и isACTIVE существуют
+        // иначе фильтрация может работать некорректно
         const fetchedPartners = data.filter(member => member.isPARTNER);
         const fetchedManagers = data.filter(member => member.isMANAGER);
 
@@ -73,44 +77,44 @@ export default function TeamSection() {
   };
 
   return (
-  <div className={styles.teamSection}>
-    <div className={styles.titles}>
-      <h2 className={styles.title}>{t('partnersTitle')}</h2>
-      <h2 className={styles.title}>{t('managersTitle')}</h2>
-    </div>
-    {/* Основной контейнер, который будет держать обе группы */}
-    <div className={styles.teamMembersContainer}>
-      {/* Контейнер для партнеров */}
-      <div className={styles.teamGroup}>
-        {partners.map((member) => {
-          const { name, position } = getMemberData(member, i18n.language);
-          return (
-            <TeamMemberCard
-              key={member.id}
-              id={member.id}
-              name={name}
-              position={position}
-              photoSrc={defaultTeamImage.src}
-            />
-          );
-        })}
+    <div className={styles.teamSection}>
+      <div className={styles.titles}>
+        <h2 className={styles.title}>{t('partnersTitle')}</h2>
+        <h2 className={styles.title}>{t('managersTitle')}</h2>
       </div>
-      {/* Контейнер для менеджеров */}
-      <div className={styles.teamGroup}>
-        {managers.map((member) => {
-          const { name, position } = getMemberData(member, i18n.language);
-          return (
-            <TeamMemberCard
-              key={member.id}
-              id={member.id}
-              name={name}
-              position={position}
-              photoSrc={defaultTeamImage.src}
-            />
-          );
-        })}
+      {/* Основной контейнер, который будет держать обе группы */}
+      <div className={styles.teamMembersContainer}>
+        {/* Контейнер для партнеров */}
+        <div className={styles.teamGroup}>
+          {partners.map((member) => {
+            const { name, position } = getMemberData(member, i18n.language);
+            return (
+              <TeamMemberCard
+                key={member.id}
+                id={member.id}
+                name={name}
+                position={position}
+                photoSrc={member.photoUrl || defaultTeamImage.src} // <-- ОБНОВЛЕНО
+              />
+            );
+          })}
+        </div>
+        {/* Контейнер для менеджеров */}
+        <div className={styles.teamGroup}>
+          {managers.map((member) => {
+            const { name, position } = getMemberData(member, i18n.language);
+            return (
+              <TeamMemberCard
+                key={member.id}
+                id={member.id}
+                name={name}
+                position={position}
+                photoSrc={member.photoUrl || defaultTeamImage.src} // <-- ОБНОВЛЕНО
+              />
+            );
+          })}
+        </div>
       </div>
     </div>
-  </div>
-);
+  );
 }
