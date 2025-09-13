@@ -1,5 +1,6 @@
 import { FC, useState, useRef, useEffect } from "react";
 import styles from "./style.module.css";
+import { useTranslation } from "react-i18next";
 
 // Кастомный хук для определения ширины экрана
 const useMediaQuery = (query: string) => {
@@ -16,31 +17,70 @@ const useMediaQuery = (query: string) => {
   return matches;
 };
 
-const slidesData = [
-  { src: "/images/test-1.png", text: "Солом'янський" },
-  { src: "/images/test-2.png", text: "Подільський" },
-  { src: "/images/test-3.png", text: "Печерський" },
-  { src: "/images/test-4.png", text: "Дніпровський" },
-  { src: "/images/test-5.png", text: "Шевченківський" },
-  { src: "/images/test-6.png", text: "Голосіївський" },
-  { src: "/images/test-7.png", text: "Оболонський" },
-  { src: "/images/test.png", text: "Дарницький" },
-];
+// Интерфейс для данных об изображении с бэкенда
+interface SiteImage {
+  id: number;
+  name: string;
+  url: string;
+}
+
+// Интерфейс для данных слайдов карусели
+interface CarouselSlide {
+  src: string;
+  name: string;
+  text: string;
+  text_en: string;
+}
 
 const Carousel: FC = () => {
+  const { t, i18n } = useTranslation("common");
+  const currentLanguage = i18n.language;
+  
+  const [images, setImages] = useState<SiteImage[]>([]);
+  const [loading, setLoading] = useState(true);
+
   const isTablet = useMediaQuery("(min-width: 769px) and (max-width: 1300px)");
   const isMobile = useMediaQuery("(max-width: 768px)");
-  const [activeIndex, setActiveIndex] = useState(slidesData.length);
+
+  // Логика карусели
+  const [activeIndex, setActiveIndex] = useState(0); 
   const [isTransitioning, setIsTransitioning] = useState(true);
   const containerRef = useRef<HTMLDivElement>(null);
 
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
-  const loopSlides = [...slidesData, ...slidesData, ...slidesData];
+  // Вспомогательная функция для получения URL по имени
+  const getImageUrlByName = (name: string): string => {
+    const image = images.find(img => img.name === name);
+    return image ? image.url : "";
+  };
+
+  // Статический массив данных для слайдов. URL будут заполнены после загрузки.
+  const baseSlidesData = [
+    { name: "Solomianskyi.png", text: "Солом'янський", text_en: "Solomianskyi" },
+    { name: "Podilskyi.png", text: "Подільський", text_en: "Podilskyi"  },
+    { name: "Pecherskyi.png", text: "Печерський", text_en: "Pecherskyi"  },
+    { name: "Dniprovskyi.png", text: "Дніпровський", text_en: "Dniprovskyi"  },
+    { name: "Shevchenkivskyi.png", text: "Шевченківський", text_en: "Shevchenkivskyi"  },
+    { name: "Holosiivskyi.png", text: "Голосіївський", text_en: "Holosiivskyi"  },
+    { name: "Obolonskyi.png", text: "Оболонський", text_en: "Obolonskyi"  },
+    { name: "Darnytskyi.png", text: "Дарницький", text_en: "Darnytskyi"  },
+    { name: "Desnianskyi.png", text: "Деснянський", text_en: "Desnianskyi"  },
+    { name: "Sviatoshynskyi.png", text: "Святошинський", text_en: "Sviatoshynskyi"  },
+  ];
+
+  // Динамическое создание массива слайдов с загруженными URL-адресами
+  const slidesData: CarouselSlide[] = baseSlidesData.map(slide => ({
+    ...slide,
+    src: getImageUrlByName(slide.name)
+  }));
+
+  const loopSlides = slidesData.length > 0 ? [...slidesData, ...slidesData, ...slidesData] : [];
   const layerGap = -40;
   const mobileLayerGap = -15;
 
   const startTimer = () => {
+    if (slidesData.length === 0) return;
     intervalRef.current = setInterval(() => nextSlide(), 10000);
   };
 
@@ -50,23 +90,43 @@ const Carousel: FC = () => {
   };
 
   const prevSlide = () => {
+    if (slidesData.length === 0) return;
     setActiveIndex((prev) => prev - 1);
     resetTimer();
   };
 
   const nextSlide = () => {
+    if (slidesData.length === 0) return;
     setActiveIndex((prev) => prev + 1);
     resetTimer();
   };
 
+  // Загружаем данные с бэкенда при монтировании компонента
   useEffect(() => {
-    startTimer();
-    return () => {
-      if (intervalRef.current) clearInterval(intervalRef.current);
+    const fetchImages = async () => {
+      try {
+        const response = await fetch("http://localhost:3001/images");
+        if (response.ok) {
+          const data: SiteImage[] = await response.json();
+          setImages(data);
+          if (data.length > 0) {
+            setActiveIndex(baseSlidesData.length);
+          }
+        } else {
+          console.error("Failed to fetch images:", response.statusText);
+        }
+      } catch (error) {
+        console.error("Network error:", error);
+      } finally {
+        setLoading(false);
+      }
     };
+    fetchImages();
   }, []);
 
   useEffect(() => {
+    if (slidesData.length === 0) return;
+    
     if (!containerRef.current) return;
 
     if (activeIndex <= slidesData.length - 1) {
@@ -82,7 +142,14 @@ const Carousel: FC = () => {
     } else {
       setIsTransitioning(true);
     }
-  }, [activeIndex]);
+  }, [activeIndex, slidesData]);
+  
+  useEffect(() => {
+    startTimer();
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+    };
+  }, [slidesData]);
 
   const getPositionStyle = (index: number) => {
     const offset = index - activeIndex;
@@ -189,6 +256,15 @@ const Carousel: FC = () => {
     return { width, height, opacity, zIndex, translateX, rotateY };
   };
 
+  if (loading) {
+    return <div>Загрузка...</div>;
+  }
+  
+  // Если данных нет, ничего не показываем
+  if (slidesData.length === 0) {
+    return null;
+  }
+
   return (
     <div className={styles.carouselWrapper}>
       {!isMobile && (
@@ -249,6 +325,7 @@ const Carousel: FC = () => {
           if (opacity === 0) return null;
 
           const isCenter = zIndex === 10;
+          const slideText = currentLanguage === "en" ? slide.text_en : slide.text;
 
           return (
             <div
@@ -265,15 +342,19 @@ const Carousel: FC = () => {
             >
               <img
                 src={slide.src}
-                alt={`slide-${idx}`}
+                alt={slide.name}
                 className={styles.slideImage}
               />
               {isCenter && (
                 <>
                   <div className={styles.textOverlay} />
                   <div className={styles.slideTextContainer}>
-                    <span className={styles.slideSubtitle}>РАЙОН</span>
-                    <span className={styles.slideTitle}>{slide.text}</span>
+                    <span className={styles.slideSubtitle}>
+                       {t('district')}
+                    </span>
+                    <span className={styles.slideTitle}>
+                       {slideText}
+                    </span>
                   </div>
                 </>
               )}

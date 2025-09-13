@@ -122,10 +122,15 @@
 .photo {
   width: 374px;
   height: 555px;
-  background-image: url("../../../public/icons/Home.svg");
   background-size: cover;
   background-position: center;
   border-radius: 20px;
+  transition: opacity 0.3s ease-in-out;
+}
+
+/* Стиль для индикатора загрузки */
+.photo.loading {
+  opacity: 0.5;
 }
 
 /* --- Планшетная адаптация --- */

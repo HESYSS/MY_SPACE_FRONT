@@ -211,7 +211,7 @@
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: flex-end;
   padding: 0 20px;
   gap: 20px;
   width: 100%;
@@ -251,7 +251,7 @@
 .frame88 {
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: flex-start;
   padding: 0px;
   gap: 64px;
   width: 100%;
@@ -277,6 +277,14 @@
   height: 1px;
   border-top: 1px solid #303030;
   box-sizing: border-box;
+}
+
+.line16{
+  width: 120%;
+}
+
+.line18{
+  width: 143%;
 }
 
 .frame86,
@@ -325,7 +333,7 @@
 /* ==========================================================================
    Медиазапросы для планшетов
    ========================================================================== */
-@media (min-width: 769px) and (max-width: 1800px) {
+@media (min-width: 769px) and (max-width: 1300px) {
   .mainDiv {
     display: flex;
     flex-direction: column;
@@ -338,6 +346,8 @@
     padding: 0 20px;
   }
 
+
+  
   /* Контейнер для заголовка и линии */
   .titleArea {
     display: flex;
@@ -437,8 +447,8 @@
   .coworking {
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: space-between; /* Изменили на space-between для выравнивания по краям */
+    flex-wrap: nowrap; /* Важное изменение */
+    justify-content: space-between; 
     align-items: flex-start;
     gap: 40px;
     width: 100%;
@@ -452,17 +462,15 @@
     font-size: 36px;
     line-height: 1.2;
     text-align: left;
-    flex: 1; /* Позволяем занимать доступное пространство */
-    min-width: 300px; /* Установили минимальную ширину */
-    max-width: 500px;
+    flex: 0 1 300px; /* Важное изменение */
     margin: 0;
   }
 
   /* Контейнер с двумя опциями */
   .frame89 {
     padding: 20px;
-    flex: 1; /* Позволяем занимать оставшееся пространство */
-    width: auto; /* Убрали фиксированную ширину */
+    flex: 1 1 400px; /* Важное изменение */
+    width: auto; 
     height: auto;
     gap: 10px;
     background: #0a0a0a;
@@ -512,5 +520,156 @@
     right: 0;
     left: auto;
     transform: translateX(0);
+  }
+}
+/* ==========================================================================
+   Медиазапросы для мобильных устройств (до 768px)
+   ========================================================================== */
+@media (max-width: 768px) {
+  .mainDiv {
+    padding: 0 15px;
+  }
+
+  .containerWithOval {
+    padding: 0;
+  }
+
+  .glowingOval {
+    width: 90vw;
+    height: 40vw;
+    top: 400px;
+  }
+
+  .titleArea {
+    flex-direction: column-reverse;
+    align-items: flex-end;
+    margin: 40px auto;
+    padding: 0;
+    width: 80%;
+    gap: 10px;
+  }
+
+  .titleLine {
+    width: 100%;
+    background: linear-gradient(to right, #050505 0%, #03b9b3 100%);
+  }
+
+  .readMoreTitle {
+    font-size: 28px;
+    line-height: 32px;
+    text-align: left;
+  }
+
+  .contactsBlockWrapper {
+    width: 80%;
+    margin-left: 20px;
+  }
+
+  .contactsBlock {
+    padding: 20px;
+  }
+
+  .frame301 {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .photoContainer {
+    width: 100%;
+    height: 250px;
+  }
+
+  .employeeName {
+    font-size: 24px;
+    line-height: 28px;
+  }
+
+  .employeeRole {
+    font-size: 16px;
+    line-height: 20px;
+  }
+
+  .infoContainer {
+    gap: 20px;
+  }
+
+  .line17 {
+    width: 100%;
+  }
+
+  .additionalInfo {
+    gap: 10px;
+  }
+
+  .infoTitle {
+    font-size: 18px;
+    line-height: 22px;
+  }
+
+  .infoText {
+    font-size: 12px;
+    line-height: 1.5;
+  }
+  
+  /* Блок "Бажаєте отримати консультацію?" */
+  .coworking {
+    display: flex;
+    flex-direction: row; 
+    flex-wrap: nowrap; 
+    justify-content: flex-start; /* Изменено, чтобы элементы не раздвигались */
+    align-items: center; 
+    gap: 50px;
+    width: 100%;
+    margin: 0 auto 40px auto;
+    padding: 0 15px;
+    margin-top: 80px;
+  }
+  
+  /* Заголовок "Бажаєте отримати консультацію?" */
+  .callToAction {
+    font-size: 14px;
+    line-height: 1.2;
+    min-width: unset;
+    text-align: left;
+    flex-shrink: 1;
+    white-space: normal; 
+  }
+  
+  /* Контейнер с двумя опциями */
+  .frame89 {
+    padding: 3px;
+    flex-grow: 0; /* Изменено, чтобы контейнер не растягивался */
+    flex-shrink: 0; /* Изменено, чтобы контейнер не сжимался */
+    width: fit-content; /* Занимает только необходимую ширину */
+    height: auto;
+    gap: 5px;
+  }
+  
+  /* Внутренний контейнер опций */
+  .frame88 {
+    gap: 5px;
+    align-items: flex-start;
+  }
+
+  /* Строка с текстом и стрелкой */
+  .frame86, .frame84 {
+    justify-content: flex-start; /* Изменено, чтобы элементы выравнивались по левому краю */
+    align-items: center;
+    gap: 5px;
+    width: 100%;
+  }
+
+  .optionText {
+    font-size: 9px;
+    line-height: 1;
+    white-space: nowrap; 
+    text-align: left;
+    width: auto;
+  }
+
+  .arrowIcon {
+    width: 10px; 
+    height: 10px;
+    margin-left: 5px;
   }
 }

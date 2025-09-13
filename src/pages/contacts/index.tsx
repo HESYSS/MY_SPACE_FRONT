@@ -1,7 +1,9 @@
-import React from "react";
+// src/pages/contacts.tsx
+import React, { memo } from "react";
 import Image from "next/image";
 import styles from "./contacts.module.css";
 import { useTranslation } from "react-i18next";
+import { useModal } from '../../hooks/useModal'; // Импортируем наш хук
 
 // Импорт изображений, если они нужны для контактов
 import youtubeIcon from "../../../public/icons/youtube.svg";
@@ -11,6 +13,7 @@ import star from "../../../public/icons/star.svg";
 
 const ContactsPage: React.FC = () => {
   const { t } = useTranslation("common");
+  const { openModal } = useModal(); // Используем хук для доступа к функции открытия модалки
 
   return (
     <div className={styles.containerWithOval}>
@@ -138,7 +141,11 @@ const ContactsPage: React.FC = () => {
         <h3 className={styles.callToAction}>{t('consultationCallToAction')}</h3>
         <div className={styles.frame89}>
           <div className={styles.frame88}>
-            <div className={styles.optionRow}>
+            {/* Блок для Sellers/Landlords */}
+            <div 
+              className={styles.optionRow}
+              onClick={() => openModal('forSellers')}
+            >
               <div className={styles.frame87}>
                 <div className={styles.line16}></div>
                 <div className={styles.frame86}>
@@ -151,7 +158,11 @@ const ContactsPage: React.FC = () => {
                 </div>
               </div>
             </div>
-            <div className={styles.optionRow}>
+            {/* Блок для Buyers/Tenants */}
+            <div 
+              className={styles.optionRow}
+              onClick={() => openModal('forBuyers')}
+            >
               <div className={styles.frame85}>
                 <div className={styles.line17}></div>
                 <div className={styles.frame84}>
@@ -171,4 +182,4 @@ const ContactsPage: React.FC = () => {
   );
 };
 
-export default ContactsPage;
+export default memo(ContactsPage);

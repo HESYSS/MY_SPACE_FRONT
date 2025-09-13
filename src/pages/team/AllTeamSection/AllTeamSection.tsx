@@ -3,8 +3,11 @@ import Image from "next/image";
 import styles from "./AllTeamSection.module.css";
 import { useTranslation } from "react-i18next";
 import Link from "next/link";
-import vitaliyPenc from "../../../../public/icons/vitaliyPenc.png";
+// Убираем импорт локального изображения, если не хотим использовать его как заглушку.
+// Если хотим, оставляем. В этом примере я его оставил, чтобы была запасная опция.
+import vitaliyPenc from "../../../../public/icons/vitaliyPenc.png"; 
 
+// ОБНОВЛЕННЫЙ ИНТЕРФЕЙС Employee
 interface Employee {
   id: number;
   firstName: string;
@@ -16,6 +19,7 @@ interface Employee {
   isPARTNER: boolean;
   isMANAGER: boolean;
   isACTIVE: boolean;
+  photoUrl?: string; // <-- ДОБАВЛЕНО ПОЛЕ
 }
 
 const AllTeamSection: React.FC = () => {
@@ -94,14 +98,20 @@ const AllTeamSection: React.FC = () => {
           ) : (
             employees.map((member) => {
               const { name, role } = getEmployeeData(member, i18n.language);
+              
+              // ОПРЕДЕЛЯЕМ ИСТОЧНИК ИЗОБРАЖЕНИЯ:
+              // Если есть photoUrl, используем его, иначе - заглушку.
+              const imageUrl = member.photoUrl || vitaliyPenc.src;
+
               return (
                 <div key={member.id} className={styles.teamMemberCard}>
                   <div className={styles.cardContent}>
                     <div className={styles.photoAndName}>
                       <Image
-                        src={vitaliyPenc}
+                        src={imageUrl} // <-- ИСПОЛЬЗУЕМ ДИНАМИЧЕСКИЙ URL
                         alt={name}
                         className={styles.memberPhoto}
+                        fill
                       />
                       <div className={styles.gradientOverlay}></div>
                       <div className={styles.textContainer}>

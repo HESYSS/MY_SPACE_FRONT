@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, memo } from "react";
 import { useRouter } from "next/router";
 import { useTranslation } from "react-i18next";
-import Image from "next/image"; // Импортируем компонент Image
-import arrowRight from "../../../public/icons/line.svg"; // Укажите правильный путь к иконке
+import Image from "next/image";
+import arrowRight from "../../../public/icons/line.svg";
 import styles from "./worker.module.css";
+import { useModal } from '../../hooks/useModal';
 
-// Определяем интерфейс для данных работника, чтобы обеспечить безопасность типов
+// Обновленный интерфейс для данных работника с полем photoUrl
 interface Employee {
   id: number;
   firstName: string;
@@ -19,19 +20,19 @@ interface Employee {
   positionEn?: string;
   profileEn?: string;
   aboutMeEn?: string;
+  photoUrl?: string; // <-- ДОБАВЛЕНО
 }
 
 const EmployeePage = () => {
   const router = useRouter();
   const { id } = router.query;
   const { t, i18n } = useTranslation();
+  const { openModal } = useModal();
 
-  // Состояние для хранения данных работника и статуса загрузки
   const [employee, setEmployee] = useState<Employee | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Используем useEffect для выполнения асинхронного запроса к бэкенду
   useEffect(() => {
     const fetchEmployee = async () => {
       try {
@@ -65,7 +66,6 @@ const EmployeePage = () => {
     return <div>{t("employeeNotFound")}</div>;
   }
 
-  // Функция для получения данных в зависимости от текущего языка
   const getEmployeeData = () => {
     const isEnglish = i18n.language === "en";
     return {
@@ -105,16 +105,22 @@ const EmployeePage = () => {
         <div className={styles.contactsBlockWrapper}>
           <div className={styles.contactsBlock}>
             <div className={styles.frame301}>
-              {/* Photo and name/role info on the left */}
               <div className={styles.photoContainer}>
-                <img
-                  src={`https://placehold.co/200x200/cccccc/000000?text=${currentData.firstName[0]}${currentData.lastName[0]}`}
-                  alt={`${currentData.firstName} ${currentData.lastName}`}
-                  className={styles.employeePhoto}
-                />
+                {/* Условный рендеринг: если есть photoUrl, используем его, иначе - заглушку */}
+                {employee.photoUrl ? (
+                  <img
+                    src={employee.photoUrl} // <-- ИСПОЛЬЗУЕМ РЕАЛЬНЫЙ URL
+                    alt={`${currentData.firstName} ${currentData.lastName}`}
+                    className={styles.employeePhoto}
+                  />
+                ) : (
+                  <img
+                    src={`https://placehold.co/200x200/cccccc/000000?text=${currentData.firstName[0]}${currentData.lastName[0]}`}
+                    alt={`${currentData.firstName} ${currentData.lastName}`}
+                    className={styles.employeePhoto}
+                  />
+                )}
               </div>
-
-              {/* Details on the right */}
               <div className={styles.infoContainer}>
                 <div className={styles.nameAndRole}>
                   <h3 className={styles.employeeName}>
@@ -122,10 +128,7 @@ const EmployeePage = () => {
                   </h3>
                   <p className={styles.employeeRole}>{currentData.position}</p>
                 </div>
-
                 <div className={styles.line17}></div>
-
-                {/* Additional info blocks */}
                 <div className={styles.additionalInfo}>
                   <div className={styles.infoSection}>
                     <h4 className={styles.infoTitle}>
@@ -136,14 +139,12 @@ const EmployeePage = () => {
                       {t("years")}
                     </p>
                   </div>
-
                   <div className={styles.infoSection}>
                     <h4 className={styles.infoTitle}>
                       {t("profile")}
                     </h4>
                     <p className={styles.infoText}>{currentData.profile}</p>
                   </div>
-
                   <div className={styles.infoSection}>
                     <h4 className={styles.infoTitle}>
                       {t("aboutMe")}
@@ -156,12 +157,16 @@ const EmployeePage = () => {
           </div>
         </div>
         
-        {/* Исправленный блок сотрудничества */}
+        {/* Исправленный блок сотрудничества с обработчиками onClick */}
         <div className={styles.coworking}>
           <h3 className={styles.callToAction}>{t('consultationCallToAction')}</h3>
           <div className={styles.frame89}>
             <div className={styles.frame88}>
-              <div className={styles.optionRow}>
+              {/* Блок для Sellers/Landlords */}
+              <div 
+                className={styles.optionRow} 
+                onClick={() => openModal('forSellers')}
+              >
                 <div className={styles.frame87}>
                   <div className={styles.line16}></div>
                   <div className={styles.frame86}>
@@ -174,9 +179,13 @@ const EmployeePage = () => {
                   </div>
                 </div>
               </div>
-              <div className={styles.optionRow}>
+              {/* Блок для Buyers/Tenants */}
+              <div 
+                className={styles.optionRow} 
+                onClick={() => openModal('forBuyers')}
+              >
                 <div className={styles.frame85}>
-                  <div className={styles.line17}></div>
+                  <div className={styles.line18}></div>
                   <div className={styles.frame84}>
                     <p className={styles.optionText}>{t('forBuyersTenants')}</p>
                     <Image
@@ -190,10 +199,9 @@ const EmployeePage = () => {
             </div>
           </div>
         </div>
-
       </div>
     </div>
   );
 };
 
-export default EmployeePage;
+export default memo(EmployeePage);

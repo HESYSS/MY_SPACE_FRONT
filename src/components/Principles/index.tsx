@@ -1,11 +1,33 @@
-// components/principles/principles.jsx
-
+import { useState, useEffect } from 'react';
 import styles from './principles.module.css';
 import starIcon from '../../../public/icons/star.svg';
-import { useTranslation } from 'react-i18next'; // Импортируем хук
+import { useTranslation } from 'react-i18next';
 
 export default function OurValues() {
-  const { t } = useTranslation('common'); // Используем файл common.json
+  const { t } = useTranslation('common');
+  const [imageUrl, setImageUrl] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchImageUrl = async () => {
+      try {
+        const response = await fetch('http://localhost:3001/images/Home.svg');
+        
+        if (!response.ok) {
+          throw new Error('Image not found or server error.');
+        }
+
+        const data = await response.json();
+        
+        setImageUrl(data.url);
+      } catch (error) {
+        console.error("Ошибка при получении URL изображения:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchImageUrl();
+  }, []);
 
   return (
     <section className={styles.advantages}>
@@ -64,8 +86,11 @@ export default function OurValues() {
             </div>
           </div>
         </div>
-        <div className={styles.photo}>
-          {/* Изображение будет фоном, как указано в стилях */}
+        {/* Используем inline-стиль для фонового изображения */}
+        <div 
+          className={`${styles.photo} ${isLoading ? styles.loading : ''}`}
+          style={{ backgroundImage: imageUrl ? `url(${imageUrl})` : 'none' }}
+        >
         </div>
       </div>
     </section>

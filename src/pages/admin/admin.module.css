@@ -1,254 +1,574 @@
 /* admin.module.css */
 
 .adminContainer {
-  max-width: 600px;
-  margin: 40px auto;
-  padding: 20px;
-  background-color: #050505;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  font-family: Arial, sans-serif;
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #050505;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
+    position: relative; /* Добавьте эту строку */
 }
 
 .adminTitle {
-  text-align: center;
-  color: #03B9B3;
-  margin-bottom: 20px;
+    text-align: center;
+    color: #03B9B3;
+    margin-bottom: 20px;
 }
 
 .tabsContainer {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 20px;
-  border-bottom: 2px solid #333;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #333;
 }
 
 .tabButton {
-  background: none;
-  border: none;
-  padding: 10px 20px;
-  cursor: pointer;
-  font-size: 16px;
-  color: #fff;
-  transition: color 0.2s ease-in-out;
+    background: none;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    color: #fff;
+    transition: color 0.2s ease-in-out;
 }
 
 .tabButton:hover {
-  color: #03B9B3;
+    color: #03B9B3;
 }
 
 .activeTab {
-  border-bottom: 2px solid #03B9B3;
-  color: #03B9B3;
-  font-weight: bold;
+    border-bottom: 2px solid #03B9B3;
+    color: #03B9B3;
+    font-weight: bold;
 }
 
 .tabContent {
-  padding-top: 20px;
+    padding-top: 20px;
 }
 
 .sectionHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
 }
 
 .sectionTitle {
-  color: #fff;
-  margin: 0;
+    color: #fff;
+    margin: 0;
 }
 
 .toggleButton {
-  background-color: #03B9B3;
-  color: #fff;
-  border: none;
-  padding: 8px 12px;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.2s ease-in-out;
+    background-color: #03B9B3;
+    color: #fff;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
 }
 
 .toggleButton:hover {
-  background-color: #051818;
+    background-color: #051818;
 }
 
 .emptyTabMessage {
-  text-align: center;
-  color: #888;
+    text-align: center;
+    color: #888;
 }
 
 .formGroup {
-  margin-bottom: 15px;
+    margin-bottom: 15px;
 }
 
 .formGroup label {
-  display: block;
-  margin-bottom: 5px;
-  font-weight: bold;
-  color: #fff; /* Изменено, чтобы соответствовать тёмной теме */
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #fff;
 }
 
 .formGroup input[type="text"],
 .formGroup input[type="number"],
 .formGroup textarea {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #03B9B3;
-  border-radius: 4px;
-  box-sizing: border-box;
-  background: #051818;
-  color: #fff;
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #03B9B3;
+    border-radius: 4px;
+    box-sizing: border-box;
+    background: #051818;
+    color: #fff;
 }
 
 .employeeForm textarea {
-  resize: vertical;
-  min-height: 100px;
+    resize: vertical;
+    min-height: 100px;
 }
 
 .employeeForm input:focus,
 .employeeForm textarea:focus {
-  border-color: #007bff;
-  outline: none;
-  box-shadow: 0 0 5px rgba(0, 123, 255, 0.25);
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.25);
 }
 
 .submitBtn {
-  display: block;
-  width: 100%;
-  padding: 12px;
-  background-color: #03B9B3;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: background-color 0.2s ease-in-out;
+    display: block;
+    width: 100%;
+    padding: 12px;
+    background-color: #03B9B3;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
 }
 
 .submitBtn:hover {
-  background-color: #051818;
+    background-color: #051818;
+}
+
+.submitBtn:disabled {
+    background-color: #555;
+    cursor: not-allowed;
 }
 
 .divider {
-  border: 0;
-  height: 1px;
-  background-color: #333;
-  margin: 30px 0;
+    border: 0;
+    height: 1px;
+    background-color: #333;
+    margin: 30px 0;
 }
 
 .employeeList {
-  display: grid;
-  gap: 15px;
+    display: grid;
+    gap: 15px;
 }
 
 .employeeCard {
-  background-color: #1a1a1a;
-  padding: 15px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  border: 1px solid #03B9B3;
-  color: #fff;
+    background-color: #1a1a1a;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    border: 1px solid #03B9B3;
+    color: #fff;
+    display: flex; /* Добавляем flex-контейнер */
+    gap: 15px; /* Задаем расстояние между фото и текстом */
+    align-items: center; /* Выравниваем элементы по центру */
 }
 
 .employeeCardContent {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
+    display: flex; /* Делаем его flex-контейнером */
+    flex-direction: column; /* Элементы идут сверху вниз */
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-grow: 1; /* Разрешаем ему занимать все доступное пространство */
+}
+
+.employeePhoto {
+    width: 80px;  /* Уменьшаем ширину */
+    height: 80px; /* Уменьшаем высоту */
+    object-fit: cover; /* Обрезаем изображение, чтобы оно вписывалось без искажений */
+    border-radius: 50%; /* Делаем изображение круглым */
+    border: 2px solid #03B9B3; /* Добавляем рамку для красоты */
 }
 
 .employeeCard p {
-  margin: 0;
-  line-height: 1.5;
+    margin: 0;
+    line-height: 1.5;
 }
 
 .deleteBtn {
-  background-color: #ff4d4d;
-  color: #fff;
-  border: none;
-  padding: 6px 10px;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 14px;
-  transition: background-color 0.2s ease-in-out;
+    background-color: #ff4d4d;
+    color: #fff;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.2s ease-in-out;
 }
 
 .deleteBtn:hover {
-  background-color: #cc0000;
+    background-color: #cc0000;
 }
 
 .errorMessage {
-  color: #ff6347;
-  text-align: center;
+    color: #ff6347;
+    text-align: center;
 }
 
-/* Новые стили для чекбоксов и меток */
 .checkboxGroup {
-  margin-bottom: 1rem;
+    margin-bottom: 1rem;
 }
 
 .checkboxGroup label {
-  display: flex;
-  align-items: center;
-  font-weight: normal;
-  color: #fff; /* Цвет текста */
-  cursor: pointer;
+    display: flex;
+    align-items: center;
+    font-weight: normal;
+    color: #fff;
+    cursor: pointer;
 }
 
 .checkboxGroup input[type="checkbox"] {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  width: 1.2rem;
-  height: 1.2rem;
-  margin-right: 0.5rem;
-  border: 2px solid #03B9B3;
-  border-radius: 4px;
-  background-color: transparent;
-  cursor: pointer;
-  position: relative;
-  transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 1.2rem;
+    height: 1.2rem;
+    margin-right: 0.5rem;
+    border: 2px solid #03B9B3;
+    border-radius: 4px;
+    background-color: transparent;
+    cursor: pointer;
+    position: relative;
+    transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
 }
 
 .checkboxGroup input[type="checkbox"]:checked {
-  background-color: #03B9B3;
-  border-color: #03B9B3;
+    background-color: #03B9B3;
+    border-color: #03B9B3;
 }
 
-/* Добавляем галочку при чекеде */
 .checkboxGroup input[type="checkbox"]:checked::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 0.5rem;
-  height: 0.8rem;
-  border: solid #050505;
-  border-width: 0 2px 2px 0;
-  transform: translate(-50%, -60%) rotate(45deg);
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0.5rem;
+    height: 0.8rem;
+    border: solid #050505;
+    border-width: 0 2px 2px 0;
+    transform: translate(-50%, -60%) rotate(45deg);
 }
 
 
-/* Стили для метки статуса в карточках сотрудников */
 .statusTag {
-  margin-left: 0.5rem;
-  padding: 0.2rem 0.5rem;
-  font-size: 0.8em;
-  font-weight: bold;
-  border-radius: 12px;
-  color: #050505; /* Цвет текста на метке */
-  white-space: nowrap;
+    margin-left: 0.5rem;
+    padding: 0.2rem 0.5rem;
+    font-size: 0.8em;
+    font-weight: bold;
+    border-radius: 12px;
+    color: #050505;
+    white-space: nowrap;
 }
 
-/* Цвета для разных статусов */
 .statusTag.partner {
-  background-color: #ffc107; /* Яркий жёлтый для партнера */
+    background-color: #ffc107;
 }
 
 .statusTag.manager {
-  background-color: #17a2b8; /* Синий для менеджера */
+    background-color: #17a2b8;
 }
 
 .statusTag.active {
-  background-color: #28a745; /* Зелёный для активного */
+    background-color: #28a745;
+}
+
+.offersSection {
+    margin-top: 20px;
+}
+
+.offerList {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.offerCard {
+    background-color: #1a1a1a;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    border: 1px solid #03B9B3;
+    color: #fff;
+}
+
+.offerCardContent {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.offerCard p {
+    margin: 0;
+    line-height: 1.5;
+}
+
+.statusBadge {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 0.9em;
+    color: #050505;
+}
+
+.statusBadge.pending {
+    background-color: #ffc107;
+}
+
+.statusBadge.processed {
+    background-color: #17a2b8;
+}
+
+.statusBadge.completed {
+    background-color: #28a745;
+}
+
+.offerActions {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+}
+
+.statusBtn {
+    background-color: #03B9B3;
+    color: #fff;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.statusBtn:hover {
+    background-color: #051818;
+}
+
+.statusBtn:disabled {
+    background-color: #555;
+    cursor: not-allowed;
+}
+
+/* Новые стили для вкладки изображений */
+.imageForm {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.imageList {
+    display: grid;
+    gap: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+}
+
+.imageCard {
+    background-color: #1a1a1a;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    border: 1px solid #03B9B3;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+}
+
+.imagePreview {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-bottom: 1px solid #03B9B3;
+}
+
+.imageInfo {
+    padding: 15px;
+}
+
+.imageInfo p {
+    word-wrap: break-word;
+    margin: 0;
+}
+
+.imageInfo a {
+    color: #03B9B3;
+    text-decoration: none;
+    word-wrap: break-word;
+}
+
+.imageInfo a:hover {
+    text-decoration: underline;
+}
+
+/* ✅ Новые стили для обновления изображений */
+.imageActions {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.updateBtn {
+    background-color: #03B9B3;
+    color: #fff;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.updateBtn:hover {
+    background-color: #051818;
+}
+
+/* Стили для модального окна */
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modalContent {
+    background-color: #050505;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    width: 90%;
+    max-width: 400px;
+    color: #fff;
+    text-align: center;
+}
+
+.modalContent h3 {
+    margin-top: 0;
+    color: #03B9B3;
+}
+
+.modalContent p {
+    color: #ccc;
+}
+
+.modalContent form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.modalActions {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.cancelBtn {
+    background-color: #555;
+    color: #fff;
+    border: none;
+    padding: 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    flex-grow: 1;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.cancelBtn:hover {
+    background-color: #777;
+}
+
+.modalActions .submitBtn {
+    flex-grow: 1;
+}
+
+.loginForm, .adminForm {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #1a1a1a;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.loginForm .formGroup, .adminForm .formGroup {
+    margin-bottom: 15px;
+}
+
+.loginForm label, .adminForm label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #fff;
+}
+
+.loginForm input, .adminForm input, .adminForm select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #03B9B3;
+    border-radius: 4px;
+    box-sizing: border-box;
+    background: #051818;
+    color: #fff;
+}
+
+.loginForm input:focus, .adminForm input:focus, .adminForm select:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.25);
+}
+
+.loginForm .submitBtn, .adminForm .submitBtn {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    background-color: #03B9B3;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.loginForm .submitBtn:hover, .adminForm .submitBtn:hover {
+    background-color: #051818;
+}
+
+.logoutBtn {
+    background-color: #d9534f;
+    color: #fff;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+
+.logoutBtn:hover {
+    background-color: #c9302c;
+}
+
+/* Стили для списка админов */
+.adminList {
+    display: grid;
+    gap: 15px;
+}
+
+.adminCard {
+    background-color: #1a1a1a;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    border: 1px solid #03B9B3;
+    color: #fff;
+}
+
+.adminCard p {
+    margin: 0;
+    line-height: 1.5;
 }

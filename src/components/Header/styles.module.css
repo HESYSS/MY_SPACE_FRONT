@@ -6,19 +6,23 @@
   justify-content: center;
   align-items: center;
   padding: 18px 0px;
-  width: 1920px;
+  width: 100%; /* Устанавливаем 100% ширину для адаптивности */
+  max-width: 1920px;
   height: 92px;
   background: #050505;
   border-radius: 0px 0px 20px 20px;
+  position: relative;
+  z-index: 100; /* Убедимся, что хедер всегда поверх контента */
 }
 
 /* Navbar */
 .navbar {
   display: flex;
   flex-direction: row;
-  justify-content: space-between; /* Распределяем пространство между левой и правой частью */
+  justify-content: space-between;
   align-items: center;
   width: 1200px;
+  max-width: 90%; /* Ограничиваем ширину, чтобы не прилипало к краям на больших экранах */
   height: 56px;
 }
 
@@ -27,7 +31,7 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 41px; /* Отступ между логотипом и ссылками */
+  gap: 41px;
 }
 
 /* Logo */
@@ -43,7 +47,7 @@
   list-style: none;
   padding: 0;
   margin: 0;
-  gap: 41px; /* Отступ между ссылками */
+  gap: 41px;
 }
 
 .navLinks a {
@@ -64,7 +68,7 @@
 
 /* Active link */
 .navLinks .activeLink {
-  color: #03b9b3; /* Цвет для активной ссылки */
+  color: #03b9b3;
 }
 
 /* Right Nav */
@@ -96,26 +100,19 @@
   color: #ebebeb;
   text-decoration: none;
   white-space: nowrap;
+  cursor: pointer;
+  transition: background 0.3s, color 0.3s;
 }
 .ctaButton:hover {
-  background: #092b2b; /* Цвет при наведении */
-  color: #ffffff; /* Цвет текста при наведении */
+  background: #092b2b;
+  color: #ffffff;
 }
+
 /* Contact Info */
 .contactInfo {
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 41px;
-}
-
-.langSelector {
-  font-family: "Raleway", sans-serif;
-  font-style: normal;
-  font-weight: 400;
-  font-size: 20px;
-  line-height: 23px;
-  color: #ffffff;
   gap: 41px;
 }
 
@@ -128,4 +125,175 @@
   line-height: 24px;
   color: #ebebeb;
   text-decoration: none;
+}
+
+/* ==========================================================================
+   Мобильные и планшетные стили (адаптация)
+   ========================================================================== */
+
+/* Скрываем элементы навигации и контактов на экранах < 1200px */
+@media (max-width: 1200px) {
+  .navLinks,
+  .navRight {
+    display: none;
+  }
+  
+  .navbar {
+    width: 90%;
+  }
+
+  /* Показываем кнопку-гамбургер и LanguageSwitcher */
+  .mobileMenuToggle {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 20px;
+  }
+
+  /* Гамбургер-кнопка */
+  .hamburgerButton {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    position: relative;
+    z-index: 101;
+    margin-top: 5px;
+  }
+
+  .hamburgerIcon,
+  .hamburgerIcon::before,
+  .hamburgerIcon::after {
+    display: block;
+    width: 25px;
+    height: 2px;
+    background-color: #ebebeb;
+    transition: all 0.3s;
+  }
+
+  .hamburgerIcon::before {
+    content: "";
+    position: absolute;
+    top: -6px;
+  }
+
+  /* Кнопка закрытия (крестик) */
+  .closeButton {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    position: relative;
+    z-index: 101;
+  }
+
+  .closeIcon,
+  .closeIcon::before,
+  .closeIcon::after {
+    display: block;
+    width: 25px;
+    height: 2px;
+    background-color: #ebebeb;
+    transition: all 0.3s;
+  }
+
+  .closeIcon {
+    transform: rotate(45deg);
+  }
+
+  .closeIcon::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: rotate(90deg);
+  }
+
+  .closeIcon::after {
+    display: none;
+  }
+  
+  /* Выпадающее меню */
+  .mobileMenuWrapper {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 92px; /* Устанавливаем top, равный высоте хедера */
+    right: 0;
+    width: 100%;
+    background: #051818;
+    z-index: 99;
+    padding: 0; 
+  }
+
+  .mobileNavLinks {
+    display: flex;
+    flex-direction: column;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+  }
+
+  .mobileNavLinks li {
+    padding: 20px 50px;
+    width: 100%;
+    box-sizing: border-box;
+    text-align: right;
+    position: relative;
+  }
+
+  .mobileNavLinks li::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, #03B9B300 0%, #03B9B380 50%);
+  }
+
+  .mobileNavLinks li:last-child::after {
+    content: none;
+  }
+
+  .mobileNavLinks li:last-child {
+    border-bottom: none;
+  }
+
+  .mobileNavLinks a,
+  .mobileNavLinks .phone {
+    font-size: 20px;
+    line-height: 23px;
+    color: #ebebeb;
+    text-decoration: none;
+    cursor: pointer;
+    white-space: nowrap;
+    text-transform: uppercase;
+    width: 100%;
+    display: block;
+    padding: 0;
+    margin: 0;
+  }
+
+  /* Блок с выравниванием кнопки "Консультація" */
+  .mobileNavLinks .ctaButton {
+    background: none;
+    padding: 0; /* Убираем внутренние отступы, чтобы текст прижался к правому краю */
+    display: inline; /* Меняем на строчный, чтобы выравнивание работало */
+    text-transform: uppercase;
+  }
+
+  .langItem {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+  }
+}
+
+/* Скрываем кнопки меню на больших экранах */
+@media (min-width: 1201px) {
+  .mobileMenuToggle {
+    display: none;
+  }
 }
