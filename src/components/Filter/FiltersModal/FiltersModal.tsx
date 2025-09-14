@@ -32,9 +32,7 @@ export default function FiltersModal({ onClose, onSubmit }: FiltersModalProps) {
     if (savedCurrency === "USD") setCurrency("USD");
   }, []);
 
-  const handleCurrencyToggle = () => {
-    const newCurrency = currency === "UAH" ? "USD" : "UAH";
-    console.log("Toggling currency to", newCurrency);
+  const handleCurrencyToggle = (newCurrency: "UAH" | "USD") => {
     setCurrency(newCurrency);
     localStorage.setItem(CURRENCY_KEY, newCurrency);
   };
@@ -56,8 +54,8 @@ export default function FiltersModal({ onClose, onSubmit }: FiltersModalProps) {
     onSubmit({
       category,
       propertyType,
-      currency, // передаем выбранную валюту
       ...filters,
+      currency, // передаем выбранную валюту
     });
   };
 
@@ -75,12 +73,6 @@ export default function FiltersModal({ onClose, onSubmit }: FiltersModalProps) {
         {/* Заголовок + кнопка переключения валюты */}
         <div className={styles.modalHeader}>
           <h2 className={styles.modalTitle}>Фільтри</h2>
-          <button
-            onClick={handleCurrencyToggle}
-            className={styles.currencyButton}
-          >
-            {currency === "UAH" ? "грн ₴" : "долар $"}
-          </button>
         </div>
 
         {/* Категорія */}
@@ -156,7 +148,6 @@ export default function FiltersModal({ onClose, onSubmit }: FiltersModalProps) {
             <div key={filter} className={styles.filterGroup}>
               <label className={styles.filterLabel}>{filter}</label>
 
-              {/* Діапазони */}
               {[
                 "Ціна",
                 "Поверх",
@@ -185,6 +176,28 @@ export default function FiltersModal({ onClose, onSubmit }: FiltersModalProps) {
                     }
                     className={styles.rangeInput}
                   />
+                  {filter === "Ціна" && (
+                    <div className={styles.currencyContainer}>
+                      <button
+                        onClick={() => handleCurrencyToggle("UAH")}
+                        className={`${styles.currencyButtonPrice} ${
+                          currency === "UAH" ? styles.active : ""
+                        }`}
+                      >
+                        Грн
+                      </button>
+                      <span>/</span>
+                      <button
+                        onClick={() => handleCurrencyToggle("USD")}
+                        className={`${styles.currencyButtonPrice} ${
+                          currency === "USD" ? styles.active : ""
+                        }`}
+                      >
+                        USD
+                      </button>
+                    </div>
+                  )}
+                  {filter === "Загальна площа" && <span>м²</span>}
                 </div>
               ) : filter === "Кіл.кімнат" ? (
                 <div className={styles.multiSelect}>

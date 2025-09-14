@@ -8,13 +8,12 @@ interface FilterProps {
   onApply?: (filters: any) => void;
   onTypeChange?: (value: "Оренда" | "Продаж") => void;
 }
-
+const LOCATION_STORAGE_KEY = "locationFilters";
+const OTHER_STORAGE_KEY = "otherFilters";
 export default function Filter({ type, onApply }: FilterProps) {
   const [searchValue, setSearchValue] = useState("");
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
   const [isFiltersModalOpen, setIsFiltersModalOpen] = useState(false);
-  const LOCATION_STORAGE_KEY = "locationFilters";
-  const OTHER_STORAGE_KEY = "otherFilters";
 
   // Локальные состояния для выбранных данных
   const [location, setLocation] = useState<any>(null);
@@ -22,6 +21,7 @@ export default function Filter({ type, onApply }: FilterProps) {
   useEffect(() => {
     // восстановление локации
     const savedLocation = localStorage.getItem(LOCATION_STORAGE_KEY);
+    console.log("Saved location from storage:", savedLocation);
     if (savedLocation) {
       setLocation(JSON.parse(savedLocation));
     }
@@ -35,6 +35,7 @@ export default function Filter({ type, onApply }: FilterProps) {
 
   // Управление модальным окном "Локация"
   const handleLocationSubmit = (locationFilters: any) => {
+    console.log("Location filters submitted:", locationFilters);
     setLocation(locationFilters);
     localStorage.setItem(LOCATION_STORAGE_KEY, JSON.stringify(locationFilters));
   };

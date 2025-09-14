@@ -1,14 +1,14 @@
 export interface Property {
   id: string;
   title: string;
-  discription: string;
+  description: string;
   prices: Price[];
   rooms: number;
   area: number;
   firstImage: string;
-  street: string;
+  district: string;
   type: string;
-  сreatedAt: string;
+  updatedAt: string;
 }
 interface Price {
   value: number;

@@ -31,6 +31,7 @@ interface Property {
   article: string;
   category: string;
   contacts: any[];
+  characteristics: any[];
 }
 
 interface PropertyImage {
@@ -56,9 +57,8 @@ export default function PropertyPage() {
         const res = await fetch(`http://localhost:3001/items/${id}`);
         if (!res.ok) throw new Error("Обʼєкт не знайдено");
         const data: Property = await res.json();
-        
+
         setProperty(data);
-        
       } catch (err: any) {
         setError(err.message || "Помилка при завантаженні");
       } finally {
@@ -84,33 +84,43 @@ export default function PropertyPage() {
   const description = property.description;
 
   const mapCoords = {
-    lat: property.location.lat,
-    lng: property.location.lng,
+    lat: Number(property.location.lat),
+    lng: Number(property.location.lng),
   };
-  
+  console.log("Property characteristics:", mapCoords);
+  const characteristicFeatures = Object.entries(property.characteristics)
+    .filter(
+      ([key, value]) => value !== null && value !== undefined && value !== ""
+    )
+    .map(([key, value]) => ({
+      name: key,
+      value: value,
+    }));
+
   const bedrooms = "2 спальні";
   const area = "1500 м²";
 
-  const features = [
-    { name: "Тип нерухомості", value: property.category },
+  const baseFeatures = [
     { name: "Вид об'єкта", value: property.type },
     { name: "Операція", value: property.deal },
-    { name: "Вулиця", value: property.location.street },
-    { name: "Кількість спалень", value: bedrooms },
-    { name: "Площа", value: area },
   ];
-
+  const features = [...baseFeatures, ...characteristicFeatures];
   return (
     <div className={styles.propertyPage}>
       <div className={styles.glowingEllipse}></div>
       <main className={styles.contentWrapper}>
         <section className={styles.mainInfoSection}>
           <div className={styles.imageGallery}>
-            <PropertyImagesGallery images={property.images} onImageClick={() => {}} />
+            <PropertyImagesGallery
+              images={property.images}
+              onImageClick={() => {}}
+            />
           </div>
           <div className={styles.infoSection}>
             <h1 className={styles.title}>{property.title}</h1>
-            <p className={styles.location}>{street}, {city}</p>
+            <p className={styles.location}>
+              {street}, {city}
+            </p>
             <p className={styles.type}>{propertyType}</p>
             <div className={styles.featuresRow}>
               <div className={styles.featureItem}>
@@ -134,7 +144,9 @@ export default function PropertyPage() {
             </div>
             <div className={styles.priceAndButton}>
               <p className={styles.price}>{formattedPrice}</p>
-              <button className={styles.contactButton}>ОТРИМАТИ КОНСУЛЬТАЦІЮ</button>
+              <button className={styles.contactButton}>
+                ОТРИМАТИ КОНСУЛЬТАЦІЮ
+              </button>
             </div>
           </div>
         </section>
@@ -154,19 +166,25 @@ export default function PropertyPage() {
             </div>
             <div className={styles.sectionBlock}>
               <h2 className={styles.sectionTitle}>Опис</h2>
-              <p className={styles.description}>{description}</p>
+              <p
+                className={styles["property-description"]}
+                dangerouslySetInnerHTML={{ __html: description }}
+              />
             </div>
           </div>
           <div className={styles.mapColumn}>
             {mapCoords.lat && mapCoords.lng && (
-              <MapWrapper properties={[
-                {
-                  id: property.id,
-                  title: property.title,
-                  location: property.location,
-                  coords: { lat: mapCoords.lat, lng: mapCoords.lng },
-                }
-              ]} />
+              <MapWrapper
+                properties={[
+                  {
+                    id: property.id,
+                    title: property.title,
+
+                    lat: mapCoords.lat,
+                    lng: mapCoords.lng,
+                  },
+                ]}
+              />
             )}
           </div>
         </div>

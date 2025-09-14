@@ -1,3 +1,6 @@
+/* =========================
+   Overlay
+   ========================= */
 .modalOverlay {
   position: fixed;
   top: 0;
@@ -11,106 +14,113 @@
   z-index: 1000;
 }
 
-.filtersModalContent {
-  background-color: #2a2a2a;
-  color: #fff;
-  border-radius: 10px;
+/* =========================
+   Modal Content
+   ========================= */
+.modalContent {
+  background-color: #0a0a0a; /* Slightly darker to match */
+  color: #e0e0e0;
+  border-radius: 12px;
   width: 90%;
   max-width: 600px;
-  padding: 2rem;
+  padding: 2.5rem 2rem;
   border: 1px solid #444;
   position: relative;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+
   max-height: 90vh;
   overflow-y: auto;
 }
+.modalContent::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+.modalContent {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
 
+/* =========================
+   Header
+   ========================= */
 .modalHeader {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #444;
 }
 
 .modalTitle {
-  font-size: 1.5rem;
-  font-weight: bold;
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: #fff;
 }
 
 .closeButton {
   background: none;
   border: none;
   color: #fff;
+  font-size: 1.5rem;
   cursor: pointer;
+  padding: 0;
 }
 
-.closeButton svg {
-  fill: #fff;
-}
-
-.filtersBody {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
+/* =========================
+   Filter Groups
+   ========================= */
 .filterGroup {
-  border-bottom: 1px solid #3a3a3a;
   padding-bottom: 1.5rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid #3a3a3a;
 }
 
 .filterLabel {
   font-size: 1rem;
   font-weight: 500;
   margin-bottom: 0.75rem;
-  color: #bbb;
+  color: #ccc;
 }
 
+/* =========================
+   Category & Type Buttons
+   ========================= */
 .categoryToggle,
-.serviceTypeToggle {
+.propertyTypeToggle,
+.serviceToggle {
   display: flex;
-  border-radius: 5px;
-  overflow: hidden;
-  border: 1px solid #4a4a4a;
+  flex-wrap: wrap;
+  gap: 0.5rem;
 }
 
 .categoryButton,
-.serviceButton,
-.propertyButton {
-  flex: 1;
-  background-color: #3a3a3a;
-  color: #fff;
-  padding: 0.75rem;
-  border: none;
+.propertyButton,
+.serviceButton {
+  background-color: #3b3b3b;
+  color: #999;
+  border: 1px solid #555;
+  border-radius: 6px;
+  padding: 0.6rem 1.2rem;
   cursor: pointer;
   font-weight: 500;
-  transition: background-color 0.2s ease;
+  position: relative;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+  flex-grow: 1; /* For equal width buttons */
+  text-align: center;
 }
 
 .categoryButton.active,
-.serviceButton.active,
-.propertyButton.active {
-  background-color: #007bff;
+.propertyButton.active,
+.serviceButton.active {
+  background-color: #03b9b34d;
+  border-color: #03b9b34d;
   color: #fff;
 }
 
-.propertyTypeToggle {
-  display: flex;
-  gap: 0.5rem;
-  margin-top: 1rem;
-}
-
-.propertyButton {
-  padding: 0.5rem 1rem;
-  border-radius: 5px;
-  border: 1px solid #4a4a4a;
-  background-color: #3a3a3a;
-}
-
-.propertyButton.active {
-  background-color: #007bff;
-  border-color: #007bff;
-}
-
+/* =========================
+   Input Ranges
+   ========================= */
 .inputRange {
   display: flex;
   align-items: center;
@@ -119,11 +129,11 @@
 
 .rangeInput {
   flex: 1;
-  background-color: #3a3a3a;
+  background-color: #3b3b3b;
   border: 1px solid #555;
   color: #fff;
-  padding: 0.5rem 0.75rem;
-  border-radius: 5px;
+  padding: 0.6rem 0.75rem;
+  border-radius: 6px;
 }
 
 .rangeInput::placeholder {
@@ -132,68 +142,68 @@
 
 .rangeSeparator {
   color: #888;
+  font-size: 0.9rem;
 }
 
-.unit {
-  color: #888;
-  margin-left: 0.5rem;
-}
-
-.currencyToggle {
+.priceInputGroup {
   display: flex;
-  border: 1px solid #555;
-  border-radius: 5px;
-  overflow: hidden;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
 }
 
-.currencyButton {
-  background-color: #3a3a3a;
-  color: #888;
-  padding: 0.5rem;
-  border: none;
-  cursor: pointer;
+.currencyDisplay {
+  color: #007bff;
+  font-weight: bold;
+  padding-left: 0.5rem;
 }
 
-.currencyButton.active {
-  background-color: #007bff;
-  color: #fff;
-}
-
-.roomButtons {
+/* =========================
+   Multi-select Buttons
+   ========================= */
+.multiSelect {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
 }
 
 .roomButton {
-  background-color: #3a3a3a;
-  color: #fff;
+  background-color: #3b3b3b;
+  color: #999;
   border: 1px solid #555;
-  border-radius: 5px;
-  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  padding: 0.6rem 1rem;
   cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
 }
 
 .roomButton.active {
   background-color: #007bff;
   border-color: #007bff;
+  color: #fff;
 }
 
+/* =========================
+   Actions
+   ========================= */
 .modalActions {
   display: flex;
   justify-content: space-between;
   gap: 1rem;
   padding-top: 1.5rem;
   border-top: 1px solid #3a3a3a;
-  margin-top: 1.5rem;
+  margin-top: 1rem;
 }
 
 .resetButton,
 .showResultsButton {
-  padding: 0.75rem 1.5rem;
-  border-radius: 5px;
+  padding: 0.8rem 2rem;
+  border-radius: 8px;
   cursor: pointer;
-  font-weight: bold;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: background-color 0.2s ease;
 }
 
 .resetButton {

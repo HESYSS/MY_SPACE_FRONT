@@ -14,18 +14,22 @@ const SHORE_DISTRICTS: Record<string, string[]> = {
   ],
 };
 
-const METRO_LINES: Record<string, string[]> = {
+export const METRO_LINES: Record<string, string[]> = {
   "Червона лінія": [
     "Академмістечко",
     "Житомирська",
     "Святошин",
     "Нивки",
+    "Берестейська",
+    "Шулявська",
     "Політехнічний інститут",
     "Вокзальна",
     "Університет",
     "Театральна",
     "Хрещатик",
     "Арсенальна",
+    "Дніпро",
+    "Гідропарк",
     "Лівобережна",
     "Дарниця",
     "Чернігівська",
@@ -35,6 +39,9 @@ const METRO_LINES: Record<string, string[]> = {
     "Героїв Дніпра",
     "Мінська",
     "Оболонь",
+    "Почайна",
+    "Тараса Шевченка",
+    "Контрактова площа",
     "Поштова площа",
     "Майдан Незалежності",
     "Площа Льва Толстого",
@@ -44,6 +51,8 @@ const METRO_LINES: Record<string, string[]> = {
     "Деміївська",
     "Голосіївська",
     "Васильківська",
+    "Виставковий центр",
+    "Іподром",
     "Теремки",
   ],
   "Зелена лінія": [
@@ -53,9 +62,11 @@ const METRO_LINES: Record<string, string[]> = {
     "Золоті ворота",
     "Палац спорту",
     "Кловська",
-    "Дружби народів",
+    "Печерська",
+    "Звіринецька",
     "Видубичі",
     "Славутич",
+    "Осокорки",
     "Позняки",
     "Харківська",
     "Вирлиця",
@@ -83,6 +94,17 @@ interface LocationModalProps {
 
 const DATA_STORAGE_KEY = "locationData"; // для данных с бэка
 const FILTERS_STORAGE_KEY = "locationFilters";
+const POLYGON_STORAGE_KEY = "mapPolygon";
+
+function loadPolygon() {
+  const stored = localStorage.getItem(POLYGON_STORAGE_KEY);
+  if (!stored) return null;
+  try {
+    return JSON.parse(stored);
+  } catch {
+    return null;
+  }
+}
 
 export default function LocationModal({
   onClose,
@@ -154,12 +176,30 @@ export default function LocationModal({
       return;
     }
 
-    // Сбрасываем все фильтры при смене locationType
-    setSelectedMetro([]);
-    setSelectedDistricts([]);
-    setSelectedStreets([]);
-    setSelectedJk([]);
-    setSelectedDirections([]);
+    const newFilters: any = {
+      isOutOfCity: locationType === "region",
+      streets: [],
+      newbuildings: [],
+    };
+
+    if (locationType === "kyiv") {
+      newFilters.metro = [];
+      newFilters.districts = [];
+    } else {
+      newFilters.directions = [];
+    }
+
+    console.log("Reset filters after location change:", newFilters);
+
+    // Чистим оба хранилища
+    localStorage.removeItem(FILTERS_STORAGE_KEY);
+    localStorage.removeItem(POLYGON_STORAGE_KEY);
+
+    // Сохраняем только базовые фильтры без полигона
+    localStorage.setItem(FILTERS_STORAGE_KEY, JSON.stringify(newFilters));
+
+    // Передаём наружу чистые фильтры
+    onSubmit(newFilters);
   }, [locationType]);
 
   const toggleArrayValue = (arr: string[], value: string) =>
@@ -206,10 +246,7 @@ export default function LocationModal({
   // Автосабмит и сохранение в localStorage
   // Автосабмит и сохранение в localStorage
   useEffect(() => {
-    if (isInitialRender) {
-      setIsInitialRender(false);
-      return;
-    }
+    if (isInitialRender) return;
 
     const filters: any = {
       isOutOfCity: locationType === "region",
@@ -224,12 +261,11 @@ export default function LocationModal({
       filters.directions = selectedDirections;
     }
 
-    onSubmit(filters);
+    console.log("Saving filters after selection:", filters);
 
-    // Сохраняем в localStorage
     localStorage.setItem(FILTERS_STORAGE_KEY, JSON.stringify(filters));
+    onSubmit({ ...filters, polygon: loadPolygon() }); // ⬅️ подмешиваем polygon
   }, [
-    locationType,
     selectedMetro,
     selectedDistricts,
     selectedStreets,
@@ -286,39 +322,45 @@ export default function LocationModal({
             isOpen={metroOpen}
             onToggle={() => setMetroOpen(!metroOpen)}
           >
-            {Object.keys(METRO_LINES).map((line) => {
-              const selectedCount = METRO_LINES[line].filter((s) =>
-                selectedMetro.includes(s)
-              ).length;
-              return (
-                <div key={line}>
-                  <div
-                    className={`${styles.dropdownItem} ${
-                      METRO_LINES[line].every((s) => selectedMetro.includes(s))
-                        ? styles.active
-                        : ""
-                    }`}
-                    style={{ fontWeight: "bold" }}
-                    onClick={() => handleSelectMetroLine(line)}
-                  >
-                    {line}
-                    {selectedCount > 0 && ` (${selectedCount})`}
-                  </div>
-                  {METRO_LINES[line].map((station) => (
+            <div className={styles.columnsWrapper}>
+              {Object.keys(METRO_LINES).map((line) => {
+                const selectedCount = METRO_LINES[line].filter((s) =>
+                  selectedMetro.includes(s)
+                ).length;
+                return (
+                  <div key={line} className={styles.metroColumn}>
                     <div
-                      key={station}
                       className={`${styles.dropdownItem} ${
-                        selectedMetro.includes(station) ? styles.active : ""
+                        METRO_LINES[line].every((s) =>
+                          selectedMetro.includes(s)
+                        )
+                          ? styles.active
+                          : ""
                       }`}
-                      style={{ paddingLeft: "20px" }}
-                      onClick={() => handleSelectMetroStation(station)}
+                      style={{ fontWeight: "bold" }}
+                      onClick={() => handleSelectMetroLine(line)}
                     >
-                      {station}
+                      {line}
+                      {selectedCount > 0 && ` (${selectedCount})`}
                     </div>
-                  ))}
-                </div>
-              );
-            })}
+                    <div className={styles.dropdownSubList}>
+                      {METRO_LINES[line].map((station) => (
+                        <div
+                          key={station}
+                          className={`${styles.dropdownItem} ${
+                            selectedMetro.includes(station) ? styles.active : ""
+                          }`}
+                          style={{ paddingLeft: "20px" }}
+                          onClick={() => handleSelectMetroStation(station)}
+                        >
+                          {station}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
           </Dropdown>
 
           {/* Районы */}
@@ -327,35 +369,39 @@ export default function LocationModal({
             isOpen={districtOpen}
             onToggle={() => setDistrictOpen(!districtOpen)}
           >
-            {Object.keys(SHORE_DISTRICTS).map((shore) => (
-              <div key={shore}>
-                <div
-                  className={`${styles.dropdownItem} ${
-                    SHORE_DISTRICTS[shore].every((d) =>
-                      selectedDistricts.includes(d)
-                    )
-                      ? styles.active
-                      : ""
-                  }`}
-                  style={{ fontWeight: "bold" }}
-                  onClick={() => handleSelectShore(shore)}
-                >
-                  {shore}
-                </div>
-                {SHORE_DISTRICTS[shore].map((district) => (
+            <div className={styles.districtsWrapper}>
+              {Object.keys(SHORE_DISTRICTS).map((shore) => (
+                <div key={shore} className={styles.districtColumn}>
                   <div
-                    key={district}
                     className={`${styles.dropdownItem} ${
-                      selectedDistricts.includes(district) ? styles.active : ""
+                      SHORE_DISTRICTS[shore].every((d) =>
+                        selectedDistricts.includes(d)
+                      )
+                        ? styles.active
+                        : ""
                     }`}
-                    style={{ paddingLeft: "20px" }}
-                    onClick={() => handleSelectDistrict(district)}
+                    style={{ fontWeight: "bold" }}
+                    onClick={() => handleSelectShore(shore)}
                   >
-                    {district}
+                    {shore}
                   </div>
-                ))}
-              </div>
-            ))}
+                  {SHORE_DISTRICTS[shore].map((district) => (
+                    <div
+                      key={district}
+                      className={`${styles.dropdownItem} ${
+                        selectedDistricts.includes(district)
+                          ? styles.active
+                          : ""
+                      }`}
+                      style={{ paddingLeft: "20px" }}
+                      onClick={() => handleSelectDistrict(district)}
+                    >
+                      {district}
+                    </div>
+                  ))}
+                </div>
+              ))}
+            </div>
           </Dropdown>
 
           {/* Вулиці */}
@@ -364,17 +410,19 @@ export default function LocationModal({
             isOpen={streetOpen}
             onToggle={() => setStreetOpen(!streetOpen)}
           >
-            {locationData?.kyiv.streets.map((street) => (
-              <div
-                key={street}
-                className={`${styles.dropdownItem} ${
-                  selectedStreets.includes(street) ? styles.active : ""
-                }`}
-                onClick={() => handleSelectStreet(street)}
-              >
-                {street}
-              </div>
-            ))}
+            <div className={styles.inlineList}>
+              {locationData?.kyiv.streets.map((street) => (
+                <div
+                  key={street}
+                  className={`${styles.dropdownItem} ${
+                    selectedStreets.includes(street) ? styles.active : ""
+                  }`}
+                  onClick={() => handleSelectStreet(street)}
+                >
+                  {street}
+                </div>
+              ))}
+            </div>
           </Dropdown>
 
           {/* ЖК */}
@@ -383,17 +431,19 @@ export default function LocationModal({
             isOpen={jkOpen}
             onToggle={() => setJkOpen(!jkOpen)}
           >
-            {locationData?.kyiv.newbuildings.map((jk) => (
-              <div
-                key={jk}
-                className={`${styles.dropdownItem} ${
-                  selectedJk.includes(jk) ? styles.active : ""
-                }`}
-                onClick={() => handleSelectJk(jk)}
-              >
-                {jk}
-              </div>
-            ))}
+            <div className={styles.inlineList}>
+              {locationData?.kyiv.newbuildings.map((jk) => (
+                <div
+                  key={jk}
+                  className={`${styles.dropdownItem} ${
+                    selectedJk.includes(jk) ? styles.active : ""
+                  }`}
+                  onClick={() => handleSelectJk(jk)}
+                >
+                  {jk}
+                </div>
+              ))}
+            </div>
           </Dropdown>
         </div>
       ) : (
@@ -404,17 +454,19 @@ export default function LocationModal({
             isOpen={regionDirectionOpen}
             onToggle={() => setRegionDirectionOpen(!regionDirectionOpen)}
           >
-            {locationData?.region.directions.map((dir) => (
-              <div
-                key={dir}
-                className={`${styles.dropdownItem} ${
-                  selectedDirections.includes(dir) ? styles.active : ""
-                }`}
-                onClick={() => handleSelectDirection(dir)}
-              >
-                {dir}
-              </div>
-            ))}
+            <div className={styles.inlineList}>
+              {locationData?.region.directions.map((dir) => (
+                <div
+                  key={dir}
+                  className={`${styles.dropdownItem} ${
+                    selectedDirections.includes(dir) ? styles.active : ""
+                  }`}
+                  onClick={() => handleSelectDirection(dir)}
+                >
+                  {dir}
+                </div>
+              ))}
+            </div>
           </Dropdown>
 
           {/* Вулиці */}
@@ -423,17 +475,19 @@ export default function LocationModal({
             isOpen={regionStreetOpen}
             onToggle={() => setRegionStreetOpen(!regionStreetOpen)}
           >
-            {locationData?.region.streets.map((street) => (
-              <div
-                key={street}
-                className={`${styles.dropdownItem} ${
-                  selectedStreets.includes(street) ? styles.active : ""
-                }`}
-                onClick={() => handleSelectStreet(street)}
-              >
-                {street}
-              </div>
-            ))}
+            <div className={styles.inlineList}>
+              {locationData?.region.streets.map((street) => (
+                <div
+                  key={street}
+                  className={`${styles.dropdownItem} ${
+                    selectedStreets.includes(street) ? styles.active : ""
+                  }`}
+                  onClick={() => handleSelectStreet(street)}
+                >
+                  {street}
+                </div>
+              ))}
+            </div>
           </Dropdown>
 
           {/* ЖК */}
@@ -442,17 +496,19 @@ export default function LocationModal({
             isOpen={regionJkOpen}
             onToggle={() => setRegionJkOpen(!regionJkOpen)}
           >
-            {locationData?.region.newbuildings.map((jk) => (
-              <div
-                key={jk}
-                className={`${styles.dropdownItem} ${
-                  selectedJk.includes(jk) ? styles.active : ""
-                }`}
-                onClick={() => handleSelectJk(jk)}
-              >
-                {jk}
-              </div>
-            ))}
+            <div className={styles.inlineList}>
+              {locationData?.region.newbuildings.map((jk) => (
+                <div
+                  key={jk}
+                  className={`${styles.dropdownItem} ${
+                    selectedJk.includes(jk) ? styles.active : ""
+                  }`}
+                  onClick={() => handleSelectJk(jk)}
+                >
+                  {jk}
+                </div>
+              ))}
+            </div>
           </Dropdown>
         </div>
       )}

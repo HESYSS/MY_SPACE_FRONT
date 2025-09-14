@@ -50,7 +50,7 @@ export default function CatalogPage() {
   const [allProperties, setAllProperties] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
-  const limit = 6;
+  const limit = 9;
 
   const [locationFilter, setLocationFilter] = useState<any>(() => {
     const saved = localStorage.getItem("locationFilters");
@@ -62,6 +62,7 @@ export default function CatalogPage() {
   });
 
   const handleApply = (location: any, filters: any) => {
+    console.log("Applying filters:", { location, filters });
     setLocationFilter({ ...location });
     setOtherFilters({ ...filters });
     setPage(1);
@@ -100,7 +101,10 @@ export default function CatalogPage() {
       try {
         const standardizedLocation = standardizeFilters(locationFilter);
         const standardizedFilters = standardizeFilters(otherFilters);
-
+        console.log("Fetching all properties with filters:", {
+          location: standardizedLocation,
+          filters: standardizedFilters,
+        });
         const params = new URLSearchParams({
           page: page.toString(),
           limit: limit.toString(),
@@ -122,10 +126,6 @@ export default function CatalogPage() {
     <div className={styles.catalogContainer}>
       <div className={styles.leftColumn}>
         <div>
-          <h1 className={styles.catalogTitle}>
-            Каталог: {propertyType && `— ${propertyType}`}
-          </h1>
-
           <Filter
             type={propertyType}
             onApply={(appliedFilters: any) => {
@@ -141,7 +141,11 @@ export default function CatalogPage() {
       </div>
 
       <div className={styles.rightColumn}>
-        <MapWrapper properties={allProperties} />
+        <MapWrapper
+          properties={allProperties}
+          locationFilters={locationFilter}
+          onChangeFilters={(newFilters) => setLocationFilter(newFilters)}
+        />
       </div>
     </div>
   );
