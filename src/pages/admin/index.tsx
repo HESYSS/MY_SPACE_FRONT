@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from "react";
-import styles from './admin.module.css';
-import { jwtDecode, JwtPayload } from 'jwt-decode';
+import styles from "./admin.module.css";
+import { jwtDecode, JwtPayload } from "jwt-decode";
+
+interface MyToken extends JwtPayload {
+  userId: string;
+  role: string;
+}
 
 interface Employee {
   id: number;
@@ -28,7 +33,7 @@ interface Offer {
   propertyType: string;
   phoneNumber: string;
   createdAt: string;
-  status: 'PENDING' | 'PROCESSED' | 'COMPLETED';
+  status: "PENDING" | "PROCESSED" | "COMPLETED";
 }
 
 interface SiteImage {
@@ -57,12 +62,14 @@ const AdminPage: React.FC = () => {
   const [offers, setOffers] = useState<Offer[]>([]);
   const [images, setImages] = useState<SiteImage[]>([]);
   const [admins, setAdmins] = useState<Admin[]>([]);
-  
+
   // Стани для полів
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [position, setPosition] = useState("");
-  const [experienceYears, setExperienceYears] = useState<string | undefined>(undefined);
+  const [experienceYears, setExperienceYears] = useState<string | undefined>(
+    undefined
+  );
   const [profile, setProfile] = useState("");
   const [aboutMe, setAboutMe] = useState("");
   const [firstNameEn, setFirstNameEn] = useState("");
@@ -79,7 +86,8 @@ const AdminPage: React.FC = () => {
   const [uploading, setUploading] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [selectedImageToUpdate, setSelectedImageToUpdate] = useState<SiteImage | null>(null);
+  const [selectedImageToUpdate, setSelectedImageToUpdate] =
+    useState<SiteImage | null>(null);
 
   // Стани для авторизації
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -87,26 +95,30 @@ const AdminPage: React.FC = () => {
   const [password, setPassword] = useState("");
   const [authError, setAuthError] = useState<string | null>(null);
   const [userRole, setUserRole] = useState<string | null>(null);
-  
+
   // Стани для форми створення адміна
-  const [newAdminUsername, setNewAdminUsername] = useState('');
-  const [newAdminPassword, setNewAdminPassword] = useState('');
-  const [newAdminRole, setNewAdminRole] = useState('admin');
+  const [newAdminUsername, setNewAdminUsername] = useState("");
+  const [newAdminPassword, setNewAdminPassword] = useState("");
+  const [newAdminRole, setNewAdminRole] = useState("admin");
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
     if (token) {
       try {
         const decoded: CustomJwtPayload = jwtDecode(token);
-        if (decoded && decoded.exp !== undefined && decoded.exp * 1000 > Date.now()) {
+        if (
+          decoded &&
+          decoded.exp !== undefined &&
+          decoded.exp * 1000 > Date.now()
+        ) {
           setIsLoggedIn(true);
           setUserRole(decoded.role);
           setActiveTab("employees");
         } else {
-          localStorage.removeItem('token');
+          localStorage.removeItem("token");
         }
       } catch (err) {
-        localStorage.removeItem('token');
+        localStorage.removeItem("token");
       }
     }
   }, []);
@@ -124,7 +136,7 @@ const AdminPage: React.FC = () => {
           fetchImages();
           break;
         case "admins":
-          if (userRole === 'superadmin') {
+          if (userRole === "superadmin") {
             fetchAdmins();
           }
           break;
@@ -133,12 +145,12 @@ const AdminPage: React.FC = () => {
   }, [activeTab, isLoggedIn, userRole]);
 
   const getHeadersWithAuth = (isMultipart = false) => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
     const headers: HeadersInit = {
-      ...(token && { Authorization: `Bearer ${token}` })
+      ...(token && { Authorization: `Bearer ${token}` }),
     };
     if (!isMultipart) {
-      headers['Content-Type'] = 'application/json';
+      headers["Content-Type"] = "application/json";
     }
     return headers;
   };
@@ -184,7 +196,7 @@ const AdminPage: React.FC = () => {
       setLoading(false);
     }
   };
-  
+
   const fetchImages = async () => {
     setLoading(true);
     setError(null);
@@ -219,11 +231,11 @@ const AdminPage: React.FC = () => {
     formData.append("file", file);
 
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem("token");
       if (!token) throw new Error("Токен не знайдено.");
       const response = await fetch("http://localhost:3001/images/upload", {
         method: "POST",
-        headers: { "Authorization": `Bearer ${token}` },
+        headers: { Authorization: `Bearer ${token}` },
         body: formData,
       });
 
@@ -258,13 +270,16 @@ const AdminPage: React.FC = () => {
     formData.append("file", file);
 
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem("token");
       if (!token) throw new Error("Токен не знайдено.");
-      const response = await fetch(`http://localhost:3001/images/${selectedImageToUpdate.id}`, {
-        method: "PATCH",
-        headers: { "Authorization": `Bearer ${token}` },
-        body: formData,
-      });
+      const response = await fetch(
+        `http://localhost:3001/images/${selectedImageToUpdate.id}`,
+        {
+          method: "PATCH",
+          headers: { Authorization: `Bearer ${token}` },
+          body: formData,
+        }
+      );
 
       if (response.ok) {
         alert("Зображення успішно оновлено!");
@@ -286,16 +301,18 @@ const AdminPage: React.FC = () => {
   };
 
   const handleImageDelete = async (imageId: number) => {
-    const confirmation = window.confirm("Ви впевнені, що хочете видалити це зображення? Ця дія є незворотною.");
+    const confirmation = window.confirm(
+      "Ви впевнені, що хочете видалити це зображення? Ця дія є незворотною."
+    );
     if (!confirmation) {
       return;
     }
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem("token");
       if (!token) throw new Error("Токен не знайдено.");
       const response = await fetch(`http://localhost:3001/images/${imageId}`, {
         method: "DELETE",
-        headers: { "Authorization": `Bearer ${token}` }
+        headers: { Authorization: `Bearer ${token}` },
       });
 
       if (response.ok) {
@@ -311,18 +328,26 @@ const AdminPage: React.FC = () => {
     }
   };
 
-  const handleUpdateStatus = async (offerId: number, newStatus: Offer['status']) => {
-    const confirmation = window.confirm(`Ви впевнені, що хочете змінити статус заявки на "${newStatus}"?`);
+  const handleUpdateStatus = async (
+    offerId: number,
+    newStatus: Offer["status"]
+  ) => {
+    const confirmation = window.confirm(
+      `Ви впевнені, що хочете змінити статус заявки на "${newStatus}"?`
+    );
     if (!confirmation) {
       return;
     }
 
     try {
-      const response = await fetch(`http://localhost:3001/offers/${offerId}/status`, {
-        method: "PATCH",
-        headers: getHeadersWithAuth(),
-        body: JSON.stringify({ status: newStatus }),
-      });
+      const response = await fetch(
+        `http://localhost:3001/offers/${offerId}/status`,
+        {
+          method: "PATCH",
+          headers: getHeadersWithAuth(),
+          body: JSON.stringify({ status: newStatus }),
+        }
+      );
 
       if (response.ok) {
         alert("Статус заявки успішно змінено!");
@@ -336,82 +361,98 @@ const AdminPage: React.FC = () => {
       alert("Помилка мережі під час зміни статусу.");
     }
   };
-  
+
   const handleCreateEmployee = async (event: React.FormEvent) => {
     event.preventDefault();
     try {
-        setLoading(true);
-        setError(null);
-        
-        const formData = new FormData();
-        // Додаємо файл, якщо він є
-        if (employeePhotoFile) {
-            formData.append("file", employeePhotoFile);
-        }
-        // Додаємо решту даних
-        formData.append("firstName", firstName);
-        formData.append("lastName", lastName);
-        formData.append("position", position);
-        if (experienceYears !== undefined) formData.append("experienceYears", experienceYears);
-        formData.append("profile", profile);
-        formData.append("aboutMe", aboutMe);
-        formData.append("firstNameEn", firstNameEn);
-        formData.append("lastNameEn", lastNameEn);
-        formData.append("positionEn", positionEn);
-        formData.append("profileEn", profileEn);
-        formData.append("aboutMeEn", aboutMeEn);
-        formData.append("isPARTNER", String(isPartner));
-        formData.append("isMANAGER", String(isManager));
-        formData.append("isACTIVE", String(isActive));
-        
-        const token = localStorage.getItem('token');
-        if (!token) throw new Error("Токен не знайдено.");
+      setLoading(true);
+      setError(null);
 
-        const response = await fetch("http://localhost:3001/employee/create", {
-            method: "POST",
-            // Заголовок 'Content-Type' не потрібен для FormData, браузер сам його встановлює
-            headers: {
-                "Authorization": `Bearer ${token}`,
-            },
-            body: formData,
-        });
+      const formData = new FormData();
+      // Додаємо файл, якщо він є
+      if (employeePhotoFile) {
+        formData.append("file", employeePhotoFile);
+      }
+      // Додаємо решту даних
+      formData.append("firstName", firstName);
+      formData.append("lastName", lastName);
+      formData.append("position", position);
+      if (experienceYears !== undefined)
+        formData.append("experienceYears", experienceYears);
+      formData.append("profile", profile);
+      formData.append("aboutMe", aboutMe);
+      formData.append("firstNameEn", firstNameEn);
+      formData.append("lastNameEn", lastNameEn);
+      formData.append("positionEn", positionEn);
+      formData.append("profileEn", profileEn);
+      formData.append("aboutMeEn", aboutMeEn);
+      formData.append("isPARTNER", String(isPartner));
+      formData.append("isMANAGER", String(isManager));
+      formData.append("isACTIVE", String(isActive));
 
-        if (response.ok) {
-            alert("Працівника успішно додано!");
-            fetchEmployees();
-            // Скидаємо всі стани форми
-            setFirstName(""); setLastName(""); setPosition(""); setExperienceYears(undefined);
-            setProfile(""); setAboutMe(""); setFirstNameEn(""); setLastNameEn("");
-            setPositionEn(""); setProfileEn(""); setAboutMeEn("");
-            setIsPartner(false);
-            setIsManager(false);
-            setIsActive(false);
-            setEmployeePhotoFile(null);
-            setIsFormVisible(false);
-        } else {
-            const errorData = await response.json();
-            alert(`Помилка під час додавання працівника: ${errorData.message}`);
-        }
+      const token = localStorage.getItem("token");
+      if (!token) throw new Error("Токен не знайдено.");
+
+      const response = await fetch("http://localhost:3001/employee/create", {
+        method: "POST",
+        // Заголовок 'Content-Type' не потрібен для FormData, браузер сам його встановлює
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: formData,
+      });
+
+      if (response.ok) {
+        alert("Працівника успішно додано!");
+        fetchEmployees();
+        // Скидаємо всі стани форми
+        setFirstName("");
+        setLastName("");
+        setPosition("");
+        setExperienceYears(undefined);
+        setProfile("");
+        setAboutMe("");
+        setFirstNameEn("");
+        setLastNameEn("");
+        setPositionEn("");
+        setProfileEn("");
+        setAboutMeEn("");
+        setIsPartner(false);
+        setIsManager(false);
+        setIsActive(false);
+        setEmployeePhotoFile(null);
+        setIsFormVisible(false);
+      } else {
+        const errorData = await response.json();
+        alert(`Помилка під час додавання працівника: ${errorData.message}`);
+      }
     } catch (err: unknown) {
-        console.error("Помилка:", err);
-        let errorMessage = "Сталася невідома помилка.";
-        if (err instanceof Error) {
-            errorMessage = err.message;
-        }
-        alert(`Помилка: ${errorMessage}`);
+      console.error("Помилка:", err);
+      let errorMessage = "Сталася невідома помилка.";
+      if (err instanceof Error) {
+        errorMessage = err.message;
+      }
+      alert(`Помилка: ${errorMessage}`);
     } finally {
-        setLoading(false);
+      setLoading(false);
     }
   };
-  
+
   const handleDelete = async (employeeId: number) => {
-    const confirmation = window.confirm("Ви впевнені, що хочете видалити цього працівника?");
-    if (!confirmation) { return; }
+    const confirmation = window.confirm(
+      "Ви впевнені, що хочете видалити цього працівника?"
+    );
+    if (!confirmation) {
+      return;
+    }
     try {
-      const response = await fetch(`http://localhost:3001/employee/${employeeId}`, {
-        method: "DELETE",
-        headers: getHeadersWithAuth(),
-      });
+      const response = await fetch(
+        `http://localhost:3001/employee/${employeeId}`,
+        {
+          method: "DELETE",
+          headers: getHeadersWithAuth(),
+        }
+      );
       if (response.ok) {
         alert("Працівника успішно видалено!");
         fetchEmployees();
@@ -423,13 +464,17 @@ const AdminPage: React.FC = () => {
       alert("Помилка під час видалення даних.");
     }
   };
-  
-  const getStatusLabel = (status: Offer['status']) => {
-    switch(status) {
-      case 'PENDING': return 'Не розглянуто';
-      case 'PROCESSED': return 'Опрацьовано';
-      case 'COMPLETED': return 'Завершено';
-      default: return status;
+
+  const getStatusLabel = (status: Offer["status"]) => {
+    switch (status) {
+      case "PENDING":
+        return "Не розглянуто";
+      case "PROCESSED":
+        return "Опрацьовано";
+      case "COMPLETED":
+        return "Завершено";
+      default:
+        return status;
     }
   };
 
@@ -447,7 +492,7 @@ const AdminPage: React.FC = () => {
         const data = await response.json();
         localStorage.setItem("token", data.token);
         const decoded: CustomJwtPayload = jwtDecode(data.token);
-        
+
         setIsLoggedIn(true);
         setUserRole(decoded.role);
         alert("Авторизація успішна!");
@@ -456,13 +501,13 @@ const AdminPage: React.FC = () => {
         setAuthError(errorData.message || "Помилка авторизації");
       }
     } catch (err: unknown) {
-        let errorMessage = "Помилка мережі під час авторизації.";
-        if (err instanceof Error) {
-            errorMessage = err.message;
-        }
-        setAuthError(errorMessage);
+      let errorMessage = "Помилка мережі під час авторизації.";
+      if (err instanceof Error) {
+        errorMessage = err.message;
+      }
+      setAuthError(errorMessage);
     } finally {
-        setLoading(false);
+      setLoading(false);
     }
   };
 
@@ -488,17 +533,19 @@ const AdminPage: React.FC = () => {
         setAdmins(data);
       } else {
         const errorData = await response.json();
-        setError(errorData.message || "Не вдалося отримати список адміністраторів.");
+        setError(
+          errorData.message || "Не вдалося отримати список адміністраторів."
+        );
       }
     } catch (err: unknown) {
-        console.error("Помилка мережі:", err);
-        let errorMessage = "Помилка мережі при отриманні списку адміністраторів.";
-        if (err instanceof Error) {
-            errorMessage = err.message;
-        }
-        setError(errorMessage);
+      console.error("Помилка мережі:", err);
+      let errorMessage = "Помилка мережі при отриманні списку адміністраторів.";
+      if (err instanceof Error) {
+        errorMessage = err.message;
+      }
+      setError(errorMessage);
     } finally {
-        setLoading(false);
+      setLoading(false);
     }
   };
 
@@ -519,13 +566,15 @@ const AdminPage: React.FC = () => {
 
       if (response.ok) {
         alert("Адміністратора успішно створено!");
-        setNewAdminUsername('');
-        setNewAdminPassword('');
-        setNewAdminRole('admin');
+        setNewAdminUsername("");
+        setNewAdminPassword("");
+        setNewAdminRole("admin");
         fetchAdmins();
       } else {
         const errorData = await response.json();
-        setError(errorData.message || "Помилка під час створення адміністратора.");
+        setError(
+          errorData.message || "Помилка під час створення адміністратора."
+        );
         alert(errorData.message || "Помилка під час створення адміністратора.");
       }
     } catch (err) {
@@ -571,29 +620,39 @@ const AdminPage: React.FC = () => {
   return (
     <div className={styles.adminContainer}>
       <h1 className={styles.adminTitle}>Адмін-панель</h1>
-      <button onClick={handleLogout} className={styles.logoutBtn}>Вийти</button>
+      <button onClick={handleLogout} className={styles.logoutBtn}>
+        Вийти
+      </button>
       <div className={styles.tabsContainer}>
         <button
-          className={`${styles.tabButton} ${activeTab === "employees" ? styles.activeTab : ""}`}
+          className={`${styles.tabButton} ${
+            activeTab === "employees" ? styles.activeTab : ""
+          }`}
           onClick={() => setActiveTab("employees")}
         >
           Працівники
         </button>
         <button
-          className={`${styles.tabButton} ${activeTab === "offers" ? styles.activeTab : ""}`}
+          className={`${styles.tabButton} ${
+            activeTab === "offers" ? styles.activeTab : ""
+          }`}
           onClick={() => setActiveTab("offers")}
         >
           Заявки
         </button>
         <button
-          className={`${styles.tabButton} ${activeTab === "images" ? styles.activeTab : ""}`}
+          className={`${styles.tabButton} ${
+            activeTab === "images" ? styles.activeTab : ""
+          }`}
           onClick={() => setActiveTab("images")}
         >
           Зображення
         </button>
         {userRole === "superadmin" && (
           <button
-            className={`${styles.tabButton} ${activeTab === "admins" ? styles.activeTab : ""}`}
+            className={`${styles.tabButton} ${
+              activeTab === "admins" ? styles.activeTab : ""
+            }`}
             onClick={() => setActiveTab("admins")}
           >
             Адміни
@@ -615,23 +674,143 @@ const AdminPage: React.FC = () => {
             </div>
 
             {isFormVisible && (
-              <form onSubmit={handleCreateEmployee} className={styles.employeeForm}>
-                <div className={styles.formGroup}><label>Фото:</label><input type="file" onChange={(e) => setEmployeePhotoFile(e.target.files ? e.target.files[0] : null)} /></div>
-                <div className={styles.formGroup}><label>Ім'я (укр):</label><input type="text" value={firstName} onChange={(e) => setFirstName(e.target.value)} required /></div>
-                <div className={styles.formGroup}><label>Прізвище (укр):</label><input type="text" value={lastName} onChange={(e) => setLastName(e.target.value)} required /></div>
-                <div className={styles.formGroup}><label>Посада (укр):</label><input type="text" value={position} onChange={(e) => setPosition(e.target.value)} required /></div>
-                <div className={styles.formGroup}><label>Досвід (роки):</label><input type="number" value={experienceYears || ''} onChange={(e) => setExperienceYears(e.target.value)} /></div>
-                <div className={styles.formGroup}><label>Профіль (укр):</label><input type="text" value={profile} onChange={(e) => setProfile(e.target.value)} /></div>
-                <div className={styles.formGroup}><label>Про себе (укр):</label><textarea value={aboutMe} onChange={(e) => setAboutMe(e.target.value)} /></div>
-                <div className={styles.formGroup}><label>Ім'я (англ):</label><input type="text" value={firstNameEn} onChange={(e) => setFirstNameEn(e.target.value)} /></div>
-                <div className={styles.formGroup}><label>Прізвище (англ):</label><input type="text" value={lastNameEn} onChange={(e) => setLastNameEn(e.target.value)} /></div>
-                <div className={styles.formGroup}><label>Посада (англ):</label><input type="text" value={positionEn} onChange={(e) => setPositionEn(e.target.value)} /></div>
-                <div className={styles.formGroup}><label>Профіль (англ):</label><input type="text" value={profileEn} onChange={(e) => setProfileEn(e.target.value)} /></div>
-                <div className={styles.formGroup}><label>Про себе (англ):</label><textarea value={aboutMeEn} onChange={(e) => setAboutMeEn(e.target.value)} /></div>
-                <div className={styles.checkboxGroup}><label><input type="checkbox" checked={isPartner} onChange={(e) => setIsPartner(e.target.checked)} /> Партнер</label></div>
-                <div className={styles.checkboxGroup}><label><input type="checkbox" checked={isManager} onChange={(e) => setIsManager(e.target.checked)} /> Менеджер</label></div>
-                <div className={styles.checkboxGroup}><label><input type="checkbox" checked={isActive} onChange={(e) => setIsActive(e.target.checked)} /> Активний</label></div>
-                <button type="submit" className={styles.submitBtn}>Додати працівника</button>
+              <form
+                onSubmit={handleCreateEmployee}
+                className={styles.employeeForm}
+              >
+                <div className={styles.formGroup}>
+                  <label>Фото:</label>
+                  <input
+                    type="file"
+                    onChange={(e) =>
+                      setEmployeePhotoFile(
+                        e.target.files ? e.target.files[0] : null
+                      )
+                    }
+                  />
+                </div>
+                <div className={styles.formGroup}>
+                  <label>Ім'я (укр):</label>
+                  <input
+                    type="text"
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
+                    required
+                  />
+                </div>
+                <div className={styles.formGroup}>
+                  <label>Прізвище (укр):</label>
+                  <input
+                    type="text"
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
+                    required
+                  />
+                </div>
+                <div className={styles.formGroup}>
+                  <label>Посада (укр):</label>
+                  <input
+                    type="text"
+                    value={position}
+                    onChange={(e) => setPosition(e.target.value)}
+                    required
+                  />
+                </div>
+                <div className={styles.formGroup}>
+                  <label>Досвід (роки):</label>
+                  <input
+                    type="number"
+                    value={experienceYears || ""}
+                    onChange={(e) => setExperienceYears(e.target.value)}
+                  />
+                </div>
+                <div className={styles.formGroup}>
+                  <label>Профіль (укр):</label>
+                  <input
+                    type="text"
+                    value={profile}
+                    onChange={(e) => setProfile(e.target.value)}
+                  />
+                </div>
+                <div className={styles.formGroup}>
+                  <label>Про себе (укр):</label>
+                  <textarea
+                    value={aboutMe}
+                    onChange={(e) => setAboutMe(e.target.value)}
+                  />
+                </div>
+                <div className={styles.formGroup}>
+                  <label>Ім'я (англ):</label>
+                  <input
+                    type="text"
+                    value={firstNameEn}
+                    onChange={(e) => setFirstNameEn(e.target.value)}
+                  />
+                </div>
+                <div className={styles.formGroup}>
+                  <label>Прізвище (англ):</label>
+                  <input
+                    type="text"
+                    value={lastNameEn}
+                    onChange={(e) => setLastNameEn(e.target.value)}
+                  />
+                </div>
+                <div className={styles.formGroup}>
+                  <label>Посада (англ):</label>
+                  <input
+                    type="text"
+                    value={positionEn}
+                    onChange={(e) => setPositionEn(e.target.value)}
+                  />
+                </div>
+                <div className={styles.formGroup}>
+                  <label>Профіль (англ):</label>
+                  <input
+                    type="text"
+                    value={profileEn}
+                    onChange={(e) => setProfileEn(e.target.value)}
+                  />
+                </div>
+                <div className={styles.formGroup}>
+                  <label>Про себе (англ):</label>
+                  <textarea
+                    value={aboutMeEn}
+                    onChange={(e) => setAboutMeEn(e.target.value)}
+                  />
+                </div>
+                <div className={styles.checkboxGroup}>
+                  <label>
+                    <input
+                      type="checkbox"
+                      checked={isPartner}
+                      onChange={(e) => setIsPartner(e.target.checked)}
+                    />{" "}
+                    Партнер
+                  </label>
+                </div>
+                <div className={styles.checkboxGroup}>
+                  <label>
+                    <input
+                      type="checkbox"
+                      checked={isManager}
+                      onChange={(e) => setIsManager(e.target.checked)}
+                    />{" "}
+                    Менеджер
+                  </label>
+                </div>
+                <div className={styles.checkboxGroup}>
+                  <label>
+                    <input
+                      type="checkbox"
+                      checked={isActive}
+                      onChange={(e) => setIsActive(e.target.checked)}
+                    />{" "}
+                    Активний
+                  </label>
+                </div>
+                <button type="submit" className={styles.submitBtn}>
+                  Додати працівника
+                </button>
               </form>
             )}
 
@@ -645,23 +824,57 @@ const AdminPage: React.FC = () => {
                 {employees.map((employee) => (
                   <div key={employee.id} className={styles.employeeCard}>
                     {employee.photoUrl && (
-                    <img src={employee.photoUrl} alt={`${employee.firstName} ${employee.lastName}`} className={styles.employeePhoto} />
+                      <img
+                        src={employee.photoUrl}
+                        alt={`${employee.firstName} ${employee.lastName}`}
+                        className={styles.employeePhoto}
+                      />
                     )}
                     <div className={styles.employeeCardContent}>
                       <div>
-                        <p><strong>{employee.firstName} {employee.lastName}</strong> {employee.isPARTNER && <span className={styles.statusTag}> (Партнер)</span>} {employee.isMANAGER && <span className={styles.statusTag}> (Менеджер)</span>} {employee.isACTIVE && <span className={styles.statusTag}> (Активний)</span>}</p>
+                        <p>
+                          <strong>
+                            {employee.firstName} {employee.lastName}
+                          </strong>{" "}
+                          {employee.isPARTNER && (
+                            <span className={styles.statusTag}> (Партнер)</span>
+                          )}{" "}
+                          {employee.isMANAGER && (
+                            <span className={styles.statusTag}>
+                              {" "}
+                              (Менеджер)
+                            </span>
+                          )}{" "}
+                          {employee.isACTIVE && (
+                            <span className={styles.statusTag}>
+                              {" "}
+                              (Активний)
+                            </span>
+                          )}
+                        </p>
                         <p>Посада: {employee.position}</p>
-                        {employee.experienceYears && <p>Досвід: {employee.experienceYears} років</p>}
+                        {employee.experienceYears && (
+                          <p>Досвід: {employee.experienceYears} років</p>
+                        )}
                         {employee.profile && <p>Профіль: {employee.profile}</p>}
-                        {employee.aboutMe && <p>Про себе: {employee.aboutMe}</p>}
+                        {employee.aboutMe && (
+                          <p>Про себе: {employee.aboutMe}</p>
+                        )}
                       </div>
-                      <button className={styles.deleteBtn} onClick={() => handleDelete(employee.id)}>Видалити</button>
+                      <button
+                        className={styles.deleteBtn}
+                        onClick={() => handleDelete(employee.id)}
+                      >
+                        Видалити
+                      </button>
                     </div>
                   </div>
                 ))}
               </div>
             )}
-            {!loading && !error && employees.length === 0 && (<p>Список працівників порожній.</p>)}
+            {!loading && !error && employees.length === 0 && (
+              <p>Список працівників порожній.</p>
+            )}
           </div>
         )}
         {activeTab === "offers" && (
@@ -677,24 +890,78 @@ const AdminPage: React.FC = () => {
                   <div key={offer.id} className={styles.offerCard}>
                     <div className={styles.offerCardContent}>
                       <div>
-                        <p><strong>Ім'я:</strong> {offer.clientName}</p>
-                        <p><strong>Телефон:</strong> {offer.phoneNumber}</p>
-                        <p><strong>Причина:</strong> {offer.reason === 'BUYING' ? 'Купівля/Оренда' : 'Продаж/Здача'}</p>
-                        <p><strong>Тип нерухомості:</strong> {offer.propertyType === 'RESIDENTIAL' ? 'Житлова' : offer.propertyType === 'COMMERCIAL' ? 'Комерційна' : 'Земельна ділянка'}</p>
-                        <p><strong>Час створення:</strong> {new Date(offer.createdAt).toLocaleString('uk-UA')}</p>
-                        <p><strong>Статус:</strong> <span className={`${styles.statusBadge} ${styles[offer.status.toLowerCase()]}`}>{getStatusLabel(offer.status)}</span></p>
+                        <p>
+                          <strong>Ім'я:</strong> {offer.clientName}
+                        </p>
+                        <p>
+                          <strong>Телефон:</strong> {offer.phoneNumber}
+                        </p>
+                        <p>
+                          <strong>Причина:</strong>{" "}
+                          {offer.reason === "BUYING"
+                            ? "Купівля/Оренда"
+                            : "Продаж/Здача"}
+                        </p>
+                        <p>
+                          <strong>Тип нерухомості:</strong>{" "}
+                          {offer.propertyType === "RESIDENTIAL"
+                            ? "Житлова"
+                            : offer.propertyType === "COMMERCIAL"
+                            ? "Комерційна"
+                            : "Земельна ділянка"}
+                        </p>
+                        <p>
+                          <strong>Час створення:</strong>{" "}
+                          {new Date(offer.createdAt).toLocaleString("uk-UA")}
+                        </p>
+                        <p>
+                          <strong>Статус:</strong>{" "}
+                          <span
+                            className={`${styles.statusBadge} ${
+                              styles[offer.status.toLowerCase()]
+                            }`}
+                          >
+                            {getStatusLabel(offer.status)}
+                          </span>
+                        </p>
                       </div>
                       <div className={styles.offerActions}>
-                        <button className={styles.statusBtn} onClick={() => handleUpdateStatus(offer.id, 'PENDING')} disabled={offer.status === 'PENDING'}>Не розглянуто</button>
-                        <button className={styles.statusBtn} onClick={() => handleUpdateStatus(offer.id, 'PROCESSED')} disabled={offer.status === 'PROCESSED'}>Опрацьовано</button>
-                        <button className={styles.statusBtn} onClick={() => handleUpdateStatus(offer.id, 'COMPLETED')} disabled={offer.status === 'COMPLETED'}>Завершено</button>
+                        <button
+                          className={styles.statusBtn}
+                          onClick={() =>
+                            handleUpdateStatus(offer.id, "PENDING")
+                          }
+                          disabled={offer.status === "PENDING"}
+                        >
+                          Не розглянуто
+                        </button>
+                        <button
+                          className={styles.statusBtn}
+                          onClick={() =>
+                            handleUpdateStatus(offer.id, "PROCESSED")
+                          }
+                          disabled={offer.status === "PROCESSED"}
+                        >
+                          Опрацьовано
+                        </button>
+                        <button
+                          className={styles.statusBtn}
+                          onClick={() =>
+                            handleUpdateStatus(offer.id, "COMPLETED")
+                          }
+                          disabled={offer.status === "COMPLETED"}
+                        >
+                          Завершено
+                        </button>
                       </div>
                     </div>
                   </div>
                 ))}
               </div>
             )}
-            {!loading && !error && offers.length === 0 && (<p>Список заявок порожній.</p>)}
+            {!loading && !error && offers.length === 0 && (
+              <p>Список заявок порожній.</p>
+            )}
           </div>
         )}
         {activeTab === "images" && (
@@ -702,34 +969,75 @@ const AdminPage: React.FC = () => {
             <h2 className={styles.sectionTitle}>Керування зображеннями</h2>
             <div className={styles.formGroup}>
               <form onSubmit={handleImageUpload} className={styles.imageForm}>
-                <input type="file" onChange={(e) => setFile(e.target.files ? e.target.files[0] : null)} required />
-                <button type="submit" className={styles.submitBtn} disabled={uploading}>{uploading ? "Завантаження..." : "Завантажити зображення"}</button>
+                <input
+                  type="file"
+                  onChange={(e) =>
+                    setFile(e.target.files ? e.target.files[0] : null)
+                  }
+                  required
+                />
+                <button
+                  type="submit"
+                  className={styles.submitBtn}
+                  disabled={uploading}
+                >
+                  {uploading ? "Завантаження..." : "Завантажити зображення"}
+                </button>
               </form>
             </div>
-            
+
             <hr className={styles.divider} />
 
-            <h2 className={styles.sectionTitle}>Список завантажених зображень</h2>
+            <h2 className={styles.sectionTitle}>
+              Список завантажених зображень
+            </h2>
             {loading && <p>Завантаження...</p>}
             {error && <p className={styles.errorMessage}>{error}</p>}
             {!loading && !error && images.length > 0 && (
               <div className={styles.imageList}>
-                {images.map(image => (
+                {images.map((image) => (
                   <div key={image.id} className={styles.imageCard}>
-                    <img src={image.url} alt={image.name} className={styles.imagePreview} />
+                    <img
+                      src={image.url}
+                      alt={image.name}
+                      className={styles.imagePreview}
+                    />
                     <div className={styles.imageInfo}>
-                      <p><strong>Назва:</strong> {image.name}</p>
-                      <p><strong>URL:</strong> <a href={image.url} target="_blank" rel="noopener noreferrer">{image.url}</a></p>
+                      <p>
+                        <strong>Назва:</strong> {image.name}
+                      </p>
+                      <p>
+                        <strong>URL:</strong>{" "}
+                        <a
+                          href={image.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          {image.url}
+                        </a>
+                      </p>
                       <div className={styles.imageActions}>
-                        <button className={styles.updateBtn} onClick={() => setSelectedImageToUpdate(image)}>Оновити</button>
-                        <button className={styles.deleteBtn} onClick={() => handleImageDelete(image.id)}>Видалити</button>
+                        <button
+                          className={styles.updateBtn}
+                          onClick={() => setSelectedImageToUpdate(image)}
+                        >
+                          Оновити
+                        </button>
+                        <button
+                          className={styles.deleteBtn}
+                          onClick={() => handleImageDelete(image.id)}
+                        >
+                          Видалити
+                        </button>
                       </div>
                     </div>
                   </div>
                 ))}
               </div>
             )}
-            {!loading && !error && images.length === 0 && (<p>Список зображень порожній. Завантажте перше зображення.</p>)}
+            {!loading && !error && images.length === 0 && (
+              <p>Список зображень порожній. Завантажте перше зображення.</p>
+            )}
           </div>
         )}
         {selectedImageToUpdate && (
@@ -738,10 +1046,31 @@ const AdminPage: React.FC = () => {
               <h3>Оновити зображення: {selectedImageToUpdate.name}</h3>
               <p>Виберіть новий файл для заміни поточного.</p>
               <form onSubmit={handleUpdate}>
-                <input type="file" onChange={(e) => setFile(e.target.files ? e.target.files[0] : null)} required />
+                <input
+                  type="file"
+                  onChange={(e) =>
+                    setFile(e.target.files ? e.target.files[0] : null)
+                  }
+                  required
+                />
                 <div className={styles.modalActions}>
-                  <button type="submit" className={styles.submitBtn} disabled={uploading}>{uploading ? "Оновлення..." : "Оновити"}</button>
-                  <button type="button" className={styles.cancelBtn} onClick={() => { setSelectedImageToUpdate(null); setFile(null); }}>Скасувати</button>
+                  <button
+                    type="submit"
+                    className={styles.submitBtn}
+                    disabled={uploading}
+                  >
+                    {uploading ? "Оновлення..." : "Оновити"}
+                  </button>
+                  <button
+                    type="button"
+                    className={styles.cancelBtn}
+                    onClick={() => {
+                      setSelectedImageToUpdate(null);
+                      setFile(null);
+                    }}
+                  >
+                    Скасувати
+                  </button>
                 </div>
               </form>
             </div>
@@ -753,24 +1082,43 @@ const AdminPage: React.FC = () => {
             <form onSubmit={handleCreateAdmin} className={styles.adminForm}>
               <div className={styles.formGroup}>
                 <label>Ім'я користувача:</label>
-                <input type="text" value={newAdminUsername} onChange={(e) => setNewAdminUsername(e.target.value)} required />
+                <input
+                  type="text"
+                  value={newAdminUsername}
+                  onChange={(e) => setNewAdminUsername(e.target.value)}
+                  required
+                />
               </div>
               <div className={styles.formGroup}>
                 <label>Пароль:</label>
-                <input type="password" value={newAdminPassword} onChange={(e) => setNewAdminPassword(e.target.value)} required />
+                <input
+                  type="password"
+                  value={newAdminPassword}
+                  onChange={(e) => setNewAdminPassword(e.target.value)}
+                  required
+                />
               </div>
               <div className={styles.formGroup}>
                 <label>Роль:</label>
-                <select value={newAdminRole} onChange={(e) => setNewAdminRole(e.target.value)}>
+                <select
+                  value={newAdminRole}
+                  onChange={(e) => setNewAdminRole(e.target.value)}
+                >
                   <option value="admin">Адмін</option>
                   <option value="superadmin">Суперадмін</option>
                 </select>
               </div>
-              <button type="submit" className={styles.submitBtn} disabled={loading}>{loading ? "Створення..." : "Створити адміна"}</button>
+              <button
+                type="submit"
+                className={styles.submitBtn}
+                disabled={loading}
+              >
+                {loading ? "Створення..." : "Створити адміна"}
+              </button>
             </form>
-            
+
             <hr className={styles.divider} />
-            
+
             <h2 className={styles.sectionTitle}>Список адміністраторів</h2>
             {loading && <p>Завантаження...</p>}
             {error && <p className={styles.errorMessage}>{error}</p>}
@@ -778,14 +1126,22 @@ const AdminPage: React.FC = () => {
               <div className={styles.adminList}>
                 {admins.map((admin) => (
                   <div key={admin.id} className={styles.adminCard}>
-                    <p><strong>ID:</strong> {admin.id}</p>
-                    <p><strong>Ім'я користувача:</strong> {admin.username}</p>
-                    <p><strong>Роль:</strong> {admin.role}</p>
+                    <p>
+                      <strong>ID:</strong> {admin.id}
+                    </p>
+                    <p>
+                      <strong>Ім'я користувача:</strong> {admin.username}
+                    </p>
+                    <p>
+                      <strong>Роль:</strong> {admin.role}
+                    </p>
                   </div>
                 ))}
               </div>
             )}
-            {!loading && !error && admins.length === 0 && (<p>Список адміністраторів порожній.</p>)}
+            {!loading && !error && admins.length === 0 && (
+              <p>Список адміністраторів порожній.</p>
+            )}
           </div>
         )}
       </div>

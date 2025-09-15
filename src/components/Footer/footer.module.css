@@ -2,7 +2,7 @@
 .footer {
   background-color: #050505;
   color: #fff;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   opacity: 1;
 
   /* Размеры и отступы из макета */
@@ -11,7 +11,7 @@
   border-top: 1px solid #2e2e2e;
   padding-top: 40px;
   padding-bottom: 40px;
-  
+
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -45,7 +45,7 @@
 }
 
 .copyright {
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
   font-weight: 400; /* Regular */
   font-size: 16px;
   line-height: 100%;
@@ -66,7 +66,7 @@
 
 /* Заголовки колонок */
 .footerHeading {
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
   font-weight: 400;
   font-size: 16px;
   line-height: 1; /* 100% = 1 */
@@ -85,12 +85,12 @@
 }
 
 .footerLinks a {
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
   font-weight: 400;
   font-size: 20px;
   line-height: 1; /* 100% = 1 */
   letter-spacing: 0;
-  color: #EBEBEB;
+  color: #ebebeb;
   text-transform: uppercase;
   text-decoration: none;
   transition: color 0.3s;
@@ -116,18 +116,17 @@
 /* Планшеты (до 768px) */
 @media (min-width: 769px) and (max-width: 1800px) {
   .footer {
-    min-width: 769px;
+    min-width: 800px;
     max-width: 1800px;
     width: auto;
     height: 265px;
-    margin-left: 20px;
   }
 
   .mainContent {
     min-width: 769px;
     max-width: 1200px;
     width: auto;
-    margin: 0 auto;
+
     gap: 30px; /* Отступ между колонками */
   }
 
@@ -164,7 +163,7 @@
     font-size: 10px;
   }
 
-  .footerLinks{
+  .footerLinks {
     gap: 10px; /* Отступ между элементами списка */
   }
 
@@ -245,7 +244,7 @@
     height: auto;
     margin: 0;
   }
-  
+
   .footerHeading {
     font-size: 10px;
     margin-bottom: 10px;

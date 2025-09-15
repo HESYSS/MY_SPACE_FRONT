@@ -1,5 +1,4 @@
-import { useState } from "react";
-import Link from "next/link"; // Импортируем компонент Link
+import Link from "next/link";
 import PropertyCard from "@/components/PropertyCard";
 import { Property } from "@/types/property";
 import styles from "./PropertyList.module.css";
@@ -7,14 +6,21 @@ import styles from "./PropertyList.module.css";
 interface Props {
   properties: Property[];
   loading: boolean;
+  page: number;
+  setPage: (p: number) => void;
+  totalCount: number;
+  pageSize: number;
 }
 
-export default function PropertyList({ properties, loading }: Props) {
-  const [page, setPage] = useState(1);
-  const pageSize = 9;
-  const start = (page - 1) * pageSize;
-  const end = start + pageSize;
-  const paginatedProperties = properties.slice(start, end);
+export default function PropertyList({
+  properties,
+  loading,
+  page,
+  setPage,
+  totalCount,
+  pageSize,
+}: Props) {
+  const totalPages = Math.ceil(totalCount / pageSize);
 
   return (
     <div className={styles.propertyListContainer}>
@@ -22,8 +28,7 @@ export default function PropertyList({ properties, loading }: Props) {
         <p>Завантаження...</p>
       ) : (
         <div className={styles.propertiesGrid}>
-          {paginatedProperties.map((p) => (
-            // Оборачиваем PropertyCard в компонент Link
+          {properties.map((p) => (
             <Link key={p.id} href={`/property/${p.id}`} passHref>
               <PropertyCard property={p} />
             </Link>
@@ -33,16 +38,15 @@ export default function PropertyList({ properties, loading }: Props) {
 
       {/* Пагинация */}
       <div className={styles.pagination}>
-        <button
-          onClick={() => setPage((p) => Math.max(1, p - 1))}
-          disabled={page === 1}
-        >
+        <button onClick={() => setPage(page - 1)} disabled={page === 1}>
           Назад
         </button>
-        <span>Сторінка {page}</span>
+        <span>
+          Сторінка {page} з {totalPages}
+        </span>
         <button
-          onClick={() => setPage((p) => (end >= properties.length ? p : p + 1))}
-          disabled={end >= properties.length}
+          onClick={() => setPage(page + 1)}
+          disabled={page === totalPages}
         >
           Вперед
         </button>

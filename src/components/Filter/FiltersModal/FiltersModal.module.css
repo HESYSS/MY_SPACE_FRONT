@@ -18,7 +18,7 @@
    Modal Content
    ========================= */
 .modalContent {
-  background-color: #0a0a0a; /* Slightly darker to match */
+  background-color: #0a0a0a;
   color: #e0e0e0;
   border-radius: 12px;
   width: 90%;
@@ -27,14 +27,15 @@
   border: 1px solid #444;
   position: relative;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-
   max-height: 90vh;
   overflow-y: auto;
 }
+
 .modalContent::-webkit-scrollbar {
   width: 0;
   height: 0;
 }
+
 .modalContent {
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -84,11 +85,46 @@
 }
 
 /* =========================
-   Category & Type Buttons
+   Universal buttons with checkbox
+   ========================= */
+.button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem; /* пространство между галочкой и текстом */
+}
+
+.button::before {
+  content: "";
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border: 1px solid #56728b;
+  border-radius: 4px;
+  background-color: #1e2d3a;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+.button.active::before {
+  content: "✓";
+  color: #16242d;
+  background-color: #8fd8a8;
+  border-color: #8fd8a8;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+/* =========================
+   Category, Type, Service, Rooms, Options
    ========================= */
 .categoryToggle,
 .propertyTypeToggle,
-.serviceToggle {
+.serviceToggle,
+.multiSelect {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
@@ -96,7 +132,9 @@
 
 .categoryButton,
 .propertyButton,
-.serviceButton {
+.serviceButton,
+.roomButton,
+.optionButton {
   background-color: #3b3b3b;
   color: #999;
   border: 1px solid #555;
@@ -104,22 +142,25 @@
   padding: 0.6rem 1.2rem;
   cursor: pointer;
   font-weight: 500;
-  position: relative;
   transition: background-color 0.2s ease, border-color 0.2s ease;
-  flex-grow: 1; /* For equal width buttons */
-  text-align: center;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .categoryButton.active,
 .propertyButton.active,
-.serviceButton.active {
+.serviceButton.active,
+.roomButton.active,
+.optionButton.active {
   background-color: #03b9b34d;
   border-color: #03b9b34d;
   color: #fff;
 }
 
 /* =========================
-   Input Ranges
+   Input Ranges (Price, Floors, Area)
    ========================= */
 .inputRange {
   display: flex;
@@ -156,32 +197,6 @@
   color: #007bff;
   font-weight: bold;
   padding-left: 0.5rem;
-}
-
-/* =========================
-   Multi-select Buttons
-   ========================= */
-.multiSelect {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
-
-.roomButton {
-  background-color: #3b3b3b;
-  color: #999;
-  border: 1px solid #555;
-  border-radius: 6px;
-  padding: 0.6rem 1rem;
-  cursor: pointer;
-  font-weight: 500;
-  transition: background-color 0.2s ease, border-color 0.2s ease;
-}
-
-.roomButton.active {
-  background-color: #007bff;
-  border-color: #007bff;
-  color: #fff;
 }
 
 /* =========================

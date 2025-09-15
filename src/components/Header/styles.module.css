@@ -137,7 +137,7 @@
   .navRight {
     display: none;
   }
-  
+
   .navbar {
     width: 90%;
   }
@@ -212,7 +212,7 @@
   .closeIcon::after {
     display: none;
   }
-  
+
   /* Выпадающее меню */
   .mobileMenuWrapper {
     display: flex;
@@ -223,7 +223,7 @@
     width: 100%;
     background: #051818;
     z-index: 99;
-    padding: 0; 
+    padding: 0;
   }
 
   .mobileNavLinks {
@@ -244,13 +244,13 @@
   }
 
   .mobileNavLinks li::after {
-    content: '';
+    content: "";
     position: absolute;
     bottom: 0;
     right: 0;
     width: 100%;
     height: 1px;
-    background: linear-gradient(90deg, #03B9B300 0%, #03B9B380 50%);
+    background: linear-gradient(90deg, #03b9b300 0%, #03b9b380 50%);
   }
 
   .mobileNavLinks li:last-child::after {

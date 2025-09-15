@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import styles from "./Filter.module.css";
 import LocationModal from "./LocationModal/LocationModal";
 import FiltersModal from "./FiltersModal/FiltersModal";
+import { useTranslation } from "react-i18next";
 
 interface FilterProps {
   type?: "Оренда" | "Продаж";
@@ -11,6 +12,7 @@ interface FilterProps {
 const LOCATION_STORAGE_KEY = "locationFilters";
 const OTHER_STORAGE_KEY = "otherFilters";
 export default function Filter({ type, onApply }: FilterProps) {
+  const { t } = useTranslation("common");
   const [searchValue, setSearchValue] = useState("");
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
   const [isFiltersModalOpen, setIsFiltersModalOpen] = useState(false);
@@ -63,17 +65,18 @@ export default function Filter({ type, onApply }: FilterProps) {
         <div className={styles.topPanel}>
           <input
             type="text"
-            placeholder="Пошук..."
+            placeholder={t("search_placeholder")} // вместо "Пошук..."
             value={searchValue}
             onChange={(e) => setSearchValue(e.target.value)}
             className={styles.input}
             onClick={() => setIsLocationModalOpen(true)}
           />
+
           <button
             onClick={() => setIsFiltersModalOpen(true)}
             className={styles.locationButton}
           >
-            Фільтр
+            {t("filter_button") || "Фільтр"} {/* вместо "Фільтр" */}
           </button>
         </div>
 

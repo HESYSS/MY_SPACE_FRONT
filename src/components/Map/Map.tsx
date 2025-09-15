@@ -6,14 +6,17 @@ import View from "ol/View";
 import { Tile as TileLayer, Vector as VectorLayer } from "ol/layer";
 import { OSM, Vector as VectorSource } from "ol/source";
 import { Fill, Stroke, Style, Circle as CircleStyle } from "ol/style";
-import Polygon from "ol/geom/Polygon";
+import Polygon, { fromCircle as polygonFromCircle } from "ol/geom/Polygon";
 import Feature from "ol/Feature";
 import Point from "ol/geom/Point";
 import { fromLonLat, toLonLat } from "ol/proj";
 import { defaults as defaultInteractions, DragPan } from "ol/interaction";
 import Circle from "ol/geom/Circle";
+import { GeoJSON } from "ol/format"; // 👈 для загрузки geojson
 import styles from "./mapStyle.module.css";
 import { kyivMetroStations } from "./kyivMetro";
+import kyivDistricts from "./kyiv.json"; // 👈 твой файл с районами
+import MultiPolygon from "ol/geom/MultiPolygon";
 
 interface Property {
   id: number;
@@ -28,6 +31,7 @@ const DEFAULT_MAP_VIEW = {
 };
 const FILTERS_STORAGE_KEY = "locationFilters";
 const POLYGON_STORAGE_KEY = "mapPolygon";
+const current_STORAGE_KEY = "currentCoords";
 // Вспомогательные функции для геометрии
 const getBoundingBox = (coords: [number, number][]) => {
   const lats = coords.map((c) => c[1]);
@@ -63,12 +67,12 @@ export default function MapDrawFilter({
   const drawSource = useRef(new VectorSource());
   const markerSource = useRef(new VectorSource());
   const metroSource = useRef(new VectorSource());
-
+  const districtsSource = useRef(new VectorSource());
   const drawing = useRef(false);
   const [isDrawing, setIsDrawing] = useState(false);
   const currentCoords = useRef<number[][]>([]);
-  const dragPanRef = useRef<DragPan | null>(null);
 
+  const dragPanRef = useRef<DragPan | null>(null);
   // Стили для слоев
   const drawStyle = new Style({
     stroke: new Stroke({ color: "rgba(48, 48, 47, 1)", width: 2 }),
@@ -101,7 +105,10 @@ export default function MapDrawFilter({
     () => new VectorLayer({ source: metroSource.current, style: metroStyle }),
     []
   );
-
+  const districtsLayer = useMemo(
+    () => new VectorLayer({ source: districtsSource.current }),
+    []
+  );
   // Фильтрация маркеров по нарисованному полигону
   const filterMarkers = useCallback(
     (polygonCoords3857: number[][], squareCoords3857: number[][]) => {
@@ -130,7 +137,13 @@ export default function MapDrawFilter({
     },
     [markerStyle]
   );
-
+  useEffect(() => {
+    // Загрузка станций метро в векторный источник
+    const save = localStorage.getItem(current_STORAGE_KEY);
+    if (save) {
+      currentCoords.current = JSON.parse(save);
+    }
+  });
   // Инициализация карты
   useEffect(() => {
     if (!mapRef.current) return;
@@ -142,6 +155,7 @@ export default function MapDrawFilter({
         markerLayer,
         drawLayer,
         metroLayer,
+        districtsLayer,
       ],
       view: new View(DEFAULT_MAP_VIEW),
       interactions: defaultInteractions(),
@@ -186,7 +200,8 @@ export default function MapDrawFilter({
       const polygonCoords = currentCoords.current.map((coord) =>
         toLonLat(coord)
       ) as [number, number][];
-
+      localStorage.setItem(current_STORAGE_KEY, JSON.stringify(polygonCoords));
+      console.log("Drawn polygon coords (lon/lat):", polygonCoords);
       const squareBox = getBoundingBox(polygonCoords);
       const squareCoords = createSquarePolygon(squareBox);
 
@@ -246,7 +261,7 @@ export default function MapDrawFilter({
   // Загрузка и обновление маркеров
   useEffect(() => {
     markerSource.current.clear();
-    properties.forEach((p) => {
+    properties?.forEach((p) => {
       markerSource.current.addFeature(
         new Feature({
           geometry: new Point(fromLonLat([p.lng, p.lat])),
@@ -255,6 +270,164 @@ export default function MapDrawFilter({
       );
     });
   }, [properties]);
+
+  // ... остальной код без изменений ...
+
+  useEffect(() => {
+    districtsSource.current.clear();
+
+    // === 1. "За містом" ===
+    if (locationFilters?.isOutOfCity) {
+      const features = new GeoJSON().readFeatures(kyivDistricts, {
+        featureProjection: "EPSG:3857",
+      });
+
+      features.forEach((f) =>
+        f.setStyle(
+          new Style({ fill: new Fill({ color: "rgba(34, 34, 34, 0.7)" }) })
+        )
+      );
+
+      districtsSource.current.addFeatures(features);
+      return;
+    }
+
+    // === 2. Районы Киева ===
+    const features = new GeoJSON().readFeatures(kyivDistricts, {
+      featureProjection: "EPSG:3857",
+    });
+
+    // --- circles для метро ---
+    const metroCircles: Polygon[] = [];
+    if (
+      Array.isArray(locationFilters?.metro) &&
+      locationFilters.metro.length > 0
+    ) {
+      locationFilters.metro.forEach((stationName: string) => {
+        const station = kyivMetroStations.find((s) => s.name === stationName);
+        if (!station) return;
+        const circleGeom = new Circle(
+          fromLonLat([station.lng, station.lat]),
+          3000
+        );
+        const circlePolygon = polygonFromCircle(circleGeom, 64);
+        metroCircles.push(circlePolygon);
+      });
+    }
+
+    // --- полигон пользователя ---
+    let filterPolygon: Polygon | null = null;
+    if (
+      locationFilters?.polygon &&
+      Array.isArray(locationFilters.polygon) &&
+      locationFilters.polygon.length > 0
+    ) {
+      console.log("Saved polygon from localStorage:", currentCoords);
+      if (currentCoords.current && currentCoords.current.length > 2) {
+        const coords3857 = currentCoords.current.map((c) => c);
+        filterPolygon = new Polygon([coords3857]);
+      }
+    }
+
+    // --- проверка: все фильтры пустые ---
+    const noFilters =
+      (!locationFilters?.districts || locationFilters.districts.length === 0) &&
+      (!locationFilters?.metro || locationFilters.metro.length === 0) &&
+      !locationFilters?.polygon;
+
+    // --- собираем все дырки для маски ---
+    const holes: [number, number][][] = [];
+
+    // районы, которые активны (подсвечиваются) → станут дырками
+    features.forEach((feature) => {
+      const rawName = feature.get("NAME") as string;
+      const districtName = rawName.replace("район", "").trim();
+      const isActive =
+        noFilters ||
+        (Array.isArray(locationFilters?.districts) &&
+          locationFilters.districts.includes(districtName));
+
+      if (isActive) {
+        const geom = feature.getGeometry();
+        if (geom instanceof Polygon)
+          holes.push(geom.getCoordinates()[0] as [number, number][]);
+        else if (geom instanceof MultiPolygon)
+          geom
+            .getCoordinates()
+            .forEach((poly) => holes.push(poly[0] as [number, number][]));
+      }
+    });
+
+    // пользовательский полигон
+    if (filterPolygon) {
+      holes.push(
+        filterPolygon.getCoordinates()[0].map((coord) => [coord[0], coord[1]])
+      );
+    }
+
+    // === 3. Маска вокруг города ===
+    const worldExtent = [-20037508, -20037508, 20037508, 20037508];
+    const worldPolygon = new Polygon([
+      [
+        [worldExtent[0], worldExtent[1]],
+        [worldExtent[0], worldExtent[3]],
+        [worldExtent[2], worldExtent[3]],
+        [worldExtent[2], worldExtent[1]],
+        [worldExtent[0], worldExtent[1]],
+      ],
+    ]);
+
+    const maskFeature = new Feature(
+      new Polygon([worldPolygon.getCoordinates()[0], ...holes])
+    );
+    maskFeature.setStyle(
+      new Style({ fill: new Fill({ color: "rgba(34, 34, 34, 0.7)" }) })
+    );
+    districtsSource.current.addFeature(maskFeature);
+
+    // === 4. Добавляем круги метро как отдельные элементы (не как дырки) ===
+    metroCircles.forEach((circle) => {
+      const feature = new Feature(circle);
+      feature.setStyle(
+        new Style({
+          fill: new Fill({
+            color: "rgba(255, 255, 255, 0)", // Прозрачная заливка
+          }),
+          stroke: new Stroke({
+            color: "#00ff00",
+            width: 1,
+          }),
+        })
+      );
+      districtsSource.current.addFeature(feature);
+    });
+
+    // === 5. Подсветка выбранных районов ===
+    features.forEach((feature) => {
+      const rawName = feature.get("NAME") as string;
+      const districtName = rawName.replace("район", "").trim();
+      const isActive =
+        noFilters ||
+        (Array.isArray(locationFilters?.districts) &&
+          locationFilters.districts.includes(districtName));
+
+      feature.setStyle(
+        new Style({
+          fill: new Fill({
+            color: isActive ? "rgba(0,0,0,0)" : "rgba(0,0,0,0)",
+          }),
+        })
+      );
+    });
+    districtsSource.current.addFeatures(features);
+  }, [
+    locationFilters?.isOutOfCity,
+    locationFilters?.districts,
+    locationFilters?.metro,
+    locationFilters?.polygon,
+  ]);
+
+  // ... остальной код без изменений ...
 
   // Обновление фильтра при изменении свойств (properties)
   useEffect(() => {
@@ -272,23 +445,6 @@ export default function MapDrawFilter({
   }, [properties, filterMarkers]);
 
   // Обновление кругов вокруг станций метро
-  useEffect(() => {
-    metroSource.current.clear();
-    if (locationFilters?.metro?.length) {
-      locationFilters.metro.forEach((stationName: string) => {
-        const station = kyivMetroStations.find((s) => s.name === stationName);
-        if (station) {
-          const circle = new Circle(
-            fromLonLat([station.lng, station.lat]),
-            3000
-          );
-          const circleFeature = new Feature(circle);
-          circleFeature.setStyle(metroStyle);
-          metroSource.current.addFeature(circleFeature);
-        }
-      });
-    }
-  }, [locationFilters, metroStyle]);
 
   const handleZoom = (delta: number) => {
     if (!mapInstance.current) return;

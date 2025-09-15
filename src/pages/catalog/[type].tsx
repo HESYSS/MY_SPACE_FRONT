@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import Filter from "@/components/Filter";
 import MapWrapper from "@/components/Map/MapWrapper";
 import PropertyList from "./PropertyList";
-import styles from "./CatalogPage.module.css"; // Импортируем стили
+import styles from "./CatalogPage.module.css";
 import { standardizeFilters } from "@/utils/filterMap";
 
 const dealMap: Record<string, string> = {
@@ -16,7 +16,7 @@ const reverseDealMap: Record<string, string> = {
   Продаж: "sale",
 };
 
-// Универсальная функция сериализации фильтров
+// Сериализация фильтров в URL-параметры
 function buildQueryFromFilters(
   filters: Record<string, any>
 ): Record<string, string> {
@@ -24,11 +24,9 @@ function buildQueryFromFilters(
   Object.entries(filters).forEach(([key, val]) => {
     if (val == null || val === "" || (Array.isArray(val) && val.length === 0))
       return;
-
     if (Array.isArray(val)) {
       params[key] = val.join(",");
     } else if (typeof val === "object") {
-      // Игнорируем вложенные объекты
       return;
     } else {
       params[key] = String(val);
@@ -51,6 +49,7 @@ export default function CatalogPage() {
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const limit = 9;
+  const [totalCount, setTotalCount] = useState(0);
 
   const [locationFilter, setLocationFilter] = useState<any>(() => {
     const saved = localStorage.getItem("locationFilters");
@@ -62,13 +61,12 @@ export default function CatalogPage() {
   });
 
   const handleApply = (location: any, filters: any) => {
-    console.log("Applying filters:", { location, filters });
     setLocationFilter({ ...location });
     setOtherFilters({ ...filters });
     setPage(1);
   };
 
-  // PropertyList
+  // --- Получение данных для списка (PropertyList) ---
   useEffect(() => {
     async function fetchData() {
       setLoading(true);
@@ -85,7 +83,10 @@ export default function CatalogPage() {
 
         const res = await fetch(`http://localhost:3001/items?${params}`);
         const data = await res.json();
-        setProperties(data);
+
+        setProperties(data.items);
+        setTotalCount(data.total);
+        console.log("Fetched properties:", data.total);
       } catch (err) {
         console.error(err);
       } finally {
@@ -95,48 +96,51 @@ export default function CatalogPage() {
     fetchData();
   }, [page, locationFilter, otherFilters]);
 
-  // MapWrapper
+  // --- Получение всех данных для карты ---
   useEffect(() => {
     async function fetchAll() {
       try {
         const standardizedLocation = standardizeFilters(locationFilter);
         const standardizedFilters = standardizeFilters(otherFilters);
-        console.log("Fetching all properties with filters:", {
-          location: standardizedLocation,
-          filters: standardizedFilters,
-        });
+
         const params = new URLSearchParams({
-          page: page.toString(),
-          limit: limit.toString(),
+          // чтобы карта показывала все
           ...buildQueryFromFilters(standardizedLocation),
           ...buildQueryFromFilters(standardizedFilters),
         });
 
         const res = await fetch(`http://localhost:3001/items/coords?${params}`);
+
         const data = await res.json();
+
         setAllProperties(data);
+        console.log("Fetched all properties for map:", data);
       } catch (err) {
         console.error(err);
       }
     }
     fetchAll();
   }, [locationFilter, otherFilters]);
-
   return (
     <div className={styles.catalogContainer}>
       <div className={styles.leftColumn}>
-        <div>
-          <Filter
-            type={propertyType}
-            onApply={(appliedFilters: any) => {
-              const { location = {}, filters = {} } = appliedFilters;
-              handleApply({ ...location }, { ...filters });
-            }}
-          />
-        </div>
+        <Filter
+          type={propertyType}
+          onApply={(appliedFilters: any) => {
+            const { location = {}, filters = {} } = appliedFilters;
+            handleApply({ ...location }, { ...filters });
+          }}
+        />
 
         <div className={styles.listContainer}>
-          <PropertyList properties={properties} loading={loading} />
+          <PropertyList
+            properties={properties}
+            loading={loading}
+            page={page}
+            setPage={setPage}
+            totalCount={totalCount}
+            pageSize={limit}
+          />
         </div>
       </div>
 
