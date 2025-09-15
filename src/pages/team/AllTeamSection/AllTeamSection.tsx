@@ -3,7 +3,7 @@ import Image from "next/image";
 import styles from "./AllTeamSection.module.css";
 import { useTranslation } from "react-i18next";
 import Link from "next/link";
-import vitaliyPenc from "../../../../public/icons/vitaliyPenc.png"; 
+import vitaliyPenc from "../../../../public/icons/vitaliyPenc.png";
 
 // ОБНОВЛЕННЫЙ ИНТЕРФЕЙС Employee
 interface Employee {
@@ -51,7 +51,9 @@ const AllTeamSection: React.FC = () => {
   useEffect(() => {
     const fetchEmployees = async () => {
       try {
-        const response = await fetch("http://localhost:3001/employee");
+        const backendUrl = process.env.REACT_APP_API_URL;
+
+        const response = await fetch(`${backendUrl}/employee`);
         if (!response.ok) throw new Error("Failed to fetch employees");
         const data: Employee[] = await response.json();
         setEmployees(data);
@@ -92,10 +94,15 @@ const AllTeamSection: React.FC = () => {
         <div
           className={styles.teamRow}
           style={
-            { 
+            {
               transform: `translateX(-${(currentPage - 1) * 100}%)`,
-              '--items-per-page': itemsPerPage,
-              '--gap': itemsPerPage === 5 ? '30px' : (itemsPerPage === 4 ? '15px' : '15px')
+              "--items-per-page": itemsPerPage,
+              "--gap":
+                itemsPerPage === 5
+                  ? "30px"
+                  : itemsPerPage === 4
+                  ? "15px"
+                  : "15px",
             } as React.CSSProperties
           }
         >
@@ -104,7 +111,7 @@ const AllTeamSection: React.FC = () => {
           ) : (
             employees.map((member) => {
               const { name, role } = getEmployeeData(member, i18n.language);
-              
+
               const imageUrl = member.photoUrl || vitaliyPenc.src;
 
               return (

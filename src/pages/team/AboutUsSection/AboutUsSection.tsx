@@ -1,8 +1,8 @@
 // components/AboutUsSection/AboutUsSection.jsx
 
-import { useState, useEffect } from 'react';
-import styles from './AboutUsSection.module.css';
-import { useTranslation } from 'react-i18next';
+import { useState, useEffect } from "react";
+import styles from "./AboutUsSection.module.css";
+import { useTranslation } from "react-i18next";
 
 // Интерфейс для данных об изображении
 interface SiteImage {
@@ -12,22 +12,24 @@ interface SiteImage {
 }
 
 export default function AboutUsSection() {
-  const { t } = useTranslation('common');
+  const { t } = useTranslation("common");
   const [aboutUsImage, setAboutUsImage] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
   const fetchImages = async () => {
     try {
-      const response = await fetch("http://localhost:3001/images");
+      const backendUrl = process.env.REACT_APP_API_URL;
+
+      const response = await fetch(`${backendUrl}/images`);
       if (response.ok) {
         const data: SiteImage[] = await response.json();
-        const foundImage = data.find(img => img.name === 'teamAbout.png');
+        const foundImage = data.find((img) => img.name === "teamAbout.png");
         if (foundImage) {
           setAboutUsImage(foundImage.url);
         } else {
           console.warn("Изображение с именем 'teamAbout' не найдено.");
           // Можно установить изображение-заглушку, если основное не найдено
-          setAboutUsImage('/path/to/placeholder-image.png');
+          setAboutUsImage("/path/to/placeholder-image.png");
         }
       } else {
         console.error("Не удалось получить изображения:", response.statusText);
@@ -50,7 +52,7 @@ export default function AboutUsSection() {
   return (
     <div className={styles.aboutUs}>
       <div className={styles.titleSection}>
-        <h2 className={styles.mainTitle}>{t('aboutUsTitle')}</h2>
+        <h2 className={styles.mainTitle}>{t("aboutUsTitle")}</h2>
         <div className={styles.line8}></div>
       </div>
       <div className={styles.contentSection}>
@@ -58,19 +60,15 @@ export default function AboutUsSection() {
           {aboutUsImage && (
             <img
               src={aboutUsImage}
-              alt={t('teamImageAlt')}
+              alt={t("teamImageAlt")}
               className={styles.mainImage}
             />
           )}
         </div>
         <div className={styles.textContainer}>
           <div className={styles.frame272}>
-            <p className={styles.textHeading}>
-              {t('aboutUsMission')}
-            </p>
-            <p className={styles.textBody}>
-              {t('aboutUsTextBody')}
-            </p>
+            <p className={styles.textHeading}>{t("aboutUsMission")}</p>
+            <p className={styles.textBody}>{t("aboutUsTextBody")}</p>
           </div>
         </div>
       </div>

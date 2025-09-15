@@ -3,7 +3,7 @@
 import { useEffect, useState, FormEvent } from "react";
 import styles from "./ConsultationModal.module.css";
 import { useTranslation } from "react-i18next";
-import { useModal } from '../../../hooks/useModal';
+import { useModal } from "../../../hooks/useModal";
 
 export default function ConsultationModal() {
   const { t } = useTranslation("common");
@@ -21,7 +21,7 @@ export default function ConsultationModal() {
 
   const forWhomOptions = [
     { value: "SELLING", label: t("forSellers") }, // Changed value to match backend 'SELLING'
-    { value: "BUYING", label: t("forBuyers") },   // Changed value to match backend 'BUYING'
+    { value: "BUYING", label: t("forBuyers") }, // Changed value to match backend 'BUYING'
   ];
 
   // State for the custom dropdowns
@@ -29,7 +29,7 @@ export default function ConsultationModal() {
   const [isForWhomDropdownOpen, setForWhomDropdownOpen] = useState(false);
   const [selectedProperty, setSelectedProperty] = useState(propertyOptions[0]);
   const [selectedForWhom, setSelectedForWhom] = useState(forWhomOptions[0]);
-  
+
   // State for submission status
   const [isLoading, setIsLoading] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -39,8 +39,11 @@ export default function ConsultationModal() {
   useEffect(() => {
     if (preselectedForWhom) {
       // Find the correct option based on the preselectedForWhom value
-      const mappedValue = preselectedForWhom === "forSellers" ? "SELLING" : "BUYING";
-      const newSelection = forWhomOptions.find(opt => opt.value === mappedValue);
+      const mappedValue =
+        preselectedForWhom === "forSellers" ? "SELLING" : "BUYING";
+      const newSelection = forWhomOptions.find(
+        (opt) => opt.value === mappedValue
+      );
       if (newSelection) {
         setSelectedForWhom(newSelection);
       }
@@ -97,12 +100,17 @@ export default function ConsultationModal() {
       reason: selectedForWhom.value, // Use the value that matches the backend enum
       propertyType: selectedProperty.value, // Use the value that matches the backend enum
     };
-    
+
     try {
-      const response = await fetch("http://localhost:3001/offers", { // Замените URL на ваш бэкэнд-адрес
+      const backendUrl = process.env.REACT_APP_API_URL;
+
+      const response = await fetch(`${backendUrl}/offers`, {
+        // Замените URL на ваш бэкэнд-адрес
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Accept: "application/json",
+          "ngrok-skip-browser-warning": "true",
         },
         body: JSON.stringify(offerData),
       });
@@ -126,7 +134,10 @@ export default function ConsultationModal() {
   if (isSubmitted) {
     return (
       <div className={styles.modalOverlay} onClick={handleCloseModal}>
-        <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+        <div
+          className={styles.modalContent}
+          onClick={(e) => e.stopPropagation()}
+        >
           <h2 className={styles.modalTitle}>{t("successTitle")}</h2>
           <p className={styles.successMessage}>{t("successMessage")}</p>
           <button className={styles.closeBtn} onClick={handleCloseModal}>
@@ -144,23 +155,23 @@ export default function ConsultationModal() {
         <form className={styles.form} onSubmit={handleSubmit}>
           <div className={styles.formItem}>
             <label className={styles.formLabel}>{t("yourName")}</label>
-            <input 
-              type="text" 
-              placeholder={t("namePlaceholder")} 
+            <input
+              type="text"
+              placeholder={t("namePlaceholder")}
               value={clientName}
               onChange={(e) => setClientName(e.target.value)}
-              required 
+              required
             />
           </div>
 
           <div className={styles.formItem}>
             <label className={styles.formLabel}>{t("yourPhone")}</label>
-            <input 
-              type="tel" 
-              placeholder={t("phonePlaceholder")} 
+            <input
+              type="tel"
+              placeholder={t("phonePlaceholder")}
               value={phoneNumber}
               onChange={(e) => setPhoneNumber(e.target.value)}
-              required 
+              required
             />
           </div>
 
@@ -229,7 +240,7 @@ export default function ConsultationModal() {
               )}
             </div>
           </div>
-          
+
           {error && <p className={styles.errorMessage}>{error}</p>}
 
           <div className={styles.formFooter}>
