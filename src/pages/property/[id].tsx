@@ -4,8 +4,10 @@ import { useRouter } from "next/router";
 import styles from "./PropertyPage.module.css";
 import PropertyImagesGallery from "./PropertyImagesGallery/PropertyImagesGallery";
 import MapWrapper from "@/components/Map/MapWrapper";
-import { useModal } from '../../hooks/useModal';
+import { useModal } from "../../hooks/useModal";
 import { useTranslation } from "react-i18next";
+
+import MapSinglePoint from "../map";
 
 interface Property {
   id: number;
@@ -58,11 +60,11 @@ export default function PropertyPage() {
       setLoading(true);
       try {
         const res = await fetch(`http://localhost:3001/items/${id}`);
-        if (!res.ok) throw new Error(t('objectNotFound'));
+        if (!res.ok) throw new Error(t("objectNotFound"));
         const data: Property = await res.json();
         setProperty(data);
       } catch (err: any) {
-        setError(err.message || t('errorLoading'));
+        setError(err.message || t("errorLoading"));
       } finally {
         setLoading(false);
       }
@@ -70,12 +72,19 @@ export default function PropertyPage() {
     fetchProperty();
   }, [id]);
 
-  if (loading) return <p>{t('loading')}</p>;
-  if (error) return <p>{t('error')}: {error}</p>;
-  if (!property) return <p>{t('objectNotFound')}</p>;
+  if (loading) return <p>{t("loading")}</p>;
+  if (error)
+    return (
+      <p>
+        {t("error")}: {error}
+      </p>
+    );
+  if (!property) return <p>{t("objectNotFound")}</p>;
 
   const formattedPrice = property.prices[0]?.value
-    ? `${property.prices[0].value.toLocaleString()} ${property.prices[0].currency}`
+    ? `${property.prices[0].value.toLocaleString()} ${
+        property.prices[0].currency
+      }`
     : "N/A";
 
   const { street, city, lat, lng } = property.location;
@@ -84,7 +93,9 @@ export default function PropertyPage() {
   const mapCoords = { lat: Number(lat), lng: Number(lng) };
 
   const characteristicFeatures = Object.entries(property.characteristics)
-    .filter(([key, value]) => value !== null && value !== undefined && value !== "")
+    .filter(
+      ([key, value]) => value !== null && value !== undefined && value !== ""
+    )
     .map(([key, value]) => ({ name: key, value }));
 
   const bedrooms = "2 спальні"; // временно, можно брать из характеристик
@@ -92,12 +103,12 @@ export default function PropertyPage() {
 
   // Объединяем базовые и пользовательские характеристики
   const baseFeatures = [
-    { name: t('propertyType'), value: property.category },
-    { name: t('objectView'), value: property.type },
-    { name: t('deal'), value: property.deal },
-    { name: t('street'), value: street },
-    { name: t('bedroomsCount'), value: bedrooms },
-    { name: t('area'), value: area },
+    { name: t("propertyType"), value: property.category },
+    { name: t("objectView"), value: property.type },
+    { name: t("deal"), value: property.deal },
+    { name: t("street"), value: street },
+    { name: t("bedroomsCount"), value: bedrooms },
+    { name: t("area"), value: area },
   ];
   const features = [...baseFeatures, ...characteristicFeatures];
 
@@ -107,18 +118,27 @@ export default function PropertyPage() {
       <main className={styles.contentWrapper}>
         <section className={styles.mainInfoSection}>
           <div className={styles.imageGallery}>
-            <PropertyImagesGallery images={property.images} onImageClick={() => {}} />
+            <PropertyImagesGallery
+              images={property.images}
+              onImageClick={() => {}}
+            />
           </div>
           <div className={styles.infoSection}>
             <h1 className={styles.title}>{property.title}</h1>
-            <p className={styles.location}>{street}, {city}</p>
+            <p className={styles.location}>
+              {street}, {city}
+            </p>
             <div className={styles.featuresRow}>
               <div className={styles.featureItem}>
-                <span role="img" aria-label={t('bedroomsAlt')}>🛏️</span>
+                <span role="img" aria-label={t("bedroomsAlt")}>
+                  🛏️
+                </span>
                 <span>{bedrooms}</span>
               </div>
               <div className={styles.featureItem}>
-                <span role="img" aria-label={t('areaAlt')}>📏</span>
+                <span role="img" aria-label={t("areaAlt")}>
+                  📏
+                </span>
                 <span>{area}</span>
               </div>
             </div>
@@ -126,9 +146,9 @@ export default function PropertyPage() {
               <p className={styles.price}>{formattedPrice}</p>
               <button
                 className={styles.contactButton}
-                onClick={() => openModal('forBuyers')}
+                onClick={() => openModal("forBuyers")}
               >
-                {t('getPropertyConsultation')}
+                {t("getPropertyConsultation")}
               </button>
             </div>
           </div>
@@ -137,7 +157,7 @@ export default function PropertyPage() {
         <div className={styles.additionalInfo}>
           <div className={styles.detailsContainer}>
             <div className={styles.sectionBlock}>
-              <h2 className={styles.sectionTitle}>{t('featuresTitle')}</h2>
+              <h2 className={styles.sectionTitle}>{t("featuresTitle")}</h2>
               <ul className={styles.featuresList}>
                 {features.map((feature, index) => (
                   <li key={index}>
@@ -147,14 +167,17 @@ export default function PropertyPage() {
               </ul>
             </div>
             <div className={styles.sectionBlock}>
-              <h2 className={styles.sectionTitle}>{t('descriptionTitle')}</h2>
+              <h2 className={styles.sectionTitle}>{t("descriptionTitle")}</h2>
               <p className={styles.description}>{description}</p>
             </div>
           </div>
           <div className={styles.mapColumn}>
             {mapCoords.lat && mapCoords.lng && (
-              <MapWrapper
-                properties={[{ id: property.id, title: property.title, lat: mapCoords.lat, lng: mapCoords.lng }]}
+              <MapSinglePoint
+                location={{
+                  lat: mapCoords.lat,
+                  lng: mapCoords.lng,
+                }}
               />
             )}
           </div>
