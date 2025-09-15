@@ -61,8 +61,10 @@ export default function RealEstateCategories() {
       </div>
       <div className={styles.columnsRealEstate}>
         <div className={styles.column1}>
+          <div className={styles.frame48wrapper}>
           <div className={styles.frame48}>
             <p className={styles.textBlock}>{t('bestOffers')}</p>
+          </div>
           </div>
           <a href="#" className={styles.frame49} style={houseImageStyle}>
             <p className={styles.categoryTitle}>{t('build')}</p> 
@@ -77,8 +79,10 @@ export default function RealEstateCategories() {
           <a href="#" className={styles.frame43} style={apartmentImageStyle}>
             <p className={styles.categoryTitle}>{t('apartment')}</p>
           </a>
+          <div className={styles.frame47wrapper}>
           <div className={styles.frame47}>
             <p className={styles.textBlock}>{t('largeSelection')}</p>
+          </div>
           </div>
         </div>
         <div className={styles.column4}>

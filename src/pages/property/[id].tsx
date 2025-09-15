@@ -1,10 +1,12 @@
 // PropertyPage.tsx
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import Image from "next/image";
+// import Image from "next/image"; // Удаляем импорт Image, так как он больше не нужен
 import styles from "./PropertyPage.module.css";
 import PropertyImagesGallery from "./PropertyImagesGallery/PropertyImagesGallery";
 import MapWrapper from "@/components/Map/MapWrapper";
+import { useModal } from '../../hooks/useModal';
+import { useTranslation } from "react-i18next"; // Импортируем хук для переводов
 
 interface Property {
   id: number;
@@ -43,6 +45,8 @@ interface PropertyImage {
 export default function PropertyPage() {
   const router = useRouter();
   const { id } = router.query;
+  const { openModal } = useModal();
+  const { t } = useTranslation("common"); // Инициализируем хук
 
   const [property, setProperty] = useState<Property | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -54,13 +58,13 @@ export default function PropertyPage() {
       setLoading(true);
       try {
         const res = await fetch(`http://localhost:3001/items/${id}`);
-        if (!res.ok) throw new Error("Обʼєкт не знайдено");
+        if (!res.ok) throw new Error(t('objectNotFound'));
         const data: Property = await res.json();
         
         setProperty(data);
         
       } catch (err: any) {
-        setError(err.message || "Помилка при завантаженні");
+        setError(err.message || t('errorLoading'));
       } finally {
         setLoading(false);
       }
@@ -68,9 +72,9 @@ export default function PropertyPage() {
     fetchProperty();
   }, [id]);
 
-  if (loading) return <p>Завантаження...</p>;
-  if (error) return <p>Помилка: {error}</p>;
-  if (!property) return <p>Обʼєкт не знайдено</p>;
+  if (loading) return <p>{t('loading')}</p>;
+  if (error) return <p>{t('error')}: {error}</p>;
+  if (!property) return <p>{t('objectNotFound')}</p>;
 
   const formattedPrice = property.prices[0]?.value
     ? `${property.prices[0].value.toLocaleString()} ${
@@ -92,12 +96,12 @@ export default function PropertyPage() {
   const area = "1500 м²";
 
   const features = [
-    { name: "Тип нерухомості", value: property.category },
-    { name: "Вид об'єкта", value: property.type },
-    { name: "Операція", value: property.deal },
-    { name: "Вулиця", value: property.location.street },
-    { name: "Кількість спалень", value: bedrooms },
-    { name: "Площа", value: area },
+    { name: t('propertyType'), value: property.category },
+    { name: t('objectView'), value: property.type },
+    { name: t('deal'), value: property.deal },
+    { name: t('street'), value: property.location.street },
+    { name: t('bedroomsCount'), value: bedrooms },
+    { name: t('area'), value: area },
   ];
 
   return (
@@ -114,36 +118,30 @@ export default function PropertyPage() {
             <p className={styles.type}>{propertyType}</p>
             <div className={styles.featuresRow}>
               <div className={styles.featureItem}>
-                <Image
-                  src="/icons/bed.svg"
-                  alt="Спальни"
-                  width={20}
-                  height={20}
-                />
+                <span role="img" aria-label={t('bedroomsAlt')}>🛏️</span> {/* Заменяем на смайлик */}
                 <span>{bedrooms}</span>
               </div>
               <div className={styles.featureItem}>
-                <Image
-                  src="/icons/area.svg"
-                  alt="Площадь"
-                  width={20}
-                  height={20}
-                />
+                <span role="img" aria-label={t('areaAlt')}>📏</span> {/* Заменяем на смайлик */}
                 <span>{area}</span>
               </div>
             </div>
             <div className={styles.priceAndButton}>
               <p className={styles.price}>{formattedPrice}</p>
-              <button className={styles.contactButton}>ОТРИМАТИ КОНСУЛЬТАЦІЮ</button>
+              <button 
+                className={styles.contactButton}
+                onClick={() => openModal('forBuyers')}
+              >
+                {t('getPropertyConsultation')}
+              </button>
             </div>
           </div>
         </section>
 
-        {/* Измененная разметка для правильного порядка на планшетах */}
         <div className={styles.additionalInfo}>
           <div className={styles.detailsContainer}>
             <div className={styles.sectionBlock}>
-              <h2 className={styles.sectionTitle}>Особливості</h2>
+              <h2 className={styles.sectionTitle}>{t('featuresTitle')}</h2>
               <ul className={styles.featuresList}>
                 {features.map((feature, index) => (
                   <li key={index}>
@@ -153,7 +151,7 @@ export default function PropertyPage() {
               </ul>
             </div>
             <div className={styles.sectionBlock}>
-              <h2 className={styles.sectionTitle}>Опис</h2>
+              <h2 className={styles.sectionTitle}>{t('descriptionTitle')}</h2>
               <p className={styles.description}>{description}</p>
             </div>
           </div>

@@ -51,10 +51,10 @@ export default function Footer() {
             </li>
           </ul>
           <div className={styles.socialIcons}>
-            <a href="https://youtube.com" target="_blank" rel="noopener noreferrer">
+            <a href="https://www.youtube.com/@MySpace-kyiv" target="_blank" rel="noopener noreferrer">
               <img src={youtubeIcon.src} alt="YouTube" className={styles.socialIcon} />
             </a>
-            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
+            <a href="https://www.instagram.com/myspace.kyiv" target="_blank" rel="noopener noreferrer">
               <img src={instagramIcon.src} alt="Instagram" className={styles.socialIcon} />
             </a>
           </div>

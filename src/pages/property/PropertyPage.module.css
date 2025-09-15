@@ -177,6 +177,12 @@
     gap: 20px;
   }
 
+  .propertyPage {
+    padding: 20px;
+    margin-left: -15px;
+    margin-right: 17px;
+  }
+
   .mainInfoSection {
     display: flex;
     flex-direction: column;
@@ -210,6 +216,8 @@
 @media (min-width: 375px) and (max-width: 768px) {
   .propertyPage {
     padding: 20px;
+    margin-left: -15px;
+    margin-right: 10px;
   }
 
   .contentWrapper {

@@ -39,21 +39,21 @@
 .heroTitleContainer {
   position: absolute;
   bottom: -40px;
-  left: 50%;
+  left: 42%;
   transform: translateX(-50%);
   width: 100%;
   max-width: 80%;
   padding: 0;
   box-sizing: border-box;
   z-index: 10;
-  text-align: center;
+  text-align: left;
 }
 
 .heroTitle {
-  color: #ffffff;
+  color: #EBEBEB;
   font-family: "Raleway", sans-serif;
   font-style: normal;
-  font-weight: 400;
+  font-weight: 600;
   font-size: 64px;
   line-height: 75px;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
@@ -145,6 +145,8 @@
   }
   .heroTitleContainer {
     bottom: 0px;
+    text-align: left;
+    left: 50%;
   }
   .heroTitle {
     font-size: 48px;

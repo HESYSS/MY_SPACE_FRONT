@@ -12,15 +12,15 @@ import defaultTeamImage from '../../../../public/icons/vitaliyPenc.png';
 interface Employee {
   id: number;
   firstName: string; 
-  lastName: string;  
-  position: string;  
+  lastName: string;  
+  position: string;  
   firstNameEn?: string; 
-  lastNameEn?: string;  
-  positionEn?: string;  
+  lastNameEn?: string;  
+  positionEn?: string;  
   isPARTNER: boolean;
   isMANAGER: boolean;
   isACTIVE: boolean;
-  photoUrl?: string; // <-- ДОБАВЛЕНО
+  photoUrl?: string;
 }
 
 export default function TeamSection() {
@@ -39,8 +39,6 @@ export default function TeamSection() {
         }
         const data: Employee[] = await response.json();
 
-        // Проверяем, что isPARTNER, isMANAGER и isACTIVE существуют
-        // иначе фильтрация может работать некорректно
         const fetchedPartners = data.filter(member => member.isPARTNER);
         const fetchedManagers = data.filter(member => member.isMANAGER);
 
@@ -78,13 +76,9 @@ export default function TeamSection() {
 
   return (
     <div className={styles.teamSection}>
-      <div className={styles.titles}>
+      {/* Container for Partners */}
+      <div className={styles.groupContainer}>
         <h2 className={styles.title}>{t('partnersTitle')}</h2>
-        <h2 className={styles.title}>{t('managersTitle')}</h2>
-      </div>
-      {/* Основной контейнер, который будет держать обе группы */}
-      <div className={styles.teamMembersContainer}>
-        {/* Контейнер для партнеров */}
         <div className={styles.teamGroup}>
           {partners.map((member) => {
             const { name, position } = getMemberData(member, i18n.language);
@@ -94,12 +88,16 @@ export default function TeamSection() {
                 id={member.id}
                 name={name}
                 position={position}
-                photoSrc={member.photoUrl || defaultTeamImage.src} // <-- ОБНОВЛЕНО
+                photoSrc={member.photoUrl || defaultTeamImage.src}
               />
             );
           })}
         </div>
-        {/* Контейнер для менеджеров */}
+      </div>
+      
+      {/* Container for Managers */}
+      <div className={styles.groupContainer}>
+        <h2 className={styles.title}>{t('managersTitle')}</h2>
         <div className={styles.teamGroup}>
           {managers.map((member) => {
             const { name, position } = getMemberData(member, i18n.language);
@@ -109,7 +107,7 @@ export default function TeamSection() {
                 id={member.id}
                 name={name}
                 position={position}
-                photoSrc={member.photoUrl || defaultTeamImage.src} // <-- ОБНОВЛЕНО
+                photoSrc={member.photoUrl || defaultTeamImage.src}
               />
             );
           })}

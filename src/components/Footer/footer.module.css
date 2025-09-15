@@ -116,11 +116,10 @@
 /* Планшеты (до 768px) */
 @media (min-width: 769px) and (max-width: 1800px) {
   .footer {
-    min-width: 769px;
+    min-width: 800px;
     max-width: 1800px;
     width: auto;
     height: 265px;
-    margin-left: 20px;
   }
 
   .mainContent {

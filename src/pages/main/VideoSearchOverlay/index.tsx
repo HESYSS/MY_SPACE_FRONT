@@ -1,22 +1,45 @@
-import React, { useRef } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import styles from "./style.module.css";
 import { useTranslation } from "react-i18next";
+import axios from "axios"; // Предполагаем, что вы используете axios для запросов
 
 const VideoSearchOverlay = () => {
-  const { t } = useTranslation("common"); // Используем файл common.json
-  const videoRef = useRef<HTMLVideoElement>(null);
+  const { t } = useTranslation("common");
+  const videoRef = useRef(null);
+  const [videoUrl, setVideoUrl] = useState(null); // Состояние для хранения URL видео
+  
+  // URL вашего API-маршрута для получения данных о видео
+  const apiUrl = "http://localhost:3001/images/videoMain.mp4";
+
+  useEffect(() => {
+    // Асинхронная функция для выполнения запроса
+    const fetchVideo = async () => {
+      try {
+        const response = await axios.get(apiUrl);
+        // Предположим, что ответ содержит объект с полем `videoLink`
+        setVideoUrl(response.data.url);
+      } catch (error) {
+        console.error("Error fetching video data:", error);
+      }
+    };
+    fetchVideo();
+  }, []); // Пустой массив зависимостей означает, что эффект выполнится один раз при монтировании
 
   return (
     <>
       <div className={styles.hero}>
         {/* Видео слой */}
-        <video ref={videoRef} className={styles.video} autoPlay loop muted>
-          <source
-            src="https://www.myspace.in.ua/wp-content/uploads/2025/05/kyivGIFFlagAtStart.mp4"
-            type="video/mp4"
-          />
-          {t('videoNotSupported')}
-        </video>
+        {videoUrl ? (
+          <video ref={videoRef} className={styles.video} autoPlay loop muted>
+            <source src={videoUrl} type="video/mp4" />
+            {t('videoNotSupported')}
+          </video>
+        ) : (
+          // Можно показать загрузчик или заглушку, пока видео загружается
+          <div className={styles.videoPlaceholder}>
+            Loading video...
+          </div>
+        )}
 
         {/* Заголовок */}
         <div className={styles.heroTitleContainer}>

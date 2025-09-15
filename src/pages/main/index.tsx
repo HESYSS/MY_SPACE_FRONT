@@ -8,12 +8,6 @@ import { useTranslation } from "react-i18next"; // Импортируем хук
 
 export default function HomePage() {
   const { t } = useTranslation('common');
-  const images = [
-    "/images/house1.jpg",
-    "/images/house2.jpg",
-    "/images/house3.jpg",
-  ];
-
   return (
     <div className={styles.mainDiv}>
       <VideoSearchOverlay />
