@@ -1,0 +1,234 @@
+/* =========================
+   Overlay
+   ========================= */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.75);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* =========================
+   Modal Content
+   ========================= */
+.modalContent {
+  background-color: #0a0a0a;
+  color: #e0e0e0;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 600px;
+  padding: 2.5rem 2rem;
+  border: 1px solid #444;
+  position: relative;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modalContent::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+.modalContent {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* =========================
+   Header
+   ========================= */
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #444;
+}
+
+.modalTitle {
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0;
+}
+
+/* =========================
+   Filter Groups
+   ========================= */
+.filterGroup {
+  padding-bottom: 1.5rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid #3a3a3a;
+}
+
+.filterLabel {
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: 0.75rem;
+  color: #ccc;
+}
+
+/* =========================
+   Universal buttons with checkbox
+   ========================= */
+.button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem; /* пространство между галочкой и текстом */
+}
+
+.button::before {
+  content: "";
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border: 1px solid #56728b;
+  border-radius: 4px;
+  background-color: #1e2d3a;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+.button.active::before {
+  content: "✓";
+  color: #16242d;
+  background-color: #8fd8a8;
+  border-color: #8fd8a8;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+/* =========================
+   Category, Type, Service, Rooms, Options
+   ========================= */
+.categoryToggle,
+.propertyTypeToggle,
+.serviceToggle,
+.multiSelect {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.categoryButton,
+.propertyButton,
+.serviceButton,
+.roomButton,
+.optionButton {
+  background-color: #3b3b3b;
+  color: #999;
+  border: 1px solid #555;
+  border-radius: 6px;
+  padding: 0.6rem 1.2rem;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.categoryButton.active,
+.propertyButton.active,
+.serviceButton.active,
+.roomButton.active,
+.optionButton.active {
+  background-color: #03b9b34d;
+  border-color: #03b9b34d;
+  color: #fff;
+}
+
+/* =========================
+   Input Ranges (Price, Floors, Area)
+   ========================= */
+.inputRange {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.rangeInput {
+  flex: 1;
+  background-color: #3b3b3b;
+  border: 1px solid #555;
+  color: #fff;
+  padding: 0.6rem 0.75rem;
+  border-radius: 6px;
+}
+
+.rangeInput::placeholder {
+  color: #888;
+}
+
+.rangeSeparator {
+  color: #888;
+  font-size: 0.9rem;
+}
+
+.priceInputGroup {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.currencyDisplay {
+  color: #007bff;
+  font-weight: bold;
+  padding-left: 0.5rem;
+}
+
+/* =========================
+   Actions
+   ========================= */
+.modalActions {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #3a3a3a;
+  margin-top: 1rem;
+}
+
+.resetButton,
+.showResultsButton {
+  padding: 0.8rem 2rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: background-color 0.2s ease;
+}
+
+.resetButton {
+  background: none;
+  color: #fff;
+  border: 1px solid #555;
+}
+
+.showResultsButton {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+}

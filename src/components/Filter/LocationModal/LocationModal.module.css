@@ -1,0 +1,212 @@
+/* =========================
+   Основной контейнер модалки
+   ========================= */
+.modalContent {
+  background-color: #0a0a0a;
+  color: #ebebeb;
+  border-radius: 12px;
+  width: 100%;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+  font-family: Arial, sans-serif;
+  box-sizing: border-box;
+  position: absolute;
+  /* общая прокрутка */
+  max-height: 80vh;
+  overflow-y: auto;
+  z-index: 1000;
+}
+
+/* скрываем скролл, но оставляем прокрутку */
+.modalContent::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+.modalContent {
+  -ms-overflow-style: none; /* IE/Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+/* =========================
+   Переключатель локации
+   ========================= */
+.locationToggle {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.locationButton {
+  flex: 1;
+  background-color: #0a0a0a;
+  border: 1px solid #03b9b34d;
+  color: #ebebeb;
+  padding: 10px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 500;
+  transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+  text-align: center;
+}
+
+.locationButton:hover {
+  background-color: #1f303c;
+}
+
+.locationButton.active {
+  background-color: #051818;
+  border-color: #051818;
+  color: #ebebeb;
+}
+
+/* =========================
+   Группа выпадающих списков
+   ========================= */
+.locationGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* =========================
+   Dropdown (контейнер)
+   ========================= */
+.dropdown {
+  width: 100%;
+  position: relative;
+  background-color: #30303033;
+  border-radius: 5px;
+}
+
+.dropdownButton {
+  width: 100%;
+  background-color: transparent;
+  color: #ebebeb;
+  padding: 12px 15px;
+  border: none;
+  border-radius: 5px;
+  text-align: left;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 400;
+}
+
+.dropdownButton:hover {
+  background-color: #30303033;
+}
+
+.dropdownButton span {
+  font-weight: 400;
+}
+
+/* стрелка */
+.dropdownButton svg,
+.dropdownButton .chevronOpen {
+  width: 16px;
+  height: 16px;
+  fill: #ebebeb;
+  transition: transform 0.3s ease;
+}
+
+.dropdownButton .chevronOpen {
+  transform: rotate(180deg);
+}
+
+/* контент */
+.dropdownContent {
+  background-color: #30303033;
+  border-top: 1px solid #30303033;
+  border-radius: 0 0 8px 8px;
+  /* убрано ограничение высоты */
+  padding: 10px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+/* =========================
+   Элементы списка
+   ========================= */
+.dropdownItem {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* расстояние между галочкой и текстом */
+  cursor: pointer;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  white-space: nowrap;
+}
+
+/* Ховер */
+.dropdownItem:hover {
+  background-color: #1a2a2a;
+}
+
+/* Активный */
+.dropdownItem.active {
+  background-color: #051818;
+  color: #fff;
+}
+
+/* Галочка слева */
+.dropdownItem::before {
+  content: "✔";
+  font-size: 14px;
+  font-weight: bold;
+  color: #fff;
+
+  /* по умолчанию скрыта */
+  opacity: 0;
+  width: 0;
+  overflow: hidden;
+
+  transition: opacity 0.2s ease, width 0.2s ease;
+}
+
+/* показываем галочку у активных */
+.dropdownItem.active::before {
+  opacity: 1;
+  width: 14px; /* ширина под символ */
+}
+
+/* =========================
+   Метро и районы (колонки)
+   ========================= */
+.columnsWrapper {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3 колонки метро */
+  gap: 15px;
+}
+
+.districtsWrapper {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 2 колонки районы */
+  gap: 15px;
+}
+
+.metroColumn,
+.districtColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+/* =========================
+   Inline списки (улицы, ЖК, направления)
+   ========================= */
+.inlineList {
+  display: flex;
+  flex-wrap: wrap; /* перенос строк */
+  gap: 8px;
+  padding: 5px 10px;
+}
+
+.inlineList .dropdownItem {
+  flex: 0 1 auto;
+}

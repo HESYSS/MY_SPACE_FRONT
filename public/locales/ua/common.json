@@ -69,7 +69,7 @@
   "managersTitle": "КЕРІВНИКИ",
   "ourTeamTitle": "НАША КОМАНДА",
   "activeTeamTitle": "Найактивніші члени команди по продажам",
-  "allTeamTitle": "Вся команда",  
+  "allTeamTitle": "Вся команда",
   "readMoreTitle": "ЧИТАТИ БІЛЬШЕ",
   "contactsTitle": "КОНТАКТИ",
   "socialNetworksTitle": "Соціальні мережі",
@@ -122,6 +122,10 @@
   "successTitle": "Заявка успішно відправлена!",
   "successMessage": "Наш менеджер зв'яжеться з вами найближчим часом для обговорення деталей. Дякуємо!",
   "district": "Район",
+
+  "search_placeholder": "Пошук...",
+  "filter_button": "Фільтр"
+
   "loading": "Завантаження...",
   "error": "Помилка",
   "errorLoading": "Помилка при завантаженні",
@@ -138,3 +142,4 @@
   "bedroomsCount": "Кількість спалень",
   "area": "Площа"
 }
+

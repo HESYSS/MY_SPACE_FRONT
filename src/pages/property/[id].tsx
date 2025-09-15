@@ -1,12 +1,11 @@
 // PropertyPage.tsx
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-// import Image from "next/image"; // Удаляем импорт Image, так как он больше не нужен
 import styles from "./PropertyPage.module.css";
 import PropertyImagesGallery from "./PropertyImagesGallery/PropertyImagesGallery";
 import MapWrapper from "@/components/Map/MapWrapper";
 import { useModal } from '../../hooks/useModal';
-import { useTranslation } from "react-i18next"; // Импортируем хук для переводов
+import { useTranslation } from "react-i18next";
 
 interface Property {
   id: number;
@@ -33,6 +32,7 @@ interface Property {
   article: string;
   category: string;
   contacts: any[];
+  characteristics: any[];
 }
 
 interface PropertyImage {
@@ -46,7 +46,7 @@ export default function PropertyPage() {
   const router = useRouter();
   const { id } = router.query;
   const { openModal } = useModal();
-  const { t } = useTranslation("common"); // Инициализируем хук
+  const { t } = useTranslation("common");
 
   const [property, setProperty] = useState<Property | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -60,9 +60,7 @@ export default function PropertyPage() {
         const res = await fetch(`http://localhost:3001/items/${id}`);
         if (!res.ok) throw new Error(t('objectNotFound'));
         const data: Property = await res.json();
-        
         setProperty(data);
-        
       } catch (err: any) {
         setError(err.message || t('errorLoading'));
       } finally {
@@ -77,32 +75,31 @@ export default function PropertyPage() {
   if (!property) return <p>{t('objectNotFound')}</p>;
 
   const formattedPrice = property.prices[0]?.value
-    ? `${property.prices[0].value.toLocaleString()} ${
-        property.prices[0].currency
-      }`
+    ? `${property.prices[0].value.toLocaleString()} ${property.prices[0].currency}`
     : "N/A";
 
-  const street = property.location.street;
-  const city = property.location.city;
-  const propertyType = property.type;
+  const { street, city, lat, lng } = property.location;
   const description = property.description;
 
-  const mapCoords = {
-    lat: property.location.lat,
-    lng: property.location.lng,
-  };
-  
-  const bedrooms = "2 спальні";
-  const area = "1500 м²";
+  const mapCoords = { lat: Number(lat), lng: Number(lng) };
 
-  const features = [
+  const characteristicFeatures = Object.entries(property.characteristics)
+    .filter(([key, value]) => value !== null && value !== undefined && value !== "")
+    .map(([key, value]) => ({ name: key, value }));
+
+  const bedrooms = "2 спальні"; // временно, можно брать из характеристик
+  const area = "1500 м²"; // временно, можно брать из характеристик
+
+  // Объединяем базовые и пользовательские характеристики
+  const baseFeatures = [
     { name: t('propertyType'), value: property.category },
     { name: t('objectView'), value: property.type },
     { name: t('deal'), value: property.deal },
-    { name: t('street'), value: property.location.street },
+    { name: t('street'), value: street },
     { name: t('bedroomsCount'), value: bedrooms },
     { name: t('area'), value: area },
   ];
+  const features = [...baseFeatures, ...characteristicFeatures];
 
   return (
     <div className={styles.propertyPage}>
@@ -115,20 +112,19 @@ export default function PropertyPage() {
           <div className={styles.infoSection}>
             <h1 className={styles.title}>{property.title}</h1>
             <p className={styles.location}>{street}, {city}</p>
-            <p className={styles.type}>{propertyType}</p>
             <div className={styles.featuresRow}>
               <div className={styles.featureItem}>
-                <span role="img" aria-label={t('bedroomsAlt')}>🛏️</span> {/* Заменяем на смайлик */}
+                <span role="img" aria-label={t('bedroomsAlt')}>🛏️</span>
                 <span>{bedrooms}</span>
               </div>
               <div className={styles.featureItem}>
-                <span role="img" aria-label={t('areaAlt')}>📏</span> {/* Заменяем на смайлик */}
+                <span role="img" aria-label={t('areaAlt')}>📏</span>
                 <span>{area}</span>
               </div>
             </div>
             <div className={styles.priceAndButton}>
               <p className={styles.price}>{formattedPrice}</p>
-              <button 
+              <button
                 className={styles.contactButton}
                 onClick={() => openModal('forBuyers')}
               >
@@ -157,14 +153,9 @@ export default function PropertyPage() {
           </div>
           <div className={styles.mapColumn}>
             {mapCoords.lat && mapCoords.lng && (
-              <MapWrapper properties={[
-                {
-                  id: property.id,
-                  title: property.title,
-                  location: property.location,
-                  coords: { lat: mapCoords.lat, lng: mapCoords.lng },
-                }
-              ]} />
+              <MapWrapper
+                properties={[{ id: property.id, title: property.title, lat: mapCoords.lat, lng: mapCoords.lng }]}
+              />
             )}
           </div>
         </div>

@@ -7,7 +7,36 @@
 .pagination {
   display: flex;
   gap: 10px;
+  align-items: center;
   margin-top: 20px;
+}
+
+.pagination button {
+  padding: 8px 16px;
+  border: 1px solid #082525;
+  border-radius: 5px;
+  background-color: #082525;
+  color: #ffffff;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.pagination button:hover:not(:disabled) {
+  background-color: #0a2e2e;
+}
+
+.pagination button:disabled {
+  background-color: #e0e0e0;
+  color: #999;
+  cursor: not-allowed;
+}
+
+.pagination span {
+  padding: 0 10px;
+  white-space: nowrap;
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
 }
 
 .propertiesGrid a {

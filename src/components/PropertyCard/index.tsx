@@ -53,6 +53,15 @@ export default function PropertyCard({ property }: Props) {
       return dateString;
     }
   };
+  const stripHtml = (html: string) => {
+    if (!html) return "";
+    return html.replace(/<[^>]*>/g, ""); // удаляем все теги
+  };
+  const getShortDescription = (html: string, maxChars = 50) => {
+    if (!html) return "";
+    const text = stripHtml(html);
+    return text.length > maxChars ? text.slice(0, maxChars) + "..." : text;
+  };
 
   return (
     <div className={styles["property-card"]}>
@@ -72,10 +81,15 @@ export default function PropertyCard({ property }: Props) {
 
       <div className={styles["property-content"]}>
         <h3 className={styles["property-title"]}>{property.title}</h3>
-        <p className={styles["property-deal-description"]}>
-          {property.discription}
+        <div
+          className={styles["property-description"]}
+          dangerouslySetInnerHTML={{
+            __html: getShortDescription(property.description),
+          }}
+        />
+        <p className={styles["property-location"]}>
+          район {property.district}{" "}
         </p>
-        <p className={styles["property-location"]}>{property.street} район</p>
         <p className={styles["property-price"]}>
           {formatPrice(
             property.prices?.[0]?.value,
@@ -95,9 +109,9 @@ export default function PropertyCard({ property }: Props) {
         </div>
 
         <div className={styles["property-footer"]}>
-          <span className={styles["property-type"]}>Квартира</span>
+          <span className={styles["property-type"]}>{property.type}</span>
           <span className={styles["property-date"]}>
-            {formatDate(property.сreatedAt)}
+            {formatDate(property.updatedAt)}
           </span>
         </div>
       </div>

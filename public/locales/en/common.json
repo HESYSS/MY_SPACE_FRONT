@@ -68,8 +68,8 @@
   "partnersTitle": "PARTNERS",
   "managersTitle": "MANAGERS",
   "ourTeamTitle": "OUR TEAM",
-  "activeTeamTitle": "Most active team members by sales",  
-  "allTeamTitle": "All Team",  
+  "activeTeamTitle": "Most active team members by sales",
+  "allTeamTitle": "All Team",
   "readMoreTitle": "READ MORE",
   "contactsTitle": "CONTACTS",
   "socialNetworksTitle": "Social Networks",
@@ -122,6 +122,10 @@
   "successTitle": "Application sent successfully!",
   "successMessage": "Our manager will contact you shortly to discuss the details. Thank you!",
   "district": "District",
+
+  "search_placeholder": "Search...",
+  "filter_button": "Filter"
+
   "loading": "Loading...",
   "error": "Error",
   "errorLoading": "Error on loading",
@@ -138,3 +142,4 @@
   "bedroomsCount": "Number of bedrooms",
   "area": "Area"
 }
+
