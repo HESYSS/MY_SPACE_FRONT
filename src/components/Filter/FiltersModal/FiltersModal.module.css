@@ -232,3 +232,36 @@
   color: #fff;
   border: none;
 }
+
+/* =========================
+   Currency Toggle
+   ========================= */
+.currencyContainer {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-left: auto; /* Pushes the container to the right */
+  background-color: #3b3b3b;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid #555;
+}
+
+.currencyContainer span {
+  color: #888;
+}
+
+.currencyButtonPrice {
+  background: transparent;
+  border: none;
+  color: #999;
+  font-weight: 500;
+  padding: 0.6rem 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.currencyButtonPrice.active {
+  background-color: #03b9b34d;
+  color: #fff;
+}

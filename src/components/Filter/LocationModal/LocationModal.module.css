@@ -210,3 +210,25 @@
 .inlineList .dropdownItem {
   flex: 0 1 auto;
 }
+
+/* =========================
+   Кнопка закрытия (крестик)
+   ========================= */
+.cancelButton {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: transparent;
+  border: none;
+  color: #ebebeb; /* Цвет, который подходит к вашему дизайну */
+  font-size: 24px; /* Размер, чтобы крестик был заметен */
+  cursor: pointer;
+  padding: 5px;
+  line-height: 1; /* Чтобы крестик не выходил за пределы кнопки */
+  transition: color 0.2s ease;
+  z-index: 1001;
+}
+
+.cancelButton:hover {
+  color: #03b9b3; /* Цвет при наведении */
+}
