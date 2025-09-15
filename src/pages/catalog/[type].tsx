@@ -80,8 +80,8 @@ export default function CatalogPage() {
           ...buildQueryFromFilters(standardizedLocation),
           ...buildQueryFromFilters(standardizedFilters),
         });
-
-        const res = await fetch(`http://localhost:3001/items?${params}`);
+        const backendUrl = process.env.REACT_APP_API_URL;
+        const res = await fetch(`${backendUrl}/items?${params}`);
         const data = await res.json();
 
         setProperties(data.items);
@@ -109,7 +109,8 @@ export default function CatalogPage() {
           ...buildQueryFromFilters(standardizedFilters),
         });
 
-        const res = await fetch(`http://localhost:3001/items/coords?${params}`);
+        const backendUrl = process.env.REACT_APP_API_URL;
+        const res = await fetch(`${backendUrl}/items/coords?${params}`);
 
         const data = await res.json();
 

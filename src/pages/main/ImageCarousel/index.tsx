@@ -35,7 +35,7 @@ interface CarouselSlide {
 const Carousel: FC = () => {
   const { t, i18n } = useTranslation("common");
   const currentLanguage = i18n.language;
-  
+
   const [images, setImages] = useState<SiteImage[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -43,7 +43,7 @@ const Carousel: FC = () => {
   const isMobile = useMediaQuery("(max-width: 768px)");
 
   // Логика карусели
-  const [activeIndex, setActiveIndex] = useState(0); 
+  const [activeIndex, setActiveIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(true);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -51,31 +51,48 @@ const Carousel: FC = () => {
 
   // Вспомогательная функция для получения URL по имени
   const getImageUrlByName = (name: string): string => {
-    const image = images.find(img => img.name === name);
+    const image = images.find((img) => img.name === name);
     return image ? image.url : "";
   };
 
   // Статический массив данных для слайдов. URL будут заполнены после загрузки.
   const baseSlidesData = [
-    { name: "Solomianskyi.png", text: "Солом'янський", text_en: "Solomianskyi" },
-    { name: "Podilskyi.png", text: "Подільський", text_en: "Podilskyi"  },
-    { name: "Pecherskyi.png", text: "Печерський", text_en: "Pecherskyi"  },
-    { name: "Dniprovskyi.png", text: "Дніпровський", text_en: "Dniprovskyi"  },
-    { name: "Shevchenkivskyi.png", text: "Шевченківський", text_en: "Shevchenkivskyi"  },
-    { name: "Holosiivskyi.png", text: "Голосіївський", text_en: "Holosiivskyi"  },
-    { name: "Obolonskyi.png", text: "Оболонський", text_en: "Obolonskyi"  },
-    { name: "Darnytskyi.png", text: "Дарницький", text_en: "Darnytskyi"  },
-    { name: "Desnianskyi.png", text: "Деснянський", text_en: "Desnianskyi"  },
-    { name: "Sviatoshynskyi.png", text: "Святошинський", text_en: "Sviatoshynskyi"  },
+    {
+      name: "Solomianskyi.png",
+      text: "Солом'янський",
+      text_en: "Solomianskyi",
+    },
+    { name: "Podilskyi.png", text: "Подільський", text_en: "Podilskyi" },
+    { name: "Pecherskyi.png", text: "Печерський", text_en: "Pecherskyi" },
+    { name: "Dniprovskyi.png", text: "Дніпровський", text_en: "Dniprovskyi" },
+    {
+      name: "Shevchenkivskyi.png",
+      text: "Шевченківський",
+      text_en: "Shevchenkivskyi",
+    },
+    {
+      name: "Holosiivskyi.png",
+      text: "Голосіївський",
+      text_en: "Holosiivskyi",
+    },
+    { name: "Obolonskyi.png", text: "Оболонський", text_en: "Obolonskyi" },
+    { name: "Darnytskyi.png", text: "Дарницький", text_en: "Darnytskyi" },
+    { name: "Desnianskyi.png", text: "Деснянський", text_en: "Desnianskyi" },
+    {
+      name: "Sviatoshynskyi.png",
+      text: "Святошинський",
+      text_en: "Sviatoshynskyi",
+    },
   ];
 
   // Динамическое создание массива слайдов с загруженными URL-адресами
-  const slidesData: CarouselSlide[] = baseSlidesData.map(slide => ({
+  const slidesData: CarouselSlide[] = baseSlidesData.map((slide) => ({
     ...slide,
-    src: getImageUrlByName(slide.name)
+    src: getImageUrlByName(slide.name),
   }));
 
-  const loopSlides = slidesData.length > 0 ? [...slidesData, ...slidesData, ...slidesData] : [];
+  const loopSlides =
+    slidesData.length > 0 ? [...slidesData, ...slidesData, ...slidesData] : [];
   const layerGap = -40;
   const mobileLayerGap = -15;
 
@@ -105,7 +122,8 @@ const Carousel: FC = () => {
   useEffect(() => {
     const fetchImages = async () => {
       try {
-        const response = await fetch("http://localhost:3001/images");
+        const backendUrl = process.env.REACT_APP_API_URL;
+        const response = await fetch(`${backendUrl}/images`);
         if (response.ok) {
           const data: SiteImage[] = await response.json();
           setImages(data);
@@ -126,7 +144,7 @@ const Carousel: FC = () => {
 
   useEffect(() => {
     if (slidesData.length === 0) return;
-    
+
     if (!containerRef.current) return;
 
     if (activeIndex <= slidesData.length - 1) {
@@ -143,7 +161,7 @@ const Carousel: FC = () => {
       setIsTransitioning(true);
     }
   }, [activeIndex, slidesData]);
-  
+
   useEffect(() => {
     startTimer();
     return () => {
@@ -236,7 +254,8 @@ const Carousel: FC = () => {
 
     let translateX = 0;
     for (let i = 1; i <= absOffset; i++) {
-      let prevW = 0, currW = 0;
+      let prevW = 0,
+        currW = 0;
       if (isMobile) {
         prevW = i === 1 ? 180 : 140;
         currW = i === 1 ? 140 : 0;
@@ -249,7 +268,7 @@ const Carousel: FC = () => {
       }
       translateX += (prevW + currW) / 2 + currentLayerGap;
     }
-    
+
     if (offset < 0) translateX = -translateX;
     translateX -= width / 2;
 
@@ -259,7 +278,7 @@ const Carousel: FC = () => {
   if (loading) {
     return <div>Загрузка...</div>;
   }
-  
+
   // Если данных нет, ничего не показываем
   if (slidesData.length === 0) {
     return null;
@@ -317,7 +336,7 @@ const Carousel: FC = () => {
         {loopSlides.map((slide, idx) => {
           const { width, height, opacity, zIndex, translateX, rotateY } =
             getPositionStyle(idx);
-          
+
           if ((isTablet || isMobile) && Math.abs(idx - activeIndex) > 1) {
             return null;
           }
@@ -325,12 +344,15 @@ const Carousel: FC = () => {
           if (opacity === 0) return null;
 
           const isCenter = zIndex === 10;
-          const slideText = currentLanguage === "en" ? slide.text_en : slide.text;
+          const slideText =
+            currentLanguage === "en" ? slide.text_en : slide.text;
 
           return (
             <div
               key={idx}
-              className={`${styles.slide} ${isCenter ? styles.centerSlide : ''}`}
+              className={`${styles.slide} ${
+                isCenter ? styles.centerSlide : ""
+              }`}
               style={{
                 width,
                 height,
@@ -350,11 +372,9 @@ const Carousel: FC = () => {
                   <div className={styles.textOverlay} />
                   <div className={styles.slideTextContainer}>
                     <span className={styles.slideSubtitle}>
-                       {t('district')}
+                      {t("district")}
                     </span>
-                    <span className={styles.slideTitle}>
-                       {slideText}
-                    </span>
+                    <span className={styles.slideTitle}>{slideText}</span>
                   </div>
                 </>
               )}

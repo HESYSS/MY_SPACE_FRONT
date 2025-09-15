@@ -143,7 +143,13 @@ export default function LocationModal({
 
     async function fetchLocationData() {
       try {
-        const res = await fetch("http://localhost:3001/items/location");
+        const backendUrl = process.env.REACT_APP_API_URL;
+        const res = await fetch(`${backendUrl}/items/location`, {
+          headers: {
+            Accept: "application/json",
+            "ngrok-skip-browser-warning": "true",
+          },
+        });
         const data = await res.json();
         setLocationData(data);
         localStorage.setItem(DATA_STORAGE_KEY, JSON.stringify(data));
@@ -514,8 +520,12 @@ export default function LocationModal({
       )}
 
       <div className={styles.modalActions}>
-        <button onClick={onClose} className={styles.cancelButton}>
-          Скасувати
+        <button
+          onClick={onClose}
+          className={styles.cancelButton}
+          aria-label="Скасувати"
+        >
+          &times;
         </button>
       </div>
     </div>

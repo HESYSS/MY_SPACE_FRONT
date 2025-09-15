@@ -159,7 +159,8 @@ const AdminPage: React.FC = () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch("http://localhost:3001/employee", {
+      const backendUrl = process.env.REACT_APP_API_URL;
+      const response = await fetch(`${backendUrl}/employee`, {
         headers: getHeadersWithAuth(),
       });
       if (response.ok) {
@@ -180,7 +181,8 @@ const AdminPage: React.FC = () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch("http://localhost:3001/offers", {
+      const backendUrl = process.env.REACT_APP_API_URL;
+      const response = await fetch(`${backendUrl}/offers`, {
         headers: getHeadersWithAuth(),
       });
       if (response.ok) {
@@ -201,7 +203,8 @@ const AdminPage: React.FC = () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch("http://localhost:3001/images", {
+      const backendUrl = process.env.REACT_APP_API_URL;
+      const response = await fetch(`${backendUrl}/images`, {
         headers: getHeadersWithAuth(),
       });
       if (response.ok) {
@@ -233,7 +236,8 @@ const AdminPage: React.FC = () => {
     try {
       const token = localStorage.getItem("token");
       if (!token) throw new Error("Токен не знайдено.");
-      const response = await fetch("http://localhost:3001/images/upload", {
+      const backendUrl = process.env.REACT_APP_API_URL;
+      const response = await fetch(`${backendUrl}/images/upload`, {
         method: "POST",
         headers: { Authorization: `Bearer ${token}` },
         body: formData,
@@ -272,8 +276,9 @@ const AdminPage: React.FC = () => {
     try {
       const token = localStorage.getItem("token");
       if (!token) throw new Error("Токен не знайдено.");
+      const backendUrl = process.env.REACT_APP_API_URL;
       const response = await fetch(
-        `http://localhost:3001/images/${selectedImageToUpdate.id}`,
+        `${backendUrl}/images/${selectedImageToUpdate.id}`,
         {
           method: "PATCH",
           headers: { Authorization: `Bearer ${token}` },
@@ -310,7 +315,8 @@ const AdminPage: React.FC = () => {
     try {
       const token = localStorage.getItem("token");
       if (!token) throw new Error("Токен не знайдено.");
-      const response = await fetch(`http://localhost:3001/images/${imageId}`, {
+      const backendUrl = process.env.REACT_APP_API_URL;
+      const response = await fetch(`${backendUrl}/images/${imageId}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -340,14 +346,12 @@ const AdminPage: React.FC = () => {
     }
 
     try {
-      const response = await fetch(
-        `http://localhost:3001/offers/${offerId}/status`,
-        {
-          method: "PATCH",
-          headers: getHeadersWithAuth(),
-          body: JSON.stringify({ status: newStatus }),
-        }
-      );
+      const backendUrl = process.env.REACT_APP_API_URL;
+      const response = await fetch(`${backendUrl}/offers/${offerId}/status`, {
+        method: "PATCH",
+        headers: getHeadersWithAuth(),
+        body: JSON.stringify({ status: newStatus }),
+      });
 
       if (response.ok) {
         alert("Статус заявки успішно змінено!");
@@ -392,8 +396,8 @@ const AdminPage: React.FC = () => {
 
       const token = localStorage.getItem("token");
       if (!token) throw new Error("Токен не знайдено.");
-
-      const response = await fetch("http://localhost:3001/employee/create", {
+      const backendUrl = process.env.REACT_APP_API_URL;
+      const response = await fetch(`${backendUrl}/employee/create`, {
         method: "POST",
         // Заголовок 'Content-Type' не потрібен для FormData, браузер сам його встановлює
         headers: {
@@ -446,13 +450,11 @@ const AdminPage: React.FC = () => {
       return;
     }
     try {
-      const response = await fetch(
-        `http://localhost:3001/employee/${employeeId}`,
-        {
-          method: "DELETE",
-          headers: getHeadersWithAuth(),
-        }
-      );
+      const backendUrl = process.env.REACT_APP_API_URL;
+      const response = await fetch(`${backendUrl}/employee/${employeeId}`, {
+        method: "DELETE",
+        headers: getHeadersWithAuth(),
+      });
       if (response.ok) {
         alert("Працівника успішно видалено!");
         fetchEmployees();
@@ -483,7 +485,8 @@ const AdminPage: React.FC = () => {
     setLoading(true);
     setAuthError(null);
     try {
-      const response = await fetch("http://localhost:3001/admin/auth/login", {
+      const backendUrl = process.env.REACT_APP_API_URL;
+      const response = await fetch(`${backendUrl}/admin/auth/login`, {
         method: "POST",
         headers: getHeadersWithAuth(),
         body: JSON.stringify({ username, password }),
@@ -525,7 +528,8 @@ const AdminPage: React.FC = () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch("http://localhost:3001/admin/admins", {
+      const backendUrl = process.env.REACT_APP_API_URL;
+      const response = await fetch(`${backendUrl}/admin/admins`, {
         headers: getHeadersWithAuth(),
       });
       if (response.ok) {
@@ -554,7 +558,8 @@ const AdminPage: React.FC = () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch("http://localhost:3001/admin/create", {
+      const backendUrl = process.env.REACT_APP_API_URL;
+      const response = await fetch(`${backendUrl}/admin/create`, {
         method: "POST",
         headers: getHeadersWithAuth(),
         body: JSON.stringify({

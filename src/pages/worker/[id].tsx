@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import Image from "next/image";
 import arrowRight from "../../../public/icons/line.svg";
 import styles from "./worker.module.css";
-import { useModal } from '../../hooks/useModal';
+import { useModal } from "../../hooks/useModal";
 
 // Обновленный интерфейс для данных работника с полем photoUrl
 interface Employee {
@@ -36,7 +36,8 @@ const EmployeePage = () => {
   useEffect(() => {
     const fetchEmployee = async () => {
       try {
-        const response = await fetch(`http://localhost:3001/employee/${id}`);
+        const backendUrl = process.env.REACT_APP_API_URL;
+        const response = await fetch(`${backendUrl}/employee/${id}`);
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
@@ -59,7 +60,11 @@ const EmployeePage = () => {
   }
 
   if (error) {
-    return <div>{t("error")}: {error}</div>;
+    return (
+      <div>
+        {t("error")}: {error}
+      </div>
+    );
   }
 
   if (!employee) {
@@ -97,9 +102,7 @@ const EmployeePage = () => {
         {/* Title block */}
         <div className={styles.titleArea}>
           <div className={styles.titleLine}></div>
-          <h2 className={styles.readMoreTitle}>
-            {t("readMoreTitle")}
-          </h2>
+          <h2 className={styles.readMoreTitle}>{t("readMoreTitle")}</h2>
         </div>
         {/* Employee information block wrapped in a new container */}
         <div className={styles.contactsBlockWrapper}>
@@ -131,24 +134,17 @@ const EmployeePage = () => {
                 <div className={styles.line17}></div>
                 <div className={styles.additionalInfo}>
                   <div className={styles.infoSection}>
-                    <h4 className={styles.infoTitle}>
-                      {t("experience")}
-                    </h4>
+                    <h4 className={styles.infoTitle}>{t("experience")}</h4>
                     <p className={styles.infoText}>
-                      {employee.experienceYears}{" "}
-                      {t("years")}
+                      {employee.experienceYears} {t("years")}
                     </p>
                   </div>
                   <div className={styles.infoSection}>
-                    <h4 className={styles.infoTitle}>
-                      {t("profile")}
-                    </h4>
+                    <h4 className={styles.infoTitle}>{t("profile")}</h4>
                     <p className={styles.infoText}>{currentData.profile}</p>
                   </div>
                   <div className={styles.infoSection}>
-                    <h4 className={styles.infoTitle}>
-                      {t("aboutMe")}
-                    </h4>
+                    <h4 className={styles.infoTitle}>{t("aboutMe")}</h4>
                     <p className={styles.infoText}>{currentData.aboutMe}</p>
                   </div>
                 </div>
@@ -156,41 +152,45 @@ const EmployeePage = () => {
             </div>
           </div>
         </div>
-        
+
         {/* Исправленный блок сотрудничества с обработчиками onClick */}
         <div className={styles.coworking}>
-          <h3 className={styles.callToAction}>{t('consultationCallToAction')}</h3>
+          <h3 className={styles.callToAction}>
+            {t("consultationCallToAction")}
+          </h3>
           <div className={styles.frame89}>
             <div className={styles.frame88}>
               {/* Блок для Sellers/Landlords */}
-              <div 
-                className={styles.optionRow} 
-                onClick={() => openModal('forSellers')}
+              <div
+                className={styles.optionRow}
+                onClick={() => openModal("forSellers")}
               >
                 <div className={styles.frame87}>
                   <div className={styles.line16}></div>
                   <div className={styles.frame86}>
-                    <p className={styles.optionText}>{t('forSellersLandlords')}</p>
+                    <p className={styles.optionText}>
+                      {t("forSellersLandlords")}
+                    </p>
                     <Image
                       src={arrowRight}
-                      alt={t('arrowRightAlt')}
+                      alt={t("arrowRightAlt")}
                       className={styles.arrowIcon}
                     />
                   </div>
                 </div>
               </div>
               {/* Блок для Buyers/Tenants */}
-              <div 
-                className={styles.optionRow} 
-                onClick={() => openModal('forBuyers')}
+              <div
+                className={styles.optionRow}
+                onClick={() => openModal("forBuyers")}
               >
                 <div className={styles.frame85}>
                   <div className={styles.line18}></div>
                   <div className={styles.frame84}>
-                    <p className={styles.optionText}>{t('forBuyersTenants')}</p>
+                    <p className={styles.optionText}>{t("forBuyersTenants")}</p>
                     <Image
                       src={arrowRight}
-                      alt={t('arrowRightAlt')}
+                      alt={t("arrowRightAlt")}
                       className={styles.arrowIcon}
                     />
                   </div>

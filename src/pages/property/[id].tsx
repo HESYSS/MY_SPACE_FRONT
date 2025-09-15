@@ -59,7 +59,9 @@ export default function PropertyPage() {
     const fetchProperty = async () => {
       setLoading(true);
       try {
-        const res = await fetch(`http://localhost:3001/items/${id}`);
+        const backendUrl = process.env.REACT_APP_API_URL;
+
+        const res = await fetch(`${backendUrl}/items/${id}`);
         if (!res.ok) throw new Error(t("objectNotFound"));
         const data: Property = await res.json();
         setProperty(data);

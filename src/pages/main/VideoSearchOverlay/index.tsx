@@ -7,9 +7,11 @@ const VideoSearchOverlay = () => {
   const { t } = useTranslation("common");
   const videoRef = useRef(null);
   const [videoUrl, setVideoUrl] = useState(null); // Состояние для хранения URL видео
-  
+
   // URL вашего API-маршрута для получения данных о видео
-  const apiUrl = "http://localhost:3001/images/videoMain.mp4";
+  const backendUrl = process.env.REACT_APP_API_URL;
+
+  const apiUrl = `${backendUrl}/images/videoMain.mp4`;
 
   useEffect(() => {
     // Асинхронная функция для выполнения запроса
@@ -32,18 +34,16 @@ const VideoSearchOverlay = () => {
         {videoUrl ? (
           <video ref={videoRef} className={styles.video} autoPlay loop muted>
             <source src={videoUrl} type="video/mp4" />
-            {t('videoNotSupported')}
+            {t("videoNotSupported")}
           </video>
         ) : (
           // Можно показать загрузчик или заглушку, пока видео загружается
-          <div className={styles.videoPlaceholder}>
-            Loading video...
-          </div>
+          <div className={styles.videoPlaceholder}>Loading video...</div>
         )}
 
         {/* Заголовок */}
         <div className={styles.heroTitleContainer}>
-          <h1 className={styles.heroTitle}>{t('heroTitle')}</h1>
+          <h1 className={styles.heroTitle}>{t("heroTitle")}</h1>
         </div>
       </div>
 
@@ -52,36 +52,36 @@ const VideoSearchOverlay = () => {
         <div className={styles.searchForm}>
           {/* Тип послуги */}
           <div className={styles.dropdown}>
-            <label htmlFor="serviceType">{t('serviceTypeLabel')}</label>
+            <label htmlFor="serviceType">{t("serviceTypeLabel")}</label>
             <select id="serviceType">
-              <option>{t('serviceRent')}</option>
-              <option>{t('serviceSale')}</option>
-              <option>{t('serviceDaily')}</option>
+              <option>{t("serviceRent")}</option>
+              <option>{t("serviceSale")}</option>
+              <option>{t("serviceDaily")}</option>
             </select>
           </div>
 
           {/* Категорія */}
           <div className={styles.dropdown}>
-            <label htmlFor="category">{t('categoryLabel')}</label>
+            <label htmlFor="category">{t("categoryLabel")}</label>
             <select id="category">
-              <option>{t('categoryResidential')}</option>
-              <option>{t('categoryCommercial')}</option>
+              <option>{t("categoryResidential")}</option>
+              <option>{t("categoryCommercial")}</option>
             </select>
           </div>
 
           {/* Область */}
           <div className={styles.dropdown}>
-            <label htmlFor="region">{t('regionLabel')}</label>
+            <label htmlFor="region">{t("regionLabel")}</label>
             <select id="region">
-              <option>{t('regionKyiv')}</option>
-              <option>{t('regionOdesa')}</option>
-              <option>{t('regionLviv')}</option>
+              <option>{t("regionKyiv")}</option>
+              <option>{t("regionOdesa")}</option>
+              <option>{t("regionLviv")}</option>
             </select>
           </div>
 
           {/* Кнопка поиска */}
           <div className={styles.searchBtnWrapper}>
-            <button className={styles.searchButton}>{t('searchButton')}</button>
+            <button className={styles.searchButton}>{t("searchButton")}</button>
           </div>
         </div>
       </div>
