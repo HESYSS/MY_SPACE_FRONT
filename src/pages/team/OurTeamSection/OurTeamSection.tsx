@@ -56,9 +56,6 @@ const OurTeamSection = () => {
     return <div>Ошибка: {error}</div>;
   }
   
-  const firstRow = employees.slice(0, 4);
-  const secondRow = employees.slice(4, 8);
-
   return (
     <div className={styles.container}>
       <div className={styles.titleSection}>
@@ -72,88 +69,46 @@ const OurTeamSection = () => {
         {employees.length === 0 ? (
           <p className={styles.emptyMessage}>Список активных сотрудников пуст.</p>
         ) : (
-          <>
-            <div className={styles.teamRow}>
-              {firstRow.map((member) => {
-                const currentLanguage = i18n.language;
-                const firstName = currentLanguage === 'en' && member.firstNameEn ? member.firstNameEn : member.firstName;
-                const lastName = currentLanguage === 'en' && member.lastNameEn ? member.lastNameEn : member.lastName;
-                const role = currentLanguage === 'en' && member.positionEn ? member.positionEn : member.position;
+          // ЕДИНЫЙ КОНТЕЙНЕР ДЛЯ ВСЕХ КАРТОЧЕК
+          <div className={styles.teamGrid}> 
+            {employees.map((member) => {
+              const currentLanguage = i18n.language;
+              const firstName = currentLanguage === 'en' && member.firstNameEn ? member.firstNameEn : member.firstName;
+              const lastName = currentLanguage === 'en' && member.lastNameEn ? member.lastNameEn : member.lastName;
+              const role = currentLanguage === 'en' && member.positionEn ? member.positionEn : member.position;
 
-                // ОПРЕДЕЛЯЕМ ИСТОЧНИК ИЗОБРАЖЕНИЯ
-                const imageUrl = member.photoUrl || defaultTeamImage.src;
+              const imageUrl = member.photoUrl || defaultTeamImage.src;
 
-                return (
-                  <div className={styles.memberCard} key={member.id}>
-                    <div className={styles.imageWrapper}>
-                      <Image 
-                        src={imageUrl} // <-- ИСПОЛЬЗУЕМ РЕАЛЬНЫЙ URL ИЛИ ЗАГЛУШКУ
-                        alt={`${firstName} ${lastName}`} 
-                        className={styles.memberImage} 
-                        fill
-                      />
-                      <div className={styles.imageOverlay}></div>
-                    </div>
-                    <div className={styles.memberInfo}>
-                      <h4 className={styles.memberName}>
-                        {firstName}
-                        <br />
-                        {lastName}
-                      </h4>
-                      <Link href={`/worker/${member.id}`} className={styles.memberRole}>
-                        <Image 
-                          src={arrow}
-                          alt="Arrow"
-                          className={styles.arrow}
-                        />
-                        <p className={styles.roleText}>{role}</p>
-                      </Link>
-                    </div>
+              return (
+                <div className={styles.memberCard} key={member.id}>
+                  <div className={styles.imageWrapper}>
+                    <Image 
+                      src={imageUrl}
+                      alt={`${firstName} ${lastName}`} 
+                      className={styles.memberImage} 
+                      fill
+                    />
+                    <div className={styles.imageOverlay}></div>
                   </div>
-                );
-              })}
-            </div>
-            <div className={styles.teamRow}>
-              {secondRow.map((member) => {
-                const currentLanguage = i18n.language;
-                const firstName = currentLanguage === 'en' && member.firstNameEn ? member.firstNameEn : member.firstName;
-                const lastName = currentLanguage === 'en' && member.lastNameEn ? member.lastNameEn : member.lastName;
-                const role = currentLanguage === 'en' && member.positionEn ? member.positionEn : member.position;
-
-                // ОПРЕДЕЛЯЕМ ИСТОЧНИК ИЗОБРАЖЕНИЯ
-                const imageUrl = member.photoUrl || defaultTeamImage.src;
-
-                return (
-                  <div className={styles.memberCard} key={member.id}>
-                    <div className={styles.imageWrapper}>
+                  <div className={styles.memberInfo}>
+                    <h4 className={styles.memberName}>
+                      {firstName}
+                      <br />
+                      {lastName}
+                    </h4>
+                    <Link href={`/worker/${member.id}`} className={styles.memberRole}>
                       <Image 
-                        src={imageUrl} // <-- ИСПОЛЬЗУЕМ РЕАЛЬНЫЙ URL ИЛИ ЗАГЛУШКУ
-                        alt={`${firstName} ${lastName}`} 
-                        className={styles.memberImage} 
-                        fill
+                        src={arrow}
+                        alt="Arrow"
+                        className={styles.arrow}
                       />
-                      <div className={styles.imageOverlay}></div>
-                    </div>
-                    <div className={styles.memberInfo}>
-                      <h4 className={styles.memberName}>
-                        {firstName}
-                        <br />
-                        {lastName}
-                      </h4>
-                      <Link href={`/worker/${member.id}`} className={styles.memberRole}>
-                        <Image 
-                          src={arrow}
-                          alt="Arrow"
-                          className={styles.arrow}
-                        />
-                        <p className={styles.roleText}>{role}</p>
-                      </Link>
-                    </div>
+                      <p className={styles.roleText}>{role}</p>
+                    </Link>
                   </div>
-                );
-              })}
-            </div>
-          </>
+                </div>
+              );
+            })}
+          </div>
         )}
       </div>
     </div>

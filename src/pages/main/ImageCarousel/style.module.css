@@ -74,8 +74,11 @@
   font-size: 24px;
   font-weight: bold;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+  text-transform: uppercase;
+  font-family: Raleway;
+  font-weight: 700;
+  font-style: Bold;
 }
-
 
 /*
  * Стили стрелок

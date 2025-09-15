@@ -1,10 +1,11 @@
 // PropertyPage.tsx
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import Image from "next/image";
 import styles from "./PropertyPage.module.css";
 import PropertyImagesGallery from "./PropertyImagesGallery/PropertyImagesGallery";
 import MapWrapper from "@/components/Map/MapWrapper";
+import { useModal } from '../../hooks/useModal';
+import { useTranslation } from "react-i18next";
 
 interface Property {
   id: number;
@@ -44,6 +45,8 @@ interface PropertyImage {
 export default function PropertyPage() {
   const router = useRouter();
   const { id } = router.query;
+  const { openModal } = useModal();
+  const { t } = useTranslation("common");
 
   const [property, setProperty] = useState<Property | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -55,12 +58,11 @@ export default function PropertyPage() {
       setLoading(true);
       try {
         const res = await fetch(`http://localhost:3001/items/${id}`);
-        if (!res.ok) throw new Error("Обʼєкт не знайдено");
+        if (!res.ok) throw new Error(t('objectNotFound'));
         const data: Property = await res.json();
-
         setProperty(data);
       } catch (err: any) {
-        setError(err.message || "Помилка при завантаженні");
+        setError(err.message || t('errorLoading'));
       } finally {
         setLoading(false);
       }
@@ -68,94 +70,74 @@ export default function PropertyPage() {
     fetchProperty();
   }, [id]);
 
-  if (loading) return <p>Завантаження...</p>;
-  if (error) return <p>Помилка: {error}</p>;
-  if (!property) return <p>Обʼєкт не знайдено</p>;
+  if (loading) return <p>{t('loading')}</p>;
+  if (error) return <p>{t('error')}: {error}</p>;
+  if (!property) return <p>{t('objectNotFound')}</p>;
 
   const formattedPrice = property.prices[0]?.value
-    ? `${property.prices[0].value.toLocaleString()} ${
-        property.prices[0].currency
-      }`
+    ? `${property.prices[0].value.toLocaleString()} ${property.prices[0].currency}`
     : "N/A";
 
-  const street = property.location.street;
-  const city = property.location.city;
-  const propertyType = property.type;
+  const { street, city, lat, lng } = property.location;
   const description = property.description;
 
-  const mapCoords = {
-    lat: Number(property.location.lat),
-    lng: Number(property.location.lng),
-  };
-  console.log("Property characteristics:", mapCoords);
+  const mapCoords = { lat: Number(lat), lng: Number(lng) };
+
   const characteristicFeatures = Object.entries(property.characteristics)
-    .filter(
-      ([key, value]) => value !== null && value !== undefined && value !== ""
-    )
-    .map(([key, value]) => ({
-      name: key,
-      value: value,
-    }));
+    .filter(([key, value]) => value !== null && value !== undefined && value !== "")
+    .map(([key, value]) => ({ name: key, value }));
 
-  const bedrooms = "2 спальні";
-  const area = "1500 м²";
+  const bedrooms = "2 спальні"; // временно, можно брать из характеристик
+  const area = "1500 м²"; // временно, можно брать из характеристик
 
+  // Объединяем базовые и пользовательские характеристики
   const baseFeatures = [
-    { name: "Вид об'єкта", value: property.type },
-    { name: "Операція", value: property.deal },
+    { name: t('propertyType'), value: property.category },
+    { name: t('objectView'), value: property.type },
+    { name: t('deal'), value: property.deal },
+    { name: t('street'), value: street },
+    { name: t('bedroomsCount'), value: bedrooms },
+    { name: t('area'), value: area },
   ];
   const features = [...baseFeatures, ...characteristicFeatures];
+
   return (
     <div className={styles.propertyPage}>
       <div className={styles.glowingEllipse}></div>
       <main className={styles.contentWrapper}>
         <section className={styles.mainInfoSection}>
           <div className={styles.imageGallery}>
-            <PropertyImagesGallery
-              images={property.images}
-              onImageClick={() => {}}
-            />
+            <PropertyImagesGallery images={property.images} onImageClick={() => {}} />
           </div>
           <div className={styles.infoSection}>
             <h1 className={styles.title}>{property.title}</h1>
-            <p className={styles.location}>
-              {street}, {city}
-            </p>
-            <p className={styles.type}>{propertyType}</p>
+            <p className={styles.location}>{street}, {city}</p>
             <div className={styles.featuresRow}>
               <div className={styles.featureItem}>
-                <Image
-                  src="/icons/bed.svg"
-                  alt="Спальни"
-                  width={20}
-                  height={20}
-                />
+                <span role="img" aria-label={t('bedroomsAlt')}>🛏️</span>
                 <span>{bedrooms}</span>
               </div>
               <div className={styles.featureItem}>
-                <Image
-                  src="/icons/area.svg"
-                  alt="Площадь"
-                  width={20}
-                  height={20}
-                />
+                <span role="img" aria-label={t('areaAlt')}>📏</span>
                 <span>{area}</span>
               </div>
             </div>
             <div className={styles.priceAndButton}>
               <p className={styles.price}>{formattedPrice}</p>
-              <button className={styles.contactButton}>
-                ОТРИМАТИ КОНСУЛЬТАЦІЮ
+              <button
+                className={styles.contactButton}
+                onClick={() => openModal('forBuyers')}
+              >
+                {t('getPropertyConsultation')}
               </button>
             </div>
           </div>
         </section>
 
-        {/* Измененная разметка для правильного порядка на планшетах */}
         <div className={styles.additionalInfo}>
           <div className={styles.detailsContainer}>
             <div className={styles.sectionBlock}>
-              <h2 className={styles.sectionTitle}>Особливості</h2>
+              <h2 className={styles.sectionTitle}>{t('featuresTitle')}</h2>
               <ul className={styles.featuresList}>
                 {features.map((feature, index) => (
                   <li key={index}>
@@ -165,25 +147,14 @@ export default function PropertyPage() {
               </ul>
             </div>
             <div className={styles.sectionBlock}>
-              <h2 className={styles.sectionTitle}>Опис</h2>
-              <p
-                className={styles["property-description"]}
-                dangerouslySetInnerHTML={{ __html: description }}
-              />
+              <h2 className={styles.sectionTitle}>{t('descriptionTitle')}</h2>
+              <p className={styles.description}>{description}</p>
             </div>
           </div>
           <div className={styles.mapColumn}>
             {mapCoords.lat && mapCoords.lng && (
               <MapWrapper
-                properties={[
-                  {
-                    id: property.id,
-                    title: property.title,
-
-                    lat: mapCoords.lat,
-                    lng: mapCoords.lng,
-                  },
-                ]}
+                properties={[{ id: property.id, title: property.title, lat: mapCoords.lat, lng: mapCoords.lng }]}
               />
             )}
           </div>

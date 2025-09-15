@@ -1,9 +1,0 @@
-.mainDiv {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 1200px;
-  height: auto;
-  background-color: black;
-  margin-left: 365px;
-}

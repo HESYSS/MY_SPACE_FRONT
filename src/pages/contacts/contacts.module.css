@@ -3,13 +3,13 @@
   position: relative;
   overflow: hidden;
   background-color: #0A0A0A;
-  padding: 20px 0; /* Отступы по бокам */
+  padding: 20px 0;
 }
 
 /* Овал теперь позиционируется относительно контейнера и масштабируется */
 .glowingOval {
   position: absolute;
-  width: 70vw; /* Используем vw для масштабирования */
+  width: 70vw;
   max-width: 872px;
   height: 30vw;
   max-height: 411px;
@@ -18,7 +18,7 @@
   background: rgba(3, 185, 179, 0.5);
   filter: blur(250px);
   z-index: 1;
-  transform: translateX(50%); /* Центрируем по горизонтали */
+  transform: translateX(50%);
 }
 
 /* Контейнер заголовка */
@@ -27,12 +27,12 @@
   flex-direction: row;
   align-items: center;
   gap: 30px;
-  max-width: 1200px; /* Ограничиваем максимальную ширину */
-  width: 90%; /* Гибкая ширина */
+  max-width: 1200px;
+  width: 90%;
   height: auto;
   position: relative;
   z-index: 2;
-  margin: 80px auto; /* Центрируем */
+  margin: 80px auto;
 }
 
 .titleLine {
@@ -51,7 +51,7 @@
   text-transform: uppercase;
   color: #EBEBEB;
   margin: 0;
-  flex-shrink: 0; /* Запрещаем сжиматься */
+  flex-shrink: 0;
 }
 
 /* Обертка для блока контактов */
@@ -74,7 +74,7 @@
   flex-direction: column;
   align-items: flex-start;
   padding: 40px;
-  gap: 30px; /* Увеличенный отступ для читаемости */
+  gap: 30px;
   width: 100%;
   height: 100%;
   background: #0A0A0A;
@@ -94,7 +94,7 @@
   display: flex;
   flex-direction: row;
   align-items: flex-start;
-  flex-wrap: wrap; /* Позволяем элементам переноситься */
+  flex-wrap: wrap;
   gap: 20px;
   width: 100%;
 }
@@ -105,7 +105,7 @@
   align-items: flex-start;
   padding: 0px;
   gap: 20px;
-  flex: 1 1 250px; /* Гибкость: минимум 250px */
+  flex: 1 1 250px;
 }
 
 .contactIconContainer {
@@ -334,64 +334,226 @@
 .arrowIcon {
   width: 26px;
   height: 26px;
-  flex-shrink: 0; /* Запрещаем сжиматься */
+  flex-shrink: 0;
 }
 
 /* -------------------------------------------------------------------------- */
 /* Media Queries */
 /* -------------------------------------------------------------------------- */
 
-@media (min-width: 769px) and (max-width: 1800px) {
+@media (min-width: 769px) and (max-width: 1300px) {
+  .titleArea {
+    width: 90%;
+    margin: 60px auto;
+  }
+
+  .readMoreTitle {
+    font-size: 40px;
+    line-height: 48px;
+  }
+
+  .contactsBlockWrapper {
+    width: 90%;
+    background: linear-gradient(90deg, #FFFFFF 0%, #000000 50%, #000000 100%);
+  }
+
+  .contactsBlock {
+    padding: 30px;
+    gap: 20px;
+  }
+  
+  /* Контакты: сетка 2x2 */
+  .contactsText {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+  
+  /* Нижний ряд: располагаем колонками */
+  .bottomRow {
+    flex-direction: column;
+    gap: 30px;
+  }
+
+  .contactTextSection,
+  .workHours {
+    width: 100%;
+    padding: 0;
+  }
+
+  .contactTextSection {
+    flex: none;
+  }
+  
+  .workHours {
+    padding-left: 0;
+    flex: none;
+  }
+
+  /* Блок "Консультации" */
   .coworking {
     flex-direction: row;
+    flex-wrap: wrap;
     justify-content: center;
     align-items: flex-start;
-    gap: 20px;
-    flex-wrap: nowrap;
+    width: 90%;
+    margin-bottom: 60px;
   }
 
   .callToAction {
     font-size: 36px;
-    flex: 1 1 300px;
-    max-width: 400px;
     line-height: 1.2;
-    margin-top: 20px;
+    flex: 1 1 300px;
+    text-align: left;
+    margin-top: 10px;
   }
 
   .frame89 {
-    display: flex;
-    flex-direction: column;
     padding: 20px;
     flex: 1 1 350px;
-    max-width: 450px;
-    height: auto;
-    gap: 10px;
-  }
-  
-  /* ЭТОТ БЛОК НУЖНО ИЗМЕНИТЬ */
-  .frame88 {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start; /* Изменяем на flex-start для выравнивания по левому краю */
-    padding: 0px;
-    gap: 40px;
-    width: 100%;
-    height: auto;
   }
 
   .optionText {
     font-size: 20px;
     line-height: 1.5;
   }
-  
+
   .arrowIcon {
-  width: 18px;
-  height: 18px;
-  flex-shrink: 0; /* Запрещаем сжиматься */
-  margin-left: 40px;
+    width: 20px;
+    height: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Заголовки и контейнеры */
+  .titleArea {
+    flex-direction: column-reverse;
+    align-items: flex-end;
+    gap: 10px;
+    width: 90%;
+    margin: 40px auto;
+  }
+
+  .readMoreTitle {
+    font-size: 32px;
+    line-height: 38px;
+    text-align: right;
+    width: 100%;
   }
 
   .contactsBlockWrapper {
-  background: linear-gradient(90deg, #FFFFFF 0%, #000000 50%, #000000 100%);
-}
+    width: 90%;
+    background: linear-gradient(90deg, #FFFFFF 0%, #000000 50%, #000000 100%);
+  }
+  
+  .contactsBlock {
+    padding: 20px;
+    gap: 20px;
+  }
+
+  .info {
+    gap: 20px;
+  }
+
+  /* Контакты: теперь сетка 2x2 */
+  .contactsText {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  
+  .contactItem {
+    width: 100%;
+    flex: none;
+  }
+
+  /* Уменьшаем шрифты для вмещения в две колонки */
+  .contactTitle {
+    font-size: 16px;
+    line-height: 19px;
+  }
+
+  .contactInfo,
+  .socialText {
+    font-size: 12px;
+    line-height: 14px;
+  }
+  
+  /* Нижний ряд: вертикальный список */
+  .bottomRow {
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .contactTextSection {
+    width: 100%;
+    padding: 0;
+    flex: none;
+  }
+
+  .contactInfoSmall {
+    font-size: 10px;
+    line-height: 12px;
+  }
+  
+  .workHours {
+    width: 100%;
+    padding: 0;
+    flex: none;
+  }
+  
+  .workHours .line {
+    width: 100%;
+  }
+
+  .workDay,
+  .workTime {
+    font-size: 12px;
+    line-height: 14px;
+  }
+
+  /* Блок "Консультации" */
+  .coworking {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap; /* Разрешаем элементам переноситься */
+    justify-content: center;
+    align-items: center;
+    width: 90%;
+    margin: 0 auto 40px auto;
+    gap: 10px;
+    padding-top: 40px;
+  }
+
+  .callToAction {
+    font-size: 16px; /* Уменьшаем шрифт заголовка */
+    line-height: 20px;
+    text-align: left;
+    width: auto;
+    flex-basis: 100%;
+    margin-bottom: 10px; /* Добавляем отступ снизу */
+  }
+
+  .frame89 {
+    width: 100%;
+    max-width: none;
+    padding: 10px;
+    flex: 1 1 100%; /* Устанавливаем гибкий размер, чтобы блок занимал всю ширину */
+  }
+  
+  .frame88 {
+    gap: 10px; /* Уменьшаем отступ между опциями */
+    align-items: flex-start;
+  }
+
+  .optionText {
+    font-size: 14px; /* Уменьшаем шрифт текста опций */
+    line-height: 1.5;
+  }
+
+  .arrowIcon {
+    width: 16px;
+    height: 16px;
+    margin-left: 10px;
+  }
 }

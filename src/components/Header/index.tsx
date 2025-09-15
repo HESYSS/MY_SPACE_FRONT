@@ -63,8 +63,8 @@ const Header: FC = () => {
           </p>
           <div className={styles.contactInfo}>
             <LanguageSwitcher />
-            <a href="tel:+3801234567" className={styles.phone}>
-              {t("phoneNumber") || "+3801234567"}
+            <a href="tel:+380687777337" className={styles.phone}>
+              {t("phoneNumber") || "+380 687777337"}
             </a>
           </div>
         </div>

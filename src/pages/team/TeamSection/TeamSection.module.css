@@ -1,10 +1,11 @@
 /* Partners and headers main container */
 .teamSection {
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  flex-direction: row; /* Default for PC/Tablet */
+  justify-content: space-between;
+  align-items: flex-start;
   padding: 0px;
-  gap: 40px;
+  gap: 30px;
   width: 1200px;
   height: auto;
   box-sizing: border-box;
@@ -29,28 +30,27 @@
   font-weight: 400;
   font-size: 48px;
   line-height: 56px;
-  text-align: center;
+  text-align: left;
   font-variant: small-caps;
   color: #ebebeb;
   margin: 0;
 }
 
 /* Container for all team member cards (Par&Man) */
-.teamMembersContainer {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: flex-start;
-  padding: 0px;
-  gap: 30px;
-  width: 1200px;
-  box-sizing: border-box;
-}
+/* This container is no longer needed in the new structure */
 
 /* Container for each group (Partners or Managers) */
 .teamGroup {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  flex: 1;
+}
+
+/* Main container for each group, used for the new structure */
+.groupContainer {
+  display: flex;
+  flex-direction: column;
   gap: 20px;
   flex: 1;
 }
@@ -179,31 +179,21 @@
 @media (min-width: 769px) and (max-width: 1300px) {
   /* Основной контейнер */
   .teamSection {
-    width: 90%; /* Адаптируем ширину под планшет */
+    width: 90%;
     max-width: 100%;
     margin: 0 auto;
-    gap: 30px;
+    gap: 20px; /* Adjusted gap */
   }
 
-  /* Контейнер заголовков */
-  .titles {
-    width: 100%;
-    gap: 20px;
-  }
-  
   /* Заголовки */
   .title {
-    font-size: 4.5vw; /* Уменьшаем размер шрифта в зависимости от ширины вьюпорта */
-    line-height: 5vw;
+    font-size: 40px; /* Fixed font size for better consistency */
+    line-height: 48px;
   }
-  .title:first-child {
-    font-size: 4.5vw;
-  }
-
-  /* Основной контейнер для групп */
-  .teamMembersContainer {
-    width: 100%;
-    gap: 20px;
+  
+  /* Main content container */
+  .groupContainer {
+    gap: 15px;
   }
 
   /* Контейнер каждой группы */
@@ -212,30 +202,87 @@
     gap: 15px;
   }
   
-  /* Фото и имя */
+  /* Photo and name */
   .photoAndName {
-    height: 15vw; /* Уменьшаем высоту относительно вьюпорта */
+    height: 180px; /* Fixed height to avoid scaling issues */
   }
   
-  /* Имя */
+  /* Name */
   .memberName {
-    font-size: 2vw;
-    line-height: 2.2vw;
+    font-size: 18px;
+    line-height: 20px;
   }
   
-  /* Должность */
+  /* Position */
   .positionText {
-    font-size: 1.5vw;
-    line-height: 1.7vw;
+    font-size: 14px;
+    line-height: 16px;
   }
 
-  /* Иконки */
+  /* Icons */
   .mySpaceLogo {
-    width: 4vw;
+    width: 48px;
   }
   
   .arrowIcon {
-    width: 2vw;
-    height: 2vw;
+    width: 18px;
+    height: 18px;
+  }
+}
+
+/* --- Мобильная адаптация --- */
+@media (max-width: 768px) {
+  /* Main container switches to a column layout */
+  .teamSection {
+    width: 90%;
+    flex-direction: column;
+    gap: 30px;
+    padding: 0 5%;
+  }
+
+  /* Each group container remains a column */
+  .groupContainer {
+    width: 100%;
+    gap: 20px;
+  }
+
+  /* Titles are aligned left and their size is reduced */
+  .title {
+    width: 100%;
+    font-size: 28px;
+    line-height: 32px;
+    text-align: left;
+  }
+  
+  /* Cards remain in two columns on mobile */
+  .teamGroup {
+    grid-template-columns: repeat(2, 1fr); /* CORRECTED */
+    gap: 10px; /* Reduced gap to fit */
+  }
+  
+  /* Card photo height is adjusted */
+  .photoAndName {
+    height: 120px; /* Adjusted to fit better in two columns */
+  }
+  
+  /* Font sizes are adjusted for mobile readability */
+  .memberName {
+    font-size: 14px; /* Reduced to fit in smaller width */
+    line-height: 16px;
+  }
+  
+  .positionText {
+    font-size: 12px;
+    line-height: 14px;
+  }
+  
+  /* Icon sizes are adjusted */
+  .mySpaceLogo {
+    width: 32px; /* Smaller icon */
+  }
+  
+  .arrowIcon {
+    width: 14px;
+    height: 14px;
   }
 }

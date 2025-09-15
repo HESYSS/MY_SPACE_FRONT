@@ -3,8 +3,6 @@ import Image from "next/image";
 import styles from "./AllTeamSection.module.css";
 import { useTranslation } from "react-i18next";
 import Link from "next/link";
-// Убираем импорт локального изображения, если не хотим использовать его как заглушку.
-// Если хотим, оставляем. В этом примере я его оставил, чтобы была запасная опция.
 import vitaliyPenc from "../../../../public/icons/vitaliyPenc.png"; 
 
 // ОБНОВЛЕННЫЙ ИНТЕРФЕЙС Employee
@@ -32,9 +30,16 @@ const AllTeamSection: React.FC = () => {
 
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth >= 769 && window.innerWidth <= 1300) {
+      // Мобильная адаптация: 2 элемента
+      if (window.innerWidth <= 768) {
+        setItemsPerPage(2);
+      }
+      // Планшетная адаптация: 4 элемента
+      else if (window.innerWidth > 768 && window.innerWidth <= 1300) {
         setItemsPerPage(4);
-      } else {
+      }
+      // ПК-версия: 5 элементов
+      else {
         setItemsPerPage(5);
       }
     };
@@ -86,12 +91,13 @@ const AllTeamSection: React.FC = () => {
       <div className={styles.carouselContainer}>
         <div
           className={styles.teamRow}
-          style={{ 
-            transform: `translateX(-${(currentPage - 1) * 100}%)`,
-            '--items-per-page': itemsPerPage,
-            '--gap': '30px', // Отступ для ПК
-            '--tablet-gap': '15px' // Отступ для планшета
-          } as React.CSSProperties}
+          style={
+            { 
+              transform: `translateX(-${(currentPage - 1) * 100}%)`,
+              '--items-per-page': itemsPerPage,
+              '--gap': itemsPerPage === 5 ? '30px' : (itemsPerPage === 4 ? '15px' : '15px')
+            } as React.CSSProperties
+          }
         >
           {employees.length === 0 ? (
             <p>Список сотрудников пуст.</p>
@@ -99,8 +105,6 @@ const AllTeamSection: React.FC = () => {
             employees.map((member) => {
               const { name, role } = getEmployeeData(member, i18n.language);
               
-              // ОПРЕДЕЛЯЕМ ИСТОЧНИК ИЗОБРАЖЕНИЯ:
-              // Если есть photoUrl, используем его, иначе - заглушку.
               const imageUrl = member.photoUrl || vitaliyPenc.src;
 
               return (
@@ -108,7 +112,7 @@ const AllTeamSection: React.FC = () => {
                   <div className={styles.cardContent}>
                     <div className={styles.photoAndName}>
                       <Image
-                        src={imageUrl} // <-- ИСПОЛЬЗУЕМ ДИНАМИЧЕСКИЙ URL
+                        src={imageUrl}
                         alt={name}
                         className={styles.memberPhoto}
                         fill
