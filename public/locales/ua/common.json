@@ -140,6 +140,63 @@
   "deal": "Операція",
   "street": "Вулиця",
   "bedroomsCount": "Кількість спалень",
-  "area": "Площа"
+  "area": "Площа",
+  "kyiv_city": "м. Київ",
+  "kyiv_region": "Київська область",
+  "metro": "Метро",
+  "districts": "Райони",
+  "jk": "ЖК",
+  "Червона лінія": "Червона лінія",
+  "Синя лінія": "Синя лінія",
+  "Зелена лінія": "Зелена лінія",
+  "Лівий берег": "Лівий берег",
+  "Правий берег": "Правий берег",
+  "directions": "Напрямки",
+  "filtersTitle": "Фільтри",
+  "propertyTypeLabel": "Тип нерухомості",
+  "dealTypeLabel": "Тип угоди",
+  "resetButton": "Скинути",
+  "showResultsButton": "Показати результати",
+  "fromPlaceholder": "Від",
+  "toPlaceholder": "До",
+  "toSeparator": "до",
+  "currencyUAH": "Грн",
+  "currencyUSD": "USD",
+  "squareMeters": "м²",
+  "enterFilter": "Введіть {{filter}}",
+  "categoryKeys": {
+    "Житлова": "Житлова",
+    "Комерційна": "Комерційна"
+  },
+  "propertyTypeKeys": {
+    "apartment": "Квартира",
+    "house": "Будинок",
+    "room": "Кімната"
+  },
+  "dealKeys": {
+    "rent": "Оренда",
+    "sale": "Продаж"
+  },
+  "filterKeys": {
+    "Ціна": "Ціна",
+    "Поверх": "Поверх",
+    "Поверховість": "Поверховість",
+    "Загальна площа": "Загальна площа",
+    "Площа": "Площа",
+    "house_number": "№ Будинку",
+    "Кіл. кімнат": "Кіл. кімнат",
+    "Ремонт": "Ремонт"
+  },
+  "renovationKeys": {
+    "no_renovation": "без ремонту",
+    "after_builders": "після будівельників",
+    "renovated": "ремонт",
+    "euro_renovation": "євроремонт",
+    "designer_renovation": "дизайнерський",
+    "with_decoration": "з оздобленням"
+  },
+  "category": "Категорія",
+  "dealType": "Тип угоди",
+  "reset": "Скинути",
+  "showResults": "Показати результати"
 }
-

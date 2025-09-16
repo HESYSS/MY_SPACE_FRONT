@@ -140,6 +140,74 @@
   "deal": "Deal",
   "street": "Street",
   "bedroomsCount": "Number of bedrooms",
-  "area": "Area"
+  "area": "Area",
+  "directions": "Directions",
+  "kyiv_city": "Kyiv city",
+  "kyiv_region": "Kyiv region",
+  "metro": "Metro",
+  "districts": "Districts",
+  "jk": "Residential complex",
+  "Червона лінія": "Red line",
+  "Синя лінія": "Blue line",
+  "Зелена лінія": "Green line",
+  "Лівий берег": "Left bank",
+  "Правий берег": "Right bank",
+  "propertyTypeLabel": "Property type",
+  "dealTypeLabel": "Deal type",
+  "resetButton": "Reset",
+  "showResultsButton": "Show results",
+  "fromPlaceholder": "From",
+  "toPlaceholder": "To",
+  "toSeparator": "to",
+  "currencyUAH": "UAH",
+  "currencyUSD": "USD",
+  "squareMeters": "m²",
+  "enterFilter": "Enter {{filter}}",
+  "categoryKeys": {
+    "Житлова": "Residential",
+    "Комерційна": "Commercial"
+  },
+  "propertyTypeKeys": {
+    "apartment": "Apartment",
+    "house": "House",
+    "room": "Room"
+  },
+  "dealKeys": {
+    "rent": "Rent",
+    "sale": "Sale"
+  },
+  "filterKeys": {
+    "price": "Price",
+    "floor": "Floor",
+    "floors": "Floors",
+    "area_total": "Total area",
+    "area": "Area",
+    "house_number": "House No.",
+    "rooms": "Rooms",
+    "renovation": "Renovation"
+  },
+  "renovationKeys": {
+    "no_renovation": "no renovation",
+    "after_builders": "after builders",
+    "renovated": "renovated",
+    "euro_renovation": "euro renovation",
+    "designer_renovation": "designer renovation",
+    "with_decoration": "with decoration"
+  },
+  "Оренда": "Rent",
+  "Продаж": "Sale",
+  "без ремонту": "no renovation",
+  "після будівельників": "after builders",
+  "ремонт": "renovation",
+  "євроремонт": "euro renovation",
+  "дизайнерський": "designer",
+  "з оздобленням": "with finishing",
+  "Грн": "UAH",
+  "до": "to",
+  "До": "To",
+  "Від": "From",
+  "category": "Category",
+  "dealType": "Deal type",
+  "reset": "Reset",
+  "showResults": "Show results"
 }
-

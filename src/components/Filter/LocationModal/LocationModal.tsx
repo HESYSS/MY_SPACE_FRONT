@@ -1,79 +1,7 @@
 import { useState, useEffect } from "react";
 import styles from "./LocationModal.module.css";
-
-const SHORE_DISTRICTS: Record<string, string[]> = {
-  "Лівий берег": ["Дніпровський", "Дарницький", "Лівобережний"],
-  "Правий берег": [
-    "Печерський",
-    "Шевченківський",
-    "Подільський",
-    "Голосіївський",
-    "Солом'янський",
-    "Оболонський",
-    "Святошинський",
-  ],
-};
-
-export const METRO_LINES: Record<string, string[]> = {
-  "Червона лінія": [
-    "Академмістечко",
-    "Житомирська",
-    "Святошин",
-    "Нивки",
-    "Берестейська",
-    "Шулявська",
-    "Політехнічний інститут",
-    "Вокзальна",
-    "Університет",
-    "Театральна",
-    "Хрещатик",
-    "Арсенальна",
-    "Дніпро",
-    "Гідропарк",
-    "Лівобережна",
-    "Дарниця",
-    "Чернігівська",
-    "Лісова",
-  ],
-  "Синя лінія": [
-    "Героїв Дніпра",
-    "Мінська",
-    "Оболонь",
-    "Почайна",
-    "Тараса Шевченка",
-    "Контрактова площа",
-    "Поштова площа",
-    "Майдан Незалежності",
-    "Площа Льва Толстого",
-    "Олімпійська",
-    "Палац «Україна»",
-    "Либідська",
-    "Деміївська",
-    "Голосіївська",
-    "Васильківська",
-    "Виставковий центр",
-    "Іподром",
-    "Теремки",
-  ],
-  "Зелена лінія": [
-    "Сирець",
-    "Дорогожичі",
-    "Лук’янівська",
-    "Золоті ворота",
-    "Палац спорту",
-    "Кловська",
-    "Печерська",
-    "Звіринецька",
-    "Видубичі",
-    "Славутич",
-    "Осокорки",
-    "Позняки",
-    "Харківська",
-    "Вирлиця",
-    "Бориспільська",
-    "Червоний хутір",
-  ],
-};
+import { useTranslation } from "react-i18next";
+import { METRO_LINES, SHORE_DISTRICTS } from "./locationfiltersconfig";
 
 interface LocationData {
   kyiv: {
@@ -120,7 +48,8 @@ export default function LocationModal({
   const [regionDirectionOpen, setRegionDirectionOpen] = useState(false);
   const [regionStreetOpen, setRegionStreetOpen] = useState(false);
   const [regionJkOpen, setRegionJkOpen] = useState(false);
-
+  const { t, i18n } = useTranslation("common");
+  const lang = i18n.language;
   // selections
   const [selectedMetro, setSelectedMetro] = useState<string[]>([]);
   const [selectedDistricts, setSelectedDistricts] = useState<string[]>([]);
@@ -137,8 +66,17 @@ export default function LocationModal({
   useEffect(() => {
     const savedData = localStorage.getItem(DATA_STORAGE_KEY);
     if (savedData) {
-      setLocationData(JSON.parse(savedData));
-      return; // Данные есть — запрос не нужен
+      const parsedData = JSON.parse(savedData);
+      console.log("Loaded location data from storage:", parsedData);
+      // Проверяем, совпадает ли язык
+      if (parsedData.lang === lang) {
+        const data = {
+          kyiv: parsedData.kyiv,
+          region: parsedData.region,
+        };
+        setLocationData(data);
+        return; // Данные есть и язык совпадает — запрос не нужен
+      }
     }
 
     async function fetchLocationData() {
@@ -146,20 +84,24 @@ export default function LocationModal({
         const backendUrl = process.env.REACT_APP_API_URL;
         const res = await fetch(`${backendUrl}/items/location`, {
           headers: {
-            Accept: "application/json",
-            "ngrok-skip-browser-warning": "true",
+            "Accept-Language": lang,
           },
         });
+
         const data = await res.json();
         setLocationData(data);
-        localStorage.setItem(DATA_STORAGE_KEY, JSON.stringify(data));
+        const dataWithLang = {
+          ...data,
+          lang: lang, // текущий язык с фронта
+        };
+        localStorage.setItem(DATA_STORAGE_KEY, JSON.stringify(dataWithLang));
       } catch (err) {
         console.error("Ошибка загрузки локаций", err);
       }
     }
 
     fetchLocationData();
-  }, []);
+  }, [lang]);
 
   // Загружаем сохраненные фильтры из localStorage
   useEffect(() => {
@@ -217,7 +159,7 @@ export default function LocationModal({
   };
 
   const handleSelectMetroLine = (line: string) => {
-    const stations = METRO_LINES[line];
+    const stations = METRO_LINES[line]["ua"];
     const allSelected = stations.every((s) => selectedMetro.includes(s));
     const newSelected = allSelected
       ? selectedMetro.filter((s) => !stations.includes(s))
@@ -230,7 +172,7 @@ export default function LocationModal({
     setSelectedDistricts(toggleArrayValue(selectedDistricts, district));
   };
   const handleSelectShore = (shore: string) => {
-    const districts = SHORE_DISTRICTS[shore];
+    const districts = SHORE_DISTRICTS[shore]["ua"];
     const allSelected = districts.every((d) => selectedDistricts.includes(d));
     const newSelected = allSelected
       ? selectedDistricts.filter((d) => !districts.includes(d))
@@ -308,7 +250,7 @@ export default function LocationModal({
           }`}
           onClick={() => setLocationType("kyiv")}
         >
-          м. Київ
+          {t("kyiv_city")}
         </button>
         <button
           className={`${styles.locationButton} ${
@@ -316,7 +258,7 @@ export default function LocationModal({
           }`}
           onClick={() => setLocationType("region")}
         >
-          Київська область
+          {t("kyiv_region")}
         </button>
       </div>
 
@@ -324,20 +266,20 @@ export default function LocationModal({
         <div className={styles.locationGroup}>
           {/* Метро */}
           <Dropdown
-            title="Метро"
+            title={t("metro")}
             isOpen={metroOpen}
             onToggle={() => setMetroOpen(!metroOpen)}
           >
             <div className={styles.columnsWrapper}>
               {Object.keys(METRO_LINES).map((line) => {
-                const selectedCount = METRO_LINES[line].filter((s) =>
+                const selectedCount = METRO_LINES[line]["ua"].filter((s) =>
                   selectedMetro.includes(s)
                 ).length;
                 return (
                   <div key={line} className={styles.metroColumn}>
                     <div
                       className={`${styles.dropdownItem} ${
-                        METRO_LINES[line].every((s) =>
+                        METRO_LINES[line]["ua"].every((s) =>
                           selectedMetro.includes(s)
                         )
                           ? styles.active
@@ -346,22 +288,29 @@ export default function LocationModal({
                       style={{ fontWeight: "bold" }}
                       onClick={() => handleSelectMetroLine(line)}
                     >
-                      {line}
+                      {t(line)}
                       {selectedCount > 0 && ` (${selectedCount})`}
                     </div>
                     <div className={styles.dropdownSubList}>
-                      {METRO_LINES[line].map((station) => (
-                        <div
-                          key={station}
-                          className={`${styles.dropdownItem} ${
-                            selectedMetro.includes(station) ? styles.active : ""
-                          }`}
-                          style={{ paddingLeft: "20px" }}
-                          onClick={() => handleSelectMetroStation(station)}
-                        >
-                          {station}
-                        </div>
-                      ))}
+                      {METRO_LINES[line]["ua"].map((stationUa, index) => {
+                        // Находим соответствующий английский вариант по индексу
+                        const stationEn = METRO_LINES[line][lang][index];
+
+                        return (
+                          <div
+                            key={stationUa} // ключ остаётся на укр
+                            className={`${styles.dropdownItem} ${
+                              selectedMetro.includes(stationUa)
+                                ? styles.active
+                                : ""
+                            }`}
+                            style={{ paddingLeft: "20px" }}
+                            onClick={() => handleSelectMetroStation(stationUa)} // передаём укр
+                          >
+                            {stationEn} {/* отображаем англ */}
+                          </div>
+                        );
+                      })}
                     </div>
                   </div>
                 );
@@ -371,7 +320,7 @@ export default function LocationModal({
 
           {/* Районы */}
           <Dropdown
-            title="Райони"
+            title={t("districts")}
             isOpen={districtOpen}
             onToggle={() => setDistrictOpen(!districtOpen)}
           >
@@ -380,7 +329,7 @@ export default function LocationModal({
                 <div key={shore} className={styles.districtColumn}>
                   <div
                     className={`${styles.dropdownItem} ${
-                      SHORE_DISTRICTS[shore].every((d) =>
+                      SHORE_DISTRICTS[shore]["ua"].every((d) =>
                         selectedDistricts.includes(d)
                       )
                         ? styles.active
@@ -389,22 +338,25 @@ export default function LocationModal({
                     style={{ fontWeight: "bold" }}
                     onClick={() => handleSelectShore(shore)}
                   >
-                    {shore}
+                    {t(shore)}
                   </div>
-                  {SHORE_DISTRICTS[shore].map((district) => (
-                    <div
-                      key={district}
-                      className={`${styles.dropdownItem} ${
-                        selectedDistricts.includes(district)
-                          ? styles.active
-                          : ""
-                      }`}
-                      style={{ paddingLeft: "20px" }}
-                      onClick={() => handleSelectDistrict(district)}
-                    >
-                      {district}
-                    </div>
-                  ))}
+                  {SHORE_DISTRICTS[shore]["ua"].map((districtUa, index) => {
+                    const districtEn = SHORE_DISTRICTS[shore][lang][index];
+                    return (
+                      <div
+                        key={districtUa}
+                        className={`${styles.dropdownItem} ${
+                          selectedDistricts.includes(districtUa)
+                            ? styles.active
+                            : ""
+                        }`}
+                        style={{ paddingLeft: "20px" }}
+                        onClick={() => handleSelectDistrict(districtUa)}
+                      >
+                        {districtEn}
+                      </div>
+                    );
+                  })}
                 </div>
               ))}
             </div>
@@ -412,7 +364,7 @@ export default function LocationModal({
 
           {/* Вулиці */}
           <Dropdown
-            title="Вулиця"
+            title={t("street")}
             isOpen={streetOpen}
             onToggle={() => setStreetOpen(!streetOpen)}
           >
@@ -433,7 +385,7 @@ export default function LocationModal({
 
           {/* ЖК */}
           <Dropdown
-            title="ЖК"
+            title={t("jk")}
             isOpen={jkOpen}
             onToggle={() => setJkOpen(!jkOpen)}
           >
@@ -456,7 +408,7 @@ export default function LocationModal({
         <div className={styles.locationGroup}>
           {/* Напрямки */}
           <Dropdown
-            title="Напрямки"
+            title={t("directions")}
             isOpen={regionDirectionOpen}
             onToggle={() => setRegionDirectionOpen(!regionDirectionOpen)}
           >
@@ -477,7 +429,7 @@ export default function LocationModal({
 
           {/* Вулиці */}
           <Dropdown
-            title="Вулиця"
+            title={t("street")}
             isOpen={regionStreetOpen}
             onToggle={() => setRegionStreetOpen(!regionStreetOpen)}
           >
@@ -498,7 +450,7 @@ export default function LocationModal({
 
           {/* ЖК */}
           <Dropdown
-            title="ЖК"
+            title={t("jk")}
             isOpen={regionJkOpen}
             onToggle={() => setRegionJkOpen(!regionJkOpen)}
           >
