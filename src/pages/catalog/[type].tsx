@@ -5,6 +5,7 @@ import MapWrapper from "@/components/Map/MapWrapper";
 import PropertyList from "./PropertyList";
 import styles from "./CatalogPage.module.css";
 import { standardizeFilters } from "@/utils/filterMap";
+import { useTranslation } from "react-i18next";
 
 const dealMap: Record<string, string> = {
   rent: "Оренда",
@@ -38,7 +39,8 @@ function buildQueryFromFilters(
 export default function CatalogPage() {
   const router = useRouter();
   const { type } = router.query;
-
+  const { i18n } = useTranslation("common");
+  const lang = i18n.language;
   const currentDeal = typeof type === "string" ? type : "Оренда";
   const [propertyType, setPropertyType] = useState<"Оренда" | "Продаж">(
     currentDeal === "rent" || currentDeal === "Оренда" ? "Оренда" : "Продаж"
@@ -79,8 +81,10 @@ export default function CatalogPage() {
           limit: limit.toString(),
           ...buildQueryFromFilters(standardizedLocation),
           ...buildQueryFromFilters(standardizedFilters),
+          lang: lang,
         });
         const backendUrl = process.env.REACT_APP_API_URL;
+        console.log("Fetching with params:", backendUrl);
         const res = await fetch(`${backendUrl}/items?${params}`);
         const data = await res.json();
 
@@ -94,7 +98,7 @@ export default function CatalogPage() {
       }
     }
     fetchData();
-  }, [page, locationFilter, otherFilters]);
+  }, [page, locationFilter, otherFilters, lang]);
 
   // --- Получение всех данных для карты ---
   useEffect(() => {
