@@ -1,267 +1,376 @@
-/* =========================
-   Overlay
-   ========================= */
+/*
+  Base Styles
+*/
 .modalOverlay {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.75);
+  background-color: rgba(0, 0, 0, 0.9); /* Увеличена непрозрачность для затемнения */
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
+  /* Добавляем эффект размытия фона для всего, что находится под оверлеем */
+  backdrop-filter: blur(5px);
 }
 
-/* =========================
-   Modal Content
-   ========================= */
 .modalContent {
-  background-color: #0a0a0a;
-  color: #e0e0e0;
+  background-color: #0A0A0A;
+  color: #fff;
   border-radius: 12px;
-  width: 90%;
+  width: 95%;
   max-width: 600px;
-  padding: 2.5rem 2rem;
-  border: 1px solid #444;
-  position: relative;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
   max-height: 90vh;
+  padding: 1.5rem;
+  border: 1px solid #1c1c1c;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
   overflow-y: auto;
+  gap: 1.5rem;
+  font-family: 'Inter', sans-serif;
 }
 
+/* Hide scrollbar for Chrome, Safari and Opera */
 .modalContent::-webkit-scrollbar {
-  width: 0;
-  height: 0;
+  display: none;
 }
-
+/* Hide scrollbar for IE, Edge and Firefox */
 .modalContent {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
 
-/* =========================
-   Header
-   ========================= */
-.modalHeader {
+/*
+  Header
+*/
+.header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 2rem;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid #444;
+  position: relative;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid #1c1c1c;
 }
 
-.modalTitle {
-  font-size: 1.6rem;
+.title {
+  font-size: 1.5rem;
   font-weight: 600;
-  color: #fff;
+  color: #e0e0e0;
 }
 
 .closeButton {
   background: none;
   border: none;
-  color: #fff;
-  font-size: 1.5rem;
+  color: #e0e0e0;
+  font-size: 2rem;
   cursor: pointer;
-  padding: 0;
+  position: absolute;
+  top: 0;
+  right: 0;
 }
 
-/* =========================
-   Filter Groups
-   ========================= */
-.filterGroup {
-  padding-bottom: 1.5rem;
-  margin-bottom: 1.5rem;
-  border-bottom: 1px solid #3a3a3a;
+/*
+  Sections & Labels
+*/
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
-.filterLabel {
+.label {
   font-size: 1rem;
   font-weight: 500;
-  margin-bottom: 0.75rem;
   color: #ccc;
+  border-bottom: 1px solid #1c1c1c;
+  padding-bottom: 0.5rem;
 }
 
-/* =========================
-   Universal buttons with checkbox
-   ========================= */
-.button {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem; /* пространство между галочкой и текстом */
-}
-
-.button::before {
-  content: "";
-  display: inline-block;
-  width: 18px;
-  height: 18px;
-  border: 1px solid #56728b;
-  border-radius: 4px;
-  background-color: #1e2d3a;
-  flex-shrink: 0;
-  transition: all 0.2s ease;
-}
-
-.button.active::before {
-  content: "✓";
-  color: #16242d;
-  background-color: #8fd8a8;
-  border-color: #8fd8a8;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 12px;
-  font-weight: bold;
-}
-
-/* =========================
-   Category, Type, Service, Rooms, Options
-   ========================= */
-.categoryToggle,
-.propertyTypeToggle,
-.serviceToggle,
-.multiSelect {
-  display: flex;
-  flex-wrap: wrap;
+/*
+  Button Toggles (Category, Deal)
+*/
+.categoryToggle, .dealToggle {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
   gap: 0.5rem;
 }
 
-.categoryButton,
-.propertyButton,
-.serviceButton,
-.roomButton,
-.optionButton {
-  background-color: #3b3b3b;
+.button {
+  background-color: #1a1a1a;
   color: #999;
-  border: 1px solid #555;
+  border: 1px solid #333;
   border-radius: 6px;
-  padding: 0.6rem 1.2rem;
+  padding: 0.75rem 1rem;
   cursor: pointer;
   font-weight: 500;
-  transition: background-color 0.2s ease, border-color 0.2s ease;
-  text-align: left;
+  transition: all 0.2s ease;
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  font-size: 0.95rem;
 }
 
-.categoryButton.active,
-.propertyButton.active,
-.serviceButton.active,
-.roomButton.active,
-.optionButton.active {
-  background-color: #03b9b34d;
-  border-color: #03b9b34d;
+.button:hover {
+  background-color: #2a2a2a;
+}
+
+.button.active {
+  background-color: #051818;
+  border-color: #03B9B3;
   color: #fff;
 }
 
-/* =========================
-   Input Ranges (Price, Floors, Area)
-   ========================= */
-.inputRange {
+.checkIcon {
+  width: 1rem;
+  height: 1rem;
+  color: #27c293;
+}
+
+/*
+  Price Inputs
+*/
+.priceContainer {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-}
-
-.rangeInput {
-  flex: 1;
-  background-color: #3b3b3b;
-  border: 1px solid #555;
-  color: #fff;
-  padding: 0.6rem 0.75rem;
-  border-radius: 6px;
-}
-
-.rangeInput::placeholder {
-  color: #888;
-}
-
-.rangeSeparator {
-  color: #888;
-  font-size: 0.9rem;
+  gap: 1rem;
 }
 
 .priceInputGroup {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+}
+
+.inputField {
+  background-color: #1a1a1a;
+  border: 1px solid #333;
+  color: #fff;
+  padding: 0.75rem 0.75rem;
+  border-radius: 6px;
   width: 100%;
+  font-size: 0.9rem;
+  transition: border-color 0.2s, background-color 0.2s;
+}
+.inputField.filled {
+  background-color: #051818;
 }
 
-.currencyDisplay {
-  color: #007bff;
-  font-weight: bold;
-  padding-left: 0.5rem;
+.inputField:focus {
+  outline: none;
+  border-color: #03b9b3;
 }
 
-/* =========================
-   Actions
-   ========================= */
-.modalActions {
+.inputField::placeholder {
+  color: #555;
+}
+
+.separator {
+  color: #555;
+  font-size: 1.2rem;
+}
+
+/*
+  Currency Toggle
+*/
+.currencyToggle {
+  display: flex;
+  background-color: #1a1a1a;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid #333;
+}
+
+.currencyButton {
+  background: transparent;
+  border: 1px solid #333;
+  color: #999;
+  font-weight: 500;
+  padding: 0.75rem 1.25rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.currencyButton.active {
+  background-color: #1a1a1a;
+  border-color: #03B9B3;
+  color: #fff;
+}
+.currencyButton:hover {
+  background-color: #2a2a2a;
+  border-color: #03B9B3;
+}
+
+/*
+  Dynamic Filter Sections (Floors, Area, Rooms)
+*/
+.dynamicFilters {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.inputRangeGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.inputRangeLabel {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #ccc;
+}
+
+.inputRange {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.unit {
+  color: #999;
+  font-size: 0.9rem;
+  margin-left: 0.25rem;
+}
+
+.roomButtons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.roomButton {
+  background-color: #1a1a1a;
+  color: #999;
+  border: 1px solid #333;
+  border-radius: 6px;
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.roomButton.active {
+  background-color: #051818;
+  border-color: #03B9B3;
+  color: #fff;
+}
+.multiSelect {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+/*
+  Footer and Action Buttons
+*/
+.footer {
   display: flex;
   justify-content: space-between;
   gap: 1rem;
   padding-top: 1.5rem;
-  border-top: 1px solid #3a3a3a;
-  margin-top: 1rem;
+  border-top: 1px solid #1c1c1c;
 }
 
-.resetButton,
-.showResultsButton {
-  padding: 0.8rem 2rem;
+.resetButton, .submitButton {
+  padding: 0.75rem 2rem;
   border-radius: 8px;
   cursor: pointer;
   font-weight: 600;
   font-size: 1rem;
-  transition: background-color 0.2s ease;
+  transition: all 0.2s;
 }
 
 .resetButton {
   background: none;
   color: #fff;
-  border: 1px solid #555;
+  border: 1px solid #333;
 }
 
-.showResultsButton {
-  background-color: #007bff;
+.resetButton:hover {
+  background-color: #2a2a2a;
+}
+
+.submitButton {
+  background-color: #051818;
   color: #fff;
   border: none;
 }
 
-/* =========================
-   Currency Toggle
-   ========================= */
-.currencyContainer {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-left: auto; /* Pushes the container to the right */
-  background-color: #3b3b3b;
-  border-radius: 6px;
-  overflow: hidden;
-  border: 1px solid #555;
-}
-
-.currencyContainer span {
-  color: #888;
-}
-
-.currencyButtonPrice {
-  background: transparent;
-  border: none;
-  color: #999;
-  font-weight: 500;
-  padding: 0.6rem 1rem;
-  cursor: pointer;
-  transition: background-color 0.2s, color 0.2s;
-}
-
-.currencyButtonPrice.active {
-  background-color: #03b9b34d;
+.submitButton:hover {
+  background-color: #12725d;
   color: #fff;
+}
+
+/*
+  ========================================================================================
+  АДАПТАЦИЯ ДЛЯ МОБИЛЬНЫХ УСТРОЙСТВ (до 768px)
+  ========================================================================================
+*/
+@media (max-width: 768px) {
+  .modalContent {
+    width: 95%;
+    max-width: none;
+    padding: 1rem;
+    gap: 1rem;
+  }
+
+  .title {
+    font-size: 1.25rem;
+  }
+
+  .header {
+    padding-bottom: 1rem;
+  }
+  
+  .section {
+    gap: 0.75rem;
+  }
+  
+  .priceContainer {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+  
+  .currencyToggle {
+    justify-content: center;
+  }
+  
+  .footer {
+    flex-direction: column;
+    gap: 1rem;
+    padding-top: 1rem;
+  }
+  
+  .resetButton, .submitButton {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+/*
+  ========================================================================================
+  АДАПТАЦИЯ ДЛЯ ПЛАНШЕТОВ (от 769px до 1300px)
+  ========================================================================================
+*/
+@media (min-width: 769px) and (max-width: 1300px) {
+  .modalContent {
+    max-width: 750px;
+  }
+
+  .title {
+    font-size: 1.75rem;
+  }
+
+  .button {
+    padding: 1rem;
+  }
+
+  .inputField {
+    padding: 1rem;
+  }
 }

@@ -209,5 +209,7 @@
   "category": "Category",
   "dealType": "Deal type",
   "reset": "Reset",
-  "showResults": "Show results"
+  "showResults": "Show results",
+  "show_map": "Show Map",
+  "close_map": "Close Map"
 }

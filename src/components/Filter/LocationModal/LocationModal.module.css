@@ -1,5 +1,6 @@
 /* =========================
    Основной контейнер модалки
+   - Стили для ПК (по умолчанию)
    ========================= */
 .modalContent {
   background-color: #0a0a0a;
@@ -10,8 +11,7 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
   font-family: Arial, sans-serif;
   box-sizing: border-box;
-  position: absolute;
-  /* общая прокрутка */
+  position: absolute; /* Позиционирование относительно родителя */
   max-height: 80vh;
   overflow-y: auto;
   z-index: 1000;
@@ -22,6 +22,7 @@
   width: 0;
   height: 0;
 }
+
 .modalContent {
   -ms-overflow-style: none; /* IE/Edge */
   scrollbar-width: none; /* Firefox */
@@ -121,7 +122,6 @@
   background-color: #30303033;
   border-top: 1px solid #30303033;
   border-radius: 0 0 8px 8px;
-  /* убрано ограничение высоты */
   padding: 10px 0;
   display: flex;
   flex-direction: column;
@@ -134,7 +134,7 @@
 .dropdownItem {
   display: flex;
   align-items: center;
-  gap: 8px; /* расстояние между галочкой и текстом */
+  gap: 8px;
   cursor: pointer;
   padding: 6px 12px;
   border-radius: 6px;
@@ -160,19 +160,16 @@
   font-size: 14px;
   font-weight: bold;
   color: #fff;
-
-  /* по умолчанию скрыта */
   opacity: 0;
   width: 0;
   overflow: hidden;
-
   transition: opacity 0.2s ease, width 0.2s ease;
 }
 
 /* показываем галочку у активных */
 .dropdownItem.active::before {
   opacity: 1;
-  width: 14px; /* ширина под символ */
+  width: 14px;
 }
 
 /* =========================
@@ -180,13 +177,13 @@
    ========================= */
 .columnsWrapper {
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* 3 колонки метро */
+  grid-template-columns: repeat(3, 1fr);
   gap: 15px;
 }
 
 .districtsWrapper {
   display: grid;
-  grid-template-columns: repeat(2, 1fr); /* 2 колонки районы */
+  grid-template-columns: repeat(2, 1fr);
   gap: 15px;
 }
 
@@ -202,7 +199,7 @@
    ========================= */
 .inlineList {
   display: flex;
-  flex-wrap: wrap; /* перенос строк */
+  flex-wrap: wrap;
   gap: 8px;
   padding: 5px 10px;
 }
@@ -211,24 +208,68 @@
   flex: 0 1 auto;
 }
 
+/* Удалили стили для .cancelButton */
+
+
 /* =========================
-   Кнопка закрытия (крестик)
+   Адаптация для планшетов (769-1300px)
    ========================= */
-.cancelButton {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background-color: transparent;
-  border: none;
-  color: #ebebeb; /* Цвет, который подходит к вашему дизайну */
-  font-size: 24px; /* Размер, чтобы крестик был заметен */
-  cursor: pointer;
-  padding: 5px;
-  line-height: 1; /* Чтобы крестик не выходил за пределы кнопки */
-  transition: color 0.2s ease;
-  z-index: 1001;
+@media (min-width: 769px) and (max-width: 1300px) {
+  .modalContent {
+    max-width: 750px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .columnsWrapper {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .districtsWrapper {
+    grid-template-columns: 1fr;
+  }
 }
 
-.cancelButton:hover {
-  color: #03b9b3; /* Цвет при наведении */
+/* =========================
+   Адаптация для мобильных устройств (до 768px)
+   ========================= */
+@media (max-width: 768px) {
+  .modalContent {
+    position: fixed; /* Полный экран */
+    top: 200;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    max-height: 300px;
+    border-radius: 0;
+    padding: 10px;
+    transform: none;
+  }
+
+  /* Переключатель локации */
+  .locationToggle {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  /* Переключаем колонки метро и районов на одну колонку */
+  .columnsWrapper,
+  .districtsWrapper {
+    grid-template-columns: 1fr;
+  }
+
+  .dropdownButton {
+    padding: 10px 12px;
+    font-size: 14px;
+  }
+
+  .dropdownItem {
+    font-size: 12px;
+  }
+
+  .inlineList {
+    justify-content: flex-start;
+  }
 }

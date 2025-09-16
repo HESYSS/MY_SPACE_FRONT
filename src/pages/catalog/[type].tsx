@@ -6,6 +6,7 @@ import PropertyList from "./PropertyList";
 import styles from "./CatalogPage.module.css";
 import { standardizeFilters } from "@/utils/filterMap";
 import { useTranslation } from "react-i18next";
+import { useMediaQuery } from "react-responsive";
 
 const dealMap: Record<string, string> = {
   rent: "Оренда",
@@ -39,8 +40,12 @@ function buildQueryFromFilters(
 export default function CatalogPage() {
   const router = useRouter();
   const { type } = router.query;
-  const { i18n } = useTranslation("common");
+  const { i18n, t } = useTranslation("common");
   const lang = i18n.language;
+
+  const isMobileOrTablet = useMediaQuery({ maxWidth: 1300 });
+  const [showMap, setShowMap] = useState(false);
+
   const currentDeal = typeof type === "string" ? type : "Оренда";
   const [propertyType, setPropertyType] = useState<"Оренда" | "Продаж">(
     currentDeal === "rent" || currentDeal === "Оренда" ? "Оренда" : "Продаж"
@@ -68,7 +73,6 @@ export default function CatalogPage() {
     setPage(1);
   };
 
-  // --- Получение данных для списка (PropertyList) ---
   useEffect(() => {
     async function fetchData() {
       setLoading(true);
@@ -100,7 +104,6 @@ export default function CatalogPage() {
     fetchData();
   }, [page, locationFilter, otherFilters, lang]);
 
-  // --- Получение всех данных для карты ---
   useEffect(() => {
     async function fetchAll() {
       try {
@@ -108,7 +111,6 @@ export default function CatalogPage() {
         const standardizedFilters = standardizeFilters(otherFilters);
 
         const params = new URLSearchParams({
-          // чтобы карта показывала все
           ...buildQueryFromFilters(standardizedLocation),
           ...buildQueryFromFilters(standardizedFilters),
         });
@@ -126,8 +128,11 @@ export default function CatalogPage() {
     }
     fetchAll();
   }, [locationFilter, otherFilters]);
+
+  const containerClass = showMap ? styles.catalogMapOnly : styles.catalogContainer;
+
   return (
-    <div className={styles.catalogContainer}>
+    <div className={containerClass}>
       <div className={styles.leftColumn}>
         <Filter
           type={propertyType}
@@ -136,6 +141,15 @@ export default function CatalogPage() {
             handleApply({ ...location }, { ...filters });
           }}
         />
+
+        {isMobileOrTablet && (
+          <button 
+            className={styles.toggleMapButton} 
+            onClick={() => setShowMap(!showMap)}
+          >
+            {showMap ? t("show_list") : t("show_map")}
+          </button>
+        )}
 
         <div className={styles.listContainer}>
           <PropertyList
@@ -149,7 +163,17 @@ export default function CatalogPage() {
         </div>
       </div>
 
-      <div className={styles.rightColumn}>
+      <div 
+        className={`${styles.rightColumn} ${showMap ? styles.mapVisible : ''}`}
+      >
+        {isMobileOrTablet && showMap && ( // 👈 Показываем кнопку только на мобильных/планшетах и когда карта активна
+          <button 
+            className={styles.closeMapButton} 
+            onClick={() => setShowMap(false)} // 👈 Кнопка закрывает карту
+          >
+            {t("close_map")}
+          </button>
+        )}
         <MapWrapper
           properties={allProperties}
           locationFilters={locationFilter}
