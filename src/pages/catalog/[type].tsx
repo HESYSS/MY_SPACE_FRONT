@@ -28,7 +28,16 @@ function buildQueryFromFilters(
     if (Array.isArray(val)) {
       params[key] = val.join(",");
     } else if (typeof val === "object") {
-      return;
+      if (Array.isArray(val)) {
+        // Если val — массив простых значений
+        return;
+      } else if (typeof val === "object" && val !== null && key === "polygon") {
+        // Если val — объект (например массив массивов)
+        const flattened = Object.values(val).map((v: any) =>
+          Array.isArray(v) ? v.join(",") : String(v)
+        );
+        params[key] = [flattened.join(",")]; // объединяем всё в одну строку
+      }
     } else {
       params[key] = String(val);
     }
@@ -45,7 +54,7 @@ export default function CatalogPage() {
   const [propertyType, setPropertyType] = useState<"Оренда" | "Продаж">(
     currentDeal === "rent" || currentDeal === "Оренда" ? "Оренда" : "Продаж"
   );
-
+  console.log("propertyType", propertyType, currentDeal);
   const [properties, setProperties] = useState<any[]>([]);
   const [allProperties, setAllProperties] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -53,16 +62,11 @@ export default function CatalogPage() {
   const limit = 9;
   const [totalCount, setTotalCount] = useState(0);
 
-  const [locationFilter, setLocationFilter] = useState<any>(() => {
-    const saved = localStorage.getItem("locationFilters");
-    return saved ? JSON.parse(saved) : {};
-  });
-  const [otherFilters, setOtherFilters] = useState<any>(() => {
-    const saved = localStorage.getItem("otherFilters");
-    return saved ? JSON.parse(saved) : {};
-  });
+  const [locationFilter, setLocationFilter] = useState<any>();
+  const [otherFilters, setOtherFilters] = useState<any>();
 
   const handleApply = (location: any, filters: any) => {
+    console.log("Applying filters:", { location, filters });
     setLocationFilter({ ...location });
     setOtherFilters({ ...filters });
     setPage(1);
@@ -70,11 +74,16 @@ export default function CatalogPage() {
 
   // --- Получение данных для списка (PropertyList) ---
   useEffect(() => {
-    async function fetchData() {
+    const controller = new AbortController();
+    const timeout = setTimeout(async () => {
       setLoading(true);
       try {
         const standardizedLocation = standardizeFilters(locationFilter);
         const standardizedFilters = standardizeFilters(otherFilters);
+        console.log("fetching with filters:", {
+          standardizedLocation,
+          standardizedFilters,
+        });
 
         const params = new URLSearchParams({
           page: page.toString(),
@@ -83,49 +92,74 @@ export default function CatalogPage() {
           ...buildQueryFromFilters(standardizedFilters),
           lang: lang,
         });
+
         const backendUrl = process.env.REACT_APP_API_URL;
-        console.log("Fetching with params:", backendUrl);
-        const res = await fetch(`${backendUrl}/items?${params}`);
+        console.log("Fetching with params:", params.toString());
+
+        const res = await fetch(`${backendUrl}/items?${params}`, {
+          signal: controller.signal,
+        });
         const data = await res.json();
 
         setProperties(data.items);
         setTotalCount(data.total);
         console.log("Fetched properties:", data.total);
-      } catch (err) {
-        console.error(err);
+      } catch (err: any) {
+        if (err.name === "AbortError") {
+          console.log("Запрос отменён из-за нового фильтра/страницы");
+        } else {
+          console.error(err);
+        }
       } finally {
         setLoading(false);
       }
-    }
-    fetchData();
+    }, 500); // задержка 500мс
+
+    return () => {
+      clearTimeout(timeout);
+      controller.abort();
+    };
   }, [page, locationFilter, otherFilters, lang]);
 
   // --- Получение всех данных для карты ---
   useEffect(() => {
-    async function fetchAll() {
+    const controller = new AbortController(); // для отмены запроса если фильтры изменились раньше чем задержка закончилась
+    const timeout = setTimeout(async () => {
       try {
         const standardizedLocation = standardizeFilters(locationFilter);
         const standardizedFilters = standardizeFilters(otherFilters);
 
+        console.log("1");
         const params = new URLSearchParams({
-          // чтобы карта показывала все
+          lang: lang,
           ...buildQueryFromFilters(standardizedLocation),
           ...buildQueryFromFilters(standardizedFilters),
         });
 
+        console.log("Fetching all with params:", params.toString());
         const backendUrl = process.env.REACT_APP_API_URL;
-        const res = await fetch(`${backendUrl}/items/coords?${params}`);
+        const res = await fetch(`${backendUrl}/items/coords?${params}`, {
+          signal: controller.signal,
+        });
 
         const data = await res.json();
-
         setAllProperties(data);
         console.log("Fetched all properties for map:", data);
-      } catch (err) {
-        console.error(err);
+      } catch (err: any) {
+        if (err.name === "AbortError") {
+          console.log("Запрос отменён из-за нового фильтра");
+        } else {
+          console.error(err);
+        }
       }
-    }
-    fetchAll();
+    }, 50); // задержка 500мс
+
+    return () => {
+      clearTimeout(timeout);
+      controller.abort(); // отменяем предыдущий запрос
+    };
   }, [locationFilter, otherFilters]);
+
   return (
     <div className={styles.catalogContainer}>
       <div className={styles.leftColumn}>

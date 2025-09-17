@@ -21,21 +21,30 @@ export default function FiltersModal({ onClose, onSubmit }: FiltersModalProps) {
     CATEGORY_TYPES["Житлова"][lang as "en" | "ua"][0]
   );
   const [filters, setFilters] = useState<Record<string, any>>({});
-  const [currency, setCurrency] = useState<"UAH" | "USD">("UAH");
+  const [currency, setCurrency] = useState<"UAH" | "USD">("USD");
 
   // Загружаем сохраненные фильтры и валюту
   useEffect(() => {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
       const parsed = JSON.parse(saved);
+      console.log("Loaded saved filters:", parsed);
       setFilters(parsed);
       if (parsed.category) setCategory(parsed.category);
       if (parsed.propertyType) setPropertyType(parsed.propertyType);
-    }
-    const savedCurrency = localStorage.getItem(CURRENCY_KEY);
-    if (savedCurrency === "USD") setCurrency("USD");
-  }, []);
 
+      const savedCurrency = localStorage.getItem(CURRENCY_KEY);
+      if (savedCurrency === "USD") setCurrency("USD");
+
+      onSubmit({
+        ...parsed,
+        // передаем выбранную валюту
+      });
+    }
+  }, []);
+  useEffect(() => {
+    console.log("Filters changed:", filters);
+  }, [filters]);
   const handleCurrencyToggle = (newCurrency: "UAH" | "USD") => {
     setCurrency(newCurrency);
     localStorage.setItem(CURRENCY_KEY, newCurrency);
@@ -92,6 +101,7 @@ export default function FiltersModal({ onClose, onSubmit }: FiltersModalProps) {
                     category === catUa ? styles.active : ""
                   }`}
                   onClick={() => {
+                    localStorage.removeItem(STORAGE_KEY);
                     setCategory(catUa as keyof typeof CATEGORY_TYPES);
                     setPropertyType(CATEGORY_TYPES[catUa]["ua"][0]);
                     const saved = JSON.parse(
@@ -123,6 +133,7 @@ export default function FiltersModal({ onClose, onSubmit }: FiltersModalProps) {
                     propertyType === typeUa ? styles.active : ""
                   }`}
                   onClick={() => {
+                    localStorage.removeItem(STORAGE_KEY);
                     setPropertyType(typeUa);
                     const saved = JSON.parse(
                       localStorage.getItem(STORAGE_KEY) || "{}"

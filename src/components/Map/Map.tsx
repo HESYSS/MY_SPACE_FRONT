@@ -63,7 +63,7 @@ export default function MapDrawFilter({
 }) {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstance = useRef<Map | null>(null);
-
+  const [hasPolygon, setHasPolygon] = useState(false);
   const drawSource = useRef(new VectorSource());
   const markerSource = useRef(new VectorSource());
   const metroSource = useRef(new VectorSource());
@@ -248,29 +248,50 @@ export default function MapDrawFilter({
       viewport.removeEventListener("pointermove", handlePointerMove);
       viewport.removeEventListener("pointerup", handlePointerUp);
     };
-  }, [
-    isDrawing,
-    markerLayer,
-    drawLayer,
-    metroLayer,
-    onChangeFilters,
-    locationFilters,
-    filterMarkers,
-  ]);
+  }, [isDrawing, locationFilters]);
 
   // Загрузка и обновление маркеров
   useEffect(() => {
-    markerSource.current.clear();
-    properties?.forEach((p) => {
-      markerSource.current.addFeature(
-        new Feature({
+    if (!markerSource.current) return;
+
+    const existingFeatures = markerSource.current.getFeatures();
+    const existingIds = new Set(existingFeatures.map((f) => f.get("id")));
+    const newIds = new Set(properties.map((p) => p.id));
+
+    // 1. Удаляем те маркеры, которых больше нет в данных
+    existingFeatures.forEach((f) => {
+      if (!newIds.has(f.get("id"))) {
+        markerSource.current.removeFeature(f);
+      }
+    });
+
+    // 2. Добавляем новые маркеры, которых ещё нет
+    properties.forEach((p) => {
+      if (!existingIds.has(p.id)) {
+        const feature = new Feature({
           geometry: new Point(fromLonLat([p.lng, p.lat])),
           id: p.id,
-        })
-      );
+        });
+        feature.setStyle(markerStyle); // 👈 если нужен стиль
+        markerSource.current.addFeature(feature);
+      }
+    });
+
+    // 3. (опционально) обновляем координаты, если они изменились
+    properties.forEach((p) => {
+      const feature = existingFeatures.find((f) => f.get("id") === p.id);
+      if (feature) {
+        const geom = feature.getGeometry();
+        if (geom instanceof Point) {
+          const coords = geom.getCoordinates();
+          const newCoords = fromLonLat([p.lng, p.lat]);
+          if (coords[0] !== newCoords[0] || coords[1] !== newCoords[1]) {
+            geom.setCoordinates(newCoords);
+          }
+        }
+      }
     });
   }, [properties]);
-
   // ... остальной код без изменений ...
 
   useEffect(() => {
@@ -299,6 +320,7 @@ export default function MapDrawFilter({
 
     // --- circles для метро ---
     const metroCircles: Polygon[] = [];
+    const metroLines: any[] = [];
     if (
       Array.isArray(locationFilters?.metro) &&
       locationFilters.metro.length > 0
@@ -312,6 +334,7 @@ export default function MapDrawFilter({
         );
         const circlePolygon = polygonFromCircle(circleGeom, 64);
         metroCircles.push(circlePolygon);
+        metroLines.push(station.line);
       });
     }
 
@@ -331,9 +354,7 @@ export default function MapDrawFilter({
 
     // --- проверка: все фильтры пустые ---
     const noFilters =
-      (!locationFilters?.districts || locationFilters.districts.length === 0) &&
-      (!locationFilters?.metro || locationFilters.metro.length === 0) &&
-      !locationFilters?.polygon;
+      !locationFilters?.districts || locationFilters.districts.length === 0;
 
     // --- собираем все дырки для маски ---
     const holes: [number, number][][] = [];
@@ -386,7 +407,7 @@ export default function MapDrawFilter({
     districtsSource.current.addFeature(maskFeature);
 
     // === 4. Добавляем круги метро как отдельные элементы (не как дырки) ===
-    metroCircles.forEach((circle) => {
+    metroCircles.forEach((circle, index) => {
       const feature = new Feature(circle);
       feature.setStyle(
         new Style({
@@ -394,7 +415,7 @@ export default function MapDrawFilter({
             color: "rgba(255, 255, 255, 0)", // Прозрачная заливка
           }),
           stroke: new Stroke({
-            color: "#00ff00",
+            color: metroLines[index] || "blue",
             width: 1,
           }),
         })
@@ -452,9 +473,32 @@ export default function MapDrawFilter({
     view.animate({ zoom: view.getZoom()! + delta, duration: 250 });
   };
 
-  const toggleDrawing = () => {
-    setIsDrawing(!isDrawing);
-    if (!isDrawing) {
+  const handlePolygonButton = () => {
+    if (isDrawing) {
+      // Завершаем рисование
+      setIsDrawing(false);
+    } else if (currentCoords.current.length > 0) {
+      console.log("Clearing drawn polygon", currentCoords);
+      const newFilters = {
+        ...locationFilters,
+        polygon: [],
+      };
+
+      onChangeFilters(newFilters);
+      console.log("New location filters:", newFilters);
+      // 🔹 Сохраняем в локальное хранилище
+      try {
+        localStorage.setItem(FILTERS_STORAGE_KEY, JSON.stringify(newFilters));
+        localStorage.removeItem(POLYGON_STORAGE_KEY);
+        localStorage.removeItem(current_STORAGE_KEY);
+      } catch (err) {
+        console.error("Не удалось сохранить фильтры в localStorage", err);
+      }
+      drawSource.current.clear();
+      currentCoords.current = [];
+    } else {
+      // Начинаем рисовать
+      setIsDrawing(true);
       drawSource.current.clear();
       currentCoords.current = [];
     }
@@ -463,8 +507,14 @@ export default function MapDrawFilter({
   return (
     <div className={styles.mapContainer}>
       <div className={styles.drawButtonContainer}>
-        <button onClick={toggleDrawing} className={styles.mapButton}>
-          {isDrawing ? "✅" : "✏️"}
+        <button onClick={handlePolygonButton} className={styles.mapButton}>
+          {
+            isDrawing
+              ? "✅" // активно рисуем
+              : currentCoords.current.length > 0
+              ? "✖" // есть полигон → удалить
+              : "✏️" // ничего нет → начать рисовать
+          }
         </button>
       </div>
 

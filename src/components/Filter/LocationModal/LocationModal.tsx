@@ -108,6 +108,7 @@ export default function LocationModal({
     const saved = localStorage.getItem(FILTERS_STORAGE_KEY);
     if (saved) {
       const parsed = JSON.parse(saved);
+      console.log("Loaded saved location filters:", parsed);
       setSelectedMetro(parsed.metro || []);
       setSelectedDistricts(parsed.districts || []);
       setSelectedStreets(parsed.streets || []);
@@ -212,6 +213,7 @@ export default function LocationModal({
     console.log("Saving filters after selection:", filters);
 
     localStorage.setItem(FILTERS_STORAGE_KEY, JSON.stringify(filters));
+    console.log("Saved location filters to storage:", loadPolygon());
     onSubmit({ ...filters, polygon: loadPolygon() }); // ⬅️ подмешиваем polygon
   }, [
     selectedMetro,

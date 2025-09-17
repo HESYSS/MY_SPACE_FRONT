@@ -20,26 +20,11 @@ export default function Filter({ type, onApply }: FilterProps) {
   // Локальные состояния для выбранных данных
   const [location, setLocation] = useState<any>(null);
   const [filters, setFilters] = useState<any>(null);
-  useEffect(() => {
-    // восстановление локации
-    const savedLocation = localStorage.getItem(LOCATION_STORAGE_KEY);
-    console.log("Saved location from storage:", savedLocation);
-    if (savedLocation) {
-      setLocation(JSON.parse(savedLocation));
-    }
-
-    // восстановление других фильтров
-    const savedFilters = localStorage.getItem(OTHER_STORAGE_KEY);
-    if (savedFilters) {
-      setFilters(JSON.parse(savedFilters));
-    }
-  }, []);
 
   // Управление модальным окном "Локация"
   const handleLocationSubmit = (locationFilters: any) => {
     console.log("Location filters submitted:", locationFilters);
     setLocation(locationFilters);
-    localStorage.setItem(LOCATION_STORAGE_KEY, JSON.stringify(locationFilters));
   };
   useEffect(() => {
     console.log("location changed", location);
@@ -55,7 +40,7 @@ export default function Filter({ type, onApply }: FilterProps) {
   // Управление модальным окном "Фильтр"
   const handleFiltersSubmit = (appliedFilters: any) => {
     setFilters({ ...appliedFilters });
-    localStorage.setItem(OTHER_STORAGE_KEY, JSON.stringify(appliedFilters));
+    console.log("Filters submitted:", appliedFilters);
     setIsFiltersModalOpen(false);
   };
   return (
