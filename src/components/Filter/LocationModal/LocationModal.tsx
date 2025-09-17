@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import styles from "./LocationModal.module.css";
 import { useTranslation } from "react-i18next";
-import { METRO_LINES, SHORE_DISTRICTS } from "./locationfiltersconfig";
+import { METRO_LINES, SHORE_DISTRICTS } from "./locationFiltersConfig";
 
 interface LocationData {
   kyiv: {
@@ -16,6 +16,7 @@ interface LocationData {
 }
 
 interface LocationModalProps {
+  isOutOfCity?: boolean;
   onClose: () => void;
   onSubmit: (filters: any) => void;
 }
@@ -35,11 +36,14 @@ function loadPolygon() {
 }
 
 export default function LocationModal({
+  isOutOfCity,
   onClose,
   onSubmit,
 }: LocationModalProps) {
-  const [locationType, setLocationType] = useState<"kyiv" | "region">("kyiv");
-
+  const [locationType, setLocationType] = useState<"kyiv" | "region">(
+    isOutOfCity ? "region" : "kyiv"
+  );
+  console.log("Initial isOutOfCity:", locationType, isOutOfCity);
   // UI state
   const [metroOpen, setMetroOpen] = useState(false);
   const [districtOpen, setDistrictOpen] = useState(false);

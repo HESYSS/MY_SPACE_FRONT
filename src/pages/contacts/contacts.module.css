@@ -2,7 +2,7 @@
 .containerWithOval {
   position: relative;
   overflow: hidden;
-  background-color: #0A0A0A;
+  background-color: #0a0a0a;
   padding: 20px 0;
 }
 
@@ -38,18 +38,18 @@
 .titleLine {
   height: 1px;
   width: 100%;
-  background: linear-gradient(to right, #050505 0%, #03B9B3 100%);
+  background: linear-gradient(to right, #050505 0%, #03b9b3 100%);
   flex-grow: 1;
 }
 
 .readMoreTitle {
-  font-family: 'Raleway';
+  font-family: "Raleway";
   font-style: normal;
   font-weight: 400;
   font-size: 64px;
   line-height: 75px;
   text-transform: uppercase;
-  color: #EBEBEB;
+  color: #ebebeb;
   margin: 0;
   flex-shrink: 0;
 }
@@ -58,7 +58,7 @@
 .contactsBlockWrapper {
   padding: 1px;
   border-radius: 20px;
-  background: linear-gradient(240deg, #FFFFFF 0%, #000000 50%, #000000 100%);
+  background: linear-gradient(240deg, #ffffff 0%, #000000 50%, #000000 100%);
   margin: 40px auto;
   max-width: 1200px;
   width: 90%;
@@ -77,7 +77,7 @@
   gap: 30px;
   width: 100%;
   height: 100%;
-  background: #0A0A0A;
+  background: #0a0a0a;
   border-radius: 20px;
   z-index: 2;
 }
@@ -133,20 +133,20 @@
 }
 
 .contactTitle {
-  font-family: 'Raleway';
+  font-family: "Raleway";
   font-weight: 700;
   font-size: 24px;
   line-height: 28px;
-  color: #EBEBEB;
+  color: #ebebeb;
   margin: 0;
 }
 
 .contactInfo {
-  font-family: 'Inter';
+  font-family: "Inter";
   font-weight: 400;
   font-size: 14px;
   line-height: 17px;
-  color: #EBEBEB;
+  color: #ebebeb;
   margin: 0;
 }
 
@@ -167,11 +167,11 @@
 }
 
 .socialText {
-  font-family: 'Inter';
+  font-family: "Inter";
   font-weight: 400;
   font-size: 14px;
   line-height: 17px;
-  color: #FFFFFF;
+  color: #ffffff;
   margin: 0;
 }
 
@@ -193,7 +193,7 @@
 }
 
 .contactInfoSmall {
-  font-family: 'Raleway';
+  font-family: "Raleway", sans-serif;
   font-weight: 700;
   font-size: 11px;
   line-height: 13px;
@@ -226,7 +226,7 @@
 
 .workDay,
 .workTime {
-  font-family: 'Inter';
+  font-family: "Inter";
   font-weight: 400;
   font-size: 14px;
   line-height: 17px;
@@ -255,12 +255,12 @@
 }
 
 .callToAction {
-  font-family: 'Raleway', sans-serif;
+  font-family: "Raleway", sans-serif;
   font-weight: 400;
   font-size: 48px;
   line-height: 56px;
   text-transform: uppercase;
-  color: #EBEBEB;
+  color: #ebebeb;
   flex: 1 1 400px;
 }
 
@@ -273,7 +273,7 @@
   flex: 1 1 500px;
   max-width: 525px;
   height: auto;
-  background: #0A0A0A;
+  background: #0a0a0a;
   border-radius: 20px;
   box-sizing: border-box;
   z-index: 2;
@@ -322,11 +322,11 @@
 }
 
 .optionText {
-  font-family: 'Raleway', sans-serif;
+  font-family: "Raleway", sans-serif;
   font-weight: 400;
   font-size: 28px;
   line-height: 42px;
-  color: #EBEBEB;
+  color: #ebebeb;
   margin: 0;
   font-variant: small-caps;
 }
@@ -354,21 +354,21 @@
 
   .contactsBlockWrapper {
     width: 90%;
-    background: linear-gradient(90deg, #FFFFFF 0%, #000000 50%, #000000 100%);
+    background: linear-gradient(90deg, #ffffff 0%, #000000 50%, #000000 100%);
   }
 
   .contactsBlock {
     padding: 30px;
     gap: 20px;
   }
-  
+
   /* Контакты: сетка 2x2 */
   .contactsText {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 20px;
   }
-  
+
   /* Нижний ряд: располагаем колонками */
   .bottomRow {
     flex-direction: column;
@@ -384,7 +384,7 @@
   .contactTextSection {
     flex: none;
   }
-  
+
   .workHours {
     padding-left: 0;
     flex: none;
@@ -443,9 +443,9 @@
 
   .contactsBlockWrapper {
     width: 90%;
-    background: linear-gradient(90deg, #FFFFFF 0%, #000000 50%, #000000 100%);
+    background: linear-gradient(90deg, #ffffff 0%, #000000 50%, #000000 100%);
   }
-  
+
   .contactsBlock {
     padding: 20px;
     gap: 20px;
@@ -461,7 +461,7 @@
     grid-template-columns: repeat(2, 1fr);
     gap: 10px;
   }
-  
+
   .contactItem {
     width: 100%;
     flex: none;
@@ -478,13 +478,13 @@
     font-size: 12px;
     line-height: 14px;
   }
-  
+
   /* Нижний ряд: вертикальный список */
   .bottomRow {
     flex-direction: column;
     gap: 20px;
   }
-  
+
   .contactTextSection {
     width: 100%;
     padding: 0;
@@ -495,13 +495,13 @@
     font-size: 10px;
     line-height: 12px;
   }
-  
+
   .workHours {
     width: 100%;
     padding: 0;
     flex: none;
   }
-  
+
   .workHours .line {
     width: 100%;
   }
@@ -540,7 +540,7 @@
     padding: 10px;
     flex: 1 1 100%; /* Устанавливаем гибкий размер, чтобы блок занимал всю ширину */
   }
-  
+
   .frame88 {
     gap: 10px; /* Уменьшаем отступ между опциями */
     align-items: flex-start;

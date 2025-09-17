@@ -79,7 +79,7 @@ export default function PropertyPage() {
       }
     };
     fetchProperty();
-  }, [id]);
+  }, [id, lang]);
 
   if (loading) return <p>{t("loading")}</p>;
   if (error)

@@ -28,7 +28,7 @@ export default function PropertyList({
         <p>Завантаження...</p>
       ) : (
         <div className={styles.propertiesGrid}>
-          {properties.map((p) => (
+          {(properties || []).map((p) => (
             <Link key={p.id} href={`/property/${p.id}`} passHref>
               <PropertyCard property={p} />
             </Link>

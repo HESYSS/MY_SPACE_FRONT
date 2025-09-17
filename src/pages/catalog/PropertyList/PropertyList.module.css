@@ -1,3 +1,6 @@
+/* PropertyList.module.css */
+
+/* Стили для ПК (по умолчанию) */
 .propertiesGrid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -6,6 +9,7 @@
 
 .pagination {
   display: flex;
+  justify-content: center;
   gap: 10px;
   align-items: center;
   margin-top: 20px;
@@ -41,4 +45,44 @@
 
 .propertiesGrid a {
   text-decoration: none;
+}
+
+/* ---------------------------------
+   Адаптация для планшетов (769px - 1300px)
+   --------------------------------- */
+@media (min-width: 769px) and (max-width: 1300px) {
+  .propertiesGrid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+  }
+}
+
+/* ---------------------------------
+   Адаптация для мобильных устройств (375px - 768px)
+   --------------------------------- */
+@media (min-width: 375px) and (max-width: 768px) {
+  .propertiesGrid {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .pagination {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .pagination button {
+    width: 90%;
+    padding: 12px;
+    font-size: 16px;
+    box-sizing: border-box; /* 👈 Добавляем это свойство */
+  }
+
+  .pagination span {
+    font-size: 14px;
+  }
 }

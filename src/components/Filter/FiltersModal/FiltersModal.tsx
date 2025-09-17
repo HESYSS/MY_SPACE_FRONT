@@ -5,6 +5,8 @@ import i18n from "i18n";
 import { useTranslation } from "react-i18next";
 
 interface FiltersModalProps {
+  type?: string;
+  currentDeal?: "Оренда" | "Продаж";
   onClose: () => void;
   onSubmit: (filters: any) => void;
 }
@@ -52,12 +54,15 @@ export default function FiltersModal({ onClose, onSubmit }: FiltersModalProps) {
 
   const handleInputChange = (filterName: string, value: any) => {
     setFilters((prev) => {
-      const updated = { ...prev, [filterName]: value };
+      const updated = {
+        ...prev,
+        category, // добавляем категорию
+        type: propertyType, // добавляем тип
+        [filterName]: value,
+      };
 
-      const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
-      if (!saved[category]) saved[category] = {};
-      saved[category][propertyType] = updated;
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(saved));
+      // сохраняем в localStorage плоским объектом
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
 
       return updated;
     });
@@ -68,7 +73,7 @@ export default function FiltersModal({ onClose, onSubmit }: FiltersModalProps) {
       category,
       propertyType,
       ...filters,
-      currency, // передаем выбранную валюту
+      currency,
     });
   };
 
@@ -84,20 +89,23 @@ export default function FiltersModal({ onClose, onSubmit }: FiltersModalProps) {
     <div className={styles.modalOverlay} onClick={onClose}>
       <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
         {/* Заголовок + кнопка переключения валюты */}
-        <div className={styles.modalHeader}>
-          <h2 className={styles.modalTitle}>{t("filter_button")}</h2>
+        <div className={styles.header}>
+          <h2 className={styles.title}>{t("filter_button")}</h2>
+          <button onClick={onClose} className={styles.closeButton}>
+            &times;
+          </button>
         </div>
 
         {/* Категорія */}
-        <div className={styles.filterGroup}>
-          <div className={styles.filterLabel}>{t("category")}</div>
+        <div className={styles.section}>
+          <div className={styles.label}>{t("category")}</div>
           <div className={styles.categoryToggle}>
             {Object.keys(CATEGORY_TYPES).map((catUa, index) => {
               const catEn = Object.keys(CATEGORY_TYPES)[index];
               return (
                 <button
                   key={catUa}
-                  className={`${styles.categoryButton} ${
+                  className={`${styles.button} ${
                     category === catUa ? styles.active : ""
                   }`}
                   onClick={() => {
@@ -112,6 +120,19 @@ export default function FiltersModal({ onClose, onSubmit }: FiltersModalProps) {
                     );
                   }}
                 >
+                  {category === catUa && (
+                    <svg
+                      className={styles.checkIcon}
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                  )}
                   {t(`categoryKeys.${catUa}`)}
                 </button>
               );
@@ -120,16 +141,16 @@ export default function FiltersModal({ onClose, onSubmit }: FiltersModalProps) {
         </div>
 
         {/* Тип нерухомості */}
-        <div className={styles.filterGroup}>
-          <div className={styles.filterLabel}>{t("propertyType")}</div>
-          <div className={styles.propertyTypeToggle}>
+        <div className={styles.section}>
+          <div className={styles.label}>{t("propertyType")}</div>
+          <div className={styles.dealToggle}>
             {CATEGORY_TYPES[category]["ua"].map((typeUa, index) => {
               const typeEn =
                 CATEGORY_TYPES[category][lang as "en" | "ua"][index];
               return (
                 <button
                   key={typeUa}
-                  className={`${styles.propertyButton} ${
+                  className={`${styles.button} ${
                     propertyType === typeUa ? styles.active : ""
                   }`}
                   onClick={() => {
@@ -141,6 +162,19 @@ export default function FiltersModal({ onClose, onSubmit }: FiltersModalProps) {
                     setFilters(saved[category]?.[typeUa] || {});
                   }}
                 >
+                  {propertyType === typeUa && (
+                    <svg
+                      className={styles.checkIcon}
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                  )}
                   {typeEn}
                 </button>
               );
@@ -149,20 +183,78 @@ export default function FiltersModal({ onClose, onSubmit }: FiltersModalProps) {
         </div>
         {/* Оренда / Продаж */}
         {/* Оренда / Продаж */}
-        <div className={styles.filterGroup}>
-          <div className={styles.filterLabel}>{t("dealType")}</div>
-          <div className={styles.propertyTypeToggle}>
-            {["Оренда", "Продаж"].map((deal) => (
+        <div className={styles.section}>
+          <div className={styles.label}>{t("dealType")}</div>
+          <div className={styles.dealToggle}>
+            {["Продаж", "Оренда"].map((deal) => (
               <button
                 key={deal}
-                className={`${styles.propertyButton} ${
-                  filters.deal == deal ? styles.active : ""
+                className={`${styles.button} ${
+                  filters.deal === deal ? styles.active : ""
                 }`}
                 onClick={() => handleInputChange("deal", deal)}
               >
+                {filters.deal === deal && (
+                  <svg
+                    className={styles.checkIcon}
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                )}
                 {t(deal)}
               </button>
             ))}
+          </div>
+        </div>
+
+        <div className={styles.section}>
+          <div className={styles.label}>{t("Цена")}</div>
+          <div className={styles.priceContainer}>
+            <div className={styles.priceInputGroup}>
+              <input
+                type="text"
+                placeholder={t("от")}
+                value={filters[`Ціна_from`] || ""}
+                onChange={(e) => handleInputChange("Ціна_from", e.target.value)}
+                className={`${styles.inputField} ${
+                  filters[`Ціна_from`] ? styles.filled : ""
+                }`}
+              />
+              <span className={styles.separator}>–</span>
+              <input
+                type="text"
+                placeholder={t("до")}
+                value={filters[`Ціна_to`] || ""}
+                onChange={(e) => handleInputChange("Ціна_to", e.target.value)}
+                className={`${styles.inputField} ${
+                  filters[`Ціна_to`] ? styles.filled : ""
+                }`}
+              />
+            </div>
+            <div className={styles.currencyToggle}>
+              <button
+                onClick={() => handleCurrencyToggle("UAH")}
+                className={`${styles.currencyButton} ${
+                  currency === "UAH" ? styles.active : ""
+                }`}
+              >
+                {t("Грн")}
+              </button>
+              <button
+                onClick={() => handleCurrencyToggle("USD")}
+                className={`${styles.currencyButton} ${
+                  currency === "USD" ? styles.active : ""
+                }`}
+              >
+                USD
+              </button>
+            </div>
           </div>
         </div>
 
@@ -183,7 +275,7 @@ export default function FiltersModal({ onClose, onSubmit }: FiltersModalProps) {
                   "Площа",
                   "№ Будинку",
                 ].includes(filterUa) ? (
-                  <div className={styles.inputRange}>
+                  <div className={styles.priceInputGroup}>
                     <input
                       type="text"
                       placeholder={t("Від")}
@@ -191,9 +283,11 @@ export default function FiltersModal({ onClose, onSubmit }: FiltersModalProps) {
                       onChange={(e) =>
                         handleInputChange(`${filterUa}_from`, e.target.value)
                       }
-                      className={styles.rangeInput}
+                      className={`${styles.inputField} ${
+                        filters[`${filterUa}_from`] ? styles.filled : ""
+                      }`}
                     />
-                    <span className={styles.rangeSeparator}>{t("до")}</span>
+                    <span className={styles.separator}>–</span>
                     <input
                       type="text"
                       placeholder={t("До")}
@@ -201,13 +295,15 @@ export default function FiltersModal({ onClose, onSubmit }: FiltersModalProps) {
                       onChange={(e) =>
                         handleInputChange(`${filterUa}_to`, e.target.value)
                       }
-                      className={styles.rangeInput}
+                      className={`${styles.inputField} ${
+                        filters[`${filterUa}_to`] ? styles.filled : ""
+                      }`}
                     />
                     {filterUa === "Ціна" && (
-                      <div className={styles.currencyContainer}>
+                      <div className={styles.currencyToggle}>
                         <button
                           onClick={() => handleCurrencyToggle("UAH")}
-                          className={`${styles.currencyButtonPrice} ${
+                          className={`${styles.currencyButton} ${
                             currency === "UAH" ? styles.active : ""
                           }`}
                         >
@@ -216,7 +312,7 @@ export default function FiltersModal({ onClose, onSubmit }: FiltersModalProps) {
                         <span>/</span>
                         <button
                           onClick={() => handleCurrencyToggle("USD")}
-                          className={`${styles.currencyButtonPrice} ${
+                          className={`${styles.currencyButton} ${
                             currency === "USD" ? styles.active : ""
                           }`}
                         >
@@ -225,29 +321,31 @@ export default function FiltersModal({ onClose, onSubmit }: FiltersModalProps) {
                       </div>
                     )}
                     {filterUa === "Загальна площа" && (
-                      <span>{t("squareMeters")}</span>
+                      <span className={styles.unit}>{t("squareMeters")}</span>
                     )}
                   </div>
                 ) : filterUa === "Кіл.кімнат" ? (
-                  <div className={styles.multiSelect}>
-                    {[1, 2, 3, 4, 5, "6+"].map((room) => (
-                      <button
-                        key={room}
-                        className={`${styles.roomButton} ${
-                          filters.rooms?.includes(room) ? styles.active : ""
-                        }`}
-                        onClick={() =>
-                          handleInputChange(
-                            "rooms",
-                            filters.rooms?.includes(room)
-                              ? filters.rooms.filter((r: any) => r !== room)
-                              : [...(filters.rooms || []), room]
-                          )
-                        }
-                      >
-                        {room}
-                      </button>
-                    ))}
+                  <div key={filterUa} className={styles.inputRangeGroup}>
+                    <div className={styles.roomButtons}>
+                      {[1, 2, 3, 4, 5, "6+"].map((room) => (
+                        <button
+                          key={room}
+                          className={`${styles.roomButton} ${
+                            filters.rooms?.includes(room) ? styles.active : ""
+                          }`}
+                          onClick={() =>
+                            handleInputChange(
+                              "rooms",
+                              filters.rooms?.includes(room)
+                                ? filters.rooms.filter((r: any) => r !== room)
+                                : [...(filters.rooms || []), room]
+                            )
+                          }
+                        >
+                          {room}
+                        </button>
+                      ))}
+                    </div>
                   </div>
                 ) : filterUa === "Ремонт" ? (
                   <div className={styles.multiSelect}>
@@ -261,7 +359,7 @@ export default function FiltersModal({ onClose, onSubmit }: FiltersModalProps) {
                     ].map((option) => (
                       <button
                         key={option}
-                        className={`${styles.optionButton} ${
+                        className={`${styles.roomButton} ${
                           filters.renovation?.includes(option)
                             ? styles.active
                             : ""
@@ -298,11 +396,11 @@ export default function FiltersModal({ onClose, onSubmit }: FiltersModalProps) {
         </div>
 
         {/* Кнопки */}
-        <div className={styles.modalActions}>
+        <div className={styles.footer}>
           <button onClick={resetFilters} className={styles.resetButton}>
             {t("reset")} {/* вместо "Скинути" */}
           </button>
-          <button onClick={handleSubmit} className={styles.showResultsButton}>
+          <button onClick={handleSubmit} className={styles.submitButton}>
             {t("showResults") /* вместо "Показати результати" */}
           </button>
         </div>

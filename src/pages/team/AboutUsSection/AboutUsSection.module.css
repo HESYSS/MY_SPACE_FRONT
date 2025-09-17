@@ -28,7 +28,7 @@
 .mainTitle {
   width: 283px;
   height: 75px;
-  font-family: "Raleway";
+  font-family: "Raleway", sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 64px;
@@ -128,80 +128,80 @@
 
 @media (max-width: 1300px) {
   .aboutUs {
-  /* Адаптация для планшетов */
-  width: 90%;
-  max-width: 689px;
-  height: auto;
-  margin: 0 auto; /* Центрирование по горизонтали */
-  gap: 30px;
-  padding: 0 15px; /* Добавление небольших отступов по бокам */
-  margin-top: 40px;
-  margin-bottom: 40px;
-}
+    /* Адаптация для планшетов */
+    width: 90%;
+    max-width: 689px;
+    height: auto;
+    margin: 0 auto; /* Центрирование по горизонтали */
+    gap: 30px;
+    padding: 0 15px; /* Добавление небольших отступов по бокам */
+    margin-top: 40px;
+    margin-bottom: 40px;
+  }
 
-.titleSection {
-  width: 100%;
-  gap: 20px;
-  height: auto;
-  flex-direction: column;
-  align-items: flex-start;
-}
+  .titleSection {
+    width: 100%;
+    gap: 20px;
+    height: auto;
+    flex-direction: column;
+    align-items: flex-start;
+  }
 
-.contentSection {
-  flex-direction: column-reverse; /* Это ключевое изменение: элементы будут располагаться вертикально. */
-  width: 100%;
-  height: auto;
-}
+  .contentSection {
+    flex-direction: column-reverse; /* Это ключевое изменение: элементы будут располагаться вертикально. */
+    width: 100%;
+    height: auto;
+  }
 
-.mainTitle {
-  font-size: 40px;
-  line-height: 50px;
-  width: auto;
-  height: auto;
-}
+  .mainTitle {
+    font-size: 40px;
+    line-height: 50px;
+    width: auto;
+    height: auto;
+  }
 
-.line8 {
-  width: 100%; /* Линия теперь занимает всю доступную ширину */
-}
+  .line8 {
+    width: 100%; /* Линия теперь занимает всю доступную ширину */
+  }
 
-.imageContainer {
-  width: 100%;
-  height: auto;
-  z-index: 0;
-}
+  .imageContainer {
+    width: 100%;
+    height: auto;
+    z-index: 0;
+  }
 
-.mainImage {
-  width: 100%;
-  height: auto;
-}
+  .mainImage {
+    width: 100%;
+    height: auto;
+  }
 
-.textContainer {
-  width: 100%;
-  height: auto;
-  border-radius: 20px 20px 0 0; /* Скругления только снизу */
-  padding: 20px;
-  margin-bottom: -20px;
-  z-index: 1;
-}
+  .textContainer {
+    width: 100%;
+    height: auto;
+    border-radius: 20px 20px 0 0; /* Скругления только снизу */
+    padding: 20px;
+    margin-bottom: -20px;
+    z-index: 1;
+  }
 
-.frame272 {
-  width: 100%;
-  height: auto;
-  gap: 15px;
-  margin-top: 0;
-}
+  .frame272 {
+    width: 100%;
+    height: auto;
+    gap: 15px;
+    margin-top: 0;
+  }
 
-.textHeading {
-  font-size: 20px;
-  line-height: 24px;
-  width: 100%;
-  height: auto;
-}
+  .textHeading {
+    font-size: 20px;
+    line-height: 24px;
+    width: 100%;
+    height: auto;
+  }
 
-.textBody {
-  font-size: 12px;
-  line-height: 14px;
-  width: 100%;
-  height: auto;
-}
+  .textBody {
+    font-size: 12px;
+    line-height: 14px;
+    width: 100%;
+    height: auto;
+  }
 }

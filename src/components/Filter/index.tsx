@@ -1,17 +1,24 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import styles from "./Filter.module.css";
 import LocationModal from "./LocationModal/LocationModal";
 import FiltersModal from "./FiltersModal/FiltersModal";
 import { useTranslation } from "react-i18next";
 
 interface FilterProps {
-  type?: "Оренда" | "Продаж";
+  isOutOfCity?: boolean;
+  type?: string;
+  deal: "Оренда" | "Продаж";
   onApply?: (filters: any) => void;
   onTypeChange?: (value: "Оренда" | "Продаж") => void;
 }
 const LOCATION_STORAGE_KEY = "locationFilters";
 const OTHER_STORAGE_KEY = "otherFilters";
-export default function Filter({ type, onApply }: FilterProps) {
+export default function Filter({
+  isOutOfCity,
+  type,
+  deal,
+  onApply,
+}: FilterProps) {
   const { t } = useTranslation("common");
   const [searchValue, setSearchValue] = useState("");
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
@@ -20,7 +27,7 @@ export default function Filter({ type, onApply }: FilterProps) {
   // Локальные состояния для выбранных данных
   const [location, setLocation] = useState<any>(null);
   const [filters, setFilters] = useState<any>(null);
-
+  const locationTriggerRef = useRef<HTMLInputElement>(null);
   // Управление модальным окном "Локация"
   const handleLocationSubmit = (locationFilters: any) => {
     console.log("Location filters submitted:", locationFilters);
@@ -40,7 +47,7 @@ export default function Filter({ type, onApply }: FilterProps) {
   // Управление модальным окном "Фильтр"
   const handleFiltersSubmit = (appliedFilters: any) => {
     setFilters({ ...appliedFilters });
-    console.log("Filters submitted:", appliedFilters);
+
     setIsFiltersModalOpen(false);
   };
   return (
@@ -49,6 +56,7 @@ export default function Filter({ type, onApply }: FilterProps) {
       <div className={styles.searchContainer}>
         <div className={styles.topPanel}>
           <input
+            ref={locationTriggerRef}
             type="text"
             placeholder={t("search_placeholder")} // вместо "Пошук..."
             value={searchValue}
@@ -72,6 +80,7 @@ export default function Filter({ type, onApply }: FilterProps) {
           }
         >
           <LocationModal
+            isOutOfCity={isOutOfCity}
             onClose={() => setIsLocationModalOpen(false)}
             onSubmit={handleLocationSubmit}
           />
@@ -82,6 +91,8 @@ export default function Filter({ type, onApply }: FilterProps) {
         className={isFiltersModalOpen ? styles.modalOpen : styles.modalClosed}
       >
         <FiltersModal
+          type={type}
+          currentDeal={deal}
           onClose={() => setIsFiltersModalOpen(false)}
           onSubmit={handleFiltersSubmit}
         />

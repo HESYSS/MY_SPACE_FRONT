@@ -143,7 +143,7 @@
   color: #ebebeb;
   margin: 0;
   white-space: nowrap;
-  font-family: Raleway;
+
   font-variant: small-caps;
 }
 
@@ -187,7 +187,8 @@
     flex-wrap: wrap;
     justify-content: center;
   }
-  .callToAction, .frame89 {
+  .callToAction,
+  .frame89 {
     width: 45%;
     height: auto;
   }
@@ -204,14 +205,17 @@
     height: auto;
     gap: 40px;
   }
-  .frame87, .frame85 {
+  .frame87,
+  .frame85 {
     width: 100%;
     height: auto;
   }
-  .line16, .line17 {
+  .line16,
+  .line17 {
     width: 100%;
   }
-  .frame86, .frame84 {
+  .frame86,
+  .frame84 {
     width: 100%;
     height: auto;
   }
@@ -258,7 +262,8 @@
     justify-content: space-between;
     gap: 10px;
   }
-  .callToAction, .frame89 {
+  .callToAction,
+  .frame89 {
     width: 48%; /* Уменьшаем ширину, чтобы они поместились в одну строку */
     height: auto;
   }
@@ -274,15 +279,18 @@
     height: auto;
     gap: 20px;
   }
-  .frame87, .frame85 {
+  .frame87,
+  .frame85 {
     width: 100%;
     height: auto;
     gap: 5px;
   }
-  .line16, .line17 {
+  .line16,
+  .line17 {
     width: 100%;
   }
-  .frame86, .frame84 {
+  .frame86,
+  .frame84 {
     width: 100%;
     height: auto;
   }

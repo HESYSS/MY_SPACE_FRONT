@@ -6,6 +6,7 @@ import PropertyList from "./PropertyList";
 import styles from "./CatalogPage.module.css";
 import { standardizeFilters } from "@/utils/filterMap";
 import { useTranslation } from "react-i18next";
+import { useMediaQuery } from "react-responsive";
 
 const dealMap: Record<string, string> = {
   rent: "Оренда",
@@ -16,7 +17,10 @@ const reverseDealMap: Record<string, string> = {
   Оренда: "rent",
   Продаж: "sale",
 };
-
+const typeMap: Record<string, string> = {
+  residential: "Житлова",
+  commercial: "Комерційна",
+};
 // Сериализация фильтров в URL-параметры
 function buildQueryFromFilters(
   filters: Record<string, any>
@@ -47,12 +51,27 @@ function buildQueryFromFilters(
 
 export default function CatalogPage() {
   const router = useRouter();
-  const { type } = router.query;
-  const { i18n } = useTranslation("common");
+  const { deal, category, region } = router.query;
+  const isOutOfCity = region === "kyiv" ? false : true;
+  const type = typeMap[typeof category === "string" ? category : "Житлова"];
+
+  const { i18n, t } = useTranslation("common");
   const lang = i18n.language;
-  const currentDeal = typeof type === "string" ? type : "Оренда";
+
+  const isMobileOrTablet = useMediaQuery({ maxWidth: 1300 });
+  const [showMap, setShowMap] = useState(false);
+
+  const currentDeal = typeof deal === "string" ? deal : "Оренда";
   const [propertyType, setPropertyType] = useState<"Оренда" | "Продаж">(
     currentDeal === "rent" || currentDeal === "Оренда" ? "Оренда" : "Продаж"
+  );
+  console.log(
+    "Router query:",
+    router.query,
+    isOutOfCity,
+    type,
+    currentDeal,
+    region
   );
   console.log("propertyType", propertyType, currentDeal);
   const [properties, setProperties] = useState<any[]>([]);
@@ -72,7 +91,6 @@ export default function CatalogPage() {
     setPage(1);
   };
 
-  // --- Получение данных для списка (PropertyList) ---
   useEffect(() => {
     const controller = new AbortController();
     const timeout = setTimeout(async () => {
@@ -121,7 +139,6 @@ export default function CatalogPage() {
     };
   }, [page, locationFilter, otherFilters, lang]);
 
-  // --- Получение всех данных для карты ---
   useEffect(() => {
     const controller = new AbortController(); // для отмены запроса если фильтры изменились раньше чем задержка закончилась
     const timeout = setTimeout(async () => {
@@ -132,6 +149,7 @@ export default function CatalogPage() {
         console.log("1");
         const params = new URLSearchParams({
           lang: lang,
+
           ...buildQueryFromFilters(standardizedLocation),
           ...buildQueryFromFilters(standardizedFilters),
         });
@@ -160,16 +178,31 @@ export default function CatalogPage() {
     };
   }, [locationFilter, otherFilters]);
 
+  const containerClass = showMap
+    ? styles.catalogMapOnly
+    : styles.catalogContainer;
+
   return (
-    <div className={styles.catalogContainer}>
+    <div className={containerClass}>
       <div className={styles.leftColumn}>
         <Filter
-          type={propertyType}
+          isOutOfCity={isOutOfCity}
+          type={type}
+          currentDeal={currentDeal}
           onApply={(appliedFilters: any) => {
             const { location = {}, filters = {} } = appliedFilters;
             handleApply({ ...location }, { ...filters });
           }}
         />
+
+        {isMobileOrTablet && (
+          <button
+            className={styles.toggleMapButton}
+            onClick={() => setShowMap(!showMap)}
+          >
+            {showMap ? t("show_list") : t("show_map")}
+          </button>
+        )}
 
         <div className={styles.listContainer}>
           <PropertyList
@@ -183,7 +216,18 @@ export default function CatalogPage() {
         </div>
       </div>
 
-      <div className={styles.rightColumn}>
+      <div
+        className={`${styles.rightColumn} ${showMap ? styles.mapVisible : ""}`}
+      >
+        {isMobileOrTablet &&
+          showMap && ( // 👈 Показываем кнопку только на мобильных/планшетах и когда карта активна
+            <button
+              className={styles.closeMapButton}
+              onClick={() => setShowMap(false)} // 👈 Кнопка закрывает карту
+            >
+              {t("close_map")}
+            </button>
+          )}
         <MapWrapper
           properties={allProperties}
           locationFilters={locationFilter}
