@@ -211,5 +211,9 @@
   "reset": "Reset",
   "showResults": "Show results",
   "show_map": "Show Map",
-  "close_map": "Close Map"
+  "close_map": "Close Map",
+  "Ціна": "Price",
+  "кімнат": "rooms",
+  "площа": "area",
+  "Kyiv region": "Kyiv region"
 }
