@@ -1,23 +1,27 @@
 // components/PropertyCard.tsx
 import { Property } from "../../types/property";
 import Image from "next/image";
-import styles from "./styles.module.css"; // Импортируем стили
+import styles from "./styles.module.css";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   property: Property;
 }
 
 export default function PropertyCard({ property }: Props) {
-  // Форматирование цены
+  const { t, i18n } = useTranslation("common");
+  const lang = i18n.language;
+
+  // Форматування ціни
   const formatPrice = (price?: number, currency?: string) => {
-    if (!price) return "N/A";
-    const formattedPrice = new Intl.NumberFormat("en-US").format(price);
+    if (!price) return t("N/A");
+    const formattedPrice = new Intl.NumberFormat("uk-UA").format(price);
     return `${formattedPrice} ${currency ?? ""}`;
   };
 
-  // Форматирование даты
+  // Форматування дати
   const formatDate = (dateString?: string) => {
-    if (!dateString) return "N/A";
+    if (!dateString) return t("N/A");
     try {
       const date = new Date(dateString);
       const options: Intl.DateTimeFormatOptions = {
@@ -25,38 +29,20 @@ export default function PropertyCard({ property }: Props) {
         month: "long",
         year: "numeric",
       };
-      const monthNames: Record<string, string> = {
-        January: "Січня",
-        February: "Лютого",
-        March: "Березня",
-        April: "Квітня",
-        May: "Травня",
-        June: "Червня",
-        July: "Липня",
-        August: "Серпня",
-        September: "Вересня",
-        October: "Жовтня",
-        November: "Листопада",
-        December: "Грудня",
-      };
-      const parts = new Intl.DateTimeFormat("en-US", options).formatToParts(
-        date
-      );
-      const day = parts.find((p) => p.type === "day")?.value;
-      const monthEn = parts.find((p) => p.type === "month")?.value;
-      const year = parts.find((p) => p.type === "year")?.value;
-
-      const monthUa = monthEn ? monthNames[monthEn] : "";
-      return `${day} ${monthUa}, ${year}`;
+      return new Intl.DateTimeFormat(lang, options).format(date);
     } catch (e) {
       console.error("Error formatting date:", e);
       return dateString;
     }
   };
+
+  // Видаляємо HTML-теги
   const stripHtml = (html: string) => {
     if (!html) return "";
-    return html.replace(/<[^>]*>/g, ""); // удаляем все теги
+    return html.replace(/<[^>]*>/g, "");
   };
+
+  // Короткий опис
   const getShortDescription = (html: string, maxChars = 50) => {
     if (!html) return "";
     const text = stripHtml(html);
@@ -75,7 +61,9 @@ export default function PropertyCard({ property }: Props) {
             className={styles["property-card-image"]}
           />
         ) : (
-          <div className={styles["property-card-placeholder"]}>No Image</div>
+          <div className={styles["property-card-placeholder"]}>
+            {t("No Image")}
+          </div>
         )}
       </div>
 
@@ -88,7 +76,7 @@ export default function PropertyCard({ property }: Props) {
           }}
         />
         <p className={styles["property-location"]}>
-          район {property.district}{" "}
+          {t("район")} {property.district}
         </p>
         <p className={styles["property-price"]}>
           {formatPrice(
@@ -100,11 +88,15 @@ export default function PropertyCard({ property }: Props) {
         <div className={styles["property-details"]}>
           <div className={styles["detail-item"]}>
             <span className={styles.icon}>📏</span>
-            <span>{property.area} кв/м</span>
+            <span>
+              {property.area} {t("кв/м")}
+            </span>
           </div>
           <div className={styles["detail-item"]}>
             <span className={styles.icon}>🛏️</span>
-            <span>кімнат: {property.rooms}</span>
+            <span>
+              {t("кімнат")}: {property.rooms}
+            </span>
           </div>
         </div>
 

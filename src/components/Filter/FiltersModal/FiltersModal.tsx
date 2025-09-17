@@ -1,9 +1,12 @@
 import { useState, useEffect } from "react";
 import styles from "./FiltersModal.module.css";
 import { CATEGORY_TYPES, FILTERS_BY_TYPE } from "./filtersConfig";
+import i18n from "i18n";
 import { useTranslation } from "react-i18next";
 
 interface FiltersModalProps {
+  type?: string;
+  currentDeal?: "Оренда" | "Продаж";
   onClose: () => void;
   onSubmit: (filters: any) => void;
 }
@@ -20,20 +23,30 @@ export default function FiltersModal({ onClose, onSubmit }: FiltersModalProps) {
     CATEGORY_TYPES["Житлова"][lang as "en" | "ua"][0]
   );
   const [filters, setFilters] = useState<Record<string, any>>({});
-  const [currency, setCurrency] = useState<"UAH" | "USD">("UAH");
+  const [currency, setCurrency] = useState<"UAH" | "USD">("USD");
 
+  // Загружаем сохраненные фильтры и валюту
   useEffect(() => {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
       const parsed = JSON.parse(saved);
+      console.log("Loaded saved filters:", parsed);
       setFilters(parsed);
       if (parsed.category) setCategory(parsed.category);
       if (parsed.propertyType) setPropertyType(parsed.propertyType);
-    }
-    const savedCurrency = localStorage.getItem(CURRENCY_KEY);
-    if (savedCurrency === "USD") setCurrency("USD");
-  }, []);
 
+      const savedCurrency = localStorage.getItem(CURRENCY_KEY);
+      if (savedCurrency === "USD") setCurrency("USD");
+
+      onSubmit({
+        ...parsed,
+        // передаем выбранную валюту
+      });
+    }
+  }, []);
+  useEffect(() => {
+    console.log("Filters changed:", filters);
+  }, [filters]);
   const handleCurrencyToggle = (newCurrency: "UAH" | "USD") => {
     setCurrency(newCurrency);
     localStorage.setItem(CURRENCY_KEY, newCurrency);
@@ -41,11 +54,16 @@ export default function FiltersModal({ onClose, onSubmit }: FiltersModalProps) {
 
   const handleInputChange = (filterName: string, value: any) => {
     setFilters((prev) => {
-      const updated = { ...prev, [filterName]: value };
-      const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
-      if (!saved[category]) saved[category] = {};
-      saved[category][propertyType] = updated;
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(saved));
+      const updated = {
+        ...prev,
+        category, // добавляем категорию
+        type: propertyType, // добавляем тип
+        [filterName]: value,
+      };
+
+      // сохраняем в localStorage плоским объектом
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+
       return updated;
     });
   };
@@ -70,54 +88,103 @@ export default function FiltersModal({ onClose, onSubmit }: FiltersModalProps) {
   return (
     <div className={styles.modalOverlay} onClick={onClose}>
       <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+        {/* Заголовок + кнопка переключения валюты */}
         <div className={styles.header}>
-          <h2 className={styles.title}>{t("Фильтры")}</h2>
+          <h2 className={styles.title}>{t("filter_button")}</h2>
           <button onClick={onClose} className={styles.closeButton}>
             &times;
           </button>
         </div>
 
+        {/* Категорія */}
         <div className={styles.section}>
-          <div className={styles.label}>{t("Категория")}</div>
+          <div className={styles.label}>{t("category")}</div>
           <div className={styles.categoryToggle}>
-            {Object.keys(CATEGORY_TYPES).map((catUa, index) => (
-              <button
-                key={catUa}
-                className={`${styles.button} ${
-                  category === catUa ? styles.active : ""
-                }`}
-                onClick={() => {
-                  setCategory(catUa as keyof typeof CATEGORY_TYPES);
-                  setPropertyType(
-                    CATEGORY_TYPES[catUa][lang as "en" | "ua"][0]
-                  );
-                  const saved = JSON.parse(
-                    localStorage.getItem(STORAGE_KEY) || "{}"
-                  );
-                  setFilters(saved[catUa]?.[propertyType] || {});
-                }}
-              >
-                {category === catUa && (
-                  <svg
-                    className={styles.checkIcon}
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <polyline points="20 6 9 17 4 12"></polyline>
-                  </svg>
-                )}
-                {t(`categoryKeys.${catUa}`)}
-              </button>
-            ))}
+            {Object.keys(CATEGORY_TYPES).map((catUa, index) => {
+              const catEn = Object.keys(CATEGORY_TYPES)[index];
+              return (
+                <button
+                  key={catUa}
+                  className={`${styles.button} ${
+                    category === catUa ? styles.active : ""
+                  }`}
+                  onClick={() => {
+                    localStorage.removeItem(STORAGE_KEY);
+                    setCategory(catUa as keyof typeof CATEGORY_TYPES);
+                    setPropertyType(CATEGORY_TYPES[catUa]["ua"][0]);
+                    const saved = JSON.parse(
+                      localStorage.getItem(STORAGE_KEY) || "{}"
+                    );
+                    setFilters(
+                      saved[catUa]?.[CATEGORY_TYPES[catUa]["ua"][0]] || {}
+                    );
+                  }}
+                >
+                  {category === catUa && (
+                    <svg
+                      className={styles.checkIcon}
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                  )}
+                  {t(`categoryKeys.${catUa}`)}
+                </button>
+              );
+            })}
           </div>
         </div>
 
+        {/* Тип нерухомості */}
         <div className={styles.section}>
-          <div className={styles.label}>{t("Тип услуги")}</div>
+          <div className={styles.label}>{t("propertyType")}</div>
+          <div className={styles.dealToggle}>
+            {CATEGORY_TYPES[category]["ua"].map((typeUa, index) => {
+              const typeEn =
+                CATEGORY_TYPES[category][lang as "en" | "ua"][index];
+              return (
+                <button
+                  key={typeUa}
+                  className={`${styles.button} ${
+                    propertyType === typeUa ? styles.active : ""
+                  }`}
+                  onClick={() => {
+                    localStorage.removeItem(STORAGE_KEY);
+                    setPropertyType(typeUa);
+                    const saved = JSON.parse(
+                      localStorage.getItem(STORAGE_KEY) || "{}"
+                    );
+                    setFilters(saved[category]?.[typeUa] || {});
+                  }}
+                >
+                  {propertyType === typeUa && (
+                    <svg
+                      className={styles.checkIcon}
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                  )}
+                  {typeEn}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+        {/* Оренда / Продаж */}
+        {/* Оренда / Продаж */}
+        <div className={styles.section}>
+          <div className={styles.label}>{t("dealType")}</div>
           <div className={styles.dealToggle}>
             {["Продаж", "Оренда"].map((deal) => (
               <button
@@ -153,17 +220,21 @@ export default function FiltersModal({ onClose, onSubmit }: FiltersModalProps) {
               <input
                 type="text"
                 placeholder={t("от")}
-                value={filters.price_from || ""}
-                onChange={(e) => handleInputChange("price_from", e.target.value)}
-                className={`${styles.inputField} ${filters.price_from ? styles.filled : ''}`}
+                value={filters[`Ціна_from`] || ""}
+                onChange={(e) => handleInputChange("Ціна_from", e.target.value)}
+                className={`${styles.inputField} ${
+                  filters[`Ціна_from`] ? styles.filled : ""
+                }`}
               />
               <span className={styles.separator}>–</span>
               <input
                 type="text"
                 placeholder={t("до")}
-                value={filters.price_to || ""}
-                onChange={(e) => handleInputChange("price_to", e.target.value)}
-                className={`${styles.inputField} ${filters.price_to ? styles.filled : ''}`}
+                value={filters[`Ціна_to`] || ""}
+                onChange={(e) => handleInputChange("Ціна_to", e.target.value)}
+                className={`${styles.inputField} ${
+                  filters[`Ціна_to`] ? styles.filled : ""
+                }`}
               />
             </div>
             <div className={styles.currencyToggle}>
@@ -187,44 +258,74 @@ export default function FiltersModal({ onClose, onSubmit }: FiltersModalProps) {
           </div>
         </div>
 
-        <div className={styles.section}>
-          <div className={styles.label}>{t("Характеристики")}</div>
-          <div className={styles.dynamicFilters}>
-            {FILTERS_BY_TYPE[propertyType]?.["ua"].map((filterUa, index) => {
-              const filterEn = FILTERS_BY_TYPE[propertyType][lang as "en" | "ua"][index];
-              
-              if (["Ціна", "Поверх", "Поверховість", "Загальна площа", "Площа", "№ Будинку"].includes(filterUa)) {
-                const nameFrom = `${filterUa}_from`;
-                const nameTo = `${filterUa}_to`;
-                return (
-                  <div key={filterUa} className={styles.inputRangeGroup}>
-                    <label className={styles.inputRangeLabel}>{t(filterUa)}</label>
-                    <div className={styles.inputRange}>
-                      <input
-                        type="text"
-                        placeholder={t("от")}
-                        value={filters[nameFrom] || ""}
-                        onChange={(e) => handleInputChange(nameFrom, e.target.value)}
-                        className={`${styles.inputField} ${filters[nameFrom] ? styles.filled : ''}`}
-                      />
-                      <span className={styles.separator}>–</span>
-                      <input
-                        type="text"
-                        placeholder={t("до")}
-                        value={filters[nameTo] || ""}
-                        onChange={(e) => handleInputChange(nameTo, e.target.value)}
-                        className={`${styles.inputField} ${filters[nameTo] ? styles.filled : ''}`}
-                      />
-                      {(filterUa === "Загальна площа" || filterUa === "Площа") && (
-                        <span className={styles.unit}>м²</span>
-                      )}
-                    </div>
+        {/* Динамічні фільтри */}
+        <div className={styles.dynamicFilters}>
+          {FILTERS_BY_TYPE[propertyType]?.["ua"].map((filterUa, index) => {
+            const filterEn =
+              FILTERS_BY_TYPE[propertyType][lang as "en" | "ua"][index];
+            return (
+              <div key={filterUa} className={styles.filterGroup}>
+                <label className={styles.filterLabel}>{filterEn}</label>
+
+                {[
+                  "Ціна",
+                  "Поверх",
+                  "Поверховість",
+                  "Загальна площа",
+                  "Площа",
+                  "№ Будинку",
+                ].includes(filterUa) ? (
+                  <div className={styles.priceInputGroup}>
+                    <input
+                      type="text"
+                      placeholder={t("Від")}
+                      value={filters[`${filterUa}_from`] || ""}
+                      onChange={(e) =>
+                        handleInputChange(`${filterUa}_from`, e.target.value)
+                      }
+                      className={`${styles.inputField} ${
+                        filters[`${filterUa}_from`] ? styles.filled : ""
+                      }`}
+                    />
+                    <span className={styles.separator}>–</span>
+                    <input
+                      type="text"
+                      placeholder={t("До")}
+                      value={filters[`${filterUa}_to`] || ""}
+                      onChange={(e) =>
+                        handleInputChange(`${filterUa}_to`, e.target.value)
+                      }
+                      className={`${styles.inputField} ${
+                        filters[`${filterUa}_to`] ? styles.filled : ""
+                      }`}
+                    />
+                    {filterUa === "Ціна" && (
+                      <div className={styles.currencyToggle}>
+                        <button
+                          onClick={() => handleCurrencyToggle("UAH")}
+                          className={`${styles.currencyButton} ${
+                            currency === "UAH" ? styles.active : ""
+                          }`}
+                        >
+                          {t("Грн")}
+                        </button>
+                        <span>/</span>
+                        <button
+                          onClick={() => handleCurrencyToggle("USD")}
+                          className={`${styles.currencyButton} ${
+                            currency === "USD" ? styles.active : ""
+                          }`}
+                        >
+                          USD
+                        </button>
+                      </div>
+                    )}
+                    {filterUa === "Загальна площа" && (
+                      <span className={styles.unit}>{t("squareMeters")}</span>
+                    )}
                   </div>
-                );
-              } else if (filterUa === "Кіл.кімнат") {
-                return (
+                ) : filterUa === "Кіл.кімнат" ? (
                   <div key={filterUa} className={styles.inputRangeGroup}>
-                    <label className={styles.inputRangeLabel}>{t("Кількість кімнат")}</label>
                     <div className={styles.roomButtons}>
                       {[1, 2, 3, 4, 5, "6+"].map((room) => (
                         <button
@@ -246,57 +347,61 @@ export default function FiltersModal({ onClose, onSubmit }: FiltersModalProps) {
                       ))}
                     </div>
                   </div>
-                );
-              } else if (filterUa === "Ремонт") {
-                  return (
-                      <div key={filterUa} className={styles.inputRangeGroup}>
-                          <label className={styles.inputRangeLabel}>{t("Ремонт")}</label>
-                          <div className={styles.multiSelect}>
-                              {[
-                                  "без ремонту",
-                                  "після будівельників",
-                                  "ремонт",
-                                  "євроремонт",
-                                  "дизайнерський",
-                                  "з оздобленням",
-                              ].map((option) => (
-                                  <button
-                                      key={option}
-                                      className={`${styles.roomButton} ${
-                                          filters.renovation?.includes(option)
-                                              ? styles.active
-                                              : ""
-                                      }`}
-                                      onClick={() =>
-                                          handleInputChange(
-                                              "renovation",
-                                              filters.renovation?.includes(option)
-                                                  ? filters.renovation.filter(
-                                                        (o: any) => o !== option
-                                                    )
-                                                  : [...(filters.renovation || []), option]
-                                          )
-                                      }
-                                  >
-                                      {t(option)}
-                                  </button>
-                              ))}
-                          </div>
-                      </div>
-                  );
-              } else {
-                return null;
-              }
-            })}
-          </div>
+                ) : filterUa === "Ремонт" ? (
+                  <div className={styles.multiSelect}>
+                    {[
+                      "без ремонту",
+                      "після будівельників",
+                      "ремонт",
+                      "євроремонт",
+                      "дизайнерський",
+                      "з оздобленням",
+                    ].map((option) => (
+                      <button
+                        key={option}
+                        className={`${styles.roomButton} ${
+                          filters.renovation?.includes(option)
+                            ? styles.active
+                            : ""
+                        }`}
+                        onClick={() =>
+                          handleInputChange(
+                            "renovation",
+                            filters.renovation?.includes(option)
+                              ? filters.renovation.filter(
+                                  (o: any) => o !== option
+                                )
+                              : [...(filters.renovation || []), option]
+                          )
+                        }
+                      >
+                        {t(option)}
+                      </button>
+                    ))}
+                  </div>
+                ) : (
+                  <input
+                    type="text"
+                    placeholder={`Введіть ${filterEn}`}
+                    value={filters[filterUa] || ""}
+                    onChange={(e) =>
+                      handleInputChange(filterUa, e.target.value)
+                    }
+                    className={styles.rangeInput}
+                  />
+                )}
+              </div>
+            );
+          })}
         </div>
 
+        {/* Кнопки */}
         <div className={styles.footer}>
           <button onClick={resetFilters} className={styles.resetButton}>
-            {t("Скинути")}
+            {t("reset")} {/* вместо "Скинути" */}
           </button>
           <button onClick={handleSubmit} className={styles.submitButton}>
-            {t("Показати результати")}
+            {t("showResults") /* вместо "Показати результати" */}
           </button>
         </div>
       </div>

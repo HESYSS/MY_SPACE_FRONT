@@ -34,7 +34,12 @@ interface Property {
   article: string;
   category: string;
   contacts: any[];
-  characteristics: any[];
+  characteristics: PropertyCharacteristic[];
+}
+
+interface PropertyCharacteristic {
+  name: string;
+  value: string | boolean;
 }
 
 interface PropertyImage {
@@ -48,8 +53,8 @@ export default function PropertyPage() {
   const router = useRouter();
   const { id } = router.query;
   const { openModal } = useModal();
-  const { t } = useTranslation("common");
-
+  const { t, i18n } = useTranslation("common");
+  const lang = i18n.language;
   const [property, setProperty] = useState<Property | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -61,9 +66,11 @@ export default function PropertyPage() {
       try {
         const backendUrl = process.env.REACT_APP_API_URL;
 
-        const res = await fetch(`${backendUrl}/items/${id}`);
+        const res = await fetch(`${backendUrl}/items/${id}?lang=${lang}`);
+
         if (!res.ok) throw new Error(t("objectNotFound"));
         const data: Property = await res.json();
+        console.log("Fetched property:", data);
         setProperty(data);
       } catch (err: any) {
         setError(err.message || t("errorLoading"));
@@ -72,7 +79,7 @@ export default function PropertyPage() {
       }
     };
     fetchProperty();
-  }, [id]);
+  }, [id, lang]);
 
   if (loading) return <p>{t("loading")}</p>;
   if (error)
@@ -94,26 +101,36 @@ export default function PropertyPage() {
 
   const mapCoords = { lat: Number(lat), lng: Number(lng) };
 
-  const characteristicFeatures = Object.entries(property.characteristics)
+  const features = Object.entries(property.characteristics)
     .filter(
       ([key, value]) => value !== null && value !== undefined && value !== ""
     )
-    .map(([key, value]) => ({ name: key, value }));
+    .map(([key, value]) => {
+      let displayValue = value;
 
-  const bedrooms = "2 спальні"; // временно, можно брать из характеристик
-  const area = "1500 м²"; // временно, можно брать из характеристик
+      // Добавляем м² для всех полей, связанных с площадью
+      const areaKeys = [
+        "Загальна площа",
+        "Площа кухні",
+        "Площа житлова",
+        "Площа землі",
+      ];
+
+      if (areaKeys.includes(key)) {
+        displayValue = `${value} ${t("squareMeters")}`; // вместо "м²"
+      }
+
+      return {
+        name: key,
+        value: displayValue,
+      };
+    });
+
+  // временно, можно брать из характеристик
 
   // Объединяем базовые и пользовательские характеристики
-  const baseFeatures = [
-    { name: t("propertyType"), value: property.category },
-    { name: t("objectView"), value: property.type },
-    { name: t("deal"), value: property.deal },
-    { name: t("street"), value: street },
-    { name: t("bedroomsCount"), value: bedrooms },
-    { name: t("area"), value: area },
-  ];
-  const features = [...baseFeatures, ...characteristicFeatures];
 
+  console.log("Property features:", features);
   return (
     <div className={styles.propertyPage}>
       <div className={styles.glowingEllipse}></div>
@@ -128,20 +145,28 @@ export default function PropertyPage() {
           <div className={styles.infoSection}>
             <h1 className={styles.title}>{property.title}</h1>
             <p className={styles.location}>
-              {street}, {city}
+              {street}, {t(city)}
             </p>
             <div className={styles.featuresRow}>
               <div className={styles.featureItem}>
                 <span role="img" aria-label={t("bedroomsAlt")}>
                   🛏️
                 </span>
-                <span>{bedrooms}</span>
+                <span>
+                  {t("кімнат")}{" "}
+                  {features.find((f) => f.name === "Кількість кімнат")?.value ||
+                    "N/A"}
+                </span>
               </div>
               <div className={styles.featureItem}>
                 <span role="img" aria-label={t("areaAlt")}>
                   📏
                 </span>
-                <span>{area}</span>
+                <span>
+                  {t("площа")}{" "}
+                  {features.find((f) => f.name === "Загальна площа")?.value ||
+                    "N/A"}
+                </span>
               </div>
             </div>
             <div className={styles.priceAndButton}>
@@ -163,7 +188,7 @@ export default function PropertyPage() {
               <ul className={styles.featuresList}>
                 {features.map((feature, index) => (
                   <li key={index}>
-                    <strong>{feature.name}:</strong> {feature.value}
+                    <strong>{t(feature.name)}:</strong> {feature.value}
                   </li>
                 ))}
               </ul>
