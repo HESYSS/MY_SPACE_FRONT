@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import styles from "./LocationModal.module.css";
 import { useTranslation } from "react-i18next";
 import { METRO_LINES, SHORE_DISTRICTS } from "./locationFiltersConfig";
@@ -40,6 +40,7 @@ export default function LocationModal({
   onClose,
   onSubmit,
 }: LocationModalProps) {
+  const modalRef = useRef<HTMLDivElement>(null); // ⬅️ Создаём ref для модалки
   const [locationType, setLocationType] = useState<"kyiv" | "region">(
     isOutOfCity ? "region" : "kyiv"
   );
@@ -65,6 +66,24 @@ export default function LocationModal({
   const [locationData, setLocationData] = useState<LocationData | null>(null);
 
   const [isInitialRender, setIsInitialRender] = useState(true);
+
+  // ⬅️ ДОБАВЛЕНИЕ НОВОГО useEffect ДЛЯ ЗАКРЫТИЯ ПО КЛИКУ ВНЕ
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      // Проверяем, что клик был вне модалки
+      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+        onClose();
+      }
+    };
+
+    // Добавляем обработчик события на весь документ
+    document.addEventListener("mousedown", handleClickOutside);
+    
+    // Удаляем обработчик при размонтировании компонента
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [onClose]);
 
   // Загружаем данные с бэка
   useEffect(() => {
@@ -248,7 +267,8 @@ export default function LocationModal({
   );
 
   return (
-    <div className={styles.modalContent}>
+    // ⬅️ Добавляем ref к основному контейнеру модалки
+    <div ref={modalRef} className={styles.modalContent}> 
       <div className={styles.locationToggle}>
         <button
           className={`${styles.locationButton} ${
@@ -476,16 +496,6 @@ export default function LocationModal({
           </Dropdown>
         </div>
       )}
-
-      <div className={styles.modalActions}>
-        <button
-          onClick={onClose}
-          className={styles.cancelButton}
-          aria-label="Скасувати"
-        >
-          &times;
-        </button>
-      </div>
     </div>
   );
 }

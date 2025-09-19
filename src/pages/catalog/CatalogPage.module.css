@@ -85,7 +85,7 @@
 /* ---------------------------------
    Адаптация для планшетов (769px - 1300px)
    --------------------------------- */
-@media (min-width: 769px) and (max-width: 1300px) {
+@media (min-width: 769px) and (max-width: 1800px) {
   .catalogContainer {
     flex-direction: column;
     height: auto;

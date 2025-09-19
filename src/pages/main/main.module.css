@@ -8,7 +8,7 @@
   width: 1200px;
   height: auto;
   background-color: transparent;
-  margin-left: 365px;
+  margin: 0 auto; /* ✅ Изменено */
 }
 
 .mainP {

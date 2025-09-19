@@ -50,7 +50,7 @@
 /* ---------------------------------
    Адаптация для планшетов (769px - 1300px)
    --------------------------------- */
-@media (min-width: 769px) and (max-width: 1300px) {
+@media (min-width: 769px) and (max-width: 1800px) {
   .propertiesGrid {
     display: flex;
     flex-wrap: wrap;

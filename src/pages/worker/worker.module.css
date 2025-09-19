@@ -433,6 +433,10 @@
     width: 100%;
   }
 
+  .employeeRole {
+    margin-top: 40px;
+  }
+
   .nameAndRole {
     align-items: flex-start;
   }
