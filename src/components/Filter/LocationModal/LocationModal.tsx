@@ -16,12 +16,13 @@ interface LocationData {
 }
 
 interface LocationModalProps {
-  isOutOfCity?: boolean;
   onClose: () => void;
   onSubmit: (filters: any) => void;
+  triggerRef: React.RefObject<HTMLElement>;
+  isOutOfCity?: boolean; // Добавляем пропс для ref триггера
 }
 
-const DATA_STORAGE_KEY = "locationData"; // для данных с бэка
+const DATA_STORAGE_KEY = "locationData";
 const FILTERS_STORAGE_KEY = "locationFilters";
 const POLYGON_STORAGE_KEY = "mapPolygon";
 
@@ -36,16 +37,14 @@ function loadPolygon() {
 }
 
 export default function LocationModal({
-  isOutOfCity,
   onClose,
   onSubmit,
+  triggerRef,
+  isOutOfCity,
 }: LocationModalProps) {
-  const modalRef = useRef<HTMLDivElement>(null); // ⬅️ Создаём ref для модалки
-  const [locationType, setLocationType] = useState<"kyiv" | "region">(
-    isOutOfCity ? "region" : "kyiv"
-  );
-  console.log("Initial isOutOfCity:", locationType, isOutOfCity);
-  // UI state
+  const [locationType, setLocationType] = useState<"kyiv" | "region">("kyiv");
+  const modalRef = useRef<HTMLDivElement>(null); // Ref для самой модалки
+
   const [metroOpen, setMetroOpen] = useState(false);
   const [districtOpen, setDistrictOpen] = useState(false);
   const [streetOpen, setStreetOpen] = useState(false);
@@ -55,30 +54,31 @@ export default function LocationModal({
   const [regionJkOpen, setRegionJkOpen] = useState(false);
   const { t, i18n } = useTranslation("common");
   const lang = i18n.language;
-  // selections
+
   const [selectedMetro, setSelectedMetro] = useState<string[]>([]);
   const [selectedDistricts, setSelectedDistricts] = useState<string[]>([]);
   const [selectedStreets, setSelectedStreets] = useState<string[]>([]);
   const [selectedJk, setSelectedJk] = useState<string[]>([]);
   const [selectedDirections, setSelectedDirections] = useState<string[]>([]);
 
-  // backend data
   const [locationData, setLocationData] = useState<LocationData | null>(null);
-
   const [isInitialRender, setIsInitialRender] = useState(true);
 
   // ⬅️ ДОБАВЛЕНИЕ НОВОГО useEffect ДЛЯ ЗАКРЫТИЯ ПО КЛИКУ ВНЕ
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       // Проверяем, что клик был вне модалки
-      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+      if (
+        modalRef.current &&
+        !modalRef.current.contains(event.target as Node)
+      ) {
         onClose();
       }
     };
 
     // Добавляем обработчик события на весь документ
     document.addEventListener("mousedown", handleClickOutside);
-    
+
     // Удаляем обработчик при размонтировании компонента
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
@@ -90,18 +90,15 @@ export default function LocationModal({
     const savedData = localStorage.getItem(DATA_STORAGE_KEY);
     if (savedData) {
       const parsedData = JSON.parse(savedData);
-      console.log("Loaded location data from storage:", parsedData);
-      // Проверяем, совпадает ли язык
       if (parsedData.lang === lang) {
         const data = {
           kyiv: parsedData.kyiv,
           region: parsedData.region,
         };
         setLocationData(data);
-        return; // Данные есть и язык совпадает — запрос не нужен
+        return;
       }
     }
-
     async function fetchLocationData() {
       try {
         const backendUrl = process.env.REACT_APP_API_URL;
@@ -110,28 +107,24 @@ export default function LocationModal({
             "Accept-Language": lang,
           },
         });
-
         const data = await res.json();
         setLocationData(data);
         const dataWithLang = {
           ...data,
-          lang: lang, // текущий язык с фронта
+          lang: lang,
         };
         localStorage.setItem(DATA_STORAGE_KEY, JSON.stringify(dataWithLang));
       } catch (err) {
         console.error("Ошибка загрузки локаций", err);
       }
     }
-
     fetchLocationData();
   }, [lang]);
 
-  // Загружаем сохраненные фильтры из localStorage
   useEffect(() => {
     const saved = localStorage.getItem(FILTERS_STORAGE_KEY);
     if (saved) {
       const parsed = JSON.parse(saved);
-      console.log("Loaded saved location filters:", parsed);
       setSelectedMetro(parsed.metro || []);
       setSelectedDistricts(parsed.districts || []);
       setSelectedStreets(parsed.streets || []);
@@ -141,43 +134,31 @@ export default function LocationModal({
     }
   }, []);
 
-  // сброс фильтров при смене локации (Kyiv/Region)
   useEffect(() => {
     if (isInitialRender) {
       setIsInitialRender(false);
       return;
     }
-
     const newFilters: any = {
       isOutOfCity: locationType === "region",
       streets: [],
       newbuildings: [],
     };
-
     if (locationType === "kyiv") {
       newFilters.metro = [];
       newFilters.districts = [];
     } else {
       newFilters.directions = [];
     }
-
-    console.log("Reset filters after location change:", newFilters);
-
-    // Чистим оба хранилища
     localStorage.removeItem(FILTERS_STORAGE_KEY);
     localStorage.removeItem(POLYGON_STORAGE_KEY);
-
-    // Сохраняем только базовые фильтры без полигона
     localStorage.setItem(FILTERS_STORAGE_KEY, JSON.stringify(newFilters));
-
-    // Передаём наружу чистые фильтры
     onSubmit(newFilters);
   }, [locationType]);
 
   const toggleArrayValue = (arr: string[], value: string) =>
     arr.includes(value) ? arr.filter((v) => v !== value) : [...arr, value];
 
-  // Метро
   const handleSelectMetroStation = (station: string) => {
     setSelectedMetro(toggleArrayValue(selectedMetro, station));
   };
@@ -191,10 +172,10 @@ export default function LocationModal({
     setSelectedMetro(newSelected);
   };
 
-  // Районы
   const handleSelectDistrict = (district: string) => {
     setSelectedDistricts(toggleArrayValue(selectedDistricts, district));
   };
+
   const handleSelectShore = (shore: string) => {
     const districts = SHORE_DISTRICTS[shore]["ua"];
     const allSelected = districts.every((d) => selectedDistricts.includes(d));
@@ -204,40 +185,34 @@ export default function LocationModal({
     setSelectedDistricts(newSelected);
   };
 
-  // Streets, ЖК, Directions
   const handleSelectStreet = (street: string) => {
     setSelectedStreets(toggleArrayValue(selectedStreets, street));
   };
+
   const handleSelectJk = (jk: string) => {
     setSelectedJk(toggleArrayValue(selectedJk, jk));
   };
+
   const handleSelectDirection = (direction: string) => {
     setSelectedDirections(toggleArrayValue(selectedDirections, direction));
   };
 
-  // Автосабмит и сохранение в localStorage
-  // Автосабмит и сохранение в localStorage
   useEffect(() => {
     if (isInitialRender) return;
-
     const filters: any = {
       isOutOfCity: locationType === "region",
       streets: selectedStreets,
       newbuildings: selectedJk,
     };
-
     if (locationType === "kyiv") {
       filters.metro = selectedMetro;
       filters.districts = selectedDistricts;
     } else {
       filters.directions = selectedDirections;
     }
-
-    console.log("Saving filters after selection:", filters);
-
     localStorage.setItem(FILTERS_STORAGE_KEY, JSON.stringify(filters));
-    console.log("Saved location filters to storage:", loadPolygon());
-    onSubmit({ ...filters, polygon: loadPolygon() }); // ⬅️ подмешиваем polygon
+    console.log("Submitting filters:", { ...filters, polygon: loadPolygon() });
+    onSubmit({ ...filters, polygon: loadPolygon() });
   }, [
     selectedMetro,
     selectedDistricts,
@@ -268,7 +243,7 @@ export default function LocationModal({
 
   return (
     // ⬅️ Добавляем ref к основному контейнеру модалки
-    <div ref={modalRef} className={styles.modalContent}> 
+    <div ref={modalRef} className={styles.modalContent}>
       <div className={styles.locationToggle}>
         <button
           className={`${styles.locationButton} ${
@@ -287,10 +262,8 @@ export default function LocationModal({
           {t("kyiv_region")}
         </button>
       </div>
-
       {locationType === "kyiv" ? (
         <div className={styles.locationGroup}>
-          {/* Метро */}
           <Dropdown
             title={t("metro")}
             isOpen={metroOpen}
@@ -319,21 +292,19 @@ export default function LocationModal({
                     </div>
                     <div className={styles.dropdownSubList}>
                       {METRO_LINES[line]["ua"].map((stationUa, index) => {
-                        // Находим соответствующий английский вариант по индексу
                         const stationEn = METRO_LINES[line][lang][index];
-
                         return (
                           <div
-                            key={stationUa} // ключ остаётся на укр
+                            key={stationUa}
                             className={`${styles.dropdownItem} ${
                               selectedMetro.includes(stationUa)
                                 ? styles.active
                                 : ""
                             }`}
                             style={{ paddingLeft: "20px" }}
-                            onClick={() => handleSelectMetroStation(stationUa)} // передаём укр
+                            onClick={() => handleSelectMetroStation(stationUa)}
                           >
-                            {stationEn} {/* отображаем англ */}
+                            {stationEn}
                           </div>
                         );
                       })}
@@ -343,8 +314,6 @@ export default function LocationModal({
               })}
             </div>
           </Dropdown>
-
-          {/* Районы */}
           <Dropdown
             title={t("districts")}
             isOpen={districtOpen}
@@ -387,15 +356,13 @@ export default function LocationModal({
               ))}
             </div>
           </Dropdown>
-
-          {/* Вулиці */}
           <Dropdown
             title={t("street")}
             isOpen={streetOpen}
             onToggle={() => setStreetOpen(!streetOpen)}
           >
             <div className={styles.inlineList}>
-              {locationData?.kyiv.streets.map((street) => (
+              {locationData?.kyiv?.streets.map((street) => (
                 <div
                   key={street}
                   className={`${styles.dropdownItem} ${
@@ -408,15 +375,13 @@ export default function LocationModal({
               ))}
             </div>
           </Dropdown>
-
-          {/* ЖК */}
           <Dropdown
             title={t("jk")}
             isOpen={jkOpen}
             onToggle={() => setJkOpen(!jkOpen)}
           >
             <div className={styles.inlineList}>
-              {locationData?.kyiv.newbuildings.map((jk) => (
+              {locationData?.kyiv?.newbuildings.map((jk) => (
                 <div
                   key={jk}
                   className={`${styles.dropdownItem} ${
@@ -432,14 +397,13 @@ export default function LocationModal({
         </div>
       ) : (
         <div className={styles.locationGroup}>
-          {/* Напрямки */}
           <Dropdown
             title={t("directions")}
             isOpen={regionDirectionOpen}
             onToggle={() => setRegionDirectionOpen(!regionDirectionOpen)}
           >
             <div className={styles.inlineList}>
-              {locationData?.region.directions.map((dir) => (
+              {locationData?.region?.directions.map((dir) => (
                 <div
                   key={dir}
                   className={`${styles.dropdownItem} ${
@@ -452,15 +416,13 @@ export default function LocationModal({
               ))}
             </div>
           </Dropdown>
-
-          {/* Вулиці */}
           <Dropdown
             title={t("street")}
             isOpen={regionStreetOpen}
             onToggle={() => setRegionStreetOpen(!regionStreetOpen)}
           >
             <div className={styles.inlineList}>
-              {locationData?.region.streets.map((street) => (
+              {locationData?.region?.streets.map((street) => (
                 <div
                   key={street}
                   className={`${styles.dropdownItem} ${
@@ -473,15 +435,13 @@ export default function LocationModal({
               ))}
             </div>
           </Dropdown>
-
-          {/* ЖК */}
           <Dropdown
             title={t("jk")}
             isOpen={regionJkOpen}
             onToggle={() => setRegionJkOpen(!regionJkOpen)}
           >
             <div className={styles.inlineList}>
-              {locationData?.region.newbuildings.map((jk) => (
+              {locationData?.region?.newbuildings.map((jk) => (
                 <div
                   key={jk}
                   className={`${styles.dropdownItem} ${

@@ -101,12 +101,12 @@
 .textHeading {
   width: 574px;
   height: 84px;
-  font-family: "Raleway";
+  font-family: "Raleway", sans-serif;
   font-style: normal;
   font-weight: 700;
-  font-size: 24px;
+  font-size: 20px;
   line-height: 28px;
-  font-variant: all-small-caps;
+
   color: #050505;
   margin: 0;
 }
@@ -115,12 +115,12 @@
 .textBody {
   width: 574px;
   height: 64px;
-  font-family: "Raleway";
+  font-family: "Raleway", sans-serif;
   font-style: bold;
   font-weight: 700;
   font-size: 14px;
   line-height: 16px;
-  font-variant: all-small-caps;
+
   color: #565656;
   margin: 0;
   font-variant: small-caps;

@@ -44,7 +44,7 @@
 /* =========================
    Адаптация для планшетов (769px - 1300px)
    ========================= */
-@media (min-width: 769px) and (max-width: 1300px) {
+@media (min-width: 769px) and (max-width: 1800px) {
   .mapContainer {
     width: 100%; /* Занимает всю ширину родителя */
     height: 100vh; /* Занимает всю высоту экрана */
@@ -61,7 +61,7 @@
     top: 20px;
     left: 20px;
   }
-  
+
   .zoomButtonsContainer {
     top: 20px;
     right: 20px;
@@ -78,17 +78,17 @@
     margin: 0;
     padding: 0;
   }
-  
+
   .mapCanvas {
     width: 100%;
     height: 100%;
   }
-  
+
   .drawButtonContainer {
     top: 10px;
     left: 10px;
   }
-  
+
   .zoomButtonsContainer {
     top: 10px;
     right: 10px;

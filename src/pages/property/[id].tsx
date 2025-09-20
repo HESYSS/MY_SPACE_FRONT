@@ -195,7 +195,10 @@ export default function PropertyPage() {
             </div>
             <div className={styles.sectionBlock}>
               <h2 className={styles.sectionTitle}>{t("descriptionTitle")}</h2>
-              <p className={styles.description}>{description}</p>
+              <p
+                className={styles.description}
+                dangerouslySetInnerHTML={{ __html: description }}
+              ></p>
             </div>
           </div>
           <div className={styles.mapColumn}>

@@ -83,6 +83,7 @@ export default function Filter({
             isOutOfCity={isOutOfCity}
             onClose={() => setIsLocationModalOpen(false)}
             onSubmit={handleLocationSubmit}
+            triggerRef={locationTriggerRef}
           />
         </div>
       </div>

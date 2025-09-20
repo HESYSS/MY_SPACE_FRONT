@@ -33,7 +33,7 @@ export default function FiltersModal({ onClose, onSubmit }: FiltersModalProps) {
       console.log("Loaded saved filters:", parsed);
       setFilters(parsed);
       if (parsed.category) setCategory(parsed.category);
-      if (parsed.propertyType) setPropertyType(parsed.propertyType);
+      if (parsed.type) setPropertyType(parsed.type);
 
       const savedCurrency = localStorage.getItem(CURRENCY_KEY);
       if (savedCurrency === "USD") setCurrency("USD");

@@ -215,5 +215,7 @@
   "Ціна": "Price",
   "кімнат": "rooms",
   "площа": "area",
-  "Kyiv region": "Kyiv region"
+  "Kyiv region": "Kyiv region",
+  "район": "district",
+  "кв/м": "sq.m"
 }
