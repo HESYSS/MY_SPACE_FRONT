@@ -21,6 +21,7 @@ export default function PropertyCard({ property }: Props) {
 
   // Форматування дати
   const formatDate = (dateString?: string) => {
+    const newlang = lang === "ua" ? "uk" : lang;
     if (!dateString) return t("N/A");
     try {
       const date = new Date(dateString);
@@ -29,7 +30,7 @@ export default function PropertyCard({ property }: Props) {
         month: "long",
         year: "numeric",
       };
-      return new Intl.DateTimeFormat(lang, options).format(date);
+      return new Intl.DateTimeFormat(newlang, options).format(date);
     } catch (e) {
       console.error("Error formatting date:", e);
       return dateString;

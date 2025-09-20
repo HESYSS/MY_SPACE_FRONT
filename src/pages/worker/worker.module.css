@@ -43,7 +43,7 @@
 }
 
 .readMoreTitle {
-  font-family: "Raleway";
+  font-family: "Raleway", sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 64px;
@@ -111,7 +111,7 @@
 .employeeName {
   width: 100%;
   height: 42px;
-  font-family: "Raleway";
+  font-family: "Raleway", sans-serif;
   font-style: normal;
   font-weight: 700;
   font-size: 36px;
@@ -144,7 +144,7 @@
 .employeeRole {
   width: 100%;
   height: auto;
-  font-family: "Raleway";
+  font-family: "Raleway", sans-serif;
   font-style: normal;
   font-weight: 700;
   font-size: 24px;
@@ -183,7 +183,7 @@
 .infoTitle {
   width: 100%;
   height: auto;
-  font-family: "Raleway";
+  font-family: "Raleway", sans-serif;
   font-style: normal;
   font-weight: 700;
   font-size: 24px;
@@ -279,11 +279,11 @@
   box-sizing: border-box;
 }
 
-.line16{
+.line16 {
   width: 120%;
 }
 
-.line18{
+.line18 {
   width: 143%;
 }
 
@@ -346,8 +346,6 @@
     padding: 0 20px;
   }
 
-
-  
   /* Контейнер для заголовка и линии */
   .titleArea {
     display: flex;
@@ -359,7 +357,7 @@
     margin: 80px 120px auto;
     padding: 0 20px;
   }
-  
+
   /* Градиентная линия */
   .titleLine {
     height: 1px;
@@ -369,7 +367,7 @@
     flex-grow: 0;
     margin-left: -120px;
   }
-  
+
   /* Заголовок "ЧИТАТИ БІЛЬШЕ" */
   .readMoreTitle {
     font-size: 48px;
@@ -383,7 +381,7 @@
     width: 729px;
     margin-bottom: 80px;
   }
-  
+
   .contactsBlock {
     display: flex;
     flex-direction: column;
@@ -395,7 +393,7 @@
     background: #0a0a0a;
     border-radius: 20px;
   }
-  
+
   .frame301 {
     display: flex;
     flex-direction: row;
@@ -410,7 +408,7 @@
     height: 480px;
     flex-shrink: 0;
   }
-  
+
   .employeePhoto {
     width: 100%;
     height: 100%;
@@ -426,7 +424,7 @@
     width: 100%;
     height: auto;
   }
-  
+
   .employeeName,
   .employeeRole {
     text-align: left;
@@ -446,13 +444,13 @@
     text-align: left;
     width: 100%;
   }
-  
+
   /* Блок "Бажаєте отримати консультацію?" */
   .coworking {
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap; /* Важное изменение */
-    justify-content: space-between; 
+    justify-content: space-between;
     align-items: flex-start;
     gap: 40px;
     width: 100%;
@@ -474,14 +472,14 @@
   .frame89 {
     padding: 20px;
     flex: 1 1 400px; /* Важное изменение */
-    width: auto; 
+    width: auto;
     height: auto;
     gap: 10px;
     background: #0a0a0a;
     border-radius: 20px;
     box-sizing: border-box;
   }
-  
+
   /* Внутренний контейнер опций */
   .frame88 {
     display: flex;
@@ -515,7 +513,7 @@
     flex-shrink: 0;
     margin-left: 25px;
   }
-  
+
   /* Овал */
   .glowingOval {
     width: 70vw;
@@ -614,21 +612,21 @@
     font-size: 12px;
     line-height: 1.5;
   }
-  
+
   /* Блок "Бажаєте отримати консультацію?" */
   .coworking {
     display: flex;
-    flex-direction: row; 
-    flex-wrap: nowrap; 
+    flex-direction: row;
+    flex-wrap: nowrap;
     justify-content: flex-start; /* Изменено, чтобы элементы не раздвигались */
-    align-items: center; 
+    align-items: center;
     gap: 50px;
     width: 100%;
     margin: 0 auto 40px auto;
     padding: 0 15px;
     margin-top: 80px;
   }
-  
+
   /* Заголовок "Бажаєте отримати консультацію?" */
   .callToAction {
     font-size: 14px;
@@ -636,9 +634,9 @@
     min-width: unset;
     text-align: left;
     flex-shrink: 1;
-    white-space: normal; 
+    white-space: normal;
   }
-  
+
   /* Контейнер с двумя опциями */
   .frame89 {
     padding: 3px;
@@ -648,7 +646,7 @@
     height: auto;
     gap: 5px;
   }
-  
+
   /* Внутренний контейнер опций */
   .frame88 {
     gap: 5px;
@@ -656,7 +654,8 @@
   }
 
   /* Строка с текстом и стрелкой */
-  .frame86, .frame84 {
+  .frame86,
+  .frame84 {
     justify-content: flex-start; /* Изменено, чтобы элементы выравнивались по левому краю */
     align-items: center;
     gap: 5px;
@@ -666,13 +665,13 @@
   .optionText {
     font-size: 9px;
     line-height: 1;
-    white-space: nowrap; 
+    white-space: nowrap;
     text-align: left;
     width: auto;
   }
 
   .arrowIcon {
-    width: 10px; 
+    width: 10px;
     height: 10px;
     margin-left: 5px;
   }

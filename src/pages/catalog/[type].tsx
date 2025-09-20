@@ -58,7 +58,7 @@ export default function CatalogPage() {
   const { i18n, t } = useTranslation("common");
   const lang = i18n.language;
 
-  const isMobileOrTablet = useMediaQuery({ maxWidth: 1300 });
+  const isMobileOrTablet = useMediaQuery({ maxWidth: 1800 });
   const [showMap, setShowMap] = useState(false);
 
   const currentDeal = typeof deal === "string" ? deal : "Оренда";
