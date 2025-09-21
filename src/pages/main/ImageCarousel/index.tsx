@@ -46,8 +46,12 @@ const Carousel: FC = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(true);
   const containerRef = useRef<HTMLDivElement>(null);
-
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  // ИЗМЕНЕНИЕ: Рефы для отслеживания свайпов
+  const touchStartRef = useRef(0);
+  const touchEndRef = useRef(0);
+  const swipeThreshold = 50; // Минимальная дистанция свайпа в пикселях
 
   // Вспомогательная функция для получения URL по имени
   const getImageUrlByName = (name: string): string => {
@@ -116,6 +120,21 @@ const Carousel: FC = () => {
     if (slidesData.length === 0) return;
     setActiveIndex((prev) => prev + 1);
     resetTimer();
+  };
+
+  // ИЗМЕНЕНИЕ: Обработчики для свайпов
+  const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+    touchStartRef.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent<HTMLDivElement>) => {
+    touchEndRef.current = e.changedTouches[0].clientX;
+    const diff = touchStartRef.current - touchEndRef.current;
+    if (diff > swipeThreshold) {
+      nextSlide();
+    } else if (diff < -swipeThreshold) {
+      prevSlide();
+    }
   };
 
   // Загружаем данные с бэкенда при монтировании компонента
@@ -287,7 +306,13 @@ const Carousel: FC = () => {
   return (
     <div className={styles.carouselContainer}>
       <div className={styles.carouselWrapper}>
-        <div ref={containerRef} className={styles.slidesContainer}>
+        <div
+          ref={containerRef}
+          className={styles.slidesContainer}
+          // ИЗМЕНЕНИЕ: Добавление обработчиков событий касания
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+        >
           {loopSlides.map((slide, idx) => {
             const { width, height, opacity, zIndex, translateX, rotateY } =
               getPositionStyle(idx);
@@ -339,7 +364,7 @@ const Carousel: FC = () => {
         </div>
       </div>
 
-      {!isMobile && (
+      {(!isMobile || (isMobile && slidesData.length > 2)) && (
         <div className={styles.arrows}>
           <button
             onClick={prevSlide}
