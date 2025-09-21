@@ -57,7 +57,7 @@ export default function MapSinglePoint({ location, zoom = 15 }: Props) {
       }),
       controls: [],
     });
-
+    console.log(map);
     mapInstance.current = map;
   }, [markerLayer]);
 
@@ -89,8 +89,7 @@ export default function MapSinglePoint({ location, zoom = 15 }: Props) {
     <div
       ref={mapRef}
       style={{
-        width: "905px",
-        height: "668.98px",
+        height: "580px",
       }}
     />
   );

@@ -3,11 +3,14 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import styles from "./PropertyPage.module.css";
 import PropertyImagesGallery from "./PropertyImagesGallery/PropertyImagesGallery";
-import MapWrapper from "@/components/Map/MapWrapper";
 import { useModal } from "../../hooks/useModal";
 import { useTranslation } from "react-i18next";
 
 import MapSinglePoint from "../map";
+
+// Импортируем иконки
+import BedIcon from '../../../public/icons/Frame153.svg'; // Укажите правильный путь
+import RulerIcon from '../../../public/icons/Frame204.svg'; // Укажите правильный путь
 
 interface Property {
   id: number;
@@ -126,10 +129,6 @@ export default function PropertyPage() {
       };
     });
 
-  // временно, можно брать из характеристик
-
-  // Объединяем базовые и пользовательские характеристики
-
   console.log("Property features:", features);
   return (
     <div className={styles.propertyPage}>
@@ -149,9 +148,8 @@ export default function PropertyPage() {
             </p>
             <div className={styles.featuresRow}>
               <div className={styles.featureItem}>
-                <span role="img" aria-label={t("bedroomsAlt")}>
-                  🛏️
-                </span>
+                {/* ИЗМЕНЕНИЕ: Используем изображение BedIcon */}
+                <img src={BedIcon.src} alt={t("bedroomsAlt")} className={styles.featureIcon} />
                 <span>
                   {t("кімнат")}{" "}
                   {features.find((f) => f.name === "Кількість кімнат")?.value ||
@@ -159,9 +157,8 @@ export default function PropertyPage() {
                 </span>
               </div>
               <div className={styles.featureItem}>
-                <span role="img" aria-label={t("areaAlt")}>
-                  📏
-                </span>
+                {/* ИЗМЕНЕНИЕ: Используем изображение RulerIcon */}
+                <img src={RulerIcon.src} alt={t("areaAlt")} className={styles.featureIcon} />
                 <span>
                   {t("площа")}{" "}
                   {features.find((f) => f.name === "Загальна площа")?.value ||

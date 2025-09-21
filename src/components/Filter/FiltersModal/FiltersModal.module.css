@@ -1,5 +1,5 @@
 /*
-  Base Styles
+  Base Styles
 */
 .modalOverlay {
   position: fixed;
@@ -7,12 +7,11 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.9); /* Увеличена непрозрачность для затемнения */
+  background-color: rgba(0, 0, 0, 0.9);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
-  /* Добавляем эффект размытия фона для всего, что находится под оверлеем */
   backdrop-filter: blur(5px);
 }
 
@@ -44,7 +43,7 @@
 }
 
 /*
-  Header
+  Header
 */
 .header {
   display: flex;
@@ -73,7 +72,7 @@
 }
 
 /*
-  Sections & Labels
+  Sections & Labels
 */
 .section {
   display: flex;
@@ -90,7 +89,7 @@
 }
 
 /*
-  Button Toggles (Category, Deal)
+  Button Toggles (Category, Deal)
 */
 .categoryToggle, .dealToggle {
   display: grid;
@@ -130,7 +129,7 @@
 }
 
 /*
-  Price Inputs
+  Price Inputs
 */
 .priceContainer {
   display: flex;
@@ -173,7 +172,7 @@
 }
 
 /*
-  Currency Toggle
+  Currency Toggle
 */
 .currencyToggle {
   display: flex;
@@ -204,7 +203,7 @@
 }
 
 /*
-  Dynamic Filter Sections (Floors, Area, Rooms)
+  Dynamic Filter Sections (Floors, Area, Rooms)
 */
 .dynamicFilters {
   display: flex;
@@ -212,6 +211,20 @@
   gap: 1.5rem;
 }
 
+.filterGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.filterLabel {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #ccc;
+  border-bottom: 1px solid #1c1c1c;
+  padding-bottom: 0.5rem;
+  /* ИЗМЕНЕНИЕ: добавил отступ снизу */
+  margin-bottom: 0.5rem;
+}
 .inputRangeGroup {
   display: flex;
   flex-direction: column;
@@ -253,6 +266,12 @@
   transition: all 0.2s ease;
 }
 
+.roomButton:hover {
+  background-color: #051818;
+  border-color: #03B9B3;
+  color: #fff;
+}
+
 .roomButton.active {
   background-color: #051818;
   border-color: #03B9B3;
@@ -265,7 +284,7 @@
 }
 
 /*
-  Footer and Action Buttons
+  Footer and Action Buttons
 */
 .footer {
   display: flex;
@@ -306,9 +325,9 @@
 }
 
 /*
-  ========================================================================================
-  АДАПТАЦИЯ ДЛЯ МОБИЛЬНЫХ УСТРОЙСТВ (до 768px)
-  ========================================================================================
+  ========================================================================================
+  АДАПТАЦИЯ ДЛЯ МОБИЛЬНЫХ УСТРОЙСТВ (до 768px)
+  ========================================================================================
 */
 @media (max-width: 768px) {
   .modalContent {
@@ -353,9 +372,9 @@
 }
 
 /*
-  ========================================================================================
-  АДАПТАЦИЯ ДЛЯ ПЛАНШЕТОВ (от 769px до 1300px)
-  ========================================================================================
+  ========================================================================================
+  АДАПТАЦИЯ ДЛЯ ПЛАНШЕТОВ (от 769px до 1300px)
+  ========================================================================================
 */
 @media (min-width: 769px) and (max-width: 1300px) {
   .modalContent {

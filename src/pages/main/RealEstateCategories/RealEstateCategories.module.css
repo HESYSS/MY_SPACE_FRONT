@@ -28,11 +28,7 @@
 .line8 {
   width: 100%;
   height: 1px;
-  background: linear-gradient(
-    to right,
-    #191919,
-    #03b9b3
-  );
+  background: linear-gradient(to right, #191919, #03b9b3);
 }
 
 /* Вся Нерухомість */
@@ -61,12 +57,13 @@
   flex-wrap: wrap;
 }
 
-/* Стили для ссылок: убираем подчеркивание */
+/* Стили для ссылок: убираем подчеркивание и делаем их позиционированными */
 .frame49,
 .column2,
 .column3 .frame43,
 .column4 .frame43 {
   text-decoration: none;
+  position: relative; /* Добавляем позиционирование для позиционирования стрелки */
 }
 
 /* column1 */
@@ -82,7 +79,7 @@
 
 .frame48wrapper {
   background: linear-gradient(180deg, #FFFFFF 0%, #000000 50%, #000000 100%);
-  padding: 1px; /* Толщина градиентной рамки */
+  padding: 1px;
   border-radius: 10px;
   width: 100%;
   height: 304px;
@@ -123,7 +120,7 @@
   justify-content: flex-end;
   align-items: flex-start;
   padding: 20px;
-  width: 85%;
+  width: 100%;
   height: 214px;
   background-size: cover;
   background-position: center;
@@ -131,26 +128,50 @@
   box-sizing: border-box;
 }
 
-/* Common styles for arrow circles */
-.frame40,
-.frame41 {
+/* Common styles for arrow circle */
+.arrowCircle {
+  position: absolute;
+  right: 20px;
+  top: 20px; /* Изменено на top */
   display: flex;
-  flex-direction: row;
   justify-content: center;
   align-items: center;
-  padding: 12px;
-  gap: 10px;
   width: 46px;
   height: 46px;
   background: #ebebeb;
-  border-radius: 100px;
+  border-radius: 50%;
+  transition: transform 0.3s ease, background-color 0.3s ease;
 }
 
-/* Common styles for arrows */
-.vector4 {
-  width: 16px;
-  height: 16px;
-  border: 2px solid #03b9b3;
+/* Стили для SVG-стрелки внутри круга */
+.arrowCircle svg {
+  transition: transform 0.3s ease;
+  transform: rotate(45deg); /* Поворот для направления вправо-вверх */
+  width: 18px; /* Задаем размер напрямую */
+  height: 18px;
+}
+
+/* Эффект при наведении на контейнер изображения */
+.frame49:hover .arrowCircle,
+.column2:hover .arrowCircle,
+.column3 .frame43:hover .arrowCircle,
+.column4 .frame43:hover .arrowCircle {
+  background-color: #051818;
+  transform: scale(1.1);
+}
+
+.frame49:hover .arrowCircle svg,
+.column2:hover .arrowCircle svg,
+.column3 .frame43:hover .arrowCircle svg,
+.column4 .frame43:hover .arrowCircle svg {
+  transform: scale(1.1) rotate(45deg); /* Увеличиваем и поворачиваем */
+}
+
+.frame49:hover .arrowCircle svg path,
+.column2:hover .arrowCircle svg path,
+.column3 .frame43:hover .arrowCircle svg path,
+.column4 .frame43:hover .arrowCircle svg path {
+  stroke: #ebebeb;
 }
 
 /* Category title styles */
@@ -213,7 +234,7 @@
   justify-content: flex-end;
   align-items: flex-start;
   padding: 20px;
-  width: 85%;
+  width: 100%;
   height: 304px;
   background-size: cover;
   background-position: center;
@@ -223,7 +244,7 @@
 
 .frame47wrapper {
   background: linear-gradient(360deg, #FFFFFF 0%, #000000 50%, #000000 100%);
-  padding: 1px; /* Толщина градиентной рамки */
+  padding: 1px;
   border-radius: 10px;
   width: 100%;
   height: 215px;
@@ -350,6 +371,18 @@
     font-size: 24px;
     line-height: 28px;
   }
+  /* Адаптивность для стрелки на планшетах */
+  .arrowCircle {
+    width: 36px;
+    height: 36px;
+    right: 15px;
+    top: 15px; /* Изменено на top */
+  }
+
+  .arrowCircle svg {
+    width: 18px;
+    height: 18px;
+  }
 }
 
 /*
@@ -427,11 +460,23 @@
     line-height: 22px;
   }
 
-  .frame47wrapper{
+  .frame47wrapper {
     background: linear-gradient(360deg, #FFFFFF 0%, #000000 50%, #000000 100%);
-    padding: 0.5px; /* Толщина градиентной рамки */
+    padding: 0.5px;
     border-radius: 10px;
     width: 100%;
     height: 150px;
+  }
+
+  /* Адаптивность для стрелки на мобильных */
+  .arrowCircle {
+    width: 32px;
+    height: 32px;
+    right: 10px;
+    top: 10px; /* Изменено на top */
+  }
+  .arrowCircle svg {
+    width: 16px;
+    height: 16px;
   }
 }

@@ -285,7 +285,60 @@ const Carousel: FC = () => {
   }
 
   return (
-    <div className={styles.carouselWrapper}>
+    <div className={styles.carouselContainer}>
+      <div className={styles.carouselWrapper}>
+        <div ref={containerRef} className={styles.slidesContainer}>
+          {loopSlides.map((slide, idx) => {
+            const { width, height, opacity, zIndex, translateX, rotateY } =
+              getPositionStyle(idx);
+
+            if ((isTablet || isMobile) && Math.abs(idx - activeIndex) > 1) {
+              return null;
+            }
+
+            if (opacity === 0) return null;
+
+            const isCenter = zIndex === 10;
+            const slideText =
+              currentLanguage === "en" ? slide.text_en : slide.text;
+
+            return (
+              <div
+                key={idx}
+                className={`${styles.slide} ${
+                  isCenter ? styles.centerSlide : ""
+                }`}
+                style={{
+                  width,
+                  height,
+                  transform: `translateX(${translateX}px) translateY(-50%) rotateY(${rotateY}deg)`,
+                  zIndex,
+                  opacity,
+                  transition: isTransitioning ? "all 0.7s ease" : "none",
+                }}
+              >
+                <img
+                  src={slide.src}
+                  alt={slide.name}
+                  className={styles.slideImage}
+                />
+                {isCenter && (
+                  <>
+                    <div className={styles.textOverlay} />
+                    <div className={styles.slideTextContainer}>
+                      <span className={styles.slideSubtitle}>
+                        {t("district")}
+                      </span>
+                      <span className={styles.slideTitle}>{slideText}</span>
+                    </div>
+                  </>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
       {!isMobile && (
         <div className={styles.arrows}>
           <button
@@ -331,57 +384,6 @@ const Carousel: FC = () => {
           </button>
         </div>
       )}
-
-      <div ref={containerRef} className={styles.slidesContainer}>
-        {loopSlides.map((slide, idx) => {
-          const { width, height, opacity, zIndex, translateX, rotateY } =
-            getPositionStyle(idx);
-
-          if ((isTablet || isMobile) && Math.abs(idx - activeIndex) > 1) {
-            return null;
-          }
-
-          if (opacity === 0) return null;
-
-          const isCenter = zIndex === 10;
-          const slideText =
-            currentLanguage === "en" ? slide.text_en : slide.text;
-
-          return (
-            <div
-              key={idx}
-              className={`${styles.slide} ${
-                isCenter ? styles.centerSlide : ""
-              }`}
-              style={{
-                width,
-                height,
-                transform: `translateX(${translateX}px) translateY(-50%) rotateY(${rotateY}deg)`,
-                zIndex,
-                opacity,
-                transition: isTransitioning ? "all 0.7s ease" : "none",
-              }}
-            >
-              <img
-                src={slide.src}
-                alt={slide.name}
-                className={styles.slideImage}
-              />
-              {isCenter && (
-                <>
-                  <div className={styles.textOverlay} />
-                  <div className={styles.slideTextContainer}>
-                    <span className={styles.slideSubtitle}>
-                      {t("district")}
-                    </span>
-                    <span className={styles.slideTitle}>{slideText}</span>
-                  </div>
-                </>
-              )}
-            </div>
-          );
-        })}
-      </div>
     </div>
   );
 };

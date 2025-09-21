@@ -217,5 +217,6 @@
   "площа": "area",
   "Kyiv region": "Kyiv region",
   "район": "district",
-  "кв/м": "sq.m"
+  "кв/м": "sq.m",
+  "search_button": "Search"
 }
