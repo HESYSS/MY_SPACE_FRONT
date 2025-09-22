@@ -17,6 +17,7 @@ import styles from "./mapStyle.module.css";
 import { kyivMetroStations } from "./kyivMetro";
 import kyivDistricts from "./kyiv.json"; // 👈 твой файл с районами
 import MultiPolygon from "ol/geom/MultiPolygon";
+import { useRouter } from "next/router";
 
 interface Property {
   id: number;
@@ -71,11 +72,11 @@ export default function MapDrawFilter({
   const drawing = useRef(false);
   const [isDrawing, setIsDrawing] = useState(false);
   const currentCoords = useRef<number[][]>([]);
-
+  const router = useRouter();
   const dragPanRef = useRef<DragPan | null>(null);
   // Стили для слоев
   const drawStyle = new Style({
-    stroke: new Stroke({ color: "rgba(48, 48, 47, 1)", width: 2 }),
+    stroke: new Stroke({ color: " #050505", width: 2 }),
   });
 
   const markerStyle = new Style({
@@ -138,12 +139,17 @@ export default function MapDrawFilter({
     [markerStyle]
   );
   useEffect(() => {
-    // Загрузка станций метро в векторный источник
-    const save = localStorage.getItem(current_STORAGE_KEY);
-    if (save) {
-      currentCoords.current = JSON.parse(save);
+    if (!router.query.locationfilters) return;
+
+    try {
+      const parsed = JSON.parse(String(router.query.locationfilters));
+      if (parsed.polygon && parsed.polygon.length > 0) {
+        currentCoords.current = parsed.polygon;
+      }
+    } catch (err) {
+      console.error("Ошибка парсинга locationfilters", err);
     }
-  });
+  }, [router.query.locationfilters]);
   // Инициализация карты
   useEffect(() => {
     if (!mapRef.current) return;
@@ -164,7 +170,6 @@ export default function MapDrawFilter({
 
     mapInstance.current = map;
 
-    // Находим DragPan interaction
     dragPanRef.current = map
       .getInteractions()
       .getArray()
@@ -173,10 +178,14 @@ export default function MapDrawFilter({
     const viewport = map.getViewport();
 
     const handlePointerDown = (e: PointerEvent) => {
-      if (!isDrawing || e.button !== 0) return;
+      if (!isDrawing) return;
+      if (e.pointerType === "mouse" && e.button !== 0) return;
       drawing.current = true;
       currentCoords.current = [];
       dragPanRef.current?.setActive(false);
+      e.preventDefault();
+      (e.target as HTMLElement).setPointerCapture(e.pointerId);
+      map.getViewport().style.touchAction = "none";
     };
 
     const handlePointerMove = (e: PointerEvent) => {
@@ -191,46 +200,45 @@ export default function MapDrawFilter({
     };
 
     const handlePointerUp = (e: PointerEvent) => {
-      if (!isDrawing || e.button !== 0) return;
+      if (!isDrawing) return;
+      if (e.pointerType === "mouse" && e.button !== 0) return;
       drawing.current = false;
       dragPanRef.current?.setActive(true);
-
+      (e.target as HTMLElement).releasePointerCapture(e.pointerId);
+      map.getViewport().style.touchAction = "auto";
       if (currentCoords.current.length < 3) return;
 
       const polygonCoords = currentCoords.current.map((coord) =>
         toLonLat(coord)
       ) as [number, number][];
-      localStorage.setItem(current_STORAGE_KEY, JSON.stringify(polygonCoords));
+
       console.log("Drawn polygon coords (lon/lat):", polygonCoords);
+
       const squareBox = getBoundingBox(polygonCoords);
       const squareCoords = createSquarePolygon(squareBox);
 
-      // Отрисовка квадрата
       const squareFeature = new Feature(
         new Polygon([squareCoords.map((c) => fromLonLat(c))])
       );
       squareFeature.setStyle(new Style({}));
       drawSource.current.addFeature(squareFeature);
 
-      // Фильтрация и отправка данных
-
+      // 🔹 Формируем новые фильтры
       const newFilters = {
         ...locationFilters,
         polygon: squareCoords,
       };
 
+      // 🔹 Сохраняем polygon в URL
+      const query = {
+        ...router.query,
+        locationfilters: JSON.stringify(newFilters),
+      };
+      router.push({ pathname: router.pathname, query }, undefined, {
+        shallow: true,
+      });
+
       onChangeFilters(newFilters);
-      console.log("New location filters:", newFilters);
-      // 🔹 Сохраняем в локальное хранилище
-      try {
-        localStorage.setItem(FILTERS_STORAGE_KEY, JSON.stringify(newFilters));
-        localStorage.setItem(
-          POLYGON_STORAGE_KEY,
-          JSON.stringify({ ...squareCoords })
-        );
-      } catch (err) {
-        console.error("Не удалось сохранить фильтры в localStorage", err);
-      }
 
       // 🔹 Очищаем слой нарисованного полигона
       drawSource.current.clear();
@@ -248,7 +256,7 @@ export default function MapDrawFilter({
       viewport.removeEventListener("pointermove", handlePointerMove);
       viewport.removeEventListener("pointerup", handlePointerUp);
     };
-  }, [isDrawing, locationFilters]);
+  }, [isDrawing, locationFilters, router]);
 
   // Загрузка и обновление маркеров
   useEffect(() => {
@@ -379,13 +387,13 @@ export default function MapDrawFilter({
       }
     });
 
-    // пользовательский полигон
+    /*/ пользовательский полигон
     if (filterPolygon) {
       holes.push(
         filterPolygon.getCoordinates()[0].map((coord) => [coord[0], coord[1]])
       );
     }
-
+*/
     // === 3. Маска вокруг города ===
     const worldExtent = [-20037508, -20037508, 20037508, 20037508];
     const worldPolygon = new Polygon([
@@ -479,21 +487,23 @@ export default function MapDrawFilter({
       setIsDrawing(false);
     } else if (currentCoords.current.length > 0) {
       console.log("Clearing drawn polygon", currentCoords);
+
       const newFilters = {
         ...locationFilters,
         polygon: [],
       };
 
       onChangeFilters(newFilters);
-      console.log("New location filters:", newFilters);
-      // 🔹 Сохраняем в локальное хранилище
-      try {
-        localStorage.setItem(FILTERS_STORAGE_KEY, JSON.stringify(newFilters));
-        localStorage.removeItem(POLYGON_STORAGE_KEY);
-        localStorage.removeItem(current_STORAGE_KEY);
-      } catch (err) {
-        console.error("Не удалось сохранить фильтры в localStorage", err);
-      }
+
+      // 🔹 Обновляем URL без localStorage
+      const query = {
+        ...router.query,
+        locationfilters: JSON.stringify(newFilters),
+      };
+      router.push({ pathname: router.pathname, query }, undefined, {
+        shallow: true,
+      });
+
       drawSource.current.clear();
       currentCoords.current = [];
     } else {

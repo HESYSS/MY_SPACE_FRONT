@@ -1,22 +1,25 @@
 import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 import styles from "./FiltersModal.module.css";
 import { CATEGORY_TYPES, FILTERS_BY_TYPE } from "./filtersConfig";
-import i18n from "i18n";
 import { useTranslation } from "react-i18next";
 
 interface FiltersModalProps {
-  type?: string;
-  currentDeal?: "Оренда" | "Продаж";
   onClose: () => void;
-  onSubmit: (filters: any) => void;
 }
+const typeMap: Record<string, string> = {
+  residential: "Житлова",
+  commercial: "Комерційна",
+  Житлова: "Житлова",
+  Комерційна: "Комерційна",
+};
 
-const STORAGE_KEY = "otherFilters";
-const CURRENCY_KEY = "currency";
-
-export default function FiltersModal({ onClose, onSubmit }: FiltersModalProps) {
+export default function FiltersModal({ onClose }: FiltersModalProps) {
   const { t, i18n } = useTranslation("common");
   const lang = i18n.language;
+  const router = useRouter();
+  const { restQuery } = router.query;
+
   const [category, setCategory] =
     useState<keyof typeof CATEGORY_TYPES>("Житлова");
   const [propertyType, setPropertyType] = useState<string>(
@@ -25,64 +28,82 @@ export default function FiltersModal({ onClose, onSubmit }: FiltersModalProps) {
   const [filters, setFilters] = useState<Record<string, any>>({});
   const [currency, setCurrency] = useState<"UAH" | "USD">("USD");
 
-  // Загружаем сохраненные фильтры и валюту
+  // Инициализация из URL
   useEffect(() => {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved) {
-      const parsed = JSON.parse(saved);
-      console.log("Loaded saved filters:", parsed);
-      setFilters(parsed);
-      if (parsed.category) setCategory(parsed.category);
-      if (parsed.type) setPropertyType(parsed.type);
+    if (!router.isReady) return;
 
-      const savedCurrency = localStorage.getItem(CURRENCY_KEY);
-      if (savedCurrency === "USD") setCurrency("USD");
-
-      onSubmit({
-        ...parsed,
-        // передаем выбранную валюту
-      });
+    let parsedOtherFilters: Record<string, any> = {};
+    if (typeof router.query.otherfilters === "string") {
+      try {
+        // 1. Декодируем URI
+        const decoded = decodeURIComponent(router.query.otherfilters);
+        // 2. Парсим JSON
+        parsedOtherFilters = JSON.parse(decoded);
+      } catch (e) {
+        console.warn("Ошибка парсинга otherfilters", e);
+      }
     }
-  }, []);
-  useEffect(() => {
-    console.log("Filters changed:", filters);
-  }, [filters]);
+    setFilters(parsedOtherFilters);
+    setCategory(parsedOtherFilters.category || "Житлова");
+    setPropertyType(parsedOtherFilters.type || "Квартира");
+  }, [router.isReady, router.query.otherfilters]);
+  // Обновление URL при изменении фильтра
+  const updateUrl = (newFilters: Record<string, any>) => {
+    const query: Record<string, string> = {
+      ...router.query,
+      otherfilters: JSON.stringify(newFilters),
+    };
+
+    // Убираем пустые значения
+    Object.keys(query).forEach((key) => {
+      if (
+        query[key] === "" ||
+        query[key] == null ||
+        (typeof query[key] === "string" && query[key] === "{}")
+      ) {
+        delete query[key];
+      }
+    });
+
+    router.push({ pathname: router.pathname, query }, undefined, {
+      shallow: true,
+    });
+  };
+
   const handleCurrencyToggle = (newCurrency: "UAH" | "USD") => {
     setCurrency(newCurrency);
-    localStorage.setItem(CURRENCY_KEY, newCurrency);
+    updateUrl({ currency: newCurrency });
   };
 
   const handleInputChange = (filterName: string, value: any) => {
-    setFilters((prev) => {
-      const updated = {
-        ...prev,
-        category, // добавляем категорию
-        type: propertyType, // добавляем тип
-        [filterName]: value,
-      };
-
-      // сохраняем в localStorage плоским объектом
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
-
-      return updated;
-    });
+    setFilters((prev) => ({
+      ...prev,
+      [filterName]: value,
+    }));
   };
 
   const handleSubmit = () => {
-    onSubmit({
-      category,
-      propertyType,
+    const otherFilters = {
       ...filters,
-      currency,
-    });
+      category,
+      type: propertyType,
+    };
+    onClose();
+    router.push(
+      {
+        pathname: router.pathname,
+        query: {
+          otherfilters: JSON.stringify(otherFilters),
+        },
+      },
+      undefined,
+      { shallow: true }
+    );
   };
 
   const resetFilters = () => {
-    setFilters({});
-    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
-    if (!saved[category]) saved[category] = {};
-    saved[category][propertyType] = {};
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(saved));
+    setFilters({}); // очищаем все фильтры
+    updateUrl({}); // очищаем otherfilters в URL
   };
 
   return (
@@ -109,15 +130,15 @@ export default function FiltersModal({ onClose, onSubmit }: FiltersModalProps) {
                     category === catUa ? styles.active : ""
                   }`}
                   onClick={() => {
-                    localStorage.removeItem(STORAGE_KEY);
-                    setCategory(catUa as keyof typeof CATEGORY_TYPES);
-                    setPropertyType(CATEGORY_TYPES[catUa]["ua"][0]);
-                    const saved = JSON.parse(
-                      localStorage.getItem(STORAGE_KEY) || "{}"
-                    );
-                    setFilters(
-                      saved[catUa]?.[CATEGORY_TYPES[catUa]["ua"][0]] || {}
-                    );
+                    const newCategory = catUa as keyof typeof CATEGORY_TYPES;
+                    const newType = CATEGORY_TYPES[newCategory]["ua"][0];
+
+                    // Локально обновляем состояние
+                    setCategory(newCategory);
+                    setPropertyType(newType);
+                    setFilters({}); // сбросить остальные фильтры
+
+                    // Не трогаем URL, обновим его только при handleSubmit
                   }}
                 >
                   {category === catUa && (
@@ -154,12 +175,13 @@ export default function FiltersModal({ onClose, onSubmit }: FiltersModalProps) {
                     propertyType === typeUa ? styles.active : ""
                   }`}
                   onClick={() => {
-                    localStorage.removeItem(STORAGE_KEY);
-                    setPropertyType(typeUa);
-                    const saved = JSON.parse(
-                      localStorage.getItem(STORAGE_KEY) || "{}"
-                    );
-                    setFilters(saved[category]?.[typeUa] || {});
+                    const newType = typeUa;
+
+                    // Локально обновляем состояние
+                    setPropertyType(newType);
+                    setFilters({}); // сброс остальных фильтров
+
+                    // URL не трогаем, он будет обновляться при handleSubmit
                   }}
                 >
                   {propertyType === typeUa && (

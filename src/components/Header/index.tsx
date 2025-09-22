@@ -1,4 +1,3 @@
-// components/Header/Header.tsx
 import Link from "next/link";
 import Image from "next/image";
 import { useTranslation } from "react-i18next";
@@ -6,20 +5,39 @@ import { FC, useState } from "react";
 import styles from "./styles.module.css";
 import mySpaceLogo from "../../../public/icons/MySpace_LOGO_1[SVG].png";
 import LanguageSwitcher from "../LanguageSwitcher/LanguageSwitcher";
-import { useModal } from '../../hooks/useModal';
+import { useModal } from "../../hooks/useModal";
 
 const Header: FC = () => {
   const { t } = useTranslation("common");
   const { openModal } = useModal();
   const [isMenuOpen, setMenuOpen] = useState<boolean>(false);
 
-  const toggleMenu = () => {
-    setMenuOpen(!isMenuOpen);
+  const toggleMenu = () => setMenuOpen(!isMenuOpen);
+  const handleOpenModal = () => {
+    openModal(null);
+    setMenuOpen(false);
   };
 
-  const handleOpenModal = () => {
-    openModal(null); // Passing null as no specific value is needed
-    setMenuOpen(false); // Close the mobile menu after opening the modal
+  const category = "Житлова";
+  const type = "Квартира";
+
+  // Ссылки на каталог без пустых массивов
+  const catalogLinkSale = {
+    pathname: "/catalog",
+    query: {
+      otherfilters: encodeURIComponent(
+        JSON.stringify({ deal: "Продаж", category, type })
+      ),
+    },
+  };
+
+  const catalogLinkRent = {
+    pathname: "/catalog",
+    query: {
+      otherfilters: encodeURIComponent(
+        JSON.stringify({ deal: "Оренда", category, type })
+      ),
+    },
   };
 
   return (
@@ -40,10 +58,10 @@ const Header: FC = () => {
           {/* Desktop Navigation Links */}
           <ul className={styles.navLinks}>
             <li>
-              <Link href="/catalog/sale">{t("sale") || "Продаж"}</Link>
+              <Link href={catalogLinkSale}>{t("sale") || "Продаж"}</Link>
             </li>
             <li>
-              <Link href="/catalog/rent" className={styles.activeLink}>
+              <Link href={catalogLinkRent} className={styles.activeLink}>
                 {t("rent") || "Оренда"}
               </Link>
             </li>
@@ -88,12 +106,12 @@ const Header: FC = () => {
         <div className={styles.mobileMenuWrapper}>
           <ul className={styles.mobileNavLinks}>
             <li>
-              <Link href="/catalog/sale" onClick={toggleMenu}>
+              <Link href={catalogLinkSale} onClick={toggleMenu}>
                 {t("sale") || "Продаж"}
               </Link>
             </li>
             <li>
-              <Link href="/catalog/rent" onClick={toggleMenu}>
+              <Link href={catalogLinkRent} onClick={toggleMenu}>
                 {t("rent") || "Оренда"}
               </Link>
             </li>
@@ -113,7 +131,11 @@ const Header: FC = () => {
               </p>
             </li>
             <li>
-              <a href="tel:+3801234567" className={styles.phone} onClick={toggleMenu}>
+              <a
+                href="tel:+3801234567"
+                className={styles.phone}
+                onClick={toggleMenu}
+              >
                 {t("phoneNumber") || "+3801234567"}
               </a>
             </li>

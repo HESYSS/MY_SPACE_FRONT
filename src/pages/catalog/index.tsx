@@ -51,7 +51,7 @@ function buildQueryFromFilters(
 
 export default function CatalogPage() {
   const router = useRouter();
-  const { deal, category, region } = router.query;
+  const { deal, category, region, ...restQuery } = router.query;
   const isOutOfCity = region === "kyiv" ? false : true;
   const type = typeMap[typeof category === "string" ? category : "Житлова"];
 
@@ -62,18 +62,7 @@ export default function CatalogPage() {
   const [showMap, setShowMap] = useState(false);
 
   const currentDeal = typeof deal === "string" ? deal : "Оренда";
-  const [propertyType, setPropertyType] = useState<"Оренда" | "Продаж">(
-    currentDeal === "rent" || currentDeal === "Оренда" ? "Оренда" : "Продаж"
-  );
-  console.log(
-    "Router query:",
-    router.query,
-    isOutOfCity,
-    type,
-    currentDeal,
-    region
-  );
-  console.log("propertyType", propertyType, currentDeal);
+
   const [properties, setProperties] = useState<any[]>([]);
   const [allProperties, setAllProperties] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -84,12 +73,49 @@ export default function CatalogPage() {
   const [locationFilter, setLocationFilter] = useState<any>();
   const [otherFilters, setOtherFilters] = useState<any>();
 
-  const handleApply = (location: any, filters: any) => {
-    console.log("Applying filters:", { location, filters });
-    setLocationFilter({ ...location });
-    setOtherFilters({ ...filters });
-    setPage(1);
-  };
+  useEffect(() => {
+    if (!router.isReady) return;
+
+    // Сегмент роута
+    const dealFromRoute = router.query.deal || router.query.slug || "Оренда";
+
+    // Парсим фильтры из URL
+    let otherFilters: Record<string, any> = {};
+    let locationFilters: Record<string, any> = {};
+
+    if (typeof router.query.otherfilters === "string") {
+      try {
+        // 1. Декодируем URI
+        const decoded = decodeURIComponent(router.query.otherfilters);
+        // 2. Парсим JSON
+        otherFilters = JSON.parse(decoded);
+        console.log("otherFilters:", otherFilters);
+      } catch (e) {
+        console.warn("Ошибка парсинга otherfilters", e);
+      }
+    }
+    if (typeof router.query.locationfilters === "string") {
+      try {
+        const decoded = decodeURIComponent(router.query.locationfilters);
+        locationFilters = JSON.parse(decoded);
+        console.log("locationFilters:", locationFilters);
+      } catch (e) {
+        console.warn("Ошибка парсинга locationfilters", e);
+      }
+    }
+
+    // Обновляем состояние только при изменении
+    setOtherFilters((prev: any) =>
+      JSON.stringify(prev) === JSON.stringify(otherFilters)
+        ? prev
+        : otherFilters
+    );
+    setLocationFilter((prev: any) =>
+      JSON.stringify(prev) === JSON.stringify(locationFilters)
+        ? prev
+        : locationFilters
+    );
+  }, [router.isReady, router.asPath]);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -112,7 +138,6 @@ export default function CatalogPage() {
         });
 
         const backendUrl = process.env.REACT_APP_API_URL;
-        console.log("Fetching with params:", params.toString());
 
         const res = await fetch(`${backendUrl}/items?${params}`, {
           signal: controller.signal,
@@ -121,7 +146,6 @@ export default function CatalogPage() {
 
         setProperties(data.items);
         setTotalCount(data.total);
-        console.log("Fetched properties:", data.total);
       } catch (err: any) {
         if (err.name === "AbortError") {
           console.log("Запрос отменён из-за нового фильтра/страницы");
@@ -146,7 +170,6 @@ export default function CatalogPage() {
         const standardizedLocation = standardizeFilters(locationFilter);
         const standardizedFilters = standardizeFilters(otherFilters);
 
-        console.log("1");
         const params = new URLSearchParams({
           lang: lang,
 
@@ -154,7 +177,6 @@ export default function CatalogPage() {
           ...buildQueryFromFilters(standardizedFilters),
         });
 
-        console.log("Fetching all with params:", params.toString());
         const backendUrl = process.env.REACT_APP_API_URL;
         const res = await fetch(`${backendUrl}/items/coords?${params}`, {
           signal: controller.signal,
@@ -162,7 +184,6 @@ export default function CatalogPage() {
 
         const data = await res.json();
         setAllProperties(data);
-        console.log("Fetched all properties for map:", data);
       } catch (err: any) {
         if (err.name === "AbortError") {
           console.log("Запрос отменён из-за нового фильтра");
@@ -185,15 +206,7 @@ export default function CatalogPage() {
   return (
     <div className={containerClass}>
       <div className={styles.leftColumn}>
-        <Filter
-          isOutOfCity={isOutOfCity}
-          type={type}
-          currentDeal={currentDeal}
-          onApply={(appliedFilters: any) => {
-            const { location = {}, filters = {} } = appliedFilters;
-            handleApply({ ...location }, { ...filters });
-          }}
-        />
+        <Filter />
 
         {isMobileOrTablet && (
           <button
