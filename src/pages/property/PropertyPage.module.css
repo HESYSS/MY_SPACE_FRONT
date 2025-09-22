@@ -104,11 +104,11 @@
 .price {
   font-size: 2em;
   font-weight: bold;
-  color: #EBEBEB;
+  color: #ebebeb;
 }
 
 .contactButton {
-  background-color: #EBEBEB;
+  background-color: #ebebeb;
   color: #0d1117;
   border: none;
   padding: 15px 30px;
@@ -121,7 +121,7 @@
 }
 
 .contactButton:hover {
-  background-color: #03B9B3;
+  background-color: #03b9b3;
 }
 
 .detailsContainer {
@@ -198,7 +198,7 @@
   .infoSection {
     margin-left: 0;
   }
-  
+
   .imageGallery {
     width: 100%;
   }
@@ -206,7 +206,7 @@
   .priceAndButton {
     align-items: flex-start;
   }
-  
+
   .detailsContainer {
     flex-direction: column;
     gap: 40px;
@@ -217,7 +217,6 @@
     margin-left: 0;
   }
 }
-
 
 @media (min-width: 375px) and (max-width: 768px) {
   .propertyPage {
@@ -239,7 +238,7 @@
   .infoSection {
     margin-left: 0;
   }
-  
+
   .title {
     font-size: 2em;
   }

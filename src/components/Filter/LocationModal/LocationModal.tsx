@@ -2,6 +2,8 @@ import { useState, useEffect, useRef } from "react";
 import styles from "./LocationModal.module.css";
 import { useTranslation } from "react-i18next";
 import { METRO_LINES, SHORE_DISTRICTS } from "./locationFiltersConfig";
+import { useRouter } from "next/router";
+import { polygon } from "leaflet";
 
 interface LocationData {
   kyiv: {
@@ -42,6 +44,7 @@ export default function LocationModal({
   triggerRef,
   isOutOfCity,
 }: LocationModalProps) {
+  const router = useRouter();
   const [locationType, setLocationType] = useState<"kyiv" | "region">("kyiv");
   const modalRef = useRef<HTMLDivElement>(null); // Ref для самой модалки
 
@@ -60,14 +63,13 @@ export default function LocationModal({
   const [selectedStreets, setSelectedStreets] = useState<string[]>([]);
   const [selectedJk, setSelectedJk] = useState<string[]>([]);
   const [selectedDirections, setSelectedDirections] = useState<string[]>([]);
-
+  const [selectedPolygon, setSelectedPolygon] = useState<string[]>([]);
   const [locationData, setLocationData] = useState<LocationData | null>(null);
   const [isInitialRender, setIsInitialRender] = useState(true);
 
-  // ⬅️ ДОБАВЛЕНИЕ НОВОГО useEffect ДЛЯ ЗАКРЫТИЯ ПО КЛИКУ ВНЕ
+  // клик вне модалки → закрытие
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      // Проверяем, что клик был вне модалки
       if (
         modalRef.current &&
         !modalRef.current.contains(event.target as Node)
@@ -75,126 +77,105 @@ export default function LocationModal({
         onClose();
       }
     };
-
-    // Добавляем обработчик события на весь документ
     document.addEventListener("mousedown", handleClickOutside);
-
-    // Удаляем обработчик при размонтировании компонента
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [onClose]);
 
-  // Загружаем данные с бэка
+  // загрузка locationfilters из URL
   useEffect(() => {
-    const savedData = localStorage.getItem(DATA_STORAGE_KEY);
-    if (savedData) {
-      const parsedData = JSON.parse(savedData);
-      if (parsedData.lang === lang) {
-        const data = {
-          kyiv: parsedData.kyiv,
-          region: parsedData.region,
-        };
-        setLocationData(data);
-        return;
-      }
-    }
-    async function fetchLocationData() {
+    if (!router.isReady) return;
+    if (router.query.locationfilters) {
       try {
-        const backendUrl = process.env.REACT_APP_API_URL;
-        const res = await fetch(`${backendUrl}/items/location`, {
-          headers: {
-            "Accept-Language": lang,
-          },
-        });
-        const data = await res.json();
-        setLocationData(data);
-        const dataWithLang = {
-          ...data,
-          lang: lang,
-        };
-        localStorage.setItem(DATA_STORAGE_KEY, JSON.stringify(dataWithLang));
-      } catch (err) {
-        console.error("Ошибка загрузки локаций", err);
+        const decoded = decodeURIComponent(
+          router.query.locationfilters as string
+        );
+        const parsed = JSON.parse(decoded);
+        setSelectedMetro(parsed.metro || []);
+        setSelectedDistricts(parsed.districts || []);
+        setSelectedStreets(parsed.streets || []);
+        setSelectedJk(parsed.newbuildings || []);
+        setSelectedDirections(parsed.directions || []);
+        setLocationType(parsed.isOutOfCity ? "region" : "kyiv");
+        setSelectedPolygon(parsed.polygon || []);
+      } catch (e) {
+        console.error("Ошибка парсинга locationfilters", e);
       }
     }
-    fetchLocationData();
-  }, [lang]);
+  }, [router.isReady, router.query.locationfilters]);
 
-  useEffect(() => {
-    const saved = localStorage.getItem(FILTERS_STORAGE_KEY);
-    if (saved) {
-      const parsed = JSON.parse(saved);
-      setSelectedMetro(parsed.metro || []);
-      setSelectedDistricts(parsed.districts || []);
-      setSelectedStreets(parsed.streets || []);
-      setSelectedJk(parsed.newbuildings || []);
-      setSelectedDirections(parsed.directions || []);
-      setLocationType(parsed.isOutOfCity ? "region" : "kyiv");
-    }
-  }, []);
-
+  // синхронизация фильтров → URL + onSubmit
   useEffect(() => {
     if (isInitialRender) {
       setIsInitialRender(false);
       return;
     }
-    const newFilters: any = {
+    const filters: any = {
       isOutOfCity: locationType === "region",
-      streets: [],
-      newbuildings: [],
+      streets: selectedStreets,
+      newbuildings: selectedJk,
+      polygon: selectedPolygon,
     };
     if (locationType === "kyiv") {
-      newFilters.metro = [];
-      newFilters.districts = [];
+      filters.metro = selectedMetro;
+      filters.districts = selectedDistricts;
     } else {
-      newFilters.directions = [];
+      filters.directions = selectedDirections;
     }
-    localStorage.removeItem(FILTERS_STORAGE_KEY);
-    localStorage.removeItem(POLYGON_STORAGE_KEY);
-    localStorage.setItem(FILTERS_STORAGE_KEY, JSON.stringify(newFilters));
-    onSubmit(newFilters);
-  }, [locationType]);
 
+    const query = {
+      ...router.query,
+      locationfilters: JSON.stringify(filters),
+    };
+
+    router.push({ pathname: router.pathname, query }, undefined, {
+      shallow: true,
+    });
+    onSubmit({ ...filters, polygon: loadPolygon() });
+  }, [
+    selectedMetro,
+    selectedDistricts,
+    selectedStreets,
+    selectedJk,
+    selectedDirections,
+    locationType,
+  ]);
+
+  // toggle helpers
   const toggleArrayValue = (arr: string[], value: string) =>
     arr.includes(value) ? arr.filter((v) => v !== value) : [...arr, value];
 
   const handleSelectMetroStation = (station: string) => {
     setSelectedMetro(toggleArrayValue(selectedMetro, station));
   };
-
   const handleSelectMetroLine = (line: string) => {
     const stations = METRO_LINES[line]["ua"];
     const allSelected = stations.every((s) => selectedMetro.includes(s));
-    const newSelected = allSelected
-      ? selectedMetro.filter((s) => !stations.includes(s))
-      : Array.from(new Set([...selectedMetro, ...stations]));
-    setSelectedMetro(newSelected);
+    setSelectedMetro(
+      allSelected
+        ? selectedMetro.filter((s) => !stations.includes(s))
+        : Array.from(new Set([...selectedMetro, ...stations]))
+    );
   };
-
   const handleSelectDistrict = (district: string) => {
     setSelectedDistricts(toggleArrayValue(selectedDistricts, district));
   };
-
   const handleSelectShore = (shore: string) => {
     const districts = SHORE_DISTRICTS[shore]["ua"];
     const allSelected = districts.every((d) => selectedDistricts.includes(d));
-    const newSelected = allSelected
-      ? selectedDistricts.filter((d) => !districts.includes(d))
-      : Array.from(new Set([...selectedDistricts, ...districts]));
-    setSelectedDistricts(newSelected);
+    setSelectedDistricts(
+      allSelected
+        ? selectedDistricts.filter((d) => !districts.includes(d))
+        : Array.from(new Set([...selectedDistricts, ...districts]))
+    );
   };
-
   const handleSelectStreet = (street: string) => {
     setSelectedStreets(toggleArrayValue(selectedStreets, street));
   };
-
   const handleSelectJk = (jk: string) => {
     setSelectedJk(toggleArrayValue(selectedJk, jk));
   };
-
-  const handleSelectDirection = (direction: string) => {
-    setSelectedDirections(toggleArrayValue(selectedDirections, direction));
+  const handleSelectDirection = (dir: string) => {
+    setSelectedDirections(toggleArrayValue(selectedDirections, dir));
   };
 
   useEffect(() => {

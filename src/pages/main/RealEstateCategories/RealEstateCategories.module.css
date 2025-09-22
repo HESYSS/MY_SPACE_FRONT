@@ -78,7 +78,7 @@
 }
 
 .frame48wrapper {
-  background: linear-gradient(180deg, #FFFFFF 0%, #000000 50%, #000000 100%);
+  background: linear-gradient(180deg, #ffffff 0%, #000000 50%, #000000 100%);
   padding: 1px;
   border-radius: 10px;
   width: 100%;
@@ -243,7 +243,7 @@
 }
 
 .frame47wrapper {
-  background: linear-gradient(360deg, #FFFFFF 0%, #000000 50%, #000000 100%);
+  background: linear-gradient(360deg, #ffffff 0%, #000000 50%, #000000 100%);
   padding: 1px;
   border-radius: 10px;
   width: 100%;
@@ -446,13 +446,16 @@
     font-size: 18px;
     line-height: 24px;
   }
-  .frame48,
   .frame49,
   .frame43,
   .frame47,
   .column2,
   .column4 .frame43 {
     height: 150px;
+  }
+  .frame48 {
+    height: 150px;
+    padding: 0px 20px 20px;
   }
   /* Уменьшаем шрифт для надписей на мобильных */
   .categoryTitle {
@@ -461,7 +464,7 @@
   }
 
   .frame47wrapper {
-    background: linear-gradient(360deg, #FFFFFF 0%, #000000 50%, #000000 100%);
+    background: linear-gradient(360deg, #ffffff 0%, #000000 50%, #000000 100%);
     padding: 0.5px;
     border-radius: 10px;
     width: 100%;

@@ -8,9 +8,9 @@ const VideoSearchOverlay = () => {
   const { t } = useTranslation("common");
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const [videoUrl, setVideoUrl] = useState<string | null>(null);
-  const [serviceType, setServiceType] = useState<"rent" | "sale">("rent");
-  const [category, setCategory] = useState("residential");
-  const [region, setRegion] = useState("kyiv");
+  const [serviceType, setServiceType] = useState<"Оренда" | "Продаж">("Оренда");
+  const [category, setCategory] = useState("Житлова");
+  const [isOutOfCity, setRegion] = useState(false);
 
   const router = useRouter();
 
@@ -31,8 +31,13 @@ const VideoSearchOverlay = () => {
 
   const handleSearch = () => {
     router.push({
-      pathname: `/catalog/${serviceType}`,
-      query: { category, region },
+      pathname: `/catalog`,
+      query: {
+        otherfilters: encodeURIComponent(
+          JSON.stringify({ deal: serviceType, category })
+        ),
+        locationfilters: encodeURIComponent(JSON.stringify({ isOutOfCity })),
+      },
     });
   };
 
@@ -61,11 +66,11 @@ const VideoSearchOverlay = () => {
               id="serviceType"
               value={serviceType}
               onChange={(e) =>
-                setServiceType(e.target.value as "rent" | "sale")
+                setServiceType(e.target.value as "Оренда" | "Продаж")
               }
             >
-              <option value="rent">{t("serviceRent")}</option>
-              <option value="sale">{t("serviceSale")}</option>
+              <option value="Оренда">{t("serviceRent")}</option>
+              <option value="Продаж">{t("serviceSale")}</option>
             </select>
           </div>
 
@@ -76,8 +81,8 @@ const VideoSearchOverlay = () => {
               value={category}
               onChange={(e) => setCategory(e.target.value)}
             >
-              <option value="residential">{t("categoryResidential")}</option>
-              <option value="commercial">{t("categoryCommercial")}</option>
+              <option value="Житлова">{t("categoryResidential")}</option>
+              <option value="Комерційна">{t("categoryCommercial")}</option>
             </select>
           </div>
 
@@ -85,11 +90,11 @@ const VideoSearchOverlay = () => {
             <label htmlFor="region">{t("regionLabel")}</label>
             <select
               id="region"
-              value={region}
-              onChange={(e) => setRegion(e.target.value)}
+              value={isOutOfCity ? "true" : "false"}
+              onChange={(e) => setRegion(e.target.value === "true")}
             >
-              <option value="kyiv">{t("regionKyiv")}</option>
-              <option value="kyivRegion">{t("Kyiv region")}</option>
+              <option value="false">{t("regionKyiv")}</option>
+              <option value="true">{t("Kyiv region")}</option>
             </select>
           </div>
 

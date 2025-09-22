@@ -1,10 +1,9 @@
-// components/RealEstateCategories/RealEstateCategories.jsx
-
+// components/RealEstateCategories/RealEstateCategories.tsx
 import { useState, useEffect } from "react";
 import styles from "./RealEstateCategories.module.css";
 import { useTranslation } from "react-i18next";
+import Link from "next/link";
 
-// Интерфейс для данных об изображении
 interface SiteImage {
   id: number;
   name: string;
@@ -13,13 +12,11 @@ interface SiteImage {
 
 const arrowPath = "/icons/Vector4.svg";
 
-
 export default function RealEstateCategories() {
   const { t } = useTranslation("common");
   const [images, setImages] = useState<SiteImage[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Функция для получения изображений с бэкенда
   const fetchImages = async () => {
     try {
       const backendUrl = process.env.REACT_APP_API_URL;
@@ -41,13 +38,11 @@ export default function RealEstateCategories() {
     fetchImages();
   }, []);
 
-  // Вспомогательная функция для получения URL по имени
   const getImageUrlByName = (name: string): string | undefined => {
     const image = images.find((img) => img.name === name);
     return image ? `url(${image.url})` : undefined;
   };
 
-  // Получаем URL для каждого изображения по его имени
   const houseImageStyle = {
     backgroundImage: getImageUrlByName("TownHouse.png"),
   };
@@ -78,28 +73,71 @@ export default function RealEstateCategories() {
               <p className={styles.textBlock}>{t("bestOffers")}</p>
             </div>
           </div>
-          <a href="#" className={styles.frame49} style={houseImageStyle}>
+          <Link
+            href={{
+              pathname: "/catalog",
+              query: {
+                otherfilters: encodeURIComponent(
+                  JSON.stringify({
+                    category: "Житлова",
+                    type: "Будинок",
+                  })
+                ),
+              },
+            }}
+            className={styles.frame49}
+            style={houseImageStyle}
+          >
             <p className={styles.categoryTitle}>{t("build")}</p>
             <div className={styles.arrowCircle}>
               <img src={arrowPath} alt="Arrow" className={styles.arrowImage} />
             </div>
-          </a>
+          </Link>
         </div>
+
         <div className={styles.frame369}>
-          <a href="#" className={styles.column2} style={commercialImageStyle}>
+          <Link
+            href={{
+              pathname: "/catalog",
+              query: {
+                otherfilters: encodeURIComponent(
+                  JSON.stringify({
+                    category: "Комерційна",
+                  })
+                ),
+              },
+            }}
+            className={styles.column2}
+            style={commercialImageStyle}
+          >
             <p className={styles.categoryTitle}>{t("Commercial")}</p>
             <div className={styles.arrowCircle}>
               <img src={arrowPath} alt="Arrow" className={styles.arrowImage} />
             </div>
-          </a>
+          </Link>
         </div>
+
         <div className={styles.column3}>
-          <a href="#" className={styles.frame43} style={apartmentImageStyle}>
+          <Link
+            href={{
+              pathname: "/catalog",
+              query: {
+                otherfilters: encodeURIComponent(
+                  JSON.stringify({
+                    category: "Житлова",
+                    type: "Квартира",
+                  })
+                ),
+              },
+            }}
+            className={styles.frame43}
+            style={apartmentImageStyle}
+          >
             <p className={styles.categoryTitle}>{t("apartment")}</p>
             <div className={styles.arrowCircle}>
               <img src={arrowPath} alt="Arrow" className={styles.arrowImage} />
             </div>
-          </a>
+          </Link>
           <div className={styles.frame47wrapper}>
             <div className={styles.frame47}>
               <p className={styles.textBlock}>{t("largeSelection")}</p>

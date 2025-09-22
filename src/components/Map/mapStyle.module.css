@@ -3,6 +3,7 @@
    ========================= */
 .mapContainer {
   position: relative;
+  touch-action: auto;
 }
 
 .drawButtonContainer {
@@ -39,6 +40,7 @@
 .mapCanvas {
   width: 905px;
   height: 668.98px;
+  touch-action: auto;
 }
 
 /* =========================
