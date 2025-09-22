@@ -62,11 +62,10 @@
   font-weight: 400;
   font-style: normal;
   line-height: 1.3;
-
 }
 
 .property-location {
-  font-family: "Raleway";
+  font-family: "Raleway", sans-serif;
   font-size: 16px;
   font-weight: 700;
   color: #050505;
@@ -76,7 +75,7 @@
 }
 
 .property-price {
-  font-family: "Raleway";
+  font-family: "Raleway", sans-serif;
   font-weight: 700;
   font-weight: bold;
   font-size: 14px;
@@ -133,4 +132,11 @@
   font-size: 14px;
   line-height: 100%;
   letter-spacing: 0%;
+}
+
+.icon {
+  width: 20px; /* Примерный размер */
+  height: 20px; /* Примерный размер */
+  margin-right: 8px; /* Отступ от текста */
+  /* Добавьте другие стили по необходимости, например, color: для SVG */
 }

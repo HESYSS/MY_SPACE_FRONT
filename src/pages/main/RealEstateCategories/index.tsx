@@ -10,6 +10,8 @@ interface SiteImage {
   url: string;
 }
 
+const arrowPath = "/icons/Vector4.svg";
+
 export default function RealEstateCategories() {
   const { t } = useTranslation("common");
   const [images, setImages] = useState<SiteImage[]>([]);
@@ -17,7 +19,7 @@ export default function RealEstateCategories() {
 
   const fetchImages = async () => {
     try {
-      const backendUrl = process.env.NEXT_PUBLIC_API_URL;
+      const backendUrl = process.env.REACT_APP_API_URL;
       const response = await fetch(`${backendUrl}/images`);
       if (response.ok) {
         const data: SiteImage[] = await response.json();
@@ -87,6 +89,9 @@ export default function RealEstateCategories() {
             style={houseImageStyle}
           >
             <p className={styles.categoryTitle}>{t("build")}</p>
+            <div className={styles.arrowCircle}>
+              <img src={arrowPath} alt="Arrow" className={styles.arrowImage} />
+            </div>
           </Link>
         </div>
 
@@ -106,6 +111,9 @@ export default function RealEstateCategories() {
             style={commercialImageStyle}
           >
             <p className={styles.categoryTitle}>{t("Commercial")}</p>
+            <div className={styles.arrowCircle}>
+              <img src={arrowPath} alt="Arrow" className={styles.arrowImage} />
+            </div>
           </Link>
         </div>
 
@@ -126,6 +134,9 @@ export default function RealEstateCategories() {
             style={apartmentImageStyle}
           >
             <p className={styles.categoryTitle}>{t("apartment")}</p>
+            <div className={styles.arrowCircle}>
+              <img src={arrowPath} alt="Arrow" className={styles.arrowImage} />
+            </div>
           </Link>
           <div className={styles.frame47wrapper}>
             <div className={styles.frame47}>
@@ -136,6 +147,9 @@ export default function RealEstateCategories() {
         <div className={styles.column4}>
           <a href="#" className={styles.frame43} style={landPlotsImageStyle}>
             <p className={styles.categoryTitle}>{t("LandPlots")}</p>
+            <div className={styles.arrowCircle}>
+              <img src={arrowPath} alt="Arrow" className={styles.arrowImage} />
+            </div>
           </a>
         </div>
       </div>

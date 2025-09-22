@@ -131,10 +131,10 @@
 }
 
 .sectionBlock {
-  background-color: #050505;
   border-radius: 12px;
   padding: 30px;
   flex: 1;
+  z-index: 1;
 }
 
 .sectionTitle {
@@ -149,7 +149,7 @@
   padding: 0;
   margin: 0;
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: 1fr; /* ИЗМЕНЕНИЕ: Устанавливаем одну колонку */
   gap: 10px;
 }
 
@@ -169,7 +169,13 @@
   border-radius: 12px;
   overflow: hidden;
   height: 500px;
-  margin-left: 200px;
+}
+
+.featureIcon {
+  width: 20px; /* Примерный размер */
+  height: 20px; /* Примерный размер */
+  margin-right: 8px; /* Отступ от текста */
+  /* Добавьте другие стили по необходимости, например, color: для SVG */
 }
 
 @media (min-width: 769px) and (max-width: 1100px) {

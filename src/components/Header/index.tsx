@@ -61,7 +61,7 @@ const Header: FC = () => {
               <Link href={catalogLinkSale}>{t("sale") || "Продаж"}</Link>
             </li>
             <li>
-              <Link href={catalogLinkRent} className={styles.activeLink}>
+              <Link href={catalogLinkRent} className={styles.navLinks}>
                 {t("rent") || "Оренда"}
               </Link>
             </li>

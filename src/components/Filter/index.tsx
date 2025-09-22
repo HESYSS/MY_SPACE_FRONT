@@ -3,6 +3,7 @@ import styles from "./Filter.module.css";
 import LocationModal from "./LocationModal/LocationModal";
 import FiltersModal from "./FiltersModal/FiltersModal";
 import { useTranslation } from "react-i18next";
+import FilterIcon from "../../../public/icons/Frame154.png";
 
 const LOCATION_STORAGE_KEY = "locationFilters";
 const OTHER_STORAGE_KEY = "otherFilters";
@@ -16,42 +17,52 @@ export default function Filter({}) {
   const [location, setLocation] = useState<any>(null);
   const [filters, setFilters] = useState<any>(null);
   const locationTriggerRef = useRef<HTMLInputElement>(null);
-  // Управление модальным окном "Локация"
+
   const handleLocationSubmit = (locationFilters: any) => {
     console.log("Location filters submitted:", locationFilters);
     setLocation(locationFilters);
   };
 
-  // Управление модальным окном "Фильтр"
   const handleFiltersSubmit = (appliedFilters: any) => {
     setFilters({ ...appliedFilters });
-
     setIsFiltersModalOpen(false);
   };
+
   return (
     <div className={styles.container}>
-      {/* Контейнер для строки поиска и модальных окон */}
       <div className={styles.searchContainer}>
         <div className={styles.topPanel}>
-          <input
-            ref={locationTriggerRef}
-            type="text"
-            placeholder={t("search_placeholder")} // вместо "Пошук..."
-            value={searchValue}
-            onChange={(e) => setSearchValue(e.target.value)}
-            className={styles.input}
-            onClick={() => setIsLocationModalOpen(true)}
-          />
+          {/* ИЗМЕНЕНИЕ: Обернули input и кнопку поиска в новый div */}
+          <div className={styles.searchInputWrapper}>
+            <input
+              ref={locationTriggerRef}
+              type="text"
+              placeholder={t("search_placeholder")}
+              value={searchValue}
+              onChange={(e) => setSearchValue(e.target.value)}
+              className={styles.input}
+              onClick={() => setIsLocationModalOpen(true)}
+            />
+            {/* ИЗМЕНЕНИЕ: Кнопка поиска теперь внутри обертки */}
+            <button className={styles.searchButton}>
+              {t("search_button")}
+            </button>
+          </div>
 
+          {/* ИЗМЕНЕНИЕ: В кнопку фильтров добавлена иконка и надпись */}
           <button
             onClick={() => setIsFiltersModalOpen(true)}
-            className={styles.locationButton}
+            className={styles.filterButton}
           >
-            {t("filter_button") || "Фільтр"} {/* вместо "Фільтр" */}
+            <img
+              src={FilterIcon.src}
+              alt="Фільтр"
+              className={styles.filterIcon}
+            />
+            <span>{t("filter_button") || "Фільтр"}</span>
           </button>
         </div>
 
-        {/* Модальное окно локации */}
         <div
           className={
             isLocationModalOpen ? styles.modalOpen : styles.modalClosed

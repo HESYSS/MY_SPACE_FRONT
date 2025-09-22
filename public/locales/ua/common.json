@@ -123,7 +123,7 @@
   "successMessage": "Наш менеджер зв'яжеться з вами найближчим часом для обговорення деталей. Дякуємо!",
   "district": "Район",
 
-  "search_placeholder": "Пошук...",
+  "search_placeholder": "Шукати...",
   "filter_button": "Фільтр",
 
   "loading": "Завантаження...",
@@ -201,5 +201,6 @@
   "showResults": "Показати результати",
   "show_map": "Показати мапу",
   "close_map": "Закрити мапу",
-  "Kyiv region": "Київська область"
+  "Kyiv region": "Київська область",
+  "search_button": "Пошук"
 }

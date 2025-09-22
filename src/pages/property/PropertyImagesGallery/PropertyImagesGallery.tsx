@@ -49,6 +49,7 @@ const ImageModal = ({
               alt="Увеличенное изображение"
               layout="fill"
               objectFit="contain"
+              sizes="(max-width: 768px) 100vw, 300px"
             />
             <button
               className={`${styles.navButton} ${styles.prevButton}`}
@@ -79,6 +80,7 @@ const ImageModal = ({
                   alt={`Миниатюра ${img.id}`}
                   layout="fill"
                   objectFit="cover"
+                  sizes="(max-width: 768px) 100vw, 300px"
                 />
               </div>
             ))}

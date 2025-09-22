@@ -4,6 +4,10 @@ import Image from "next/image";
 import styles from "./styles.module.css";
 import { useTranslation } from "react-i18next";
 
+// Импортируем иконки
+import BedIcon from '../../../public/icons/Frame153.svg'; // Укажите правильный путь
+import RulerIcon from '../../../public/icons/Frame204.svg'; // Укажите правильный путь
+
 interface Props {
   property: Property;
 }
@@ -88,13 +92,15 @@ export default function PropertyCard({ property }: Props) {
 
         <div className={styles["property-details"]}>
           <div className={styles["detail-item"]}>
-            <span className={styles.icon}>📏</span>
+            {/* ИЗМЕНЕНИЕ: Используем изображение RulerIcon */}
+            <img src={RulerIcon.src} alt="Площа" className={styles.icon} />
             <span>
               {property.area} {t("кв/м")}
             </span>
           </div>
           <div className={styles["detail-item"]}>
-            <span className={styles.icon}>🛏️</span>
+            {/* ИЗМЕНЕНИЕ: Используем изображение BedIcon */}
+            <img src={BedIcon.src} alt="Кімнати" className={styles.icon} />
             <span>
               {t("кімнат")}: {property.rooms}
             </span>

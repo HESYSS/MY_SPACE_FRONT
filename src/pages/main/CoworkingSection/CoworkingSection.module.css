@@ -153,6 +153,18 @@
   height: 26px;
 }
 
+/* НОВЫЕ СТИЛИ: Эффект при наведении на весь блок */
+.optionRow:hover .optionText {
+  color: #03b9b3; /* Цвет текста станет бирюзовым */
+  cursor: pointer;
+}
+
+.optionRow:hover .arrowIcon {
+  transform: translateX(5px); /* Стрелка немного сдвинется вправо */
+  filter: brightness(0) invert(1); /* Это сделает SVG белым */
+  cursor: pointer;
+}
+
 /* --- Планшетная адаптация (769px - 1300px) --- */
 @media (min-width: 769px) and (max-width: 1300px) {
   .coworkingP {
@@ -297,7 +309,6 @@
   .optionText {
     font-size: 10px;
     line-height: 12px;
-    white-space: normal;
   }
   .arrowIcon {
     width: 12px;

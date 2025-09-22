@@ -46,8 +46,12 @@ const Carousel: FC = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(true);
   const containerRef = useRef<HTMLDivElement>(null);
-
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  // ИЗМЕНЕНИЕ: Рефы для отслеживания свайпов
+  const touchStartRef = useRef(0);
+  const touchEndRef = useRef(0);
+  const swipeThreshold = 50; // Минимальная дистанция свайпа в пикселях
 
   // Вспомогательная функция для получения URL по имени
   const getImageUrlByName = (name: string): string => {
@@ -116,6 +120,21 @@ const Carousel: FC = () => {
     if (slidesData.length === 0) return;
     setActiveIndex((prev) => prev + 1);
     resetTimer();
+  };
+
+  // ИЗМЕНЕНИЕ: Обработчики для свайпов
+  const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+    touchStartRef.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent<HTMLDivElement>) => {
+    touchEndRef.current = e.changedTouches[0].clientX;
+    const diff = touchStartRef.current - touchEndRef.current;
+    if (diff > swipeThreshold) {
+      nextSlide();
+    } else if (diff < -swipeThreshold) {
+      prevSlide();
+    }
   };
 
   // Загружаем данные с бэкенда при монтировании компонента
@@ -285,8 +304,67 @@ const Carousel: FC = () => {
   }
 
   return (
-    <div className={styles.carouselWrapper}>
-      {!isMobile && (
+    <div className={styles.carouselContainer}>
+      <div className={styles.carouselWrapper}>
+        <div
+          ref={containerRef}
+          className={styles.slidesContainer}
+          // ИЗМЕНЕНИЕ: Добавление обработчиков событий касания
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+        >
+          {loopSlides.map((slide, idx) => {
+            const { width, height, opacity, zIndex, translateX, rotateY } =
+              getPositionStyle(idx);
+
+            if ((isTablet || isMobile) && Math.abs(idx - activeIndex) > 1) {
+              return null;
+            }
+
+            if (opacity === 0) return null;
+
+            const isCenter = zIndex === 10;
+            const slideText =
+              currentLanguage === "en" ? slide.text_en : slide.text;
+
+            return (
+              <div
+                key={idx}
+                className={`${styles.slide} ${
+                  isCenter ? styles.centerSlide : ""
+                }`}
+                style={{
+                  width,
+                  height,
+                  transform: `translateX(${translateX}px) translateY(-50%) rotateY(${rotateY}deg)`,
+                  zIndex,
+                  opacity,
+                  transition: isTransitioning ? "all 0.7s ease" : "none",
+                }}
+              >
+                <img
+                  src={slide.src}
+                  alt={slide.name}
+                  className={styles.slideImage}
+                />
+                {isCenter && (
+                  <>
+                    <div className={styles.textOverlay} />
+                    <div className={styles.slideTextContainer}>
+                      <span className={styles.slideSubtitle}>
+                        {t("district")}
+                      </span>
+                      <span className={styles.slideTitle}>{slideText}</span>
+                    </div>
+                  </>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {(!isMobile || (isMobile && slidesData.length > 2)) && (
         <div className={styles.arrows}>
           <button
             onClick={prevSlide}
@@ -331,57 +409,6 @@ const Carousel: FC = () => {
           </button>
         </div>
       )}
-
-      <div ref={containerRef} className={styles.slidesContainer}>
-        {loopSlides.map((slide, idx) => {
-          const { width, height, opacity, zIndex, translateX, rotateY } =
-            getPositionStyle(idx);
-
-          if ((isTablet || isMobile) && Math.abs(idx - activeIndex) > 1) {
-            return null;
-          }
-
-          if (opacity === 0) return null;
-
-          const isCenter = zIndex === 10;
-          const slideText =
-            currentLanguage === "en" ? slide.text_en : slide.text;
-
-          return (
-            <div
-              key={idx}
-              className={`${styles.slide} ${
-                isCenter ? styles.centerSlide : ""
-              }`}
-              style={{
-                width,
-                height,
-                transform: `translateX(${translateX}px) translateY(-50%) rotateY(${rotateY}deg)`,
-                zIndex,
-                opacity,
-                transition: isTransitioning ? "all 0.7s ease" : "none",
-              }}
-            >
-              <img
-                src={slide.src}
-                alt={slide.name}
-                className={styles.slideImage}
-              />
-              {isCenter && (
-                <>
-                  <div className={styles.textOverlay} />
-                  <div className={styles.slideTextContainer}>
-                    <span className={styles.slideSubtitle}>
-                      {t("district")}
-                    </span>
-                    <span className={styles.slideTitle}>{slideText}</span>
-                  </div>
-                </>
-              )}
-            </div>
-          );
-        })}
-      </div>
     </div>
   );
 };

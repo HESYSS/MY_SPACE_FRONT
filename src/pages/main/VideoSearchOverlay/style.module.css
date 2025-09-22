@@ -50,7 +50,7 @@
 }
 
 .heroTitle {
-  color: #EBEBEB;
+  color: #ebebeb;
   font-family: "Raleway", sans-serif;
   font-style: normal;
   font-weight: 600;
@@ -93,7 +93,8 @@
 .dropdown select {
   background-color: #051818;
   color: #ffffff;
-  border: 1px solid #03b9b3;
+  border: none;
+  border-bottom: 2px solid transparent;
   padding: 10px;
   font-size: 16px;
   border-radius: 4px;
@@ -101,9 +102,12 @@
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-  background-image: url('data:image/svg+xml;utf8,<svg fill="%2303b9b3" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
-  background-repeat: no-repeat;
-  background-position: right 10px top 50%;
+  background-image: linear-gradient(to right, #03b9b300, #03b9b3),
+    /* градиент линии */
+      url('data:image/svg+xml;utf8,<svg fill="%2303b9b3" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+  background-repeat: no-repeat, no-repeat;
+  background-position: bottom left, right 10px center;
+  background-size: 100% 2px, 24px 24px;
 }
 
 .searchBtnWrapper {
