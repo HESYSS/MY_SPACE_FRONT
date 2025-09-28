@@ -142,7 +142,7 @@
 }
 
 .contactInfo {
-  font-family: "Inter";
+  font-family: "Inter", sans-serif;
   font-weight: 400;
   font-size: 14px;
   line-height: 17px;
@@ -167,7 +167,7 @@
 }
 
 .socialText {
-  font-family: "Inter";
+  font-family: "Inter", sans-serif;
   font-weight: 400;
   font-size: 14px;
   line-height: 17px;
@@ -226,7 +226,7 @@
 
 .workDay,
 .workTime {
-  font-family: "Inter";
+  font-family: "Inter", sans-serif;
   font-weight: 400;
   font-size: 14px;
   line-height: 17px;

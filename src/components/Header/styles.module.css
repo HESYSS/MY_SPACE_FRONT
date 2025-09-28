@@ -6,13 +6,13 @@
   justify-content: center;
   align-items: center;
   padding: 18px 0px;
-  width: 100%; /* Устанавливаем 100% ширину для адаптивности */
+  width: 100%;
   max-width: 1920px;
   height: 92px;
   background: #050505;
   border-radius: 0px 0px 20px 20px;
   position: relative;
-  z-index: 100; /* Убедимся, что хедер всегда поверх контента */
+  z-index: 100;
 }
 
 /* Navbar */
@@ -22,7 +22,7 @@
   justify-content: space-between;
   align-items: center;
   width: 1200px;
-  max-width: 90%; /* Ограничиваем ширину, чтобы не прилипало к краям на больших экранах */
+  max-width: 90%;
   height: 56px;
 }
 
@@ -76,7 +76,6 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 41px;
 }
 
 /* CTA Button */
@@ -103,6 +102,7 @@
   cursor: pointer;
   transition: background 0.3s, color 0.3s;
 }
+
 .ctaButton:hover {
   background: #092b2b;
   color: #ffffff;
@@ -128,12 +128,13 @@
 }
 
 /* ==========================================================================
-   Мобильные и планшетные стили (адаптация)
-   ========================================================================== */
+  Мобильные и планшетные стили (адаптация)
+  ========================================================================== */
 
-/* Скрываем элементы навигации и контактов на экранах < 1200px */
+/* ... (весь код стилей до медиа-запроса) ... */
+
 @media (max-width: 1300px) {
-  .header{
+  .header {
     margin-left: 0px;
   }
 
@@ -146,7 +147,7 @@
     width: 90%;
   }
 
-  /* Показываем кнопку-гамбургер и LanguageSwitcher */
+  /* Показываем кнопку-гамбургер */
   .mobileMenuToggle {
     display: flex;
     flex-direction: row;
@@ -154,75 +155,51 @@
     gap: 20px;
   }
 
-  /* Гамбургер-кнопка */
+  /* Общая кнопка-гамбургер для 3 полосок - ИЗМЕНЕНО */
   .hamburgerButton {
     background: transparent;
     border: none;
     cursor: pointer;
-    padding: 10px;
-    position: relative;
+    width: 40px;
+    height: 30px; /* УМЕНЬШЕНО */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
     z-index: 101;
     margin-top: 5px;
+    padding: 0;
   }
 
-  .hamburgerIcon,
-  .hamburgerIcon::before,
-  .hamburgerIcon::after {
+  /* Стили для полосок */
+  .hamburgerLine {
     display: block;
-    width: 25px;
-    height: 2px;
-    background-color: #ebebeb;
-    transition: all 0.3s;
+    width: 100%;
+    height: 4px;
+    background-color:#03b9b3;
+    border-radius: 2px;
+    transition: all 0.3s ease-in-out;
   }
 
-  .hamburgerIcon::before {
-    content: "";
-    position: absolute;
-    top: -6px;
+  /* Анимация при открытом меню (класс .open) - ИЗМЕНЕНО */
+  .hamburgerButton.open .hamburgerLine:first-child {
+    transform: translateY(13px) rotate(45deg); /* Скорректировано */
   }
 
-  /* Кнопка закрытия (крестик) */
-  .closeButton {
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    padding: 10px;
-    position: relative;
-    z-index: 101;
+  .hamburgerButton.open .hamburgerLine:nth-child(2) {
+    opacity: 0;
   }
 
-  .closeIcon,
-  .closeIcon::before,
-  .closeIcon::after {
-    display: block;
-    width: 25px;
-    height: 2px;
-    background-color: #ebebeb;
-    transition: all 0.3s;
+  .hamburgerButton.open .hamburgerLine:last-child {
+    transform: translateY(-13px) rotate(-45deg); /* Скорректировано */
   }
 
-  .closeIcon {
-    transform: rotate(45deg);
-  }
-
-  .closeIcon::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    transform: rotate(90deg);
-  }
-
-  .closeIcon::after {
-    display: none;
-  }
-
-  /* Выпадающее меню */
+  /* ... (весь код мобильного меню после кнопки) ... */
   .mobileMenuWrapper {
     display: flex;
     flex-direction: column;
     position: absolute;
-    top: 92px; /* Устанавливаем top, равный высоте хедера */
+    top: 92px;
     right: 0;
     width: 100%;
     background: #051818;
@@ -283,8 +260,8 @@
   /* Блок с выравниванием кнопки "Консультація" */
   .mobileNavLinks .ctaButton {
     background: none;
-    padding: 0; /* Убираем внутренние отступы, чтобы текст прижался к правому краю */
-    display: inline; /* Меняем на строчный, чтобы выравнивание работало */
+    padding: 0;
+    display: inline;
     text-transform: uppercase;
   }
 

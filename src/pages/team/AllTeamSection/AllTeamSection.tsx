@@ -5,7 +5,6 @@ import { useTranslation } from "react-i18next";
 import Link from "next/link";
 import vitaliyPenc from "../../../../public/icons/vitaliyPenc.png";
 
-// ОБНОВЛЕННЫЙ ИНТЕРФЕЙС Employee
 interface Employee {
   id: number;
   firstName: string;
@@ -17,7 +16,7 @@ interface Employee {
   isPARTNER: boolean;
   isMANAGER: boolean;
   isACTIVE: boolean;
-  photoUrl?: string; // <-- ДОБАВЛЕНО ПОЛЕ
+  photoUrl?: string;
 }
 
 const AllTeamSection: React.FC = () => {
@@ -28,18 +27,18 @@ const AllTeamSection: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(5);
 
+  // Состояния для тач-скролла (активны только на мобильных)
+  const [touchStartX, setTouchStartX] = useState<number | null>(null);
+  const [dragX, setDragX] = useState<number>(0);
+  const [isDragging, setIsDragging] = useState<boolean>(false);
+
   useEffect(() => {
     const handleResize = () => {
-      // Мобильная адаптация: 2 элемента
       if (window.innerWidth <= 768) {
         setItemsPerPage(2);
-      }
-      // Планшетная адаптация: 4 элемента
-      else if (window.innerWidth > 768 && window.innerWidth <= 1300) {
+      } else if (window.innerWidth > 768 && window.innerWidth <= 1300) {
         setItemsPerPage(4);
-      }
-      // ПК-версия: 5 элементов
-      else {
+      } else {
         setItemsPerPage(5);
       }
     };
@@ -52,7 +51,6 @@ const AllTeamSection: React.FC = () => {
     const fetchEmployees = async () => {
       try {
         const backendUrl = process.env.REACT_APP_API_URL;
-
         const response = await fetch(`${backendUrl}/employee`);
         if (!response.ok) throw new Error("Failed to fetch employees");
         const data: Employee[] = await response.json();
@@ -68,7 +66,10 @@ const AllTeamSection: React.FC = () => {
   }, []);
 
   const totalPages = Math.ceil(employees.length / itemsPerPage);
-  const handlePageChange = (page: number) => setCurrentPage(page);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(Math.max(1, Math.min(page, totalPages)));
+  };
 
   const getEmployeeData = (employee: Employee, language: string) => {
     const isEnglish = language === "en";
@@ -84,6 +85,35 @@ const AllTeamSection: React.FC = () => {
     };
   };
 
+  // Обработчики событий касания (тач-скролл)
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStartX(e.touches[0].clientX);
+    setIsDragging(true);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!isDragging || touchStartX === null) return;
+    const dragDistance = e.touches[0].clientX - touchStartX;
+    setDragX(dragDistance);
+  };
+
+  const handleTouchEnd = () => {
+    setIsDragging(false);
+    if (touchStartX === null) return;
+    const swipeThreshold = 50;
+    if (dragX < -swipeThreshold) {
+      handlePageChange(currentPage + 1);
+    } else if (dragX > swipeThreshold) {
+      handlePageChange(currentPage - 1);
+    }
+    setTouchStartX(null);
+    setDragX(0);
+  };
+
+  // Условное отображение. Свайп включается только для мобильных и планшетов.
+  // Десктоп-версия (itemsPerPage === 5) управляется только точками.
+  const isMobileOrTablet = itemsPerPage === 2 || itemsPerPage === 4;
+
   if (loading) return <div>Загрузка...</div>;
   if (error) return <div>Ошибка: {error}</div>;
 
@@ -93,16 +123,20 @@ const AllTeamSection: React.FC = () => {
       <div className={styles.carouselContainer}>
         <div
           className={styles.teamRow}
+          // Обработчики касаний только для мобильных/планшетов
+          {...(isMobileOrTablet && {
+            onTouchStart: handleTouchStart,
+            onTouchMove: handleTouchMove,
+            onTouchEnd: handleTouchEnd,
+          })}
           style={
             {
-              transform: `translateX(-${(currentPage - 1) * 100}%)`,
+              transform: `translateX(calc(-${(currentPage - 1) * 100}% + ${
+                isMobileOrTablet ? dragX : 0
+              }px))`,
+              transition: isMobileOrTablet && isDragging ? "none" : "transform 0.5s ease-in-out",
               "--items-per-page": itemsPerPage,
-              "--gap":
-                itemsPerPage === 5
-                  ? "30px"
-                  : itemsPerPage === 4
-                  ? "15px"
-                  : "15px",
+              "--gap": itemsPerPage === 5 ? "30px" : "15px",
             } as React.CSSProperties
           }
         >
@@ -111,7 +145,6 @@ const AllTeamSection: React.FC = () => {
           ) : (
             employees.map((member) => {
               const { name, role } = getEmployeeData(member, i18n.language);
-
               const imageUrl = member.photoUrl || vitaliyPenc.src;
 
               return (
@@ -141,6 +174,7 @@ const AllTeamSection: React.FC = () => {
             })
           )}
         </div>
+        {/* Пагинация по точкам, теперь видима на всех экранах */}
         {totalPages > 1 && (
           <div className={styles.pagination}>
             {Array.from({ length: totalPages }, (_, index) => (

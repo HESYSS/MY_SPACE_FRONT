@@ -258,6 +258,24 @@ export default function MapDrawFilter({
     };
   }, [isDrawing, locationFilters, router]);
 
+  useEffect(() => {
+    if (!mapRef.current) return;
+    const viewport = mapRef.current;
+
+    // 🚫 блокируем скролл на странице при рисовании
+    const disableScroll = (e: TouchEvent) => {
+      if (isDrawing) {
+        e.preventDefault();
+      }
+    };
+
+    viewport.addEventListener("touchmove", disableScroll, { passive: false });
+
+    return () => {
+      viewport.removeEventListener("touchmove", disableScroll);
+    };
+  }, [isDrawing]);
+
   // Загрузка и обновление маркеров
   useEffect(() => {
     if (!markerSource.current) return;

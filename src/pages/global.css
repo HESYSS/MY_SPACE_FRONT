@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;700&display=swap");
+
 html,
 body {
   margin: 0;
@@ -18,6 +20,10 @@ body {
   flex-direction: column;
   min-height: 100vh; /* Убедимся, что контейнер занимает всю высоту экрана */
   overflow: hidden; /* Предотвращаем горизонтальный скроллинг */
+}
+
+a {
+  text-decoration: none;
 }
 
 /* Стили для основного контента */

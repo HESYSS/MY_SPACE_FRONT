@@ -87,17 +87,17 @@ const Header: FC = () => {
           </div>
         </div>
 
-        {/* Mobile Menu Buttons */}
+        {/* Mobile Menu Button - Обновлено */}
         <div className={styles.mobileMenuToggle}>
-          {isMenuOpen ? (
-            <button className={styles.closeButton} onClick={toggleMenu}>
-              <div className={styles.closeIcon}></div>
-            </button>
-          ) : (
-            <button className={styles.hamburgerButton} onClick={toggleMenu}>
-              <div className={styles.hamburgerIcon}></div>
-            </button>
-          )}
+          <button
+            className={`${styles.hamburgerButton} ${isMenuOpen ? styles.open : ""}`}
+            onClick={toggleMenu}
+            aria-label="Toggle mobile menu"
+          >
+            <span className={styles.hamburgerLine}></span>
+            <span className={styles.hamburgerLine}></span>
+            <span className={styles.hamburgerLine}></span>
+          </button>
         </div>
       </nav>
 

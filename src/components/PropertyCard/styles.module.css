@@ -93,7 +93,7 @@
 }
 
 .detail-item {
-  font-family: "Inter";
+  font-family: "Inter", sans-serif;
   font-weight: 500;
   font-style: Medium;
   display: flex;
@@ -117,7 +117,7 @@
 }
 
 .property-type {
-  font-family: Inter;
+  font-family: "Inter", sans-serif;
   font-weight: 400;
   font-style: Regular;
   font-size: 14px;
@@ -126,7 +126,7 @@
 }
 
 .property-date {
-  font-family: Inter;
+  font-family: "Inter", sans-serif;
   font-weight: 400;
   font-style: Regular;
   font-size: 14px;

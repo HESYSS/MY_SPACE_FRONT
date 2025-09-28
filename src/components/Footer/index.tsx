@@ -21,7 +21,7 @@ export default function Footer() {
           <h4 className={styles.footerHeading}>{t("menuHeading")}</h4>
           <ul className={styles.footerLinks}>
             <li>
-              <a href="/">{t("home")}</a>
+              <a href="/main">{t("home")}</a>
             </li>
             <li>
               <a href="/team">{t("ourTeam")}</a>

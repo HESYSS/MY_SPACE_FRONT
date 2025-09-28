@@ -8,8 +8,9 @@ i18n
   .use(LanguageDetector)
   .use(initReactI18next)
   .init({
-    fallbackLng: 'ua',
-    supportedLngs: ['ua', 'en'],
+    fallbackLng: 'uk',
+    supportedLngs: ['uk', 'en'],
+    lng: 'uk', 
     debug: false, // Установите это значение в false, чтобы отключить все логи i18next
     ns: ['common'],
     defaultNS: 'common',

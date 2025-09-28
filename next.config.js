@@ -15,9 +15,9 @@ const nextConfig = {
       process.env.REACT_APP_API_URL || "http://localhost:3000/api",
   },
   i18n: {
-    locales: ["ua", "en"], // список поддерживаемых языков
-    defaultLocale: "ua", // язык по умолчанию
-    localeDetection: true, // автоматически определять язык по браузеру
+    locales: ["uk", "en"], // список поддерживаемых языков
+    defaultLocale: "uk", // язык по умолчанию
+    localeDetection: false, // автоматически определять язык по браузеру
   },
   webpack: (config, { dev, isServer }) => {
     if (dev && !isServer) {

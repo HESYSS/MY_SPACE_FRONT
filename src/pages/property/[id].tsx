@@ -104,12 +104,12 @@ export default function PropertyPage() {
 
   const mapCoords = { lat: Number(lat), lng: Number(lng) };
 
-  const features = Object.entries(property.characteristics)
+  const initialFeatures = Object.entries(property.characteristics)
     .filter(
-      ([key, value]) => value !== null && value !== undefined && value !== ""
+      ([key, value]) => value !== null && value !== undefined && !(typeof value === 'string' && value === "")
     )
     .map(([key, value]) => {
-      let displayValue = value;
+      let displayValue: string | boolean | number = value as unknown as string | boolean | number;
 
       // Добавляем м² для всех полей, связанных с площадью
       const areaKeys = [
@@ -119,15 +119,26 @@ export default function PropertyPage() {
         "Площа землі",
       ];
 
-      if (areaKeys.includes(key)) {
-        displayValue = `${value} ${t("squareMeters")}`; // вместо "м²"
-      }
+      if (areaKeys.includes(key) && typeof value !== 'boolean') {
+        // ✅ ИСПРАВЛЕНИЕ: Мы знаем, что value не boolean, поэтому можем безопасно форматировать как строку
+        displayValue = `${value} ${t("squareMeters")}`; 
+      }
 
       return {
         name: key,
         value: displayValue,
       };
     });
+
+        const features = [...initialFeatures];
+
+    if (property.crmId) {
+        features.push({
+            name: t("crmIdLabel") || "ID объекта (CRM)", 
+            value: property.crmId,
+        });
+    }
+
 
   console.log("Property features:", features);
   return (

@@ -8,7 +8,7 @@ const VideoSearchOverlay = () => {
   const { t } = useTranslation("common");
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const [videoUrl, setVideoUrl] = useState<string | null>(null);
-  const [serviceType, setServiceType] = useState<"Оренда" | "Продаж">("Оренда");
+  const [serviceType, setServiceType] = useState<"Оренда" | "Продаж">("Продаж");
   const [category, setCategory] = useState("Житлова");
   const [isOutOfCity, setRegion] = useState(false);
 

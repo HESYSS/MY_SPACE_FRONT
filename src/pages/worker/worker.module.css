@@ -196,7 +196,7 @@
 .infoText {
   width: 100%;
   height: auto;
-  font-family: "Inter";
+  font-family: "Inter", sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 14px;

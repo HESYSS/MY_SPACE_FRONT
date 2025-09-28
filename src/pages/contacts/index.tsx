@@ -4,6 +4,7 @@ import Image from "next/image";
 import styles from "./contacts.module.css";
 import { useTranslation } from "react-i18next";
 import { useModal } from '../../hooks/useModal'; // Импортируем наш хук
+import Link from "next/link"; // Импортируем компонент Link из Next.js
 
 // Импорт изображений, если они нужны для контактов
 import youtubeIcon from "../../../public/icons/youtube.svg";
@@ -43,7 +44,13 @@ const ContactsPage: React.FC = () => {
                 <div className={styles.contactDetails}>
                   <h4 className={styles.contactTitle}>{t('socialNetworksTitle')}</h4>
                   <div className={styles.socialLinks}>
-                    <div className={styles.socialLink}>
+                    {/* YouTube link */}
+                    <a
+                      href="https://www.youtube.com/@MySpace-kyiv"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={styles.socialLink}
+                    >
                       <Image
                         src={youtubeIcon}
                         alt="YouTube"
@@ -51,8 +58,14 @@ const ContactsPage: React.FC = () => {
                         height={16}
                       />
                       <p className={styles.socialText}>YouTube</p>
-                    </div>
-                    <div className={styles.socialLink}>
+                    </a>
+                    {/* Instagram link */}
+                    <a
+                      href="https://www.instagram.com/myspace.kyiv"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={styles.socialLink}
+                    >
                       <Image
                         src={instagramIcon}
                         alt="Instagram"
@@ -60,7 +73,7 @@ const ContactsPage: React.FC = () => {
                         height={22}
                       />
                       <p className={styles.socialText}>Instagram</p>
-                    </div>
+                    </a>
                   </div>
                 </div>
               </div>
@@ -91,7 +104,7 @@ const ContactsPage: React.FC = () => {
                 </div>
                 <div className={styles.contactDetails}>
                   <h4 className={styles.contactTitle}>{t('phoneNumberTitle')}</h4>
-                  <p className={styles.contactInfo}>+38 068 777 73 37</p>
+                  <a href="tel:+380687777337" className={styles.contactInfo}>+38 068 777 73 37</a>
                 </div>
               </div>
 
@@ -142,7 +155,7 @@ const ContactsPage: React.FC = () => {
         <div className={styles.frame89}>
           <div className={styles.frame88}>
             {/* Блок для Sellers/Landlords */}
-            <div 
+            <div
               className={styles.optionRow}
               onClick={() => openModal('forSellers')}
             >
@@ -159,7 +172,7 @@ const ContactsPage: React.FC = () => {
               </div>
             </div>
             {/* Блок для Buyers/Tenants */}
-            <div 
+            <div
               className={styles.optionRow}
               onClick={() => openModal('forBuyers')}
             >
