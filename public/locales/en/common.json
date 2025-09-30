@@ -219,5 +219,6 @@
   "Kyiv region": "Kyiv region",
   "район": "district",
   "кв/м": "sq.m",
-  "search_button": "Search"
+  "search_button": "Search",
+  "objectManagerLabel": "Facility Manager"
 }

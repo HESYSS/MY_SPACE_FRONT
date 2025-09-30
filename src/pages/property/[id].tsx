@@ -1,4 +1,3 @@
-// PropertyPage.tsx
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import styles from "./PropertyPage.module.css";
@@ -9,8 +8,14 @@ import { useTranslation } from "react-i18next";
 import MapSinglePoint from "../map";
 
 // Импортируем иконки
-import BedIcon from '../../../public/icons/Frame153.svg'; // Укажите правильный путь
-import RulerIcon from '../../../public/icons/Frame204.svg'; // Укажите правильный путь
+import BedIcon from '../../../public/icons/Frame153.svg'; 
+import RulerIcon from '../../../public/icons/Frame204.svg'; 
+
+interface PropertyContact {
+  name: string; // ФИО
+  phone: string; // Номер (может содержать несколько, разделенных запятыми)
+  email?: string; // Почта
+}
 
 interface Property {
   id: number;
@@ -36,13 +41,14 @@ interface Property {
   isOutOfCity: boolean;
   article: string;
   category: string;
-  contacts: any[];
-  characteristics: PropertyCharacteristic[];
+  contacts: PropertyContact[]; 
+  characteristics: any; 
 }
 
-interface PropertyCharacteristic {
+// Упрощенный интерфейс для характеристик после маппинга
+interface DisplayFeature {
   name: string;
-  value: string | boolean;
+  value: string | boolean | number;
 }
 
 interface PropertyImage {
@@ -73,7 +79,6 @@ export default function PropertyPage() {
 
         if (!res.ok) throw new Error(t("objectNotFound"));
         const data: Property = await res.json();
-        console.log("Fetched property:", data);
         setProperty(data);
       } catch (err: any) {
         setError(err.message || t("errorLoading"));
@@ -93,6 +98,8 @@ export default function PropertyPage() {
     );
   if (!property) return <p>{t("objectNotFound")}</p>;
 
+  // Переменная managerContact удалена, используем property.contacts напрямую
+  
   const formattedPrice = property.prices[0]?.value
     ? `${property.prices[0].value.toLocaleString()} ${
         property.prices[0].currency
@@ -104,25 +111,21 @@ export default function PropertyPage() {
 
   const mapCoords = { lat: Number(lat), lng: Number(lng) };
 
-  const initialFeatures = Object.entries(property.characteristics)
+  // Логика форматирования характеристик
+  const initialFeatures: DisplayFeature[] = Object.entries(property.characteristics)
     .filter(
       ([key, value]) => value !== null && value !== undefined && !(typeof value === 'string' && value === "")
     )
     .map(([key, value]) => {
-      let displayValue: string | boolean | number = value as unknown as string | boolean | number;
+      let displayValue: string | boolean | number = value as string | boolean | number;
 
-      // Добавляем м² для всех полей, связанных с площадью
       const areaKeys = [
-        "Загальна площа",
-        "Площа кухні",
-        "Площа житлова",
-        "Площа землі",
+        "Загальна площа", "Площа кухні", "Площа житлова", "Площа землі",
       ];
 
-      if (areaKeys.includes(key) && typeof value !== 'boolean') {
-        // ✅ ИСПРАВЛЕНИЕ: Мы знаем, что value не boolean, поэтому можем безопасно форматировать как строку
-        displayValue = `${value} ${t("squareMeters")}`; 
-      }
+      if (areaKeys.includes(key) && typeof value !== 'boolean') {
+        displayValue = `${value} ${t("squareMeters")}`; 
+      }
 
       return {
         name: key,
@@ -130,7 +133,7 @@ export default function PropertyPage() {
       };
     });
 
-        const features = [...initialFeatures];
+    const features = [...initialFeatures];
 
     if (property.crmId) {
         features.push({
@@ -139,8 +142,6 @@ export default function PropertyPage() {
         });
     }
 
-
-  console.log("Property features:", features);
   return (
     <div className={styles.propertyPage}>
       <div className={styles.glowingEllipse}></div>
@@ -159,26 +160,58 @@ export default function PropertyPage() {
             </p>
             <div className={styles.featuresRow}>
               <div className={styles.featureItem}>
-                {/* ИЗМЕНЕНИЕ: Используем изображение BedIcon */}
                 <img src={BedIcon.src} alt={t("bedroomsAlt")} className={styles.featureIcon} />
                 <span>
                   {t("кімнат")}{" "}
-                  {features.find((f) => f.name === "Кількість кімнат")?.value ||
-                    "N/A"}
+                  {features.find((f) => f.name === "Кількість кімнат")?.value || "N/A"}
                 </span>
               </div>
               <div className={styles.featureItem}>
-                {/* ИЗМЕНЕНИЕ: Используем изображение RulerIcon */}
                 <img src={RulerIcon.src} alt={t("areaAlt")} className={styles.featureIcon} />
                 <span>
                   {t("площа")}{" "}
-                  {features.find((f) => f.name === "Загальна площа")?.value ||
-                    "N/A"}
+                  {features.find((f) => f.name === "Загальна площа")?.value || "N/A"}
                 </span>
               </div>
             </div>
+            
             <div className={styles.priceAndButton}>
-              <p className={styles.price}>{formattedPrice}</p>
+              <p className={styles.price}>{formattedPrice}</p> 
+
+              {/* ✅ Блок с контактами, который перебирает все контакты */}
+              {property.contacts.length > 0 && (
+                <div className={styles.managerInfo}>
+                  <p className={styles.managerLabel}>
+                    {t("objectManagerLabel") || "Менеджер об'єкту"}:
+                  </p>
+
+                  {property.contacts.map((contact, contactIndex) => (
+                    <div key={contactIndex} className={styles.singleContactBlock}>
+                      {/* ФИО */}
+                      <p className={styles.managerName}>{contact.name}</p>
+                      
+                      {/* УСЛОВИЕ: Разделение поля phone на отдельные номера и их рендеринг */}
+                      {contact.phone && contact.phone.split(',').map((phoneNum, phoneIndex) => (
+                          <a 
+                            key={phoneIndex} 
+                            href={`tel:${phoneNum.trim()}`} 
+                            className={styles.managerPhone}
+                          >
+                            {phoneNum.trim()}
+                          </a>
+                      ))}
+                      
+                      {/* Email отдельной строкой */}
+                      {contact.email && (
+                        <a href={`mailto:${contact.email}`} className={styles.managerEmail}>
+                          {contact.email}
+                        </a>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
+              
               <button
                 className={styles.contactButton}
                 onClick={() => openModal("forBuyers")}

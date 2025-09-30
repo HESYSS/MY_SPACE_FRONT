@@ -203,5 +203,6 @@
   "show_map": "Показати мапу",
   "close_map": "Закрити мапу",
   "Kyiv region": "Київська область",
-  "search_button": "Пошук"
+  "search_button": "Пошук",
+  "objectManagerLabel": "Менеджер об'єкту"
 }
