@@ -16,18 +16,15 @@ const typeMap: Record<string, string> = {
 
 export default function FiltersModal({ onClose }: FiltersModalProps) {
   const { t, i18n } = useTranslation("common");
-  const lang = i18n.language;
+  const lang = i18n.language == "uk" ? "ua" : i18n.language;
   const router = useRouter();
   const { restQuery } = router.query;
 
   const [category, setCategory] =
     useState<keyof typeof CATEGORY_TYPES>("Житлова");
-  const [propertyType, setPropertyType] = useState<string>(
-    CATEGORY_TYPES["Житлова"][lang as "en" | "ua"][0]
-  );
+  const [propertyType, setPropertyType] = useState<string>("");
   const [filters, setFilters] = useState<Record<string, any>>({});
   const [currency, setCurrency] = useState<"UAH" | "USD">("USD");
-
   // Инициализация из URL
   useEffect(() => {
     if (!router.isReady) return;
@@ -45,7 +42,7 @@ export default function FiltersModal({ onClose }: FiltersModalProps) {
     }
     setFilters(parsedOtherFilters);
     setCategory(parsedOtherFilters.category || "Житлова");
-    setPropertyType(parsedOtherFilters.type || "Квартира");
+    setPropertyType(parsedOtherFilters.type || "");
   }, [router.isReady, router.query.otherfilters]);
   // Обновление URL при изменении фильтра
   const updateUrl = (newFilters: Record<string, any>) => {
@@ -72,7 +69,7 @@ export default function FiltersModal({ onClose }: FiltersModalProps) {
 
   const handleCurrencyToggle = (newCurrency: "UAH" | "USD") => {
     setCurrency(newCurrency);
-    updateUrl({ currency: newCurrency });
+    // Не обновляем URL сразу — сохраняем в локальном состоянии
   };
 
   const handleInputChange = (filterName: string, value: any) => {
@@ -87,6 +84,7 @@ export default function FiltersModal({ onClose }: FiltersModalProps) {
       ...filters,
       category,
       type: propertyType,
+      currency,
     };
     onClose();
     router.push(

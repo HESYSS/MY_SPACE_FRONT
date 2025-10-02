@@ -9,6 +9,7 @@ export interface Property {
   district: string;
   type: string;
   updatedAt: string;
+  slug: string;
 }
 interface Price {
   value: number;

@@ -107,6 +107,66 @@
   color: #ebebeb;
 }
 
+/* -------------------------------------- */
+/* СТИЛИ ДЛЯ БЛОКА МЕНЕДЖЕРА (managerInfo) */
+/* -------------------------------------- */
+
+.managerInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding-bottom: 5px;
+  width: 100%;
+}
+
+.singleContactBlock {
+  margin-bottom: 15px; /* Отступ между отдельными менеджерами */
+  padding-bottom: 5px;
+  /* Добавьте границу, если нужно визуальное разделение контактов */
+}
+
+.managerLabel {
+  font-size: 1em;
+  font-weight: bold;
+  color: #c9d1d9;
+  margin: 0;
+}
+
+.managerName {
+  font-size: 1em;
+  color: #c9d1d9;
+  margin: 0 0 5px 0; /* Добавляем небольшой отступ снизу от имени */
+}
+
+.managerPhone,
+.managerEmail {
+  display: block;
+  font-size: 0.95em;
+  color: #03b9b3;
+  text-decoration: none;
+  margin: 0; /* Сброс стандартного маржина */
+}
+
+/* ✅ ИЗМЕНЕНИЕ: Добавляем отступ сверху для номера телефона */
+.managerPhone {
+  margin-top: 5px;
+}
+
+/* ✅ ИЗМЕНЕНИЕ: Добавляем маленький отступ между телефоном и почтой */
+.managerEmail {
+  margin-top: 5px;
+  margin-bottom: 10px; /* Отступ между контактами и кнопкой */
+}
+
+.managerPhone:hover,
+.managerEmail:hover {
+  text-decoration: underline;
+}
+
+/* -------------------------------------- */
+/* Стили для кнопки и остального */
+/* -------------------------------------- */
+
 .contactButton {
   background-color: #ebebeb;
   color: #0d1117;
@@ -149,7 +209,7 @@
   padding: 0;
   margin: 0;
   display: grid;
-  grid-template-columns: 1fr; /* ИЗМЕНЕНИЕ: Устанавливаем одну колонку */
+  grid-template-columns: 1fr;
   gap: 10px;
 }
 
@@ -172,10 +232,9 @@
 }
 
 .featureIcon {
-  width: 20px; /* Примерный размер */
-  height: 20px; /* Примерный размер */
-  margin-right: 8px; /* Отступ от текста */
-  /* Добавьте другие стили по необходимости, например, color: для SVG */
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
 }
 
 @media (min-width: 769px) and (max-width: 1100px) {
@@ -205,6 +264,11 @@
 
   .priceAndButton {
     align-items: flex-start;
+  }
+
+  /* Адаптируем managerInfo для планшетов */
+  .managerInfo {
+    gap: 5px;
   }
 
   .detailsContainer {
@@ -262,6 +326,21 @@
 
   .price {
     font-size: 1.8em;
+  }
+
+  /* Адаптируем managerInfo для мобильных */
+  .managerInfo {
+    gap: 4px;
+  }
+
+  .managerLabel {
+    font-size: 0.95em;
+  }
+
+  .managerPhone,
+  .managerEmail {
+    font-size: 0.9em;
+    margin-top: 4px; /* Меньший отступ на мобильных */
   }
 
   .contactButton {

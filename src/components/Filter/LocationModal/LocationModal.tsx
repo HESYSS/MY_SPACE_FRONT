@@ -45,7 +45,9 @@ export default function LocationModal({
   isOutOfCity,
 }: LocationModalProps) {
   const router = useRouter();
-  const [locationType, setLocationType] = useState<"kyiv" | "region">("kyiv");
+  const [locationType, setLocationType] = useState<"kyiv" | "region" | "none">(
+    "none"
+  );
   const modalRef = useRef<HTMLDivElement>(null); // Ref для самой модалки
 
   const [metroOpen, setMetroOpen] = useState(false);
@@ -56,7 +58,7 @@ export default function LocationModal({
   const [regionStreetOpen, setRegionStreetOpen] = useState(false);
   const [regionJkOpen, setRegionJkOpen] = useState(false);
   const { t, i18n } = useTranslation("common");
-  const lang = i18n.language;
+  const lang = i18n.language == "uk" ? "ua" : i18n.language;
 
   const [selectedMetro, setSelectedMetro] = useState<string[]>([]);
   const [selectedDistricts, setSelectedDistricts] = useState<string[]>([]);
@@ -66,6 +68,41 @@ export default function LocationModal({
   const [selectedPolygon, setSelectedPolygon] = useState<string[]>([]);
   const [locationData, setLocationData] = useState<LocationData | null>(null);
   const [isInitialRender, setIsInitialRender] = useState(true);
+
+  useEffect(() => {
+    const savedData = localStorage.getItem(DATA_STORAGE_KEY);
+    if (savedData) {
+      const parsedData = JSON.parse(savedData);
+      if (parsedData.lang === lang) {
+        const data = {
+          kyiv: parsedData.kyiv,
+          region: parsedData.region,
+        };
+        setLocationData(data);
+        return;
+      }
+    }
+    async function fetchLocationData() {
+      try {
+        const backendUrl = process.env.REACT_APP_API_URL;
+        const res = await fetch(`${backendUrl}/items/location`, {
+          headers: {
+            "Accept-Language": lang,
+          },
+        });
+        const data = await res.json();
+        setLocationData(data);
+        const dataWithLang = {
+          ...data,
+          lang: lang,
+        };
+        localStorage.setItem(DATA_STORAGE_KEY, JSON.stringify(dataWithLang));
+      } catch (err) {
+        console.error("Ошибка загрузки локаций", err);
+      }
+    }
+    fetchLocationData();
+  }, [lang]);
 
   // клик вне модалки → закрытие
   useEffect(() => {
@@ -90,6 +127,7 @@ export default function LocationModal({
           router.query.locationfilters as string
         );
         const parsed = JSON.parse(decoded);
+        console.log(parsed);
         setSelectedMetro(parsed.metro || []);
         setSelectedDistricts(parsed.districts || []);
         setSelectedStreets(parsed.streets || []);
@@ -141,8 +179,15 @@ export default function LocationModal({
   ]);
 
   // toggle helpers
-  const toggleArrayValue = (arr: string[], value: string) =>
-    arr.includes(value) ? arr.filter((v) => v !== value) : [...arr, value];
+  const toggleArrayValue = (
+    arr: string[] | string,
+    value: string
+  ): string[] => {
+    const normalized = Array.isArray(arr) ? arr : arr ? [arr] : [];
+    return normalized.includes(value)
+      ? normalized.filter((v) => v !== value)
+      : [...normalized, value];
+  };
 
   const handleSelectMetroStation = (station: string) => {
     setSelectedMetro(toggleArrayValue(selectedMetro, station));
@@ -376,7 +421,7 @@ export default function LocationModal({
             </div>
           </Dropdown>
         </div>
-      ) : (
+      ) : locationType === "region" ? (
         <div className={styles.locationGroup}>
           <Dropdown
             title={t("directions")}
@@ -436,7 +481,7 @@ export default function LocationModal({
             </div>
           </Dropdown>
         </div>
-      )}
+      ) : undefined}
     </div>
   );
 }

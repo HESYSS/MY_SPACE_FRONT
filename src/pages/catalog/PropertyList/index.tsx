@@ -21,7 +21,7 @@ export default function PropertyList({
   pageSize,
 }: Props) {
   const totalPages = Math.ceil(totalCount / pageSize);
-
+  console.log("properties:", properties);
   return (
     <div className={styles.propertyListContainer}>
       {loading ? (
@@ -29,7 +29,7 @@ export default function PropertyList({
       ) : (
         <div className={styles.propertiesGrid}>
           {(properties || []).map((p) => (
-            <Link key={p.id} href={`/property/${p.id}`} passHref>
+            <Link key={p.id} href={`/property/${p.slug}`} passHref>
               <PropertyCard property={p} />
             </Link>
           ))}

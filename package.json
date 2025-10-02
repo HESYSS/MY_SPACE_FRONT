@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "postbuild": "next-sitemap"
   },
   "dependencies": {
     "@deck.gl/core": "^9.1.14",
@@ -31,6 +32,8 @@
     "maplibre-gl": "^4.7.1",
     "next": "13.5.2",
     "next-i18next": "^15.4.2",
+    "next-seo": "^6.8.0",
+    "next-sitemap": "^4.2.3",
     "node-fetch": "^2.7.0",
     "ol": "^10.6.1",
     "pbf": "^4.0.1",

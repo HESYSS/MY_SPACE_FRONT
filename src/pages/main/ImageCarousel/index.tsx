@@ -1,6 +1,7 @@
 import { FC, useState, useRef, useEffect } from "react";
 import styles from "./style.module.css";
 import { useTranslation } from "react-i18next";
+import Link from "next/link";
 
 // Кастомный хук для определения ширины экрана
 const useMediaQuery = (query: string) => {
@@ -342,13 +343,29 @@ const Carousel: FC = () => {
                   transition: isTransitioning ? "all 0.7s ease" : "none",
                 }}
               >
-                <img
-                  src={slide.src}
-                  alt={slide.name}
-                  className={styles.slideImage}
-                />
-                {isCenter && (
-                  <>
+                {isCenter ? (
+                  <Link
+                    href={{
+                      pathname: "/catalog",
+                      query: {
+                        otherfilters: encodeURIComponent(
+                          JSON.stringify({
+                            deal: "Оренда",
+                            category: "Житлова",
+                          }) // 👈 пример
+                        ),
+                        locationfilters: encodeURIComponent(
+                          JSON.stringify({ districts: slide.text }) // 👈 сюда район
+                        ),
+                      },
+                    }}
+                    className={styles.linkWrapper}
+                  >
+                    <img
+                      src={slide.src}
+                      alt={slide.name}
+                      className={styles.slideImage}
+                    />
                     <div className={styles.textOverlay} />
                     <div className={styles.slideTextContainer}>
                       <span className={styles.slideSubtitle}>
@@ -356,7 +373,13 @@ const Carousel: FC = () => {
                       </span>
                       <span className={styles.slideTitle}>{slideText}</span>
                     </div>
-                  </>
+                  </Link>
+                ) : (
+                  <img
+                    src={slide.src}
+                    alt={slide.name}
+                    className={styles.slideImage}
+                  />
                 )}
               </div>
             );
