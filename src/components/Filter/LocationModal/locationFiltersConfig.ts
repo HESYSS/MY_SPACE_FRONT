@@ -1,7 +1,7 @@
 export const SHORE_DISTRICTS: Record<string, Record<string, string[]>> = {
   "Лівий берег": {
-    en: ["Dniprovskyi", "Darnytskyi", "Livoberezhnyi"],
-    ua: ["Дніпровський", "Дарницький", "Лівобережний"],
+    en: ["Dniprovskyi", "Darnytskyi", "Desnyanskyi"],
+    ua: ["Дніпровський", "Дарницький", "Деснянський"],
   },
   "Правий берег": {
     en: [

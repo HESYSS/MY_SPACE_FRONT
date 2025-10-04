@@ -151,7 +151,7 @@ export default function PropertyPage() {
   if (property.crmId) {
     features.push({
       name: t("crmIdLabel") || "ID объекта (CRM)",
-      value: property.crmId,
+      value: property.article,
     });
   }
   const metaDescription =
