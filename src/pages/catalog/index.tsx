@@ -40,7 +40,7 @@ function buildQueryFromFilters(
         const flattened = Object.values(val).map((v: any) =>
           Array.isArray(v) ? v.join(",") : String(v)
         );
-        params[key] = [flattened.join(",")]; // объединяем всё в одну строку
+        params[key] = flattened.join(","); // объединяем всё в одну строку
       }
     } else {
       params[key] = String(val);
@@ -51,7 +51,7 @@ function buildQueryFromFilters(
 
 export default function CatalogPage() {
   const router = useRouter();
-  const { deal, category, region, ...restQuery } = router.query;
+  const { deal, category, region, sort, q, ...restQuery } = router.query;
   const isOutOfCity = region === "kyiv" ? false : true;
   const type = typeMap[typeof category === "string" ? category : "Житлова"];
 
@@ -72,6 +72,13 @@ export default function CatalogPage() {
 
   const [locationFilter, setLocationFilter] = useState<any>();
   const [otherFilters, setOtherFilters] = useState<any>();
+
+  const [searchValue, setSearchValue] = useState<string>(
+    typeof q === "string" ? q : ""
+  );
+  const [sortOption, setSortOption] = useState<string>(
+    typeof sort === "string" ? sort : "none"
+  );
 
   useEffect(() => {
     if (!router.isReady) return;
@@ -115,6 +122,9 @@ export default function CatalogPage() {
         ? prev
         : locationFilters
     );
+
+    if (typeof router.query.q === "string") setSearchValue(router.query.q);
+    if (typeof router.query.sort === "string") setSortOption(router.query.sort);
   }, [router.isReady, router.asPath]);
 
   useEffect(() => {
@@ -136,7 +146,8 @@ export default function CatalogPage() {
           ...buildQueryFromFilters(standardizedFilters),
           lang: lang,
         });
-
+        if (searchValue) params.set("q", searchValue);
+        if (sortOption && sortOption !== "none") params.set("sort", sortOption);
         const backendUrl = process.env.REACT_APP_API_URL;
 
         const res = await fetch(`${backendUrl}/items?${params}`, {
@@ -161,7 +172,7 @@ export default function CatalogPage() {
       clearTimeout(timeout);
       controller.abort();
     };
-  }, [page, locationFilter, otherFilters, lang]);
+  }, [page, locationFilter, otherFilters, lang, searchValue, sortOption]);
 
   useEffect(() => {
     const controller = new AbortController(); // для отмены запроса если фильтры изменились раньше чем задержка закончилась
@@ -176,7 +187,8 @@ export default function CatalogPage() {
           ...buildQueryFromFilters(standardizedLocation),
           ...buildQueryFromFilters(standardizedFilters),
         });
-
+        if (searchValue) params.set("q", searchValue);
+        if (sortOption && sortOption !== "none") params.set("sort", sortOption);
         const backendUrl = process.env.REACT_APP_API_URL;
         const res = await fetch(`${backendUrl}/items/coords?${params}`, {
           signal: controller.signal,
@@ -197,7 +209,7 @@ export default function CatalogPage() {
       clearTimeout(timeout);
       controller.abort(); // отменяем предыдущий запрос
     };
-  }, [locationFilter, otherFilters]);
+  }, [locationFilter, otherFilters, searchValue, sortOption]);
 
   const containerClass = showMap
     ? styles.catalogMapOnly

@@ -96,7 +96,7 @@ export default function MapDrawFilter({
     () => new VectorLayer({ source: drawSource.current, style: drawStyle }),
     []
   );
-
+  console.log(locationFilters);
   const markerLayer = useMemo(
     () => new VectorLayer({ source: markerSource.current, style: markerStyle }),
     []
@@ -142,7 +142,10 @@ export default function MapDrawFilter({
     if (!router.query.locationfilters) return;
 
     try {
-      const parsed = JSON.parse(String(router.query.locationfilters));
+      const decoded = decodeURIComponent(
+        router.query.locationfilters as string
+      );
+      const parsed = JSON.parse(decoded);
       if (parsed.polygon && parsed.polygon.length > 0) {
         currentCoords.current = parsed.polygon;
       }
@@ -322,7 +325,9 @@ export default function MapDrawFilter({
 
   useEffect(() => {
     districtsSource.current.clear();
-
+    if (!("isOutOfCity" in (locationFilters ?? {}))) {
+      return;
+    }
     // === 1. "За містом" ===
     if (locationFilters?.isOutOfCity) {
       const features = new GeoJSON().readFeatures(kyivDistricts, {
@@ -384,15 +389,32 @@ export default function MapDrawFilter({
 
     // --- собираем все дырки для маски ---
     const holes: [number, number][][] = [];
+    const normalize = (str: string) =>
+      str.trim().toLowerCase().replace(/['’]/g, "'"); // заменяем типографский апостроф на обычный
+
+    let districts: string[] = [];
+
+    if (Array.isArray(locationFilters?.districts)) {
+      districts = locationFilters.districts.map(normalize);
+    } else if (typeof locationFilters?.districts === "string") {
+      try {
+        // пробуем распарсить JSON-массив
+        const parsed = JSON.parse(locationFilters.districts);
+        if (Array.isArray(parsed)) {
+          districts = parsed.map(normalize);
+        } else {
+          districts = [normalize(locationFilters.districts)];
+        }
+      } catch {
+        districts = [normalize(locationFilters.districts)];
+      }
+    }
 
     // районы, которые активны (подсвечиваются) → станут дырками
     features.forEach((feature) => {
       const rawName = feature.get("NAME") as string;
       const districtName = rawName.replace("район", "").trim();
-      const isActive =
-        noFilters ||
-        (Array.isArray(locationFilters?.districts) &&
-          locationFilters.districts.includes(districtName));
+      const isActive = noFilters || districts.includes(normalize(districtName));
 
       if (isActive) {
         const geom = feature.getGeometry();

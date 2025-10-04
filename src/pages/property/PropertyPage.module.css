@@ -114,20 +114,20 @@
 .managerInfo {
   display: flex;
   flex-direction: column;
-  gap: 5px; 
-  padding-bottom: 5px; 
+  gap: 5px;
+  padding-bottom: 5px;
   width: 100%;
 }
 
 .singleContactBlock {
   margin-bottom: 15px; /* Отступ между отдельными менеджерами */
-  padding-bottom: 5px; 
+  padding-bottom: 5px;
   /* Добавьте границу, если нужно визуальное разделение контактов */
 }
 
 .managerLabel {
   font-size: 1em;
-  font-weight: bold; 
+  font-weight: bold;
   color: #c9d1d9;
   margin: 0;
 }
@@ -140,21 +140,21 @@
 
 .managerPhone,
 .managerEmail {
-  display: block; 
+  display: block;
   font-size: 0.95em;
-  color: #03b9b3; 
+  color: #03b9b3;
   text-decoration: none;
   margin: 0; /* Сброс стандартного маржина */
 }
 
 /* ✅ ИЗМЕНЕНИЕ: Добавляем отступ сверху для номера телефона */
 .managerPhone {
-  margin-top: 5px; 
+  margin-top: 5px;
 }
 
 /* ✅ ИЗМЕНЕНИЕ: Добавляем маленький отступ между телефоном и почтой */
 .managerEmail {
-  margin-top: 5px; 
+  margin-top: 5px;
   margin-bottom: 10px; /* Отступ между контактами и кнопкой */
 }
 
@@ -209,7 +209,7 @@
   padding: 0;
   margin: 0;
   display: grid;
-  grid-template-columns: 1fr; 
+  grid-template-columns: 1fr;
   gap: 10px;
 }
 
@@ -232,9 +232,9 @@
 }
 
 .featureIcon {
-  width: 20px; 
-  height: 20px; 
-  margin-right: 8px; 
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
 }
 
 @media (min-width: 769px) and (max-width: 1100px) {
@@ -266,6 +266,11 @@
     align-items: flex-start;
   }
   
+  /* Адаптируем managerInfo для планшетов */
+  .managerInfo {
+    gap: 5px;
+  }
+
   /* Адаптируем managerInfo для планшетов */
   .managerInfo {
     gap: 5px;
@@ -337,6 +342,21 @@
     font-size: 0.95em;
   }
   
+  .managerPhone,
+  .managerEmail {
+    font-size: 0.9em;
+    margin-top: 4px; /* Меньший отступ на мобильных */
+  }
+
+  /* Адаптируем managerInfo для мобильных */
+  .managerInfo {
+    gap: 4px;
+  }
+
+  .managerLabel {
+    font-size: 0.95em;
+  }
+
   .managerPhone,
   .managerEmail {
     font-size: 0.9em;

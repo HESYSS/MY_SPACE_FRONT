@@ -204,5 +204,10 @@
   "close_map": "Закрити мапу",
   "Kyiv region": "Київська область",
   "search_button": "Пошук",
+  "sort_label": "Сортувати...",
+  "sort_newest": "Спочатку нові",
+  "sort_oldest": "Спочатку старі",
+  "sort_price_asc": "Спочатку дешевші",
+  "sort_price_desc": "Спочатку дорожчі",
   "objectManagerLabel": "Менеджер об'єкту"
 }

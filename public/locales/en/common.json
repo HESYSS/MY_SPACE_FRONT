@@ -220,5 +220,10 @@
   "район": "district",
   "кв/м": "sq.m",
   "search_button": "Search",
+  "sort_label": "Sort by...",
+  "sort_newest": "Newest first",
+  "sort_oldest": "Oldest first",
+  "sort_price_asc": "Price: Low to High",
+  "sort_price_desc": "Price: High to Low",
   "objectManagerLabel": "Facility Manager"
 }

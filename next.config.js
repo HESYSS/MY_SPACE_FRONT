@@ -13,6 +13,7 @@ const nextConfig = {
   env: {
     REACT_APP_API_URL:
       process.env.REACT_APP_API_URL || "http://localhost:3000/api",
+    DOMENIAN_URL: process.env.DOMENIAN_URL || "http://localhost:3000/api",
   },
   i18n: {
     locales: ["uk", "en"], // список поддерживаемых языков
