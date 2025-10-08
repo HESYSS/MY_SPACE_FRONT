@@ -51,7 +51,8 @@ function buildQueryFromFilters(
 
 export default function CatalogPage() {
   const router = useRouter();
-  const { deal, category, region, sort, q, ...restQuery } = router.query;
+  // 👈 ИЗМЕНЕНИЕ 1: Читаем параметр 'search' вместо 'q'
+  const { deal, category, region, sort, search, ...restQuery } = router.query;
   const isOutOfCity = region === "kyiv" ? false : true;
   const type = typeMap[typeof category === "string" ? category : "Житлова"];
 
@@ -73,8 +74,9 @@ export default function CatalogPage() {
   const [locationFilter, setLocationFilter] = useState<any>();
   const [otherFilters, setOtherFilters] = useState<any>();
 
+  // 👈 ИЗМЕНЕНИЕ 2: Инициализация searchValue из 'search'
   const [searchValue, setSearchValue] = useState<string>(
-    typeof q === "string" ? q : ""
+    typeof search === "string" ? search : ""
   );
   const [sortOption, setSortOption] = useState<string>(
     typeof sort === "string" ? sort : "none"
@@ -123,10 +125,20 @@ export default function CatalogPage() {
         : locationFilters
     );
 
-    if (typeof router.query.q === "string") setSearchValue(router.query.q);
+    // 👈 ИЗМЕНЕНИЕ 3: Обновляем searchValue из 'search'
+    if (typeof router.query.search === "string") setSearchValue(router.query.search);
+    // Сбрасываем страницу на первую при смене search или sort
+    if (
+      typeof router.query.search === "string" ||
+      (typeof router.query.sort === "string" && router.query.sort !== sortOption)
+    ) {
+      setPage(1);
+    }
+    
     if (typeof router.query.sort === "string") setSortOption(router.query.sort);
   }, [router.isReady, router.asPath]);
 
+  // Эффект для загрузки списка объектов (запускается при изменении searchValue)
   useEffect(() => {
     const controller = new AbortController();
     const timeout = setTimeout(async () => {
@@ -146,6 +158,8 @@ export default function CatalogPage() {
           ...buildQueryFromFilters(standardizedFilters),
           lang: lang,
         });
+        
+        // 👈 ЗДЕСЬ ИСПОЛЬЗУЕМ Q для БЭКЕНДА
         if (searchValue) params.set("q", searchValue);
         if (sortOption && sortOption !== "none") params.set("sort", sortOption);
         const backendUrl = process.env.REACT_APP_API_URL;
@@ -172,8 +186,9 @@ export default function CatalogPage() {
       clearTimeout(timeout);
       controller.abort();
     };
-  }, [page, locationFilter, otherFilters, lang, searchValue, sortOption]);
+  }, [page, locationFilter, otherFilters, lang, searchValue, sortOption]); // 👈 searchValue в зависимостях
 
+  // Эффект для загрузки координат (также запускается при изменении searchValue)
   useEffect(() => {
     const controller = new AbortController(); // для отмены запроса если фильтры изменились раньше чем задержка закончилась
     const timeout = setTimeout(async () => {
@@ -187,6 +202,7 @@ export default function CatalogPage() {
           ...buildQueryFromFilters(standardizedLocation),
           ...buildQueryFromFilters(standardizedFilters),
         });
+        // 👈 ЗДЕСЬ ИСПОЛЬЗУЕМ Q для БЭКЕНДА
         if (searchValue) params.set("q", searchValue);
         if (sortOption && sortOption !== "none") params.set("sort", sortOption);
         const backendUrl = process.env.REACT_APP_API_URL;
@@ -209,7 +225,7 @@ export default function CatalogPage() {
       clearTimeout(timeout);
       controller.abort(); // отменяем предыдущий запрос
     };
-  }, [locationFilter, otherFilters, searchValue, sortOption]);
+  }, [locationFilter, otherFilters, searchValue, sortOption]); // 👈 searchValue в зависимостях
 
   const containerClass = showMap
     ? styles.catalogMapOnly

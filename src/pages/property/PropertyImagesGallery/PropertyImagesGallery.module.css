@@ -1,14 +1,14 @@
 /* PropertyImagesGallery.module.css */
 
 /*
-* Глобальные стили для галереи
+* Глобальные стили для галереи (по умолчанию для больших экранов > 1300px)
 */
 
 .imagesBlock {
   display: flex;
   flex-direction: column;
   gap: 20px;
-  width: 600px;
+  width: 600px; /* Ширина по умолчанию */
 }
 
 /* Обертка для основного изображения */
@@ -53,6 +53,29 @@
   right: 10px;
 }
 
+/* --- Стили для кнопки "Увеличить" --- */
+.zoomButton {
+  position: absolute;
+  bottom: 20px; /* Отступ снизу */
+  right: 20px; /* Отступ справа */
+  background-color: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 20px; /* Размер иконки */
+  z-index: 10;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+  line-height: 1;
+}
+
+.zoomButton:hover {
+  background-color: rgba(0, 0, 0, 0.9);
+  transform: scale(1.05);
+}
+/* ------------------------------------- */
+
 .thumbnails {
   display: flex;
   flex-direction: row;
@@ -82,7 +105,7 @@
 }
 
 .activeThumbnail {
-  border-color: #03B9B3; /* Цвет выделения для активной миниатюры */
+  border-color: #03B9B3;
 }
 
 /* Стили для кнопки "Все фото" */
@@ -140,7 +163,7 @@
   color: #fff;
   font-size: 30px;
   cursor: pointer;
-  z-index: 10;
+  z-index: 1001;
 }
 
 /* Стили для слайдера внутри модального окна */
@@ -192,6 +215,7 @@
   padding: 10px 0;
   -webkit-overflow-scrolling: touch;
   max-width: 100%;
+  scroll-behavior: smooth;
   scrollbar-width: thin;
   scrollbar-color: #888 #555;
 }
@@ -229,38 +253,111 @@
   border-color: #03B9B3;
 }
 
+/* --------------------------------------------------- */
+/* АДАПТАЦИЯ ДЛЯ ЭКРАНОВ 769px - 1300px (Планшеты/Маленькие десктопы) */
+/* --------------------------------------------------- */
+@media (min-width: 769px) and (max-width: 1100px) {
+    /* Основная галерея */
+    .imagesBlock {
+        width: 100%; /* Занимаем всю доступную ширину */
+        max-width: 800px; /* Можно ограничить максимальную ширину для центрирования */
+        margin: 0 auto;
+    }
+    
+    .mainImageWrapper {
+        height: 400px; /* Немного уменьшим высоту основного изображения */
+    }
+
+    .thumbnailWrapper {
+        width: 120px; /* Уменьшаем миниатюры, чтобы 4 помещалось без скролла */
+        height: 120px;
+    }
+
+    /* Модальное окно */
+    .largeImageWrapper {
+        max-width: 700px; /* Уменьшаем максимальную ширину изображения в модалке */
+        height: 70vh; /* Увеличим высоту, так как экрана больше */
+    }
+    
+    .modalThumbnail {
+        width: 80px; /* Немного уменьшаем миниатюры в модалке */
+        height: 80px;
+    }
+    
+    .modalContent {
+        max-width: 95%; /* Можем использовать чуть больше места */
+        padding: 15px; /* Уменьшаем padding для лучшего использования пространства */
+    }
+}
+
+
+/* --------------------------------------------------- */
+/* АДАПТАЦИЯ ДЛЯ ЭКРАНОВ 375px - 768px (Мобильные устройства) */
+/* --------------------------------------------------- */
 @media (min-width: 375px) and (max-width: 768px) {
-  .imagesBlock {
-    width: 100%; /* Галерея занимает всю ширину экрана */
-  }
+    .imagesBlock {
+        width: 100%; 
+    }
 
-  .mainImageWrapper {
-    height: 300px; /* Уменьшаем высоту основного изображения */
-    border-radius: 10px;
-  }
+    .mainImageWrapper {
+        height: 300px;
+        border-radius: 10px;
+    }
+    
+    .thumbnails {
+        overflow-x: auto;
+        padding-bottom: 10px; 
+        gap: 10px;
+    }
 
-  /* Скрываем миниатюры на мобильных устройствах, так как они могут занимать много места */
-  .thumbnails {
-    display: none;
-  }
+    .thumbnailWrapper {
+        flex-shrink: 0;
+        width: 100px;
+        height: 100px;
+    }
 
-  /* Адаптация кнопок навигации */
-  .navButton {
-    font-size: 20px;
-    padding: 8px 12px;
-  }
+    .zoomButton {
+        bottom: 10px;
+        right: 10px;
+        font-size: 16px;
+        padding: 8px 12px;
+    }
+    
+    .navButton {
+        font-size: 20px;
+        padding: 8px 12px;
+    }
 
-  /* Стили для модального окна на мобильных устройствах */
-  .modalContent {
-    padding: 10px;
-  }
+    /* Модальное окно */
+    .modalContent {
+        padding: 10px;
+        width: calc(100% - 20px);
+        height: calc(100% - 20px);
+        max-width: 100%;
+        max-height: 100%;
+        box-sizing: border-box; 
+    }
 
-  .largeImageWrapper {
-    height: 40vh; /* Уменьшаем высоту изображения в модальном окне */
-  }
+    .modalSlider {
+        gap: 10px;
+    }
 
-  .modalThumbnail {
-    width: 80px; /* Уменьшаем размер миниатюр в модальном окне */
-    height: 80px;
-  }
+    .largeImageWrapper {
+        height: 60vh; 
+        max-width: 100%;
+    }
+    
+    .modalThumbnail {
+        width: 70px;
+        height: 70px;
+    }
+    
+    .thumbnailSlider {
+        padding: 5px 0;
+    }
+    
+    .modalCloseButton {
+        top: 0;
+        right: 0;
+    }
 }
