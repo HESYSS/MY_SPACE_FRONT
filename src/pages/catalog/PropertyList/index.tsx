@@ -21,7 +21,6 @@ export default function PropertyList({
   pageSize,
 }: Props) {
   const totalPages = Math.ceil(totalCount / pageSize);
-  console.log("properties:", properties);
   return (
     <div className={styles.propertyListContainer}>
       {loading ? (

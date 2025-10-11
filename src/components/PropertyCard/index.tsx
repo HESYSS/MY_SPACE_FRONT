@@ -5,8 +5,8 @@ import styles from "./styles.module.css";
 import { useTranslation } from "react-i18next";
 
 // Импортируем иконки
-import BedIcon from '../../../public/icons/Frame153.svg'; // Укажите правильный путь
-import RulerIcon from '../../../public/icons/Frame204.svg'; // Укажите правильный путь
+import BedIcon from "../../../public/icons/Frame153.svg"; // Укажите правильный путь
+import RulerIcon from "../../../public/icons/Frame204.svg"; // Укажите правильный путь
 
 interface Props {
   property: Property;
@@ -47,6 +47,12 @@ export default function PropertyCard({ property }: Props) {
     return html.replace(/<[^>]*>/g, "");
   };
 
+  const getShortTitle = (html: string, maxChars = 20) => {
+    if (!html) return "";
+    const text = stripHtml(html);
+    return text.length > maxChars ? text.slice(0, maxChars) + "..." : text;
+  };
+
   // Короткий опис
   const getShortDescription = (html: string, maxChars = 50) => {
     if (!html) return "";
@@ -73,7 +79,9 @@ export default function PropertyCard({ property }: Props) {
       </div>
 
       <div className={styles["property-content"]}>
-        <h3 className={styles["property-title"]}>{property.title}</h3>
+        <h3 className={styles["property-title"]}>
+          {getShortTitle(property.title)}
+        </h3>
         <div
           className={styles["property-description"]}
           dangerouslySetInnerHTML={{
