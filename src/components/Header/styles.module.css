@@ -24,6 +24,7 @@
   width: 1200px;
   max-width: 90%;
   height: 56px;
+  margin-left: 25px;
 }
 
 /* Left Nav (Лого и навигация) */
@@ -176,7 +177,7 @@
     display: block;
     width: 100%;
     height: 4px;
-    background-color:#03b9b3;
+    background-color: #03b9b3;
     border-radius: 2px;
     transition: all 0.3s ease-in-out;
   }

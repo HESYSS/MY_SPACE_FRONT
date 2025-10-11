@@ -38,7 +38,7 @@ interface Property {
   isOutOfCity: boolean;
   article: string;
   category: string;
-  contacts: PropertyContact[];
+  contacts?: PropertyContact | null;
   characteristics: PropertyCharacteristic[];
 }
 
@@ -285,45 +285,42 @@ export default function PropertyPage() {
                 <p className={styles.price}>{formattedPrice}</p>
 
                 {/* ✅ Блок с контактами, который перебирает все контакты */}
-                {(property.contacts ?? []).length > 0 && (
+                {property.contacts && (
                   <div className={styles.managerInfo}>
                     <p className={styles.managerLabel}>
                       {t("objectManagerLabel") || "Менеджер об'єкту"}:
                     </p>
 
-                    {property.contacts.map((contact, contactIndex) => (
-                      <div
-                        key={contactIndex}
-                        className={styles.singleContactBlock}
-                      >
-                        {/* ФИО */}
-                        <p className={styles.managerName}>{contact.name}</p>
+                    <div className={styles.singleContactBlock}>
+                      {/* ФИО */}
+                      <p className={styles.managerName}>
+                        {property.contacts.name}
+                      </p>
 
-                        {/* УСЛОВИЕ: Разделение поля phone на отдельные номера и их рендеринг */}
-                        {contact.phone &&
-                          contact.phone
-                            .split(",")
-                            .map((phoneNum, phoneIndex) => (
-                              <a
-                                key={phoneIndex}
-                                href={`tel:${phoneNum.trim()}`}
-                                className={styles.managerPhone}
-                              >
-                                {phoneNum.trim()}
-                              </a>
-                            ))}
+                      {/* Разделение телефонов на отдельные номера */}
+                      {property.contacts.phone &&
+                        property.contacts.phone
+                          .split(",")
+                          .map((phoneNum, phoneIndex) => (
+                            <a
+                              key={phoneIndex}
+                              href={`tel:${phoneNum.trim()}`}
+                              className={styles.managerPhone}
+                            >
+                              {phoneNum.trim()}
+                            </a>
+                          ))}
 
-                        {/* Email отдельной строкой */}
-                        {contact.email && (
-                          <a
-                            href={`mailto:${contact.email}`}
-                            className={styles.managerEmail}
-                          >
-                            {contact.email}
-                          </a>
-                        )}
-                      </div>
-                    ))}
+                      {/* Email отдельной строкой */}
+                      {property.contacts.email && (
+                        <a
+                          href={`mailto:${property.contacts.email}`}
+                          className={styles.managerEmail}
+                        >
+                          {property.contacts.email}
+                        </a>
+                      )}
+                    </div>
                   </div>
                 )}
 

@@ -43,6 +43,9 @@
 }
 
 .sortSelect {
+  min-width: 100px;
+  max-width: 120px;
+  width: auto;
   height: 40px;
   padding: 0 0.5rem;
   border-radius: 5px;
@@ -107,4 +110,24 @@
 }
 .modalOpen {
   display: block;
+}
+@media (max-width: 770px) {
+  .filterButton span {
+    display: none; /* скрываем текст */
+  }
+
+  .filterButton {
+    padding: 0 0.6rem; /* делаем кнопку компактнее */
+    min-width: 40px; /* чтобы иконка не прижималась */
+  }
+
+  .filterIcon {
+    width: 22px;
+    height: 22px;
+  }
+
+  /* при желании можно немного уменьшить отступы между элементами */
+  .topPanel {
+    gap: 0.3rem;
+  }
 }

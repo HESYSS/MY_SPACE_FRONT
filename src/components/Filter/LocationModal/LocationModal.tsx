@@ -165,9 +165,10 @@ export default function LocationModal({
       locationfilters: JSON.stringify(filters),
     };
 
-    router.push({ pathname: router.pathname, query }, undefined, {
+    router.replace({ pathname: router.pathname, query }, undefined, {
       shallow: true,
     });
+
     onSubmit({ ...filters, polygon: loadPolygon() });
   }, [
     selectedMetro,

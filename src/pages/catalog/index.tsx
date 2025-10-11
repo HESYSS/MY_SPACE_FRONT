@@ -59,7 +59,7 @@ export default function CatalogPage() {
   const { i18n, t } = useTranslation("common");
   const lang = i18n.language;
 
-  const isMobileOrTablet = useMediaQuery({ maxWidth: 1800 });
+  const isMobileOrTablet = useMediaQuery({ maxWidth: 1300 });
   const [showMap, setShowMap] = useState(false);
 
   const currentDeal = typeof deal === "string" ? deal : "Оренда";
@@ -68,7 +68,7 @@ export default function CatalogPage() {
   const [allProperties, setAllProperties] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
-  const limit = 9;
+  const limit = 12;
   const [totalCount, setTotalCount] = useState(0);
 
   const [locationFilter, setLocationFilter] = useState<any>();
@@ -126,15 +126,17 @@ export default function CatalogPage() {
     );
 
     // 👈 ИЗМЕНЕНИЕ 3: Обновляем searchValue из 'search'
-    if (typeof router.query.search === "string") setSearchValue(router.query.search);
+    if (typeof router.query.search === "string")
+      setSearchValue(router.query.search);
     // Сбрасываем страницу на первую при смене search или sort
     if (
       typeof router.query.search === "string" ||
-      (typeof router.query.sort === "string" && router.query.sort !== sortOption)
+      (typeof router.query.sort === "string" &&
+        router.query.sort !== sortOption)
     ) {
       setPage(1);
     }
-    
+
     if (typeof router.query.sort === "string") setSortOption(router.query.sort);
   }, [router.isReady, router.asPath]);
 
@@ -158,7 +160,7 @@ export default function CatalogPage() {
           ...buildQueryFromFilters(standardizedFilters),
           lang: lang,
         });
-        
+
         // 👈 ЗДЕСЬ ИСПОЛЬЗУЕМ Q для БЭКЕНДА
         if (searchValue) params.set("q", searchValue);
         if (sortOption && sortOption !== "none") params.set("sort", sortOption);

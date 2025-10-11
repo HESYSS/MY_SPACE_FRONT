@@ -6,7 +6,8 @@
   opacity: 1;
 
   /* Размеры и отступы из макета */
-  width: 1920px;
+  width: 100%;
+  max-width: 1920px;
   height: 325px;
   border-top: 1px solid #2e2e2e;
   padding-top: 40px;
@@ -21,11 +22,11 @@
 /* Основной контент (колонки) */
 .mainContent {
   width: 1200px;
+  max-width: 90%;
   display: flex;
   justify-content: flex-start;
   gap: 70px; /* Отступ между колонками */
-  margin-left: 330px; /* Отступ от левого края футера */
-  margin-right: 330px;
+  margin-left: 25px;
 }
 
 /* Секция с логотипом */
@@ -114,7 +115,7 @@
 }
 
 /* Планшеты (до 768px) */
-@media (min-width: 769px) and (max-width: 1800px) {
+@media (min-width: 769px) and (max-width: 1300px) {
   .footer {
     min-width: 800px;
     max-width: 1800px;

@@ -4,6 +4,9 @@
 .mapContainer {
   position: relative;
   touch-action: auto;
+  width: 100%;
+  height: 100%;
+  margin-right: 20px;
 }
 
 .drawButtonContainer {
@@ -38,15 +41,16 @@
 }
 
 .mapCanvas {
-  width: 905px;
-  height: 668.98px;
-  touch-action: auto;
+  width: calc(100% - 0px); /* ширина с учётом отступа справа */
+  max-width: 100%; /* при необходимости ограничиваем ширину */
+  height: calc(100% - 0px);
+  margin-right: 10px;
+  z-index: 10;
 }
-
 /* =========================
    Адаптация для планшетов (769px - 1300px)
    ========================= */
-@media (min-width: 769px) and (max-width: 1800px) {
+@media (min-width: 769px) and (max-width: 1300px) {
   .mapContainer {
     width: 100%; /* Занимает всю ширину родителя */
     height: 100vh; /* Занимает всю высоту экрана */

@@ -350,7 +350,7 @@ const Carousel: FC = () => {
                       query: {
                         otherfilters: encodeURIComponent(
                           JSON.stringify({
-                            deal: "Оренда",
+                            deal: "Продаж",
                             category: "Житлова",
                           }) // 👈 пример
                         ),

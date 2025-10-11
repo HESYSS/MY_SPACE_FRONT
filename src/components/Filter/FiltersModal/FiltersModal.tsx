@@ -44,8 +44,7 @@ export default function FiltersModal({ onClose }: FiltersModalProps) {
     setCategory(parsedOtherFilters.category || "Житлова");
     setPropertyType(parsedOtherFilters.type || "");
   }, [router.isReady, router.query.otherfilters]);
-  
-  // Обновление URL при изменении фильтра (эта функция используется только для resetFilters)
+  // Обновление URL при изменении фильтра
   const updateUrl = (newFilters: Record<string, any>) => {
     const query: Record<string, string> = {
       ...router.query,
@@ -63,7 +62,7 @@ export default function FiltersModal({ onClose }: FiltersModalProps) {
       }
     });
 
-    router.push({ pathname: router.pathname, query }, undefined, {
+    router.replace({ pathname: router.pathname, query }, undefined, {
       shallow: true,
     });
   };
@@ -88,28 +87,12 @@ export default function FiltersModal({ onClose }: FiltersModalProps) {
       currency,
     };
     onClose();
-
-    // ИСПРАВЛЕНИЕ: Объединяем текущие параметры URL с новыми фильтрами,
-    // чтобы сохранить существующие параметры, такие как 'search' и 'sort'.
-    const newQuery = {
-      ...router.query, // <-- СОХРАНЯЕМ существующие параметры
-      otherfilters: JSON.stringify(otherFilters),
-    };
-    
-    // Очищаем 'page' при применении новых фильтров (если он был установлен)
-    if (newQuery.page) {
-        delete newQuery.page;
-    }
-    
-    // Очищаем otherfilters из URL, если фильтры пусты
-    if (newQuery.otherfilters === "{}") {
-        delete newQuery.otherfilters;
-    }
-
-    router.push(
+    router.replace(
       {
         pathname: router.pathname,
-        query: newQuery, // Используем объединенный объект
+        query: {
+          otherfilters: JSON.stringify(otherFilters),
+        },
       },
       undefined,
       { shallow: true }
@@ -218,6 +201,7 @@ export default function FiltersModal({ onClose }: FiltersModalProps) {
             })}
           </div>
         </div>
+        {/* Оренда / Продаж */}
         {/* Оренда / Продаж */}
         <div className={styles.section}>
           <div className={styles.label}>{t("dealType")}</div>
