@@ -1,12 +1,10 @@
-// components/PropertyCard.tsx
 import { Property } from "../../types/property";
 import Image from "next/image";
 import styles from "./styles.module.css";
 import { useTranslation } from "react-i18next";
 
-// Импортируем иконки
-import BedIcon from "../../../public/icons/Frame153.svg"; // Укажите правильный путь
-import RulerIcon from "../../../public/icons/Frame204.svg"; // Укажите правильный путь
+import BedIcon from "../../../public/icons/Frame153.svg"; 
+import RulerIcon from "../../../public/icons/Frame204.svg";
 
 interface Props {
   property: Property;
@@ -16,14 +14,12 @@ export default function PropertyCard({ property }: Props) {
   const { t, i18n } = useTranslation("common");
   const lang = i18n.language;
 
-  // Форматування ціни
   const formatPrice = (price?: number, currency?: string) => {
     if (!price) return t("N/A");
     const formattedPrice = new Intl.NumberFormat("uk-UA").format(price);
     return `${formattedPrice} ${currency ?? ""}`;
   };
 
-  // Форматування дати
   const formatDate = (dateString?: string) => {
     const newlang = lang === "ua" ? "uk" : lang;
     if (!dateString) return t("N/A");
@@ -41,7 +37,6 @@ export default function PropertyCard({ property }: Props) {
     }
   };
 
-  // Видаляємо HTML-теги
   const stripHtml = (html: string) => {
     if (!html) return "";
     return html.replace(/<[^>]*>/g, "");
@@ -53,7 +48,6 @@ export default function PropertyCard({ property }: Props) {
     return text.length > maxChars ? text.slice(0, maxChars) + "..." : text;
   };
 
-  // Короткий опис
   const getShortDescription = (html: string, maxChars = 50) => {
     if (!html) return "";
     const text = stripHtml(html);
@@ -100,14 +94,12 @@ export default function PropertyCard({ property }: Props) {
 
         <div className={styles["property-details"]}>
           <div className={styles["detail-item"]}>
-            {/* ИЗМЕНЕНИЕ: Используем изображение RulerIcon */}
             <img src={RulerIcon.src} alt="Площа" className={styles.icon} />
             <span>
               {property.area} {t("кв/м")}
             </span>
           </div>
           <div className={styles["detail-item"]}>
-            {/* ИЗМЕНЕНИЕ: Используем изображение BedIcon */}
             <img src={BedIcon.src} alt="Кімнати" className={styles.icon} />
             <span>
               {t("кімнат")}: {property.rooms}

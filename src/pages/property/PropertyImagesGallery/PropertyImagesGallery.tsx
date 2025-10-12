@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import Image from "next/image";
 import styles from "./PropertyImagesGallery.module.css";
 
-// --- Интерфейсы ---
-
 interface PropertyImage {
   id: number;
   url: string;
@@ -16,18 +14,16 @@ interface Props {
   onImageClick: (url: string) => void;
 }
 
-// --- Компонент Модального Окна (ImageModal) ---
 
 const ImageModal = ({
   images,
   onClose,
-  initialIndex, // Добавлено: начальный индекс для открытия
+  initialIndex,
 }: {
   images: PropertyImage[];
   onClose: () => void;
-  initialIndex: number; // Добавлено: начальный индекс
+  initialIndex: number;
 }) => {
-  // Используем initialIndex как начальное состояние
   const [modalImageIndex, setModalImageIndex] = useState(initialIndex);
 
   const nextImage = () => {
@@ -42,7 +38,6 @@ const ImageModal = ({
     );
   };
 
-  // Проверка на нажатие Escape для закрытия модального окна
   React.useEffect(() => {
     const handleKeydown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
@@ -65,14 +60,13 @@ const ImageModal = ({
           &times;
         </button>
         <div className={styles.modalSlider}>
-          {/* Увеличенное изображение */}
           <div className={styles.largeImageWrapper}>
             <Image
               src={images[modalImageIndex].url}
               alt="Увеличенное изображение"
               layout="fill"
               objectFit="contain"
-              sizes="(max-width: 768px) 100vw, 800px" // Увеличил максимальный размер для модального окна
+              sizes="(max-width: 768px) 100vw, 800px"
             />
             <button
               className={`${styles.navButton} ${styles.prevButton}`}
@@ -89,8 +83,6 @@ const ImageModal = ({
               &#10095;
             </button>
           </div>
-
-          {/* Горизонтальная прокручиваемая галерея миниатюр */}
           <div className={styles.thumbnailSlider}>
             {images.map((img, index) => (
               <div
@@ -116,9 +108,6 @@ const ImageModal = ({
     </div>
   );
 };
-
-// --- Основной Компонент Галереи (PropertyImagesGallery) ---
-
 const PropertyImagesGallery: React.FC<Props> = ({ images, onImageClick }) => {
   const [showModal, setShowModal] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -132,18 +121,12 @@ const PropertyImagesGallery: React.FC<Props> = ({ images, onImageClick }) => {
   if (sortedImages.length === 0) return null;
 
   const mainImage = sortedImages[currentImageIndex];
-  // Миниатюры: берем первые 3 изображения, которые не являются основным
   const thumbnails = sortedImages.filter((_, index) => index !== currentImageIndex).slice(0, 3);
-  
-  // Определяем, какие индексы соответствуют этим миниатюрам
-  const thumbnailIndices = sortedImages
+    const thumbnailIndices = sortedImages
     .map((_, index) => index)
     .filter((index) => index !== currentImageIndex)
     .slice(0, 3);
-
-  // Количество оставшихся изображений для кнопки "Еще фото"
   const remainingImagesCount = sortedImages.length > 4 ? sortedImages.length - 1 : 0; 
-  // Корректировка, чтобы кнопка показывала все остальные, если их > 0
   const totalThumbnailsShown = 1 + thumbnailIndices.length;
   const viewAllCount = sortedImages.length - totalThumbnailsShown;
 
@@ -158,9 +141,7 @@ const PropertyImagesGallery: React.FC<Props> = ({ images, onImageClick }) => {
       prevIndex === 0 ? sortedImages.length - 1 : prevIndex - 1
     );
   };
-  
-  // Функция для открытия модального окна
-  const openModal = () => {
+    const openModal = () => {
     setShowModal(true);
   };
 
@@ -168,29 +149,21 @@ const PropertyImagesGallery: React.FC<Props> = ({ images, onImageClick }) => {
     <div className={styles.galleryContainer}>
       <div className={styles.imagesBlock}>
         <div className={styles.mainImageWrapper}>
-          {/* Основное изображение */}
           <Image
             src={mainImage.url}
             alt="Основное изображение объекта"
             layout="fill"
             objectFit="cover"
-            className={styles.mainImage}
-            // Удаляем onClick, чтобы избежать конфликта с кнопкой "Увеличить"
-            // или оставляем, если клик по изображению тоже должен открывать модалку
-            // onClick={openModal} // Можно добавить, чтобы клик по картинке тоже увеличивал
-          />
+            className={styles.mainImage}/>
           
-          {/* Кнопка "Увеличить" */}
           <button
             className={styles.zoomButton}
             onClick={openModal}
             title="Увеличить изображение"
             aria-label="Увеличить изображение"
           >
-            &#x1F50E; {/* Иконка увеличительного стекла */}
+            &#x1F50E;
           </button>
-
-          {/* Кнопки навигации */}
           <button
             className={`${styles.navButton} ${styles.prevButton}`}
             onClick={(e) => {
@@ -213,10 +186,8 @@ const PropertyImagesGallery: React.FC<Props> = ({ images, onImageClick }) => {
           </button>
         </div>
         
-        {/* Миниатюры */}
         <div className={styles.thumbnails}>
           {thumbnails.map((img, index) => {
-            // Фактический индекс изображения в sortedImages
             const actualIndex = thumbnailIndices[index]; 
 
             return (
@@ -238,7 +209,6 @@ const PropertyImagesGallery: React.FC<Props> = ({ images, onImageClick }) => {
             );
           })}
           
-          {/* Кнопка "Еще фото" */}
           {viewAllCount > 0 && (
             <button
               className={styles.viewAllButton}
@@ -250,12 +220,11 @@ const PropertyImagesGallery: React.FC<Props> = ({ images, onImageClick }) => {
         </div>
       </div>
       
-      {/* Модальное окно */}
       {showModal && (
         <ImageModal
           images={sortedImages}
           onClose={() => setShowModal(false)}
-          initialIndex={currentImageIndex} // Передаем текущий индекс
+          initialIndex={currentImageIndex}
         />
       )}
     </div>

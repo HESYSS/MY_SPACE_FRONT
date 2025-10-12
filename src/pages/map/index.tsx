@@ -1,4 +1,3 @@
-// MapSinglePoint.tsx
 import { useEffect, useRef, useMemo } from "react";
 import "ol/ol.css";
 import Map from "ol/Map";
@@ -17,15 +16,14 @@ interface Location {
 }
 
 interface Props {
-  location: Location | null; // точка для отображения
-  zoom?: number; // необязательный уровень зума
+  location: Location | null;
+  zoom?: number;
 }
 
 export default function MapSinglePoint({ location, zoom = 15 }: Props) {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstance = useRef<Map | null>(null);
 
-  // Векторный слой для маркера
   const markerSource = useRef(new VectorSource());
   const markerLayer = useMemo(
     () =>
@@ -42,7 +40,6 @@ export default function MapSinglePoint({ location, zoom = 15 }: Props) {
     []
   );
 
-  // Инициализация карты
   useEffect(() => {
     if (!mapRef.current) return;
 
@@ -57,27 +54,22 @@ export default function MapSinglePoint({ location, zoom = 15 }: Props) {
       }),
       controls: [],
     });
-    console.log(map);
     mapInstance.current = map;
   }, [markerLayer]);
 
-  // Обновление точки и центрирование
   useEffect(() => {
     if (!location || !mapInstance.current) return;
 
     const coords = fromLonLat([location.lng, location.lat]);
 
-    // Очищаем предыдущие маркеры
     markerSource.current.clear();
 
-    // Добавляем новый маркер
     const feature = new Feature({
       geometry: new Point(coords),
       title: location.title,
     });
     markerSource.current.addFeature(feature);
 
-    // Центрируем карту на маркере с анимацией
     mapInstance.current.getView().animate({
       center: coords,
       zoom: zoom,

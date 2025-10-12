@@ -1,6 +1,3 @@
-// filtersConfig.ts
-
-// Категории и типы
 export const CATEGORY_TYPES: Record<string, { en: string[]; ua: string[] }> = {
   Комерційна: {
     en: [
@@ -38,7 +35,6 @@ export const CATEGORY_TYPES: Record<string, { en: string[]; ua: string[] }> = {
   },
 };
 
-// Фильтры по типу недвижимости (без локации)
 export const FILTERS_BY_TYPE: Record<string, { en: string[]; ua: string[] }> = {
   Офіс: {
     en: ["Floor", "Floors", "Total area"],

@@ -1,14 +1,12 @@
-// components/Footer/Footer.jsx
-
 import styles from "./footer.module.css";
 import mySpaceLogo from "../../../public/icons/MySpace_LOGO_1[SVG].png";
 import youtubeIcon from "../../../public/icons/youtube.svg";
 import instagramIcon from "../../../public/icons/instagram.svg";
 
-import { useTranslation } from "react-i18next"; // Импортируем хук
+import { useTranslation } from "react-i18next";
 
 export default function Footer() {
-  const { t } = useTranslation("common"); // Используем файл common.json
+  const { t } = useTranslation("common");
 
   return (
     <footer className={styles.footer}>

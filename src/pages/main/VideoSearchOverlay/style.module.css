@@ -1,6 +1,3 @@
-/*
- * Основные стили для десктопа (по умолчанию)
- */
 .hero {
   position: relative;
   width: 100%;
@@ -103,7 +100,6 @@
   -moz-appearance: none;
   appearance: none;
   background-image: linear-gradient(to right, #03b9b300, #03b9b3),
-    /* градиент линии */
       url('data:image/svg+xml;utf8,<svg fill="%2303b9b3" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
   background-repeat: no-repeat, no-repeat;
   background-position: bottom left, right 10px center;
@@ -140,9 +136,6 @@
   color: #ffffff;
 }
 
-/*
- * Адаптация для планшетов (769px - 1300px)
- */
 @media (min-width: 769px) and (max-width: 1300px) {
   .hero {
     height: 450px;
@@ -171,9 +164,6 @@
   }
 }
 
-/*
- * Адаптация для мобильных устройств (375px - 768px)
- */
 @media (max-width: 768px) {
   .hero {
     height: 300px;
@@ -206,7 +196,6 @@
     text-overflow: ellipsis;
   }
   .searchFormContainer {
-    /* Удалена строка 'width: 100%;' */
     max-width: calc(100% - 40px);
     margin: 30px auto 80px;
     padding: 0;

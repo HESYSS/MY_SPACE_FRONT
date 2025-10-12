@@ -1,4 +1,3 @@
-// components/RealEstateCategories/RealEstateCategories.tsx
 import { useState, useEffect } from "react";
 import styles from "./RealEstateCategories.module.css";
 import { useTranslation } from "react-i18next";

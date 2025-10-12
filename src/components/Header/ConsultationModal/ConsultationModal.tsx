@@ -1,5 +1,3 @@
-// components/ConsultationModal/ConsultationModal.tsx
-
 import { useEffect, useState, FormEvent } from "react";
 import styles from "./ConsultationModal.module.css";
 import { useTranslation } from "react-i18next";
@@ -9,36 +7,30 @@ export default function ConsultationModal() {
   const { t } = useTranslation("common");
   const { isModalOpen, closeModal, preselectedForWhom } = useModal();
 
-  // State for form inputs
   const [clientName, setClientName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
 
-  // Options for the custom dropdowns, with values matching backend enums
   const propertyOptions = [
     { value: "RESIDENTIAL", label: t("residential") },
     { value: "COMMERCIAL", label: t("commercial") },
   ];
 
   const forWhomOptions = [
-    { value: "SELLING", label: t("forSellers") }, // Changed value to match backend 'SELLING'
-    { value: "BUYING", label: t("forBuyers") }, // Changed value to match backend 'BUYING'
+    { value: "SELLING", label: t("forSellers") },
+    { value: "BUYING", label: t("forBuyers") },
   ];
 
-  // State for the custom dropdowns
   const [isPropertyDropdownOpen, setPropertyDropdownOpen] = useState(false);
   const [isForWhomDropdownOpen, setForWhomDropdownOpen] = useState(false);
   const [selectedProperty, setSelectedProperty] = useState(propertyOptions[0]);
   const [selectedForWhom, setSelectedForWhom] = useState(forWhomOptions[0]);
 
-  // State for submission status
   const [isLoading, setIsLoading] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [error, setError] = useState("");
 
-  // Update selected value when preselectedForWhom changes
   useEffect(() => {
     if (preselectedForWhom) {
-      // Find the correct option based on the preselectedForWhom value
       const mappedValue =
         preselectedForWhom === "forSellers" ? "SELLING" : "BUYING";
       const newSelection = forWhomOptions.find(
@@ -52,9 +44,7 @@ export default function ConsultationModal() {
     }
   }, [preselectedForWhom]);
 
-  // Handle closing modal
   const handleCloseModal = () => {
-    // Reset form state on close
     setClientName("");
     setPhoneNumber("");
     setError("");
@@ -62,7 +52,6 @@ export default function ConsultationModal() {
     closeModal();
   };
 
-  // Handle outside click to close modal
   useEffect(() => {
     const handleOutsideClick = (event: MouseEvent) => {
       const modalContent = document.querySelector(`.${styles.modalContent}`);
@@ -78,7 +67,6 @@ export default function ConsultationModal() {
     };
   }, [isModalOpen]);
 
-  // Handle escape key
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
       if (e.key === "Escape") handleCloseModal();
@@ -87,25 +75,22 @@ export default function ConsultationModal() {
     return () => window.removeEventListener("keydown", handleEsc);
   }, []);
 
-  // Handle form submission
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
     setIsLoading(true);
     setError("");
 
-    // Prepare data to send to the backend
     const offerData = {
       clientName,
       phoneNumber,
-      reason: selectedForWhom.value, // Use the value that matches the backend enum
-      propertyType: selectedProperty.value, // Use the value that matches the backend enum
+      reason: selectedForWhom.value,
+      propertyType: selectedProperty.value,
     };
 
     try {
       const backendUrl = process.env.REACT_APP_API_URL;
 
       const response = await fetch(`${backendUrl}/offers`, {
-        // Замените URL на ваш бэкэнд-адрес
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -120,7 +105,7 @@ export default function ConsultationModal() {
         throw new Error(errorData.message || "Something went wrong!");
       }
 
-      setIsSubmitted(true); // Set success state
+      setIsSubmitted(true);
     } catch (err: any) {
       setError(err.message);
     } finally {
@@ -130,7 +115,6 @@ export default function ConsultationModal() {
 
   if (!isModalOpen) return null;
 
-  // Show a success message after submission
   if (isSubmitted) {
     return (
       <div className={styles.modalOverlay} onClick={handleCloseModal}>

@@ -1,4 +1,3 @@
-/* --- Стили для ПК (ширина больше 1300px) --- */
 .container {
   display: flex;
   flex-direction: column;
@@ -76,7 +75,6 @@
   flex: 1 1 258px;
 }
 
-/* Смещения для ПК-версии (4 колонки) */
 .teamGrid > .memberCard:nth-child(4n + 1) {
   margin-top: 50px;
 }
@@ -177,7 +175,6 @@
   flex-grow: 1;
 }
 
-/* --- Адаптация для планшетов (769px - 1300px) --- */
 @media (min-width: 769px) and (max-width: 1300px) {
   .titleSection {
     flex-direction: column-reverse;
@@ -254,7 +251,6 @@
   }
 }
 
-/* --- Мобильная адаптация (до 768px включительно) --- */
 @media (max-width: 768px) {
   .container {
     width: auto;
@@ -293,21 +289,17 @@
   .memberCard {
     width: calc(50% - 10px);
     flex: 0 0 auto;
-    position: relative; /* Добавляем позиционирование */
+    position: relative;
   }
 
-  /* Смещения для мобильной версии (2 колонки) */
   .teamGrid > .memberCard:nth-child(2n + 1) {
-    /* Левая колонка */
     top: 20px;
   }
 
   .teamGrid > .memberCard:nth-child(2n + 2) {
-    /* Правая колонка */
     top: 60px;
   }
 
-  /* Сбрасываем старые смещения для 4-х колонок */
   .teamGrid > .memberCard:nth-child(4n + 1),
   .teamGrid > .memberCard:nth-child(4n + 2),
   .teamGrid > .memberCard:nth-child(4n + 3),

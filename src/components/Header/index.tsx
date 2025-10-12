@@ -21,7 +21,6 @@ const Header: FC = () => {
   const category = "Житлова";
   const type = "Квартира";
 
-  // Ссылки на каталог без пустых массивов
   const catalogLinkSale = {
     pathname: "/catalog",
     query: {
@@ -55,7 +54,6 @@ const Header: FC = () => {
             </Link>
           </div>
 
-          {/* Desktop Navigation Links */}
           <ul className={styles.navLinks}>
             <li>
               <Link href={catalogLinkSale}>{t("sale") || "Продаж"}</Link>
@@ -74,7 +72,6 @@ const Header: FC = () => {
           </ul>
         </div>
 
-        {/* Desktop Right Side */}
         <div className={styles.navRight}>
           <p className={styles.ctaButton} onClick={handleOpenModal}>
             {t("consultation") || "Консультація"}
@@ -87,7 +84,6 @@ const Header: FC = () => {
           </div>
         </div>
 
-        {/* Mobile Menu Button - Обновлено */}
         <div className={styles.mobileMenuToggle}>
           <button
             className={`${styles.hamburgerButton} ${isMenuOpen ? styles.open : ""}`}
@@ -101,7 +97,6 @@ const Header: FC = () => {
         </div>
       </nav>
 
-      {/* Mobile Dropdown Menu */}
       {isMenuOpen && (
         <div className={styles.mobileMenuWrapper}>
           <ul className={styles.mobileNavLinks}>

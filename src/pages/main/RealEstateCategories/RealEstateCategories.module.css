@@ -1,4 +1,3 @@
-/* Real Estate p */
 .realEstateP {
   display: flex;
   flex-direction: column;
@@ -13,7 +12,6 @@
   margin: 80px auto;
 }
 
-/* Title real estate */
 .titleRealEstate {
   display: flex;
   flex-direction: row;
@@ -24,14 +22,12 @@
   height: auto;
 }
 
-/* Line 8 */
 .line8 {
   width: 100%;
   height: 1px;
   background: linear-gradient(to right, #191919, #03b9b3);
 }
 
-/* Вся Нерухомість */
 .mainTitle {
   width: auto;
   height: 75px;
@@ -45,7 +41,6 @@
   white-space: nowrap;
 }
 
-/* Columns real estate */
 .columnsRealEstate {
   display: flex;
   flex-direction: row;
@@ -57,16 +52,14 @@
   flex-wrap: wrap;
 }
 
-/* Стили для ссылок: убираем подчеркивание и делаем их позиционированными */
 .frame49,
 .column2,
 .column3 .frame43,
 .column4 .frame43 {
   text-decoration: none;
-  position: relative; /* Добавляем позиционирование для позиционирования стрелки */
+  position: relative;
 }
 
-/* column1 */
 .column1 {
   display: flex;
   flex-direction: column;
@@ -85,7 +78,6 @@
   height: 304px;
 }
 
-/* Frame 48 */
 .frame48 {
   box-sizing: border-box;
   display: flex;
@@ -100,7 +92,6 @@
   border-radius: 10px;
 }
 
-/* Text block styles */
 .textBlock {
   width: 100%;
   height: auto;
@@ -113,7 +104,6 @@
   color: #ebebeb;
 }
 
-/* Frame 49 (Houses) */
 .frame49 {
   display: flex;
   flex-direction: column;
@@ -128,11 +118,10 @@
   box-sizing: border-box;
 }
 
-/* Common styles for arrow circle */
 .arrowCircle {
   position: absolute;
   right: 20px;
-  top: 20px; /* Изменено на top */
+  top: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -143,15 +132,13 @@
   transition: transform 0.3s ease, background-color 0.3s ease;
 }
 
-/* Стили для SVG-стрелки внутри круга */
 .arrowCircle svg {
   transition: transform 0.3s ease;
-  transform: rotate(45deg); /* Поворот для направления вправо-вверх */
-  width: 18px; /* Задаем размер напрямую */
+  transform: rotate(45deg);
+  width: 18px;
   height: 18px;
 }
 
-/* Эффект при наведении на контейнер изображения */
 .frame49:hover .arrowCircle,
 .column2:hover .arrowCircle,
 .column3 .frame43:hover .arrowCircle,
@@ -164,7 +151,7 @@
 .column2:hover .arrowCircle svg,
 .column3 .frame43:hover .arrowCircle svg,
 .column4 .frame43:hover .arrowCircle svg {
-  transform: scale(1.1) rotate(45deg); /* Увеличиваем и поворачиваем */
+  transform: scale(1.1) rotate(45deg);
 }
 
 .frame49:hover .arrowCircle svg path,
@@ -174,7 +161,6 @@
   stroke: #ebebeb;
 }
 
-/* Category title styles */
 .categoryTitle {
   width: 100%;
   height: auto;
@@ -190,7 +176,6 @@
   box-sizing: border-box;
 }
 
-/* Frame 369 */
 .frame369 {
   display: flex;
   flex-direction: row;
@@ -201,7 +186,6 @@
   height: 539px;
 }
 
-/* column2 (Commercial) */
 .column2 {
   display: flex;
   flex-direction: column;
@@ -216,7 +200,6 @@
   box-sizing: border-box;
 }
 
-/* column3 */
 .column3 {
   display: flex;
   flex-direction: column;
@@ -227,7 +210,6 @@
   height: 539px;
 }
 
-/* Frame 43 (Apartments) */
 .frame43 {
   display: flex;
   flex-direction: column;
@@ -250,7 +232,6 @@
   height: 215px;
 }
 
-/* Frame 47 */
 .frame47 {
   box-sizing: border-box;
   display: flex;
@@ -264,7 +245,6 @@
   border-radius: 10px;
 }
 
-/* column4 (Land) */
 .column4 {
   display: flex;
   flex-direction: column;
@@ -275,7 +255,6 @@
   height: 539px;
 }
 
-/* Frame 43 (Land) */
 .column4 .frame43 {
   display: flex;
   flex-direction: column;
@@ -290,9 +269,6 @@
   box-sizing: border-box;
 }
 
-/*
- * Адаптация для десктопа (свыше 1301px)
- */
 @media (min-width: 1301px) {
   .columnsRealEstate {
     width: 1200px;
@@ -314,9 +290,6 @@
   }
 }
 
-/*
- * --- НОВОЕ ПРАВИЛО: Адаптация для экранов от 1200px до 1300px ---
- */
 @media (min-width: 1200px) and (max-width: 1300px) {
   .realEstateP {
     padding: 0 40px;
@@ -347,11 +320,6 @@
   }
 }
 
-/*
- * Адаптация для планшетов (769px - 1199px)
- * Важно: я изменил максимальное значение с 1300px на 1199px
- * чтобы не было конфликтов с новым правилом выше.
- */
 @media (min-width: 769px) and (max-width: 1199px) {
   .realEstateP {
     padding: 0 40px;
@@ -399,17 +367,15 @@
   .column4 .frame43 {
     width: 85%;
   }
-  /* Уменьшаем шрифт для надписей на планшетах */
   .categoryTitle {
     font-size: 24px;
     line-height: 28px;
   }
-  /* Адаптивность для стрелки на планшетах */
   .arrowCircle {
     width: 36px;
     height: 36px;
     right: 15px;
-    top: 15px; /* Изменено на top */
+    top: 15px;
   }
   .arrowCircle svg {
     width: 18px;
@@ -417,9 +383,6 @@
   }
 }
 
-/*
- * Адаптация для мобильных устройств (375px - 768px)
- */
 @media (max-width: 768px) {
   .realEstateP {
     gap: 30px;
@@ -444,18 +407,14 @@
     text-align: right;
     white-space: normal;
   }
-  /* Основной контейнер с гибким макетом */
   .columnsRealEstate {
-    flex-direction: column; /* Все элементы в один столбец */
-    flex-wrap: nowrap; /* Отключаем перенос на новую строку */
+    flex-direction: column;
+    flex-wrap: nowrap;
     align-items: flex-start;
     padding: 0;
-    gap: 20px; /* Отступ между элементами */
+    gap: 20px;
   }
-  /*
-   * Устанавливаем ширину 100% для всех родительских колонок
-   * и сбрасываем все старые стили.
-   */
+
   .column1,
   .frame369,
   .column3,
@@ -466,36 +425,31 @@
     margin: 0;
     order: unset;
   }
-  /*
-   * Устанавливаем внутренние элементы как колонки, чтобы
-   * они выстраивались друг над другом.
-   */
+
   .column1,
   .column3 {
     display: flex;
     flex-direction: row;
-    gap: 20px; /* Отступ между текстовым блоком и фото */
+    gap: 20px;
   }
-  /* Сброс padding-top для блоков, где он был задан ранее */
+
   .frame369,
   .column4 {
     padding-top: 0;
   }
-  /* Устанавливаем высоту для всех блоков с фото, чтобы они выглядели одинаково */
   .frame49,
   .column2,
   .column3 .frame43,
   .column4 .frame43 {
     width: 100%;
-    height: 200px; /* Увеличена высота для лучшего вида */
+    height: 200px;
     padding: 20px;
     box-sizing: border-box;
   }
-  /* Стили для текстовых блоков "Лучшие предложения" и "Большой выбор" */
   .frame48wrapper,
   .frame47wrapper {
     width: 100%;
-    height: 200px; /* Фиксированная высота */
+    height: 200px;
     padding: 1px;
     border-radius: 10px;
   }
@@ -516,7 +470,7 @@
     font-size: 24px;
     line-height: 28px;
   }
-  /* Адаптивность для стрелки на мобильных */
+
   .arrowCircle {
     width: 40px;
     height: 40px;

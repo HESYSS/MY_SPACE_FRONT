@@ -1,4 +1,3 @@
-/* General styles */
 .container {
   background-color: #050505;
   color: #fff;
@@ -7,19 +6,16 @@
     "Helvetica Neue", Arial, sans-serif;
 }
 
-/* New container for positioning the modal */
 .searchContainer {
   position: relative;
 }
 
-/* Top search and filter panel */
 .topPanel {
   display: flex;
   gap: 0.5rem;
   margin-bottom: 40px;
 }
 
-/* ИЗМЕНЕНИЕ: Обертка для поля ввода и кнопки поиска */
 .searchInputWrapper {
   flex: 1;
   position: relative;
@@ -32,9 +28,7 @@
   border: 1px solid #03b9b34d;
   color: #fff;
   padding: 0 1rem;
-  /* ИЗМЕНЕНИЕ: Увеличен отступ справа, чтобы избежать наложения кнопки */
   padding-right: 80px;
-  /* ИЗМЕНЕНИЕ: Добавлено свойство для корректного расчета ширины */
   box-sizing: border-box;
 }
 
@@ -59,7 +53,6 @@
   border-color: #03b9b3;
 }
 
-/* ИЗМЕНЕНИЕ: Стили для абсолютно позиционированной белой кнопки "Пошук" */
 .searchButton {
   position: absolute;
   top: 0;
@@ -80,7 +73,6 @@
   background-color: #eee;
 }
 
-/* ИЗМЕНЕНИЕ: Стили для кнопки фильтров с иконкой и надписью */
 .filterButton {
   height: 40px;
   padding: 0 1rem;
@@ -113,12 +105,12 @@
 }
 @media (max-width: 770px) {
   .filterButton span {
-    display: none; /* скрываем текст */
+    display: none;
   }
 
   .filterButton {
-    padding: 0 0.6rem; /* делаем кнопку компактнее */
-    min-width: 40px; /* чтобы иконка не прижималась */
+    padding: 0 0.6rem;
+    min-width: 40px;
   }
 
   .filterIcon {
@@ -126,7 +118,6 @@
     height: 22px;
   }
 
-  /* при желании можно немного уменьшить отступы между элементами */
   .topPanel {
     gap: 0.3rem;
   }

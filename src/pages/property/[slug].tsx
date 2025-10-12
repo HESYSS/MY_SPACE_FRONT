@@ -1,4 +1,3 @@
-// PropertyPage.tsx
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import styles from "./PropertyPage.module.css";
@@ -8,10 +7,8 @@ import { useTranslation } from "react-i18next";
 
 import MapSinglePoint from "../map";
 
-// Импортируем иконки
-import BedIcon from "../../../public/icons/Frame153.svg"; // Укажите правильный путь
-import RulerIcon from "../../../public/icons/Frame204.svg"; // Укажите правильный путь
-import Head from "next/head";
+import BedIcon from "../../../public/icons/Frame153.svg";
+import RulerIcon from "../../../public/icons/Frame204.svg";
 import { NextSeo, ProductJsonLd } from "next-seo";
 
 interface Property {
@@ -55,9 +52,9 @@ interface PropertyImage {
 }
 
 interface PropertyContact {
-  name: string; // ФИО
-  phone: string; // Номер (может содержать несколько, разделенных запятыми)
-  email?: string; // Почта
+  name: string;
+  phone: string;
+  email?: string;
 }
 
 export default function PropertyPage() {
@@ -81,7 +78,6 @@ export default function PropertyPage() {
 
         if (!res.ok) throw new Error(t("objectNotFound"));
         const data: Property = await res.json();
-        console.log("Fetched property:", data);
         setProperty(data);
       } catch (err: any) {
         setError(err.message || t("errorLoading"));
@@ -123,7 +119,6 @@ export default function PropertyPage() {
         | boolean
         | number;
 
-      // Добавляем м² для всех полей, связанных с площадью
       const areaKeys = [
         "Загальна площа",
         "Площа кухні",
@@ -136,7 +131,6 @@ export default function PropertyPage() {
       ];
 
       if (areaKeys.includes(key) && typeof value !== "boolean") {
-        // ✅ ИСПРАВЛЕНИЕ: Мы знаем, что value не boolean, поэтому можем безопасно форматировать как строку
         displayValue = `${value} ${t("squareMeters")}`;
       }
 
@@ -158,8 +152,6 @@ export default function PropertyPage() {
     description?.slice(0, 160).replace(/<\/?[^>]+(>|$)/g, "") ||
     `${property.title} — ${t("realEstateOffer")}`;
   const backendUrl = process.env.DOMENIAN_URL;
-  console.log(backendUrl);
-  // 🔹 JSON-LD для Google (структурированные данные)
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Offer",
@@ -179,7 +171,6 @@ export default function PropertyPage() {
 
   return (
     <>
-      {/* 🔹 SEO-блок */}
       <NextSeo
         title={`${property.title} | ${property.location.city} | MySpace`}
         description={metaDescription}
@@ -253,7 +244,6 @@ export default function PropertyPage() {
               </p>
               <div className={styles.featuresRow}>
                 <div className={styles.featureItem}>
-                  {/* ИЗМЕНЕНИЕ: Используем изображение BedIcon */}
                   <img
                     src={BedIcon.src}
                     alt={t("bedroomsAlt")}
@@ -267,7 +257,6 @@ export default function PropertyPage() {
                   </span>
                 </div>
                 <div className={styles.featureItem}>
-                  {/* ИЗМЕНЕНИЕ: Используем изображение RulerIcon */}
                   <img
                     src={RulerIcon.src}
                     alt={t("areaAlt")}
@@ -284,7 +273,6 @@ export default function PropertyPage() {
               <div className={styles.priceAndButton}>
                 <p className={styles.price}>{formattedPrice}</p>
 
-                {/* ✅ Блок с контактами, который перебирает все контакты */}
                 {property.contacts && (
                   <div className={styles.managerInfo}>
                     <p className={styles.managerLabel}>
@@ -292,12 +280,9 @@ export default function PropertyPage() {
                     </p>
 
                     <div className={styles.singleContactBlock}>
-                      {/* ФИО */}
                       <p className={styles.managerName}>
                         {property.contacts.name}
                       </p>
-
-                      {/* Разделение телефонов на отдельные номера */}
                       {property.contacts.phone &&
                         property.contacts.phone
                           .split(",")
@@ -310,8 +295,6 @@ export default function PropertyPage() {
                               {phoneNum.trim()}
                             </a>
                           ))}
-
-                      {/* Email отдельной строкой */}
                       {property.contacts.email && (
                         <a
                           href={`mailto:${property.contacts.email}`}

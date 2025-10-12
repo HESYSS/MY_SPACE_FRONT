@@ -3,7 +3,6 @@ import styles from "./style.module.css";
 import { useTranslation } from "react-i18next";
 import Link from "next/link";
 
-// Кастомный хук для определения ширины экрана
 const useMediaQuery = (query: string) => {
   const [matches, setMatches] = useState(false);
   useEffect(() => {
@@ -18,14 +17,12 @@ const useMediaQuery = (query: string) => {
   return matches;
 };
 
-// Интерфейс для данных об изображении с бэкенда
 interface SiteImage {
   id: number;
   name: string;
   url: string;
 }
 
-// Интерфейс для данных слайдов карусели
 interface CarouselSlide {
   src: string;
   name: string;
@@ -43,24 +40,20 @@ const Carousel: FC = () => {
   const isTablet = useMediaQuery("(min-width: 769px) and (max-width: 1300px)");
   const isMobile = useMediaQuery("(max-width: 768px)");
 
-  // Логика карусели
   const [activeIndex, setActiveIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(true);
   const containerRef = useRef<HTMLDivElement>(null);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
-  // ИЗМЕНЕНИЕ: Рефы для отслеживания свайпов
   const touchStartRef = useRef(0);
   const touchEndRef = useRef(0);
-  const swipeThreshold = 50; // Минимальная дистанция свайпа в пикселях
+  const swipeThreshold = 50;
 
-  // Вспомогательная функция для получения URL по имени
   const getImageUrlByName = (name: string): string => {
     const image = images.find((img) => img.name === name);
     return image ? image.url : "";
   };
 
-  // Статический массив данных для слайдов. URL будут заполнены после загрузки.
   const baseSlidesData = [
     {
       name: "Solomianskyi.png",
@@ -90,7 +83,6 @@ const Carousel: FC = () => {
     },
   ];
 
-  // Динамическое создание массива слайдов с загруженными URL-адресами
   const slidesData: CarouselSlide[] = baseSlidesData.map((slide) => ({
     ...slide,
     src: getImageUrlByName(slide.name),
@@ -123,7 +115,6 @@ const Carousel: FC = () => {
     resetTimer();
   };
 
-  // ИЗМЕНЕНИЕ: Обработчики для свайпов
   const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
     touchStartRef.current = e.touches[0].clientX;
   };
@@ -138,7 +129,6 @@ const Carousel: FC = () => {
     }
   };
 
-  // Загружаем данные с бэкенда при монтировании компонента
   useEffect(() => {
     const fetchImages = async () => {
       try {
@@ -299,7 +289,6 @@ const Carousel: FC = () => {
     return <div>Загрузка...</div>;
   }
 
-  // Если данных нет, ничего не показываем
   if (slidesData.length === 0) {
     return null;
   }
@@ -310,7 +299,6 @@ const Carousel: FC = () => {
         <div
           ref={containerRef}
           className={styles.slidesContainer}
-          // ИЗМЕНЕНИЕ: Добавление обработчиков событий касания
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
         >
@@ -352,10 +340,10 @@ const Carousel: FC = () => {
                           JSON.stringify({
                             deal: "Продаж",
                             category: "Житлова",
-                          }) // 👈 пример
+                          })
                         ),
                         locationfilters: encodeURIComponent(
-                          JSON.stringify({ districts: slide.text }) // 👈 сюда район
+                          JSON.stringify({ districts: slide.text })
                         ),
                       },
                     }}

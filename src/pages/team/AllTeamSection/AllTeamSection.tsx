@@ -27,7 +27,6 @@ const AllTeamSection: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(5);
 
-  // Состояния для тач-скролла (активны только на мобильных)
   const [touchStartX, setTouchStartX] = useState<number | null>(null);
   const [dragX, setDragX] = useState<number>(0);
   const [isDragging, setIsDragging] = useState<boolean>(false);
@@ -85,7 +84,6 @@ const AllTeamSection: React.FC = () => {
     };
   };
 
-  // Обработчики событий касания (тач-скролл)
   const handleTouchStart = (e: React.TouchEvent) => {
     setTouchStartX(e.touches[0].clientX);
     setIsDragging(true);
@@ -110,8 +108,6 @@ const AllTeamSection: React.FC = () => {
     setDragX(0);
   };
 
-  // Условное отображение. Свайп включается только для мобильных и планшетов.
-  // Десктоп-версия (itemsPerPage === 5) управляется только точками.
   const isMobileOrTablet = itemsPerPage === 2 || itemsPerPage === 4;
 
   if (loading) return <div>Загрузка...</div>;
@@ -123,7 +119,6 @@ const AllTeamSection: React.FC = () => {
       <div className={styles.carouselContainer}>
         <div
           className={styles.teamRow}
-          // Обработчики касаний только для мобильных/планшетов
           {...(isMobileOrTablet && {
             onTouchStart: handleTouchStart,
             onTouchMove: handleTouchMove,
@@ -174,7 +169,6 @@ const AllTeamSection: React.FC = () => {
             })
           )}
         </div>
-        {/* Пагинация по точкам, теперь видима на всех экранах */}
         {totalPages > 1 && (
           <div className={styles.pagination}>
             {Array.from({ length: totalPages }, (_, index) => (

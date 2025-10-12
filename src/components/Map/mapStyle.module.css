@@ -1,6 +1,3 @@
-/* =========================
-   Стили для ПК (по умолчанию)
-   ========================= */
 .mapContainer {
   position: relative;
   touch-action: auto;
@@ -41,26 +38,24 @@
 }
 
 .mapCanvas {
-  width: calc(100% - 0px); /* ширина с учётом отступа справа */
-  max-width: 100%; /* при необходимости ограничиваем ширину */
+  width: calc(100% - 0px);
+  max-width: 100%;
   height: calc(100% - 0px);
   margin-right: 10px;
   z-index: 10;
 }
-/* =========================
-   Адаптация для планшетов (769px - 1300px)
-   ========================= */
+
 @media (min-width: 769px) and (max-width: 1300px) {
   .mapContainer {
-    width: 100%; /* Занимает всю ширину родителя */
-    height: 100vh; /* Занимает всю высоту экрана */
+    width: 100%;
+    height: 100vh;
     margin: 0;
     padding: 0;
   }
 
   .mapCanvas {
-    width: 100%; /* Карта растягивается на всю ширину */
-    height: 100%; /* Карта растягивается на всю высоту */
+    width: 100%;
+    height: 100%;
   }
 
   .drawButtonContainer {
@@ -74,13 +69,10 @@
   }
 }
 
-/* =========================
-   Адаптация для мобильных устройств (до 768px)
-   ========================= */
 @media (max-width: 768px) {
   .mapContainer {
     width: 100%;
-    height: 100vh; /* Используем 100vh для полного экрана */
+    height: 100vh;
     margin: 0;
     padding: 0;
   }
@@ -101,7 +93,7 @@
   }
 
   .mapButton {
-    width: 35px; /* Уменьшаем размер кнопок */
+    width: 35px;
     height: 35px;
     font-size: 16px;
   }

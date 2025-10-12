@@ -3,46 +3,46 @@
   grid-template-columns: repeat(
     auto-fill,
     minmax(300px, 1fr)
-  ); /* Adjust card width as needed */
+  );
   gap: 20px;
   padding: 20px;
-  justify-content: center; /* Center cards if there aren't enough to fill a row */
+  justify-content: center;
 }
 
 .property-card {
-  background-color: #ffffff; /* Изменяем цвет фона на белый */
-  border-radius: 8px; /* Slightly rounded corners */
-  overflow: hidden; /* Ensures image corners are rounded with the card */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Меняем тень для светлой карточки */
+  background-color: #ffffff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
-  color: #2b2b2b; /* Изменяем цвет текста на темный */
+  color: #2b2b2b;
   transition: transform 0.2s ease-in-out;
   width: 287.6666564941406px;
   height: 416px;
 }
 
 .property-card:hover {
-  transform: translateY(-5px); /* Lift card on hover */
+  transform: translateY(-5px);
 }
 
 .property-image-wrapper {
   width: 100%;
-  height: 200px; /* Fixed height for images */
+  height: 200px;
   overflow: hidden;
 }
 
 .property-card-image {
   width: 100%;
   height: 100%;
-  object-fit: cover; /* Ensures image covers the area without distortion */
+  object-fit: cover;
 }
 
 .property-content {
   padding: 15px;
   display: flex;
   flex-direction: column;
-  flex-grow: 1; /* Allows content to push footer down */
+  flex-grow: 1;
 }
 
 .property-title {
@@ -57,7 +57,7 @@
 
 .property-description {
   font-size: 13px;
-  color: #555555; /* Средний серый для описания */
+  color: #555555;
   margin-bottom: 5px;
   font-weight: 400;
   font-style: normal;
@@ -79,15 +79,15 @@
   font-weight: 700;
   font-weight: bold;
   font-size: 14px;
-  color: #263544; /* Темный цвет для цены */
-  margin-top: auto; /* Pushes price to the bottom before details */
+  color: #263544;
+  margin-top: auto;
   margin-bottom: 15px;
   text-transform: uppercase;
 }
 
 .property-details {
   display: flex;
-  justify-content: space-between; /* Spreads out area and rooms */
+  justify-content: space-between;
   margin-bottom: 15px;
   padding-top: 10px;
 }
@@ -104,7 +104,7 @@
 
 .detail-item .icon {
   margin-right: 5px;
-  font-size: 1.1em; /* Adjust icon size */
+  font-size: 1.1em;
 }
 
 .property-footer {
@@ -112,7 +112,7 @@
   justify-content: space-between;
   align-items: center;
   font-size: 0.8em;
-  color: #555555; /* Серый цвет для текста футера */
+  color: #555555;
   padding-top: 10px;
 }
 
@@ -135,8 +135,7 @@
 }
 
 .icon {
-  width: 20px; /* Примерный размер */
-  height: 20px; /* Примерный размер */
-  margin-right: 8px; /* Отступ от текста */
-  /* Добавьте другие стили по необходимости, например, color: для SVG */
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
 }

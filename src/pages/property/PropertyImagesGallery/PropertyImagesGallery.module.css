@@ -1,21 +1,14 @@
-/* PropertyImagesGallery.module.css */
-
-/*
-* Глобальные стили для галереи (по умолчанию для больших экранов > 1300px)
-*/
-
 .imagesBlock {
   display: flex;
   flex-direction: column;
   gap: 20px;
-  width: 600px; /* Ширина по умолчанию */
+  width: 600px;
 }
 
-/* Обертка для основного изображения */
 .mainImageWrapper {
   position: relative;
   width: 100%;
-  height: 474.92px; /* Фиксированная высота */
+  height: 474.92px;
   border-radius: 20px;
   overflow: hidden;
   cursor: pointer;
@@ -25,7 +18,6 @@
   object-fit: cover;
 }
 
-/* Кнопки навигации на главном изображении */
 .navButton {
   position: absolute;
   top: 50%;
@@ -53,18 +45,17 @@
   right: 10px;
 }
 
-/* --- Стили для кнопки "Увеличить" --- */
 .zoomButton {
   position: absolute;
-  bottom: 20px; /* Отступ снизу */
-  right: 20px; /* Отступ справа */
+  bottom: 20px;
+  right: 20px;
   background-color: rgba(0, 0, 0, 0.7);
   color: #fff;
   border: none;
   padding: 10px 15px;
   border-radius: 8px;
   cursor: pointer;
-  font-size: 20px; /* Размер иконки */
+  font-size: 20px;
   z-index: 10;
   transition: background-color 0.2s ease, transform 0.2s ease;
   line-height: 1;
@@ -74,7 +65,6 @@
   background-color: rgba(0, 0, 0, 0.9);
   transform: scale(1.05);
 }
-/* ------------------------------------- */
 
 .thumbnails {
   display: flex;
@@ -84,7 +74,6 @@
   position: relative;
 }
 
-/* Обертка для миниатюр */
 .thumbnailWrapper {
   position: relative;
   width: 160px;
@@ -108,7 +97,6 @@
   border-color: #03B9B3;
 }
 
-/* Стили для кнопки "Все фото" */
 .viewAllButton {
   position: absolute;
   bottom: 0;
@@ -127,7 +115,6 @@
   background-color: rgba(0, 0, 0, 0.9);
 }
 
-/* Стили для модального окна */
 .modalOverlay {
   position: fixed;
   top: 0;
@@ -166,7 +153,6 @@
   z-index: 1001;
 }
 
-/* Стили для слайдера внутри модального окна */
 .modalSlider {
   display: flex;
   flex-direction: column;
@@ -182,7 +168,6 @@
   height: 60vh;
 }
 
-/* Кнопки навигации внутри модального окна */
 .modalContent .navButton {
   background-color: rgba(0, 0, 0, 0.5);
   color: #fff;
@@ -207,7 +192,6 @@
   right: 10px;
 }
 
-/* Горизонтальная прокручиваемая галерея миниатюр */
 .thumbnailSlider {
   display: flex;
   gap: 15px;
@@ -253,47 +237,38 @@
   border-color: #03B9B3;
 }
 
-/* --------------------------------------------------- */
-/* АДАПТАЦИЯ ДЛЯ ЭКРАНОВ 769px - 1300px (Планшеты/Маленькие десктопы) */
-/* --------------------------------------------------- */
 @media (min-width: 769px) and (max-width: 1100px) {
-    /* Основная галерея */
     .imagesBlock {
-        width: 100%; /* Занимаем всю доступную ширину */
-        max-width: 800px; /* Можно ограничить максимальную ширину для центрирования */
+        width: 100%;
+        max-width: 800px;
         margin: 0 auto;
     }
     
     .mainImageWrapper {
-        height: 400px; /* Немного уменьшим высоту основного изображения */
+        height: 400px;
     }
 
     .thumbnailWrapper {
-        width: 120px; /* Уменьшаем миниатюры, чтобы 4 помещалось без скролла */
+        width: 120px;
         height: 120px;
     }
 
-    /* Модальное окно */
     .largeImageWrapper {
-        max-width: 700px; /* Уменьшаем максимальную ширину изображения в модалке */
-        height: 70vh; /* Увеличим высоту, так как экрана больше */
+        max-width: 700px;
+        height: 70vh;
     }
     
     .modalThumbnail {
-        width: 80px; /* Немного уменьшаем миниатюры в модалке */
+        width: 80px;
         height: 80px;
     }
     
     .modalContent {
-        max-width: 95%; /* Можем использовать чуть больше места */
-        padding: 15px; /* Уменьшаем padding для лучшего использования пространства */
+        max-width: 95%; 
+        padding: 15px;
     }
 }
 
-
-/* --------------------------------------------------- */
-/* АДАПТАЦИЯ ДЛЯ ЭКРАНОВ 375px - 768px (Мобильные устройства) */
-/* --------------------------------------------------- */
 @media (min-width: 375px) and (max-width: 768px) {
     .imagesBlock {
         width: 100%; 
@@ -328,7 +303,6 @@
         padding: 8px 12px;
     }
 
-    /* Модальное окно */
     .modalContent {
         padding: 10px;
         width: calc(100% - 20px);

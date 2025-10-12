@@ -21,7 +21,7 @@ interface LocationModalProps {
   onClose: () => void;
   onSubmit: (filters: any) => void;
   triggerRef: React.RefObject<HTMLElement>;
-  isOutOfCity?: boolean; // Добавляем пропс для ref триггера
+  isOutOfCity?: boolean;
 }
 
 const DATA_STORAGE_KEY = "locationData";
@@ -48,7 +48,7 @@ export default function LocationModal({
   const [locationType, setLocationType] = useState<"kyiv" | "region" | "none">(
     "none"
   );
-  const modalRef = useRef<HTMLDivElement>(null); // Ref для самой модалки
+  const modalRef = useRef<HTMLDivElement>(null);
 
   const [metroOpen, setMetroOpen] = useState(false);
   const [districtOpen, setDistrictOpen] = useState(false);
@@ -104,7 +104,6 @@ export default function LocationModal({
     fetchLocationData();
   }, [lang]);
 
-  // клик вне модалки → закрытие
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -118,7 +117,6 @@ export default function LocationModal({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [onClose]);
 
-  // загрузка locationfilters из URL
   useEffect(() => {
     if (!router.isReady) return;
     if (router.query.locationfilters) {
@@ -127,7 +125,6 @@ export default function LocationModal({
           router.query.locationfilters as string
         );
         const parsed = JSON.parse(decoded);
-        console.log(parsed);
         setSelectedMetro(parsed.metro || []);
         setSelectedDistricts(parsed.districts || []);
         setSelectedStreets(parsed.streets || []);
@@ -141,7 +138,6 @@ export default function LocationModal({
     }
   }, [router.isReady, router.query.locationfilters]);
 
-  // синхронизация фильтров → URL + onSubmit
   useEffect(() => {
     if (isInitialRender) {
       setIsInitialRender(false);
@@ -179,7 +175,6 @@ export default function LocationModal({
     locationType,
   ]);
 
-  // toggle helpers
   const toggleArrayValue = (
     arr: string[] | string,
     value: string
@@ -238,7 +233,6 @@ export default function LocationModal({
       filters.directions = selectedDirections;
     }
     localStorage.setItem(FILTERS_STORAGE_KEY, JSON.stringify(filters));
-    console.log("Submitting filters:", { ...filters, polygon: loadPolygon() });
     onSubmit({ ...filters, polygon: loadPolygon() });
   }, [
     selectedMetro,
@@ -269,7 +263,6 @@ export default function LocationModal({
   );
 
   return (
-    // ⬅️ Добавляем ref к основному контейнеру модалки
     <div ref={modalRef} className={styles.modalContent}>
       <div className={styles.locationToggle}>
         <button

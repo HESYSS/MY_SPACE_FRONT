@@ -77,7 +77,6 @@ const AdminPage: React.FC = () => {
   const [images, setImages] = useState<SiteImage[]>([]);
   const [admins, setAdmins] = useState<Admin[]>([]);
 
-  // Стани для полів
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [position, setPosition] = useState("");
@@ -103,14 +102,12 @@ const AdminPage: React.FC = () => {
   const [selectedImageToUpdate, setSelectedImageToUpdate] =
     useState<SiteImage | null>(null);
 
-  // Стани для авторизації
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [authError, setAuthError] = useState<string | null>(null);
   const [userRole, setUserRole] = useState<string | null>(null);
 
-  // Стани для форми створення адміна
   const [newAdminUsername, setNewAdminUsername] = useState("");
   const [newAdminPassword, setNewAdminPassword] = useState("");
   const [newAdminRole, setNewAdminRole] = useState("admin");
@@ -397,11 +394,9 @@ const AdminPage: React.FC = () => {
       setError(null);
 
       const formData = new FormData();
-      // Додаємо файл, якщо він є
       if (employeePhotoFile) {
         formData.append("file", employeePhotoFile);
       }
-      // Додаємо решту даних
       formData.append("firstName", firstName);
       formData.append("lastName", lastName);
       formData.append("position", position);
@@ -423,7 +418,6 @@ const AdminPage: React.FC = () => {
       const backendUrl = process.env.REACT_APP_API_URL;
       const response = await fetch(`${backendUrl}/employee/create`, {
         method: "POST",
-        // Заголовок 'Content-Type' не потрібен для FormData, браузер сам його встановлює
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -433,7 +427,6 @@ const AdminPage: React.FC = () => {
       if (response.ok) {
         alert("Працівника успішно додано!");
         fetchEmployees();
-        // Скидаємо всі стани форми
         setFirstName("");
         setLastName("");
         setPosition("");
@@ -646,8 +639,6 @@ const AdminPage: React.FC = () => {
     );
   }
 
-  // ... існуючі функції
-
 const fetchItemsForAdmin = async () => {
   setLoading(true);
   setError(null);
@@ -696,7 +687,7 @@ const handleToggleImageActive = async (imageId: number, currentStatus: boolean) 
   try {
     const backendUrl = process.env.REACT_APP_API_URL;
     const response = await fetch(`${backendUrl}/images/item/${imageId}/active`, {
-      method: 'PUT', // Изменено с PATCH на PUT
+      method: 'PUT',
       headers: getHeadersWithAuth(),
       body: JSON.stringify({ isActive: !currentStatus }),
     });
@@ -726,7 +717,6 @@ const onDragEnd = async (result: DropResult) => {
 
   setSelectedItem({ ...selectedItem, images: newImages });
 
-  // Формируем новый массив объектов, как ожидает бэкенд
   const updates = newImages.map((image, index) => ({
     id: image.id,
     order: index,
@@ -737,11 +727,10 @@ const onDragEnd = async (result: DropResult) => {
     const response = await fetch(`${backendUrl}/images/item/order`, {
       method: 'PUT',
       headers: getHeadersWithAuth(),
-      body: JSON.stringify({ updates }), // Отправляем массив объектов
+      body: JSON.stringify({ updates }),
     });
 
     if (response.ok) {
-      console.log("Порядок изображений успешно обновлен.");
     } else {
       const errorData = await response.json();
       console.error(`Помилка оновлення порядку: ${errorData.message}`);
@@ -1155,7 +1144,6 @@ const onDragEnd = async (result: DropResult) => {
                               }}
                               className={styles.itemImageCard}
                             >
-                              {/* Этот div будет "ручкой" для перетаскивания */}
                               <div {...provided.dragHandleProps} className={styles.dragHandle}>
                                 <img
                                   src={image.url}

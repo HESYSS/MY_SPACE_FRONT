@@ -5,10 +5,8 @@ import arrow from "../../../../public/icons/Vector10.svg";
 import { useTranslation } from "react-i18next";
 import Link from "next/link";
 
-// Пока что используем одно локальное изображение для всех
 import defaultTeamImage from "../../../../public/icons/Бубенко_Ірина.png";
 
-// ОБНОВЛЕННЫЙ ИНТЕРФЕЙС Employee
 interface Employee {
   id: number;
   firstName: string;
@@ -18,7 +16,7 @@ interface Employee {
   lastNameEn?: string;
   positionEn?: string;
   isACTIVE: boolean;
-  photoUrl?: string; // <-- ДОБАВЛЕНО ПОЛЕ ДЛЯ URL ФОТОГРАФИИ
+  photoUrl?: string;
 }
 
 const OurTeamSection = () => {
@@ -73,7 +71,6 @@ const OurTeamSection = () => {
             Список активных сотрудников пуст.
           </p>
         ) : (
-          // ЕДИНЫЙ КОНТЕЙНЕР ДЛЯ ВСЕХ КАРТОЧЕК
           <div className={styles.teamGrid}>
             {employees.map((member) => {
               const currentLanguage = i18n.language;

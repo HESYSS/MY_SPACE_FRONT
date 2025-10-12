@@ -1,14 +1,11 @@
-// src/components/TeamSection/TeamSection.js
 
 import { useState, useEffect } from "react";
 import styles from "./TeamSection.module.css";
 import TeamMemberCard from "./TeamMemberCard";
 import { useTranslation } from "react-i18next";
 
-// Импорт изображений членов команды (пока что один для всех)
 import defaultTeamImage from "../../../../public/icons/vitaliyPenc.png";
 
-// Обновленный интерфейс для данных, получаемых с бэкенда
 interface Employee {
   id: number;
   firstName: string;
@@ -79,7 +76,6 @@ export default function TeamSection() {
 
   return (
     <div className={styles.teamSection}>
-      {/* Container for Partners */}
       <div className={styles.groupContainer}>
         <h2 className={styles.title}>{t("partnersTitle")}</h2>
         <div className={styles.teamGroup}>
@@ -98,7 +94,6 @@ export default function TeamSection() {
         </div>
       </div>
 
-      {/* Container for Managers */}
       <div className={styles.groupContainer}>
         <h2 className={styles.title}>{t("managersTitle")}</h2>
         <div className={styles.teamGroup}>

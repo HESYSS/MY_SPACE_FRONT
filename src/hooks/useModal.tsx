@@ -1,5 +1,3 @@
-// hooks/useModal.tsx
-
 import { createContext, useContext, useState, ReactNode } from 'react';
 
 type PreselectedForWhom = 'forSellers' | 'forBuyers' | null;

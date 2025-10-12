@@ -6,7 +6,6 @@ import arrowRight from "../../../public/icons/line.svg";
 import styles from "./worker.module.css";
 import { useModal } from "../../hooks/useModal";
 
-// Обновленный интерфейс для данных работника с полем photoUrl
 interface Employee {
   id: number;
   firstName: string;
@@ -20,7 +19,7 @@ interface Employee {
   positionEn?: string;
   profileEn?: string;
   aboutMeEn?: string;
-  photoUrl?: string; // <-- ДОБАВЛЕНО
+  photoUrl?: string;
 }
 
 const EmployeePage = () => {
@@ -99,20 +98,17 @@ const EmployeePage = () => {
     <div className={styles.mainDiv}>
       <div className={styles.containerWithOval}>
         <div className={styles.glowingOval}></div>
-        {/* Title block */}
         <div className={styles.titleArea}>
           <div className={styles.titleLine}></div>
           <h2 className={styles.readMoreTitle}>{t("readMoreTitle")}</h2>
         </div>
-        {/* Employee information block wrapped in a new container */}
         <div className={styles.contactsBlockWrapper}>
           <div className={styles.contactsBlock}>
             <div className={styles.frame301}>
               <div className={styles.photoContainer}>
-                {/* Условный рендеринг: если есть photoUrl, используем его, иначе - заглушку */}
                 {employee.photoUrl ? (
                   <img
-                    src={employee.photoUrl} // <-- ИСПОЛЬЗУЕМ РЕАЛЬНЫЙ URL
+                    src={employee.photoUrl} 
                     alt={`${currentData.firstName} ${currentData.lastName}`}
                     className={styles.employeePhoto}
                   />
@@ -153,14 +149,12 @@ const EmployeePage = () => {
           </div>
         </div>
 
-        {/* Исправленный блок сотрудничества с обработчиками onClick */}
         <div className={styles.coworking}>
           <h3 className={styles.callToAction}>
             {t("consultationCallToAction")}
           </h3>
           <div className={styles.frame89}>
             <div className={styles.frame88}>
-              {/* Блок для Sellers/Landlords */}
               <div
                 className={styles.optionRow}
                 onClick={() => openModal("forSellers")}
@@ -179,7 +173,6 @@ const EmployeePage = () => {
                   </div>
                 </div>
               </div>
-              {/* Блок для Buyers/Tenants */}
               <div
                 className={styles.optionRow}
                 onClick={() => openModal("forBuyers")}

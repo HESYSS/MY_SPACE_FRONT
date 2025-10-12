@@ -1,5 +1,3 @@
-// src/components/Layout.tsx
-
 import React, { ReactNode } from "react";
 import Header from "../Header";
 import Footer from "../Footer";
@@ -14,12 +12,11 @@ const Layout = ({ children }: LayoutProps) => {
   return (
     <ModalProvider>
       {" "}
-      {/* Оборачиваем весь макет в провайдер */}
       <div className="layout">
         <Header />
         <main>{children}</main>
         <Footer />
-        <ConsultationModal /> {/* Размещаем модалку здесь */}
+        <ConsultationModal />
       </div>
     </ModalProvider>
   );

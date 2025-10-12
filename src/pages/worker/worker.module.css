@@ -1,6 +1,3 @@
-/* ==========================================================================
-   Базовые стили для ПК (широких экранов)
-   ========================================================================== */
 .mainDiv {
   display: flex;
   flex-direction: column;
@@ -10,17 +7,15 @@
   height: auto;
   background-color: transparent;
   margin: 0 auto;
-  padding: 0 20px; /* Отступ для предотвращения прилипания к краям */
+  padding: 0 20px;
 }
 
-/* Новый контейнер для всего содержимого */
 .containerWithOval {
   position: relative;
-  overflow: hidden; /* Меняем на hidden, чтобы овал не выходил за пределы */
+  overflow: hidden;
   width: 100%;
 }
 
-/* Контейнер для заголовка и линии */
 .titleArea {
   display: flex;
   flex-direction: row;
@@ -327,24 +322,20 @@
   background: rgba(3, 185, 179, 0.5);
   filter: blur(250px);
   z-index: 1;
-  transform: translateX(50%); /* Центрируем по горизонтали */
+  transform: translateX(50%);
 }
 
-/* НОВЫЕ СТИЛИ: Эффект при наведении на весь блок */
 .optionRow:hover .optionText {
-  color: #03b9b3; /* Цвет текста станет бирюзовым */
+  color: #03b9b3;
   cursor: pointer;
 }
 
 .optionRow:hover .arrowIcon {
-  transform: translateX(5px); /* Стрелка немного сдвинется вправо */
-  filter: brightness(0) invert(1); /* Это сделает SVG белым */
+  transform: translateX(5px);
+  filter: brightness(0) invert(1);
   cursor: pointer;
 }
 
-/* ==========================================================================
-   Медиазапросы для планшетов
-   ========================================================================== */
 @media (min-width: 769px) and (max-width: 1300px) {
   .mainDiv {
     display: flex;
@@ -358,7 +349,6 @@
     padding: 0 20px;
   }
 
-  /* Контейнер для заголовка и линии */
   .titleArea {
     display: flex;
     flex-direction: column-reverse;
@@ -370,7 +360,6 @@
     padding: 0 20px;
   }
 
-  /* Градиентная линия */
   .titleLine {
     height: 1px;
     width: 500px;
@@ -380,7 +369,6 @@
     margin-left: -120px;
   }
 
-  /* Заголовок "ЧИТАТИ БІЛЬШЕ" */
   .readMoreTitle {
     font-size: 48px;
     line-height: 56px;
@@ -388,7 +376,6 @@
     text-align: center;
   }
 
-  /* Обертка для блока контактов (информация о сотруднике) */
   .contactsBlockWrapper {
     width: 729px;
     margin-bottom: 80px;
@@ -457,11 +444,10 @@
     width: 100%;
   }
 
-  /* Блок "Бажаєте отримати консультацію?" */
   .coworking {
     display: flex;
     flex-direction: row;
-    flex-wrap: nowrap; /* Важное изменение */
+    flex-wrap: nowrap;
     justify-content: space-between;
     align-items: flex-start;
     gap: 40px;
@@ -471,19 +457,17 @@
     padding: 0 20px;
   }
 
-  /* Заголовок "Бажаєте отримати консультацію?" */
   .callToAction {
     font-size: 36px;
     line-height: 1.2;
     text-align: left;
-    flex: 0 1 300px; /* Важное изменение */
+    flex: 0 1 300px; 
     margin: 0;
   }
 
-  /* Контейнер с двумя опциями */
   .frame89 {
     padding: 20px;
-    flex: 1 1 400px; /* Важное изменение */
+    flex: 1 1 400px;
     width: auto;
     height: auto;
     gap: 10px;
@@ -492,7 +476,6 @@
     box-sizing: border-box;
   }
 
-  /* Внутренний контейнер опций */
   .frame88 {
     display: flex;
     flex-direction: column;
@@ -502,7 +485,6 @@
     height: auto;
   }
 
-  /* Строка с текстом и стрелкой */
   .frame86,
   .frame84 {
     justify-content: space-between;
@@ -511,14 +493,12 @@
     padding: 0;
   }
 
-  /* Текст опций */
   .optionText {
     font-size: 20px;
     line-height: 1.5;
     white-space: normal;
   }
 
-  /* Стрелка */
   .arrowIcon {
     width: 18px;
     height: 18px;
@@ -526,7 +506,6 @@
     margin-left: 25px;
   }
 
-  /* Овал */
   .glowingOval {
     width: 70vw;
     height: 30vw;
@@ -536,9 +515,7 @@
     transform: translateX(0);
   }
 }
-/* ==========================================================================
-   Медиазапросы для мобильных устройств (до 768px)
-   ========================================================================== */
+
 @media (max-width: 768px) {
   .mainDiv {
     padding: 0 15px;
@@ -625,12 +602,11 @@
     line-height: 1.5;
   }
 
-  /* Блок "Бажаєте отримати консультацію?" */
   .coworking {
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
-    justify-content: flex-start; /* Изменено, чтобы элементы не раздвигались */
+    justify-content: flex-start;
     align-items: center;
     gap: 50px;
     width: 100%;
@@ -639,7 +615,6 @@
     margin-top: 80px;
   }
 
-  /* Заголовок "Бажаєте отримати консультацію?" */
   .callToAction {
     font-size: 14px;
     line-height: 1.2;
@@ -649,26 +624,23 @@
     white-space: normal;
   }
 
-  /* Контейнер с двумя опциями */
   .frame89 {
     padding: 3px;
-    flex-grow: 0; /* Изменено, чтобы контейнер не растягивался */
-    flex-shrink: 0; /* Изменено, чтобы контейнер не сжимался */
-    width: fit-content; /* Занимает только необходимую ширину */
+    flex-grow: 0;
+    flex-shrink: 0;
+    width: fit-content;
     height: auto;
     gap: 5px;
   }
 
-  /* Внутренний контейнер опций */
   .frame88 {
     gap: 5px;
     align-items: flex-start;
   }
 
-  /* Строка с текстом и стрелкой */
   .frame86,
   .frame84 {
-    justify-content: flex-start; /* Изменено, чтобы элементы выравнивались по левому краю */
+    justify-content: flex-start;
     align-items: center;
     gap: 5px;
     width: 100%;

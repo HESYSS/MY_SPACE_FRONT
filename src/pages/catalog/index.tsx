@@ -21,7 +21,6 @@ const typeMap: Record<string, string> = {
   residential: "Житлова",
   commercial: "Комерційна",
 };
-// Сериализация фильтров в URL-параметры
 function buildQueryFromFilters(
   filters: Record<string, any>
 ): Record<string, string> {
@@ -33,14 +32,12 @@ function buildQueryFromFilters(
       params[key] = val.join(",");
     } else if (typeof val === "object") {
       if (Array.isArray(val)) {
-        // Если val — массив простых значений
         return;
       } else if (typeof val === "object" && val !== null && key === "polygon") {
-        // Если val — объект (например массив массивов)
         const flattened = Object.values(val).map((v: any) =>
           Array.isArray(v) ? v.join(",") : String(v)
         );
-        params[key] = flattened.join(","); // объединяем всё в одну строку
+        params[key] = flattened.join(",");
       }
     } else {
       params[key] = String(val);
@@ -51,7 +48,6 @@ function buildQueryFromFilters(
 
 export default function CatalogPage() {
   const router = useRouter();
-  // 👈 ИЗМЕНЕНИЕ 1: Читаем параметр 'search' вместо 'q'
   const { deal, category, region, sort, search, ...restQuery } = router.query;
   const isOutOfCity = region === "kyiv" ? false : true;
   const type = typeMap[typeof category === "string" ? category : "Житлова"];
@@ -74,7 +70,6 @@ export default function CatalogPage() {
   const [locationFilter, setLocationFilter] = useState<any>();
   const [otherFilters, setOtherFilters] = useState<any>();
 
-  // 👈 ИЗМЕНЕНИЕ 2: Инициализация searchValue из 'search'
   const [searchValue, setSearchValue] = useState<string>(
     typeof search === "string" ? search : ""
   );
@@ -85,20 +80,15 @@ export default function CatalogPage() {
   useEffect(() => {
     if (!router.isReady) return;
 
-    // Сегмент роута
     const dealFromRoute = router.query.deal || router.query.slug || "Оренда";
 
-    // Парсим фильтры из URL
     let otherFilters: Record<string, any> = {};
     let locationFilters: Record<string, any> = {};
 
     if (typeof router.query.otherfilters === "string") {
       try {
-        // 1. Декодируем URI
         const decoded = decodeURIComponent(router.query.otherfilters);
-        // 2. Парсим JSON
         otherFilters = JSON.parse(decoded);
-        console.log("otherFilters:", otherFilters);
       } catch (e) {
         console.warn("Ошибка парсинга otherfilters", e);
       }
@@ -107,13 +97,11 @@ export default function CatalogPage() {
       try {
         const decoded = decodeURIComponent(router.query.locationfilters);
         locationFilters = JSON.parse(decoded);
-        console.log("locationFilters:", locationFilters);
       } catch (e) {
         console.warn("Ошибка парсинга locationfilters", e);
       }
     }
 
-    // Обновляем состояние только при изменении
     setOtherFilters((prev: any) =>
       JSON.stringify(prev) === JSON.stringify(otherFilters)
         ? prev
@@ -125,10 +113,8 @@ export default function CatalogPage() {
         : locationFilters
     );
 
-    // 👈 ИЗМЕНЕНИЕ 3: Обновляем searchValue из 'search'
     if (typeof router.query.search === "string")
       setSearchValue(router.query.search);
-    // Сбрасываем страницу на первую при смене search или sort
     if (
       typeof router.query.search === "string" ||
       (typeof router.query.sort === "string" &&
@@ -140,7 +126,6 @@ export default function CatalogPage() {
     if (typeof router.query.sort === "string") setSortOption(router.query.sort);
   }, [router.isReady, router.asPath]);
 
-  // Эффект для загрузки списка объектов (запускается при изменении searchValue)
   useEffect(() => {
     const controller = new AbortController();
     const timeout = setTimeout(async () => {
@@ -148,11 +133,6 @@ export default function CatalogPage() {
       try {
         const standardizedLocation = standardizeFilters(locationFilter);
         const standardizedFilters = standardizeFilters(otherFilters);
-        console.log("fetching with filters:", {
-          standardizedLocation,
-          standardizedFilters,
-        });
-
         const params = new URLSearchParams({
           page: page.toString(),
           limit: limit.toString(),
@@ -161,7 +141,6 @@ export default function CatalogPage() {
           lang: lang,
         });
 
-        // 👈 ЗДЕСЬ ИСПОЛЬЗУЕМ Q для БЭКЕНДА
         if (searchValue) params.set("q", searchValue);
         if (sortOption && sortOption !== "none") params.set("sort", sortOption);
         const backendUrl = process.env.REACT_APP_API_URL;
@@ -175,24 +154,22 @@ export default function CatalogPage() {
         setTotalCount(data.total);
       } catch (err: any) {
         if (err.name === "AbortError") {
-          console.log("Запрос отменён из-за нового фильтра/страницы");
         } else {
           console.error(err);
         }
       } finally {
         setLoading(false);
       }
-    }, 500); // задержка 500мс
+    }, 500);
 
     return () => {
       clearTimeout(timeout);
       controller.abort();
     };
-  }, [page, locationFilter, otherFilters, lang, searchValue, sortOption]); // 👈 searchValue в зависимостях
+  }, [page, locationFilter, otherFilters, lang, searchValue, sortOption]);
 
-  // Эффект для загрузки координат (также запускается при изменении searchValue)
   useEffect(() => {
-    const controller = new AbortController(); // для отмены запроса если фильтры изменились раньше чем задержка закончилась
+    const controller = new AbortController();
     const timeout = setTimeout(async () => {
       try {
         const standardizedLocation = standardizeFilters(locationFilter);
@@ -204,7 +181,6 @@ export default function CatalogPage() {
           ...buildQueryFromFilters(standardizedLocation),
           ...buildQueryFromFilters(standardizedFilters),
         });
-        // 👈 ЗДЕСЬ ИСПОЛЬЗУЕМ Q для БЭКЕНДА
         if (searchValue) params.set("q", searchValue);
         if (sortOption && sortOption !== "none") params.set("sort", sortOption);
         const backendUrl = process.env.REACT_APP_API_URL;
@@ -216,18 +192,17 @@ export default function CatalogPage() {
         setAllProperties(data);
       } catch (err: any) {
         if (err.name === "AbortError") {
-          console.log("Запрос отменён из-за нового фильтра");
         } else {
           console.error(err);
         }
       }
-    }, 50); // задержка 500мс
+    }, 50);
 
     return () => {
       clearTimeout(timeout);
-      controller.abort(); // отменяем предыдущий запрос
+      controller.abort();
     };
-  }, [locationFilter, otherFilters, searchValue, sortOption]); // 👈 searchValue в зависимостях
+  }, [locationFilter, otherFilters, searchValue, sortOption]);
 
   const containerClass = showMap
     ? styles.catalogMapOnly
@@ -263,10 +238,10 @@ export default function CatalogPage() {
         className={`${styles.rightColumn} ${showMap ? styles.mapVisible : ""}`}
       >
         {isMobileOrTablet &&
-          showMap && ( // 👈 Показываем кнопку только на мобильных/планшетах и когда карта активна
+          showMap && (
             <button
               className={styles.closeMapButton}
-              onClick={() => setShowMap(false)} // 👈 Кнопка закрывает карту
+              onClick={() => setShowMap(false)} 
             >
               {t("close_map")}
             </button>

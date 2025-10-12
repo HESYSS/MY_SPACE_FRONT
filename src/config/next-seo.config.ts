@@ -29,7 +29,7 @@ const config: DefaultSeoProps = {
   },
   additionalMetaTags: [
     { name: "robots", content: "index, follow" },
-    { name: "application-name", content: "MySpace" }, // 🔹 ярлык для PWA и Google
+    { name: "application-name", content: "MySpace" },
   ],
   additionalLinkTags: [
     {

@@ -1,5 +1,3 @@
-// components/CoworkingSection/CoworkingSection.tsx
-
 import styles from './CoworkingSection.module.css';
 import Image from 'next/image';
 import arrowRight from '../../../../public/icons/line.svg';
@@ -20,7 +18,6 @@ export default function CoworkingSection() {
         <h3 className={styles.callToAction}>{t('consultationCallToAction')}</h3>
         <div className={styles.frame89}>
           <div className={styles.frame88}>
-            {/* Блок для Sellers/Landlords */}
             <div className={styles.optionRow} onClick={() => openModal('forSellers')}>
               <div className={styles.frame87}>
                 <div className={styles.line16}></div>
@@ -30,7 +27,6 @@ export default function CoworkingSection() {
                 </div>
               </div>
             </div>
-            {/* Блок для Buyers/Tenants */}
             <div className={styles.optionRow} onClick={() => openModal('forBuyers')}>
               <div className={styles.frame85}>
                 <div className={styles.line17}></div>

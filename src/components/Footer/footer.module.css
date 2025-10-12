@@ -1,11 +1,9 @@
-/* Общие стили для футера */
 .footer {
   background-color: #050505;
   color: #fff;
   font-family: "Montserrat", sans-serif;
   opacity: 1;
 
-  /* Размеры и отступы из макета */
   width: 100%;
   max-width: 1920px;
   height: 325px;
@@ -19,25 +17,23 @@
   align-items: center;
 }
 
-/* Основной контент (колонки) */
 .mainContent {
   width: 1200px;
   max-width: 90%;
   display: flex;
   justify-content: flex-start;
-  gap: 70px; /* Отступ между колонками */
+  gap: 70px;
   margin-left: 25px;
 }
 
-/* Секция с логотипом */
 .logoSection {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   width: 247.5px;
   height: 295px;
-  gap: 218px; /* Расстояние между логотипом и копирайтом */
-  justify-content: space-between; /* Равномерное распределение элементов */
+  gap: 218px;
+  justify-content: space-between;
 }
 
 .logoSection img {
@@ -47,15 +43,14 @@
 
 .copyright {
   font-family: "Inter", sans-serif;
-  font-weight: 400; /* Regular */
+  font-weight: 400;
   font-size: 16px;
   line-height: 100%;
   letter-spacing: 0%;
   color: #565656;
-  white-space: nowrap; /* Этот стиль предотвращает перенос текста */
+  white-space: nowrap;
 }
 
-/* Секции меню, информации и контактов */
 .menuSection,
 .infoSection,
 .contactSection {
@@ -65,31 +60,29 @@
   height: 295px;
 }
 
-/* Заголовки колонок */
 .footerHeading {
   font-family: "Inter", sans-serif;
   font-weight: 400;
   font-size: 16px;
-  line-height: 1; /* 100% = 1 */
+  line-height: 1;
   letter-spacing: 0;
   margin-bottom: 20px;
   color: #565656;
 }
 
-/* Списки ссылок */
 .footerLinks {
   list-style: none;
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 20px; /* Отступ между элементами списка */
+  gap: 20px;
 }
 
 .footerLinks a {
   font-family: "Inter", sans-serif;
   font-weight: 400;
   font-size: 20px;
-  line-height: 1; /* 100% = 1 */
+  line-height: 1;
   letter-spacing: 0;
   color: #ebebeb;
   text-transform: uppercase;
@@ -101,11 +94,10 @@
   color: #03b9b3;
 }
 
-/* Блок с социальными иконками */
 .socialIcons {
   display: flex;
   gap: 10px;
-  margin-top: 40px; /* Отступ от основного контента */
+  margin-top: 40px;
 }
 
 .socialIcon {
@@ -114,7 +106,6 @@
   margin-top: 50px;
 }
 
-/* Планшеты (до 768px) */
 @media (min-width: 769px) and (max-width: 1300px) {
   .footer {
     min-width: 800px;
@@ -129,7 +120,7 @@
     max-width: 1200px;
     width: auto;
 
-    gap: 30px; /* Отступ между колонками */
+    gap: 30px;
   }
 
   .logoSection {
@@ -138,8 +129,8 @@
     align-items: flex-start;
     width: 172.5px;
     height: 20px;
-    gap: 218px; /* Расстояние между логотипом и копирайтом */
-    justify-content: space-between; /* Равномерное распределение элементов */
+    gap: 218px;
+    justify-content: space-between;
   }
 
   .logoSection img {
@@ -166,7 +157,7 @@
   }
 
   .footerLinks {
-    gap: 10px; /* Отступ между элементами списка */
+    gap: 10px;
   }
 
   .footerLinks a {
@@ -175,7 +166,7 @@
 
   .socialIcons {
     gap: 20px;
-    margin-top: 30px; /* Отступ от основного контента */
+    margin-top: 30px;
   }
 
   .copyright {
@@ -184,7 +175,6 @@
   }
 }
 
-/* --- Мобильная адаптация (до 768px) --- */
 @media (max-width: 768px) {
   .footer {
     width: 100%;

@@ -1,12 +1,10 @@
-// src/pages/contacts.tsx
 import React, { memo } from "react";
 import Image from "next/image";
 import styles from "./contacts.module.css";
 import { useTranslation } from "react-i18next";
-import { useModal } from '../../hooks/useModal'; // Импортируем наш хук
-import Link from "next/link"; // Импортируем компонент Link из Next.js
+import { useModal } from '../../hooks/useModal'; 
+import Link from "next/link";
 
-// Импорт изображений, если они нужны для контактов
 import youtubeIcon from "../../../public/icons/youtube.svg";
 import instagramIcon from "../../../public/icons/instagram.svg";
 import arrowRight from "../../../public/icons/line.svg";
@@ -14,25 +12,21 @@ import star from "../../../public/icons/star.svg";
 
 const ContactsPage: React.FC = () => {
   const { t } = useTranslation("common");
-  const { openModal } = useModal(); // Используем хук для доступа к функции открытия модалки
+  const { openModal } = useModal();
 
   return (
     <div className={styles.containerWithOval}>
-      {/* Овал со свечением, который теперь позиционируется относительно containerWithOval */}
       <div className={styles.glowingOval}></div>
 
-      {/* Title block */}
       <div className={styles.titleArea}>
         <div className={styles.titleLine}></div>
         <h2 className={styles.readMoreTitle}>{t('contactsTitle')}</h2>
       </div>
 
-      {/* Contacts block wrapper */}
       <div className={styles.contactsBlockWrapper}>
         <div className={styles.contactsBlock}>
           <div className={styles.info}>
             <div className={styles.contactsText}>
-              {/* Соціальні мережі */}
               <div className={styles.contactItem}>
                 <div className={styles.contactIconContainer}>
                   <Image
@@ -44,7 +38,6 @@ const ContactsPage: React.FC = () => {
                 <div className={styles.contactDetails}>
                   <h4 className={styles.contactTitle}>{t('socialNetworksTitle')}</h4>
                   <div className={styles.socialLinks}>
-                    {/* YouTube link */}
                     <a
                       href="https://www.youtube.com/@MySpace-kyiv"
                       target="_blank"
@@ -59,7 +52,6 @@ const ContactsPage: React.FC = () => {
                       />
                       <p className={styles.socialText}>YouTube</p>
                     </a>
-                    {/* Instagram link */}
                     <a
                       href="https://www.instagram.com/myspace.kyiv"
                       target="_blank"
@@ -78,7 +70,6 @@ const ContactsPage: React.FC = () => {
                 </div>
               </div>
 
-              {/* Електронна пошта */}
               <div className={styles.contactItem}>
                 <div className={styles.contactIconContainer}>
                   <Image
@@ -93,7 +84,6 @@ const ContactsPage: React.FC = () => {
                 </div>
               </div>
 
-              {/* Номер телефону */}
               <div className={styles.contactItem}>
                 <div className={styles.contactIconContainer}>
                   <Image
@@ -108,7 +98,6 @@ const ContactsPage: React.FC = () => {
                 </div>
               </div>
 
-              {/* Адреса */}
               <div className={styles.contactItem}>
                 <div className={styles.contactIconContainer}>
                   <Image
@@ -126,7 +115,6 @@ const ContactsPage: React.FC = () => {
               </div>
             </div>
 
-            {/* Зв’язок та Години роботи */}
             <div className={styles.bottomRow}>
               <div className={styles.contactTextSection}>
                 <h4 className={styles.contactTitle}>{t('connectionTitle')}</h4>
@@ -149,12 +137,10 @@ const ContactsPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Coworking block */}
       <div className={styles.coworking}>
         <h3 className={styles.callToAction}>{t('consultationCallToAction')}</h3>
         <div className={styles.frame89}>
           <div className={styles.frame88}>
-            {/* Блок для Sellers/Landlords */}
             <div
               className={styles.optionRow}
               onClick={() => openModal('forSellers')}
@@ -171,7 +157,6 @@ const ContactsPage: React.FC = () => {
                 </div>
               </div>
             </div>
-            {/* Блок для Buyers/Tenants */}
             <div
               className={styles.optionRow}
               onClick={() => openModal('forBuyers')}

@@ -1,10 +1,7 @@
-// components/AboutUsSection/AboutUsSection.jsx
-
 import { useState, useEffect } from "react";
 import styles from "./AboutUsSection.module.css";
 import { useTranslation } from "react-i18next";
 
-// Интерфейс для данных об изображении
 interface SiteImage {
   id: number;
   name: string;
@@ -28,7 +25,6 @@ export default function AboutUsSection() {
           setAboutUsImage(foundImage.url);
         } else {
           console.warn("Изображение с именем 'teamAbout' не найдено.");
-          // Можно установить изображение-заглушку, если основное не найдено
           setAboutUsImage("/path/to/placeholder-image.png");
         }
       } else {

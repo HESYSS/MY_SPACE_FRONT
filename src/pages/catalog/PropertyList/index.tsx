@@ -35,7 +35,6 @@ export default function PropertyList({
         </div>
       )}
 
-      {/* Пагинация */}
       <div className={styles.pagination}>
         <button onClick={() => setPage(page - 1)} disabled={page === 1}>
           Назад

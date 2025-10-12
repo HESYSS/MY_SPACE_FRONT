@@ -1,4 +1,3 @@
-/* Coworking p */
 .coworkingP {
   display: flex;
   flex-direction: column;
@@ -13,7 +12,6 @@
   margin-bottom: 80px;
 }
 
-/* Coworking title */
 .coworkingTitle {
   display: flex;
   flex-direction: row;
@@ -24,7 +22,6 @@
   height: 75px;
 }
 
-/* Line 8 */
 .line8 {
   width: 100%;
   height: 1px;
@@ -32,7 +29,6 @@
   transform: matrix(-1, 0, 0, 1, 0, 0);
 }
 
-/* Співпраця */
 .mainTitle {
   height: 75px;
   font-family: "Raleway", sans-serif;
@@ -44,7 +40,6 @@
   color: #ebebeb;
 }
 
-/* Coworking */
 .coworking {
   display: flex;
   flex-direction: row;
@@ -56,7 +51,6 @@
   height: 344px;
 }
 
-/* Бажаєте отримати консультацію? */
 .callToAction {
   width: 403px;
   height: 168px;
@@ -69,7 +63,6 @@
   color: #ebebeb;
 }
 
-/* Frame 89 */
 .frame89 {
   display: flex;
   flex-direction: column;
@@ -83,7 +76,6 @@
   box-sizing: border-box;
 }
 
-/* Frame 88 */
 .frame88 {
   display: flex;
   flex-direction: column;
@@ -94,7 +86,6 @@
   height: 284px;
 }
 
-/* Общие стили для строк с опциями */
 .frame87,
 .frame85,
 .frame83 {
@@ -108,7 +99,6 @@
   box-sizing: border-box;
 }
 
-/* Линии разделители */
 .line16,
 .line17,
 .line18 {
@@ -118,7 +108,6 @@
   box-sizing: border-box;
 }
 
-/* Общие стили для фреймов с текстом и стрелкой */
 .frame86,
 .frame84,
 .frame82 {
@@ -130,10 +119,8 @@
   width: 453px;
   height: 42px;
   box-sizing: border-box;
-  /* Удалили gap */
 }
 
-/* Текст опций */
 .optionText {
   font-family: "Raleway", sans-serif;
   font-style: normal;
@@ -147,25 +134,22 @@
   font-variant: small-caps;
 }
 
-/* Стили для изображений стрелок */
 .arrowIcon {
   width: 26px;
   height: 26px;
 }
 
-/* НОВЫЕ СТИЛИ: Эффект при наведении на весь блок */
 .optionRow:hover .optionText {
-  color: #03b9b3; /* Цвет текста станет бирюзовым */
+  color: #03b9b3;
   cursor: pointer;
 }
 
 .optionRow:hover .arrowIcon {
-  transform: translateX(5px); /* Стрелка немного сдвинется вправо */
-  filter: brightness(0) invert(1); /* Это сделает SVG белым */
+  transform: translateX(5px);
+  filter: brightness(0) invert(1);
   cursor: pointer;
 }
 
-/* --- Планшетная адаптация (769px - 1300px) --- */
 @media (min-width: 769px) and (max-width: 1300px) {
   .coworkingP {
     width: 90%;
@@ -241,7 +225,6 @@
   }
 }
 
-/* --- Мобильная адаптация (375px - 768px) --- */
 @media (max-width: 768px) {
   .coworkingP {
     width: 90%;
@@ -276,7 +259,7 @@
   }
   .callToAction,
   .frame89 {
-    width: 48%; /* Уменьшаем ширину, чтобы они поместились в одну строку */
+    width: 48%;
     height: auto;
   }
   .callToAction {

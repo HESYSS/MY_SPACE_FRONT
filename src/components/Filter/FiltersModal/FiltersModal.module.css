@@ -1,6 +1,3 @@
-/*
-  Base Styles
-*/
 .modalOverlay {
   position: fixed;
   top: 0;
@@ -32,19 +29,14 @@
   font-family: 'Inter', sans-serif;
 }
 
-/* Hide scrollbar for Chrome, Safari and Opera */
 .modalContent::-webkit-scrollbar {
   display: none;
 }
-/* Hide scrollbar for IE, Edge and Firefox */
 .modalContent {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
 
-/*
-  Header
-*/
 .header {
   display: flex;
   justify-content: space-between;
@@ -71,9 +63,6 @@
   right: 0;
 }
 
-/*
-  Sections & Labels
-*/
 .section {
   display: flex;
   flex-direction: column;
@@ -88,9 +77,6 @@
   padding-bottom: 0.5rem;
 }
 
-/*
-  Button Toggles (Category, Deal)
-*/
 .categoryToggle, .dealToggle {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -128,9 +114,6 @@
   color: #27c293;
 }
 
-/*
-  Price Inputs
-*/
 .priceContainer {
   display: flex;
   align-items: center;
@@ -171,9 +154,6 @@
   font-size: 1.2rem;
 }
 
-/*
-  Currency Toggle
-*/
 .currencyToggle {
   display: flex;
   background-color: #1a1a1a;
@@ -202,9 +182,6 @@
   border-color: #03B9B3;
 }
 
-/*
-  Dynamic Filter Sections (Floors, Area, Rooms)
-*/
 .dynamicFilters {
   display: flex;
   flex-direction: column;
@@ -222,7 +199,6 @@
   color: #ccc;
   border-bottom: 1px solid #1c1c1c;
   padding-bottom: 0.5rem;
-  /* ИЗМЕНЕНИЕ: добавил отступ снизу */
   margin-bottom: 0.5rem;
 }
 .inputRangeGroup {
@@ -283,9 +259,6 @@
   gap: 0.5rem;
 }
 
-/*
-  Footer and Action Buttons
-*/
 .footer {
   display: flex;
   justify-content: space-between;
@@ -324,11 +297,7 @@
   color: #fff;
 }
 
-/*
-  ========================================================================================
-  АДАПТАЦИЯ ДЛЯ МОБИЛЬНЫХ УСТРОЙСТВ (до 768px)
-  ========================================================================================
-*/
+
 @media (max-width: 768px) {
   .modalContent {
     width: 95%;
@@ -371,11 +340,6 @@
   }
 }
 
-/*
-  ========================================================================================
-  АДАПТАЦИЯ ДЛЯ ПЛАНШЕТОВ (от 769px до 1300px)
-  ========================================================================================
-*/
 @media (min-width: 769px) and (max-width: 1300px) {
   .modalContent {
     max-width: 750px;

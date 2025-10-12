@@ -1,4 +1,3 @@
-/* Базовые стили для всех экранов (гибкие по умолчанию) */
 .containerWithOval {
   position: relative;
   overflow: hidden;
@@ -6,7 +5,6 @@
   padding: 20px 0;
 }
 
-/* Овал теперь позиционируется относительно контейнера и масштабируется */
 .glowingOval {
   position: absolute;
   width: 70vw;
@@ -21,7 +19,6 @@
   transform: translateX(50%);
 }
 
-/* Контейнер заголовка */
 .titleArea {
   display: flex;
   flex-direction: row;
@@ -54,7 +51,6 @@
   flex-shrink: 0;
 }
 
-/* Обертка для блока контактов */
 .contactsBlockWrapper {
   padding: 1px;
   border-radius: 20px;
@@ -337,21 +333,16 @@
   flex-shrink: 0;
 }
 
-/* НОВЫЕ СТИЛИ: Эффект при наведении на весь блок */
 .optionRow:hover .optionText {
-  color: #03b9b3; /* Цвет текста станет бирюзовым */
+  color: #03b9b3;
   cursor: pointer;
 }
 
 .optionRow:hover .arrowIcon {
-  transform: translateX(5px); /* Стрелка немного сдвинется вправо */
-  filter: brightness(0) invert(1); /* Это сделает SVG белым */
+  transform: translateX(5px);
+  filter: brightness(0) invert(1);
   cursor: pointer;
 }
-
-/* -------------------------------------------------------------------------- */
-/* Media Queries */
-/* -------------------------------------------------------------------------- */
 
 @media (min-width: 769px) and (max-width: 1300px) {
   .titleArea {
@@ -374,14 +365,12 @@
     gap: 20px;
   }
 
-  /* Контакты: сетка 2x2 */
   .contactsText {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 20px;
   }
 
-  /* Нижний ряд: располагаем колонками */
   .bottomRow {
     flex-direction: column;
     gap: 30px;
@@ -402,7 +391,6 @@
     flex: none;
   }
 
-  /* Блок "Консультации" */
   .coworking {
     flex-direction: row;
     flex-wrap: wrap;
@@ -437,7 +425,6 @@
 }
 
 @media (max-width: 768px) {
-  /* Заголовки и контейнеры */
   .titleArea {
     flex-direction: column-reverse;
     align-items: flex-end;
@@ -467,7 +454,6 @@
     gap: 20px;
   }
 
-  /* Контакты: теперь сетка 2x2 */
   .contactsText {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -479,7 +465,6 @@
     flex: none;
   }
 
-  /* Уменьшаем шрифты для вмещения в две колонки */
   .contactTitle {
     font-size: 16px;
     line-height: 19px;
@@ -491,7 +476,6 @@
     line-height: 14px;
   }
 
-  /* Нижний ряд: вертикальный список */
   .bottomRow {
     flex-direction: column;
     gap: 20px;
@@ -524,11 +508,10 @@
     line-height: 14px;
   }
 
-  /* Блок "Консультации" */
   .coworking {
     display: flex;
     flex-direction: row;
-    flex-wrap: nowrap; /* Разрешаем элементам переноситься */
+    flex-wrap: nowrap; 
     justify-content: center;
     align-items: center;
     width: 90%;
@@ -538,28 +521,28 @@
   }
 
   .callToAction {
-    font-size: 16px; /* Уменьшаем шрифт заголовка */
+    font-size: 16px;
     line-height: 20px;
     text-align: left;
     width: auto;
     flex-basis: 100%;
-    margin-bottom: 10px; /* Добавляем отступ снизу */
+    margin-bottom: 10px;
   }
 
   .frame89 {
     width: 100%;
     max-width: none;
     padding: 10px;
-    flex: 1 1 100%; /* Устанавливаем гибкий размер, чтобы блок занимал всю ширину */
+    flex: 1 1 100%;
   }
 
   .frame88 {
-    gap: 10px; /* Уменьшаем отступ между опциями */
+    gap: 10px;
     align-items: flex-start;
   }
 
   .optionText {
-    font-size: 14px; /* Уменьшаем шрифт текста опций */
+    font-size: 14px;
     line-height: 1.5;
   }
 

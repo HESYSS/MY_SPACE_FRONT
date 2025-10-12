@@ -25,16 +25,13 @@ export default function FiltersModal({ onClose }: FiltersModalProps) {
   const [propertyType, setPropertyType] = useState<string>("");
   const [filters, setFilters] = useState<Record<string, any>>({});
   const [currency, setCurrency] = useState<"UAH" | "USD">("USD");
-  // Инициализация из URL
   useEffect(() => {
     if (!router.isReady) return;
 
     let parsedOtherFilters: Record<string, any> = {};
     if (typeof router.query.otherfilters === "string") {
       try {
-        // 1. Декодируем URI
         const decoded = decodeURIComponent(router.query.otherfilters);
-        // 2. Парсим JSON
         parsedOtherFilters = JSON.parse(decoded);
       } catch (e) {
         console.warn("Ошибка парсинга otherfilters", e);
@@ -44,14 +41,12 @@ export default function FiltersModal({ onClose }: FiltersModalProps) {
     setCategory(parsedOtherFilters.category || "Житлова");
     setPropertyType(parsedOtherFilters.type || "");
   }, [router.isReady, router.query.otherfilters]);
-  // Обновление URL при изменении фильтра
   const updateUrl = (newFilters: Record<string, any>) => {
     const query: Record<string, string> = {
       ...router.query,
       otherfilters: JSON.stringify(newFilters),
     };
 
-    // Убираем пустые значения
     Object.keys(query).forEach((key) => {
       if (
         query[key] === "" ||
@@ -69,7 +64,6 @@ export default function FiltersModal({ onClose }: FiltersModalProps) {
 
   const handleCurrencyToggle = (newCurrency: "UAH" | "USD") => {
     setCurrency(newCurrency);
-    // Не обновляем URL сразу — сохраняем в локальном состоянии
   };
 
   const handleInputChange = (filterName: string, value: any) => {
@@ -80,34 +74,31 @@ export default function FiltersModal({ onClose }: FiltersModalProps) {
   };
 
   const handleSubmit = () => {
-    const otherFilters = {
-      ...filters,
-      category,
-      type: propertyType,
-      currency,
-    };
-    onClose();
-    router.replace(
-      {
-        pathname: router.pathname,
-        query: {
-          otherfilters: JSON.stringify(otherFilters),
-        },
-      },
-      undefined,
-      { shallow: true }
-    );
-  };
+      const otherFilters = {
+        ...filters,
+        category,
+        type: propertyType,
+        currency,
+      };
+      onClose();
+      const query = {
+        ...router.query,
+        otherfilters: JSON.stringify(otherFilters),
+      };
 
+      router.replace({ pathname: router.pathname, query }, undefined, {
+        shallow: true,
+      });
+    };
+    
   const resetFilters = () => {
-    setFilters({}); // очищаем все фильтры
-    updateUrl({}); // очищаем otherfilters в URL
+    setFilters({});
+    updateUrl({});
   };
 
   return (
     <div className={styles.modalOverlay} onClick={onClose}>
       <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
-        {/* Заголовок + кнопка переключения валюты */}
         <div className={styles.header}>
           <h2 className={styles.title}>{t("filter_button")}</h2>
           <button onClick={onClose} className={styles.closeButton}>
@@ -115,7 +106,6 @@ export default function FiltersModal({ onClose }: FiltersModalProps) {
           </button>
         </div>
 
-        {/* Категорія */}
         <div className={styles.section}>
           <div className={styles.label}>{t("category")}</div>
           <div className={styles.categoryToggle}>
@@ -131,12 +121,9 @@ export default function FiltersModal({ onClose }: FiltersModalProps) {
                     const newCategory = catUa as keyof typeof CATEGORY_TYPES;
                     const newType = CATEGORY_TYPES[newCategory]["ua"][0];
 
-                    // Локально обновляем состояние
                     setCategory(newCategory);
                     setPropertyType(newType);
-                    setFilters({}); // сбросить остальные фильтры
-
-                    // Не трогаем URL, обновим его только при handleSubmit
+                    setFilters({});
                   }}
                 >
                   {category === catUa && (
@@ -159,7 +146,6 @@ export default function FiltersModal({ onClose }: FiltersModalProps) {
           </div>
         </div>
 
-        {/* Тип нерухомості */}
         <div className={styles.section}>
           <div className={styles.label}>{t("propertyType")}</div>
           <div className={styles.dealToggle}>
@@ -175,11 +161,8 @@ export default function FiltersModal({ onClose }: FiltersModalProps) {
                   onClick={() => {
                     const newType = typeUa;
 
-                    // Локально обновляем состояние
                     setPropertyType(newType);
-                    setFilters({}); // сброс остальных фильтров
-
-                    // URL не трогаем, он будет обновляться при handleSubmit
+                    setFilters({});
                   }}
                 >
                   {propertyType === typeUa && (
@@ -201,8 +184,6 @@ export default function FiltersModal({ onClose }: FiltersModalProps) {
             })}
           </div>
         </div>
-        {/* Оренда / Продаж */}
-        {/* Оренда / Продаж */}
         <div className={styles.section}>
           <div className={styles.label}>{t("dealType")}</div>
           <div className={styles.dealToggle}>
@@ -277,8 +258,6 @@ export default function FiltersModal({ onClose }: FiltersModalProps) {
             </div>
           </div>
         </div>
-
-        {/* Динамічні фільтри */}
         <div className={styles.dynamicFilters}>
           {FILTERS_BY_TYPE[propertyType]?.["ua"].map((filterUa, index) => {
             const filterEn =
@@ -414,14 +393,12 @@ export default function FiltersModal({ onClose }: FiltersModalProps) {
             );
           })}
         </div>
-
-        {/* Кнопки */}
         <div className={styles.footer}>
           <button onClick={resetFilters} className={styles.resetButton}>
-            {t("reset")} {/* вместо "Скинути" */}
+            {t("reset")}
           </button>
           <button onClick={handleSubmit} className={styles.submitButton}>
-            {t("showResults") /* вместо "Показати результати" */}
+            {t("showResults")}
           </button>
         </div>
       </div>

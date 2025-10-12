@@ -4,7 +4,7 @@ import styles from "./main.module.css";
 import CoworkingSection from "./CoworkingSection";
 import ImageCarousel from "./ImageCarousel";
 import VideoSearchOverlay from "./VideoSearchOverlay";
-import { useTranslation } from "react-i18next"; // Импортируем хук
+import { useTranslation } from "react-i18next";
 
 export default function HomePage() {
   const { t } = useTranslation('common');

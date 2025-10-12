@@ -1,4 +1,3 @@
-/* Header block */
 .header {
   box-sizing: border-box;
   display: flex;
@@ -15,7 +14,6 @@
   z-index: 100;
 }
 
-/* Navbar */
 .navbar {
   display: flex;
   flex-direction: row;
@@ -27,7 +25,6 @@
   margin-left: 25px;
 }
 
-/* Left Nav (Лого и навигация) */
 .leftNav {
   display: flex;
   flex-direction: row;
@@ -35,13 +32,11 @@
   gap: 41px;
 }
 
-/* Logo */
 .logo img {
   width: 108px;
   height: 56px;
 }
 
-/* Navigation Links */
 .navLinks {
   display: flex;
   flex-direction: row;
@@ -67,19 +62,16 @@
   color: #03b9b3;
 }
 
-/* Active link */
 .navLinks .activeLink {
   color: #03b9b3;
 }
 
-/* Right Nav */
 .navRight {
   display: flex;
   flex-direction: row;
   align-items: center;
 }
 
-/* CTA Button */
 .ctaButton {
   display: flex;
   flex-direction: row;
@@ -109,7 +101,6 @@
   color: #ffffff;
 }
 
-/* Contact Info */
 .contactInfo {
   display: flex;
   flex-direction: row;
@@ -117,7 +108,6 @@
   gap: 41px;
 }
 
-/* Phone number */
 .phone {
   font-family: "Inter", sans-serif;
   font-style: normal;
@@ -127,12 +117,6 @@
   color: #ebebeb;
   text-decoration: none;
 }
-
-/* ==========================================================================
-  Мобильные и планшетные стили (адаптация)
-  ========================================================================== */
-
-/* ... (весь код стилей до медиа-запроса) ... */
 
 @media (max-width: 1300px) {
   .header {
@@ -148,7 +132,6 @@
     width: 90%;
   }
 
-  /* Показываем кнопку-гамбургер */
   .mobileMenuToggle {
     display: flex;
     flex-direction: row;
@@ -156,13 +139,12 @@
     gap: 20px;
   }
 
-  /* Общая кнопка-гамбургер для 3 полосок - ИЗМЕНЕНО */
   .hamburgerButton {
     background: transparent;
     border: none;
     cursor: pointer;
     width: 40px;
-    height: 30px; /* УМЕНЬШЕНО */
+    height: 30px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -172,7 +154,6 @@
     padding: 0;
   }
 
-  /* Стили для полосок */
   .hamburgerLine {
     display: block;
     width: 100%;
@@ -182,9 +163,8 @@
     transition: all 0.3s ease-in-out;
   }
 
-  /* Анимация при открытом меню (класс .open) - ИЗМЕНЕНО */
   .hamburgerButton.open .hamburgerLine:first-child {
-    transform: translateY(13px) rotate(45deg); /* Скорректировано */
+    transform: translateY(13px) rotate(45deg);
   }
 
   .hamburgerButton.open .hamburgerLine:nth-child(2) {
@@ -192,10 +172,9 @@
   }
 
   .hamburgerButton.open .hamburgerLine:last-child {
-    transform: translateY(-13px) rotate(-45deg); /* Скорректировано */
+    transform: translateY(-13px) rotate(-45deg);
   }
 
-  /* ... (весь код мобильного меню после кнопки) ... */
   .mobileMenuWrapper {
     display: flex;
     flex-direction: column;
@@ -258,7 +237,6 @@
     margin: 0;
   }
 
-  /* Блок с выравниванием кнопки "Консультація" */
   .mobileNavLinks .ctaButton {
     background: none;
     padding: 0;
@@ -273,7 +251,6 @@
   }
 }
 
-/* Скрываем кнопки меню на больших экранах */
 @media (min-width: 1301px) {
   .mobileMenuToggle {
     display: none;

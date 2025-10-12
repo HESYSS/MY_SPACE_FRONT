@@ -9,7 +9,7 @@ interface TeamMemberCardProps {
   photoSrc: string;
   name: string;
   position: string;
-  id: number; // id работника
+  id: number;
 }
 
 export default function TeamMemberCard({

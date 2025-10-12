@@ -1,5 +1,3 @@
-/* admin.module.css */
-
 .adminContainer {
   max-width: 800px;
   margin: 40px auto;
@@ -577,7 +575,6 @@
   line-height: 1.5;
 }
 
-/* Новые стили для управления изображениями товаров */
 .subTitle {
   color: #fff;
   margin-top: 30px;
@@ -609,20 +606,19 @@
 
 .itemImageList {
   display: flex;
-  flex-direction: row; /* Элементы располагаются в одну линию */
-  flex-wrap: nowrap; /* Запрещает перенос элементов на новую строку */
-  overflow-x: auto; /* Включает горизонтальную прокрутку */
-  gap: 15px; /* Сохраняем отступы между изображениями */
+  flex-direction: row;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  gap: 15px;
   list-style: none;
-  padding: 10px 0; /* Добавляем небольшой отступ для прокрутки */
+  padding: 10px 0;
   margin-top: 20px;
 }
 
 .itemImageCard {
-  /* Устанавливаем фиксированные размеры, чтобы элементы не сжимались */
   width: 150px;
   height: 150px; 
-  flex-shrink: 0; /* Запрещает элементам уменьшаться */
+  flex-shrink: 0;
   position: relative;
   border-radius: 8px;
   overflow: hidden;

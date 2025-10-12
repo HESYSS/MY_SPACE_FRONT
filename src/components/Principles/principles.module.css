@@ -1,4 +1,3 @@
-/* Основной контейнер */
 .advantages {
   display: flex;
   flex-direction: column;
@@ -13,7 +12,6 @@
   margin-top: 80px;
 }
 
-/* Контейнер для текста и фото */
 .frame142 {
   display: flex;
   flex-direction: row;
@@ -25,7 +23,6 @@
   height: auto;
 }
 
-/* Контейнер для текстовых блоков */
 .info {
   display: flex;
   flex-direction: column;
@@ -36,7 +33,6 @@
   height: auto;
 }
 
-/* Заголовки */
 .frame63 {
   width: 100%;
   height: auto;
@@ -64,31 +60,27 @@
   color: #050505;
 }
 
-/* Контейнер для 6 блоков с ценностями */
 .aboutUsExamples {
-  /* Используем Grid для создания двух колонок */
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 20px 40px; /* Вертикальный и горизонтальный отступ */
+  gap: 20px 40px;
   width: 686px;
   height: auto;
   margin-top: -35px;
 }
 
-/* Убираем стили для frame394 и frame395, так как Grid будет управлять макетом */
 .frame394,
 .frame395 {
-  display: contents; /* Позволяет дочерним элементам участвовать в сетке родителя */
+  display: contents;
 }
 
-/* Устанавливаем ширину для каждого блока */
 .frame60, .frame59, .frame62, .frame61, .frame55, .frame57 {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   padding: 0px;
   gap: 12px;
-  width: auto; /* Ширина определяется сеткой */
+  width: auto;
   background: #ebebeb;
 }
 
@@ -128,12 +120,10 @@
   transition: opacity 0.3s ease-in-out;
 }
 
-/* Стиль для индикатора загрузки */
 .photo.loading {
   opacity: 0.5;
 }
 
-/* --- Планшетная адаптация --- */
 @media (min-width: 769px) and (max-width: 1300px) {
   .advantages {
     width: 90%;
@@ -187,7 +177,6 @@
   }
 }
 
-/* --- Мобильная адаптация (375px - 768px) --- */
 @media (max-width: 768px) {
   .advantages {
     width: 90%;
@@ -197,7 +186,7 @@
   }
 
   .frame142 {
-    flex-direction: column; /* Картинка теперь сверху на мобильных */
+    flex-direction: column;
     gap: 30px;
     width: 100%;
   }
@@ -219,7 +208,7 @@
   }
 
   .aboutUsExamples {
-    grid-template-columns: repeat(2, 1fr); /* Изменено на две колонки */
+    grid-template-columns: repeat(2, 1fr);
     gap: 15px;
     width: 100%;
     margin-top: -15px;

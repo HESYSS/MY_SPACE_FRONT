@@ -16,9 +16,9 @@ const nextConfig = {
     DOMENIAN_URL: process.env.DOMENIAN_URL || "http://localhost:3000/api",
   },
   i18n: {
-    locales: ["uk", "en"], // список поддерживаемых языков
-    defaultLocale: "uk", // язык по умолчанию
-    localeDetection: false, // автоматически определять язык по браузеру
+    locales: ["uk", "en"],
+    defaultLocale: "uk",
+    localeDetection: false,
   },
   webpack: (config, { dev, isServer }) => {
     if (dev && !isServer) {

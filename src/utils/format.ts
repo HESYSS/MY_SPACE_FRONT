@@ -1,26 +1,22 @@
 export const filterKeyMap: Record<string, string> = {
-  // === Item ===
-  deal: "deal", // аренда / продажа
-  propertyType: "type", // apartment, house, etc.
-  category: "category", // Житлова, Комерційна
-  isNewBuilding: "isNewBuilding", // булево
-  isOutOfCity: "isOutOfCity", // булево
+  deal: "deal", 
+  propertyType: "type",
+  category: "category",
+  isNewBuilding: "isNewBuilding",
+  isOutOfCity: "isOutOfCity",
   newbuildingName: "newbuildingName",
 
-  // === Location ===
   city: "city",
-  borough: "district", // админ. район
-  districts: "borough", // бОро (подрайон города)
-  county: "county", // для обл. районов
+  borough: "district", 
+  districts: "borough", 
+  county: "county", 
   street: "streets",
   streets: "street",
   streetType: "streetType",
 
-  // === Metro ===
-  metro: "metros.name", // массив станций метро
-  metroDistance: "metros.distance", // диапазон расстояний
+  metro: "metros.name",
+  metroDistance: "metros.distance",
 
-  // === Characteristic ===
   Поверх_from: "characteristics.floor_min",
   Поверх_to: "characteristics.floor_max",
 
@@ -33,10 +29,9 @@ export const filterKeyMap: Record<string, string> = {
   Площа_from: "characteristics.area_min",
   Площа_to: "characteristics.area_max",
 
-  rooms: "characteristics.room_count", // массив комнат
-  renovation: "characteristics.renovation", // опции ремонта
+  rooms: "characteristics.room_count", 
+  renovation: "characteristics.renovation",
 
-  // === Price ===
   Ціна_from: "prices.value_min",
   Ціна_to: "prices.value_max",
 
@@ -50,7 +45,7 @@ export const filterKeyMap: Record<string, string> = {
   Магазин: "Магазин",
 
   СТО: "СТО",
-  АЗС: "АЗС", // АЗС нет прямого соответствия, отнесем к "Інший об'єкт"
+  АЗС: "АЗС", 
   Автомийка: "Автомийка",
   "Паркомісце/Гараж": "Паркування",
   "Окрема Будівля Ціла будівля": "Ціла будівля",

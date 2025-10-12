@@ -112,7 +112,6 @@ export default function OurValues() {
             </div>
           </div>
         </div>
-        {/* Используем inline-стиль для фонового изображения */}
         <div
           className={`${styles.photo} ${isLoading ? styles.loading : ""}`}
           style={{ backgroundImage: imageUrl ? `url(${imageUrl})` : "none" }}

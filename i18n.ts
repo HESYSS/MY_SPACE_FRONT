@@ -11,13 +11,13 @@ i18n
     fallbackLng: 'uk',
     supportedLngs: ['uk', 'en'],
     lng: 'uk', 
-    debug: false, // Установите это значение в false, чтобы отключить все логи i18next
+    debug: false,
     ns: ['common'],
     defaultNS: 'common',
     backend: {
       loadPath: '/locales/{{lng}}/{{ns}}.json',
-      allowMultiLoading: true, // Позволяет загружать несколько файлов, даже если один из них не загрузится
-      crossDomain: true, // Предотвращает отображение ошибок, связанных с кросс-доменными запросами, в консоли
+      allowMultiLoading: true,
+      crossDomain: true,
     },
     interpolation: {
       escapeValue: false,

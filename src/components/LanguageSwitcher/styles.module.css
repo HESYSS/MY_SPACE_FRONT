@@ -9,7 +9,7 @@
   align-items: center;
   gap: 4px;
   cursor: pointer;
-  color: #fff; /* Или другой цвет, который подходит к вашему дизайну */
+  color: #fff; 
   font-weight: bold;
   font-size: 20px;
   text-transform: uppercase;
@@ -20,21 +20,16 @@
   transition: transform 0.2s ease-in-out;
 }
 
-/* Эффект при открытии дропдауна, если нужно */
-/* .langSelectorContainer.open .dropdownArrow {
-  transform: rotate(180deg);
-} */
-
 .dropdownMenu {
   position: absolute;
-  top: 100%; /* Располагаем под селектором */
+  top: 100%; 
   left: 50%;
   transform: translateX(-50%);
   z-index: 10;
-  background-color: #000; /* Цвет фона, как на скрине */
-  border: 1px solid #333; /* Небольшая рамка */
+  background-color: #000; 
+  border: 1px solid #333;
   border-radius: 4px;
-  margin-top: 5px; /* Отступ от селектора */
+  margin-top: 5px;
   min-width: 60px;
   text-align: center;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -50,5 +45,5 @@
 }
 
 .dropdownItem:hover {
-  background-color: #222; /* Цвет при наведении */
+  background-color: #222;
 }

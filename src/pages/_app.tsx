@@ -1,5 +1,3 @@
-// pages/_app.tsx
-
 import { AppProps } from "next/app";
 import Layout from "@/components/Layout";
 import { I18nextProvider } from "react-i18next";
@@ -9,7 +7,6 @@ import SEO from "../config/next-seo.config";
 import i18n from "i18n";
 import { useEffect, useState } from "react";
 
-// Компонент для клиентской отрисовки
 const ClientOnly: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);

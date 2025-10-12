@@ -1,11 +1,11 @@
 "use client";
 import * as React from "react";
-import MapDrawFilter from "./Map"; // MapDrawFilter вместо Map3DComponent
+import MapDrawFilter from "./Map";
 
 export default function MapWrapper({
   properties,
   locationFilters,
-  onChangeFilters, // 👈 добавляем проп для callback
+  onChangeFilters, 
 }: {
   properties: any[];
   locationFilters: any;
@@ -23,7 +23,7 @@ export default function MapWrapper({
     <MapDrawFilter
       properties={properties}
       locationFilters={locationFilters}
-      onChangeFilters={onChangeFilters} // 👈 передаем колбэк в MapDrawFilter
+      onChangeFilters={onChangeFilters} 
     />
   );
 }

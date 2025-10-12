@@ -1,7 +1,6 @@
-/* Partners and headers main container */
 .teamSection {
   display: flex;
-  flex-direction: row; /* Default for PC/Tablet */
+  flex-direction: row;
   justify-content: space-between;
   align-items: flex-start;
   padding: 0px;
@@ -11,7 +10,6 @@
   box-sizing: border-box;
 }
 
-/* Titles container */
 .titles {
   display: flex;
   flex-direction: row;
@@ -23,7 +21,6 @@
   box-sizing: border-box;
 }
 
-/* "Партнери" and "Керівники" titles */
 .title {
   font-family: "Raleway", sans-serif;
   font-style: normal;
@@ -36,10 +33,6 @@
   margin: 0;
 }
 
-/* Container for all team member cards (Par&Man) */
-/* This container is no longer needed in the new structure */
-
-/* Container for each group (Partners or Managers) */
 .teamGroup {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -47,7 +40,6 @@
   flex: 1;
 }
 
-/* Main container for each group, used for the new structure */
 .groupContainer {
   display: flex;
   flex-direction: column;
@@ -55,7 +47,6 @@
   flex: 1;
 }
 
-/* Team member card */
 .teamMemberCard {
   display: flex;
   flex-direction: column;
@@ -69,7 +60,6 @@
   box-sizing: border-box;
 }
 
-/* Card content */
 .cardContent {
   width: 100%;
   gap: 10px;
@@ -79,7 +69,6 @@
   padding: 0px;
 }
 
-/* Photo and name container */
 .photoAndName {
   width: 100%;
   height: 232px;
@@ -91,7 +80,6 @@
   padding: 5px;
 }
 
-/* Photo of team member */
 .memberPhoto {
   position: absolute;
   width: 100%;
@@ -102,7 +90,6 @@
   border-radius: 4px;
 }
 
-/* Member name */
 .memberName {
   font-family: "Raleway", sans-serif;
   font-style: normal;
@@ -119,7 +106,6 @@
   word-wrap: break-word;
 }
 
-/* Member description container */
 .memberDesc {
   display: flex;
   flex-direction: column;
@@ -130,7 +116,6 @@
   height: auto;
 }
 
-/* Position text container */
 .memberPosition {
   box-sizing: border-box;
   display: flex;
@@ -141,7 +126,6 @@
   border-top: 1px solid #303030;
 }
 
-/* Position text */
 .positionText {
   font-family: "Raleway", sans-serif;
   font-style: normal;
@@ -154,7 +138,6 @@
   margin: 0;
 }
 
-/* Vectors (logo and arrow) container */
 .vectors {
   display: flex;
   flex-direction: row;
@@ -175,51 +158,42 @@
   height: 20px;
 }
 
-/* --- Планшетная адаптация --- */
 @media (min-width: 769px) and (max-width: 1300px) {
-  /* Основной контейнер */
   .teamSection {
     width: 90%;
     max-width: 100%;
     margin: 0 auto;
-    gap: 20px; /* Adjusted gap */
+    gap: 20px;
   }
 
-  /* Заголовки */
   .title {
-    font-size: 40px; /* Fixed font size for better consistency */
+    font-size: 40px;
     line-height: 48px;
   }
   
-  /* Main content container */
   .groupContainer {
     gap: 15px;
   }
 
-  /* Контейнер каждой группы */
   .teamGroup {
     grid-template-columns: repeat(2, 1fr);
     gap: 15px;
   }
   
-  /* Photo and name */
   .photoAndName {
-    height: 180px; /* Fixed height to avoid scaling issues */
+    height: 180px;
   }
   
-  /* Name */
   .memberName {
     font-size: 18px;
     line-height: 20px;
   }
   
-  /* Position */
   .positionText {
     font-size: 14px;
     line-height: 16px;
   }
 
-  /* Icons */
   .mySpaceLogo {
     width: 48px;
   }
@@ -230,9 +204,7 @@
   }
 }
 
-/* --- Мобильная адаптация --- */
 @media (max-width: 768px) {
-  /* Main container switches to a column layout */
   .teamSection {
     width: 90%;
     flex-direction: column;
@@ -240,13 +212,11 @@
     padding: 0 5%;
   }
 
-  /* Each group container remains a column */
   .groupContainer {
     width: 100%;
     gap: 20px;
   }
 
-  /* Titles are aligned left and their size is reduced */
   .title {
     width: 100%;
     font-size: 28px;
@@ -254,20 +224,17 @@
     text-align: left;
   }
   
-  /* Cards remain in two columns on mobile */
   .teamGroup {
-    grid-template-columns: repeat(2, 1fr); /* CORRECTED */
-    gap: 10px; /* Reduced gap to fit */
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
   }
   
-  /* Card photo height is adjusted */
   .photoAndName {
-    height: 120px; /* Adjusted to fit better in two columns */
+    height: 120px;
   }
   
-  /* Font sizes are adjusted for mobile readability */
   .memberName {
-    font-size: 14px; /* Reduced to fit in smaller width */
+    font-size: 14px;
     line-height: 16px;
   }
   
@@ -276,9 +243,8 @@
     line-height: 14px;
   }
   
-  /* Icon sizes are adjusted */
   .mySpaceLogo {
-    width: 32px; /* Smaller icon */
+    width: 32px;
   }
   
   .arrowIcon {
