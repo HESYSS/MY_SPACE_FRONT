@@ -60,6 +60,9 @@ export default function MapDrawFilter({
   locationFilters: any;
   onChangeFilters: (filters: any) => void;
 }) {
+  const savedPolygon = JSON.parse(
+    localStorage.getItem(POLYGON_STORAGE_KEY) || "[]"
+  );
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstance = useRef<Map | null>(null);
   const [hasPolygon, setHasPolygon] = useState(false);
@@ -120,9 +123,9 @@ export default function MapDrawFilter({
         if (inPolygon) {
           insideIds.push(f.get("id"));
           f.setStyle(markerStyle);
-        } else if (inSquare) {
+        } else if (inSquare && !inPolygon) {
           f.setStyle(hiddenStyle);
-        } else {
+        } else if (!inSquare && !inPolygon) {
           f.setStyle(markerStyle);
         }
       });
@@ -130,21 +133,11 @@ export default function MapDrawFilter({
     },
     [markerStyle]
   );
-  useEffect(() => {
-    if (!router.query.locationfilters) return;
 
-    try {
-      const decoded = decodeURIComponent(
-        router.query.locationfilters as string
-      );
-      const parsed = JSON.parse(decoded);
-      if (parsed.polygon && parsed.polygon.length > 0) {
-        currentCoords.current = parsed.polygon;
-      }
-    } catch (err) {
-      console.error("Ошибка парсинга locationfilters", err);
-    }
-  }, [router.query.locationfilters]);
+    useEffect(() => {
+    currentCoords.current = locationFilters?.polygon || [];
+  }, [locationFilters]);
+
   useEffect(() => {
     if (!mapRef.current) return;
 
@@ -206,14 +199,9 @@ export default function MapDrawFilter({
         toLonLat(coord)
       ) as [number, number][];
 
+      localStorage.setItem(POLYGON_STORAGE_KEY, JSON.stringify(polygonCoords));
       const squareBox = getBoundingBox(polygonCoords);
       const squareCoords = createSquarePolygon(squareBox);
-
-      const squareFeature = new Feature(
-        new Polygon([squareCoords.map((c) => fromLonLat(c))])
-      );
-      squareFeature.setStyle(new Style({}));
-      drawSource.current.addFeature(squareFeature);
 
       const newFilters = {
         ...locationFilters,
@@ -229,8 +217,6 @@ export default function MapDrawFilter({
       });
 
       onChangeFilters(newFilters);
-
-      drawSource.current.clear();
 
       setIsDrawing(false);
     };
@@ -352,10 +338,19 @@ export default function MapDrawFilter({
       Array.isArray(locationFilters.polygon) &&
       locationFilters.polygon.length > 0
     ) {
-      if (currentCoords.current && currentCoords.current.length > 2) {
-        const coords3857 = currentCoords.current.map((c) => c);
+      if (savedPolygon.length > 2) {
+        const coords3857 = savedPolygon.map((c: any) => fromLonLat(c));
+
+        // Замыкаем полигон
+        if (
+          coords3857[0][0] !== coords3857[coords3857.length - 1][0] ||
+          coords3857[0][1] !== coords3857[coords3857.length - 1][1]
+        ) {
+          coords3857.push(coords3857[0]);
+        }
+
         filterPolygon = new Polygon([coords3857]);
-      }
+       }
     }
 
     const noFilters =
@@ -433,6 +428,24 @@ export default function MapDrawFilter({
       districtsSource.current.addFeature(feature);
     });
 
+    if (filterPolygon) {
+      console.log("Adding user polygon to map:", filterPolygon);
+      const userFeature = new Feature(filterPolygon);
+      userFeature.setStyle(
+        new Style({
+          fill: new Fill({
+            color: "rgba(255, 255, 255, 0)", // без заливки
+          }),
+          stroke: new Stroke({
+            color: "black", // цвет как у метро
+            width: 2,
+          }),
+        })
+      );
+
+      districtsSource.current.addFeature(userFeature);
+    }
+
     features.forEach((feature) => {
       const rawName = feature.get("NAME") as string;
       const districtName = rawName.replace("район", "").trim();
@@ -459,14 +472,14 @@ export default function MapDrawFilter({
 
   useEffect(() => {
     if (!mapInstance.current || !currentCoords.current.length) return;
-    const polygonCoords = currentCoords.current.map((c) => toLonLat(c)) as [
+    const polygonCoords = currentCoords.current.map((c) => c) as [
       number,
       number
     ][];
     const squareBox = getBoundingBox(polygonCoords);
     const squareCoords = createSquarePolygon(squareBox);
     filterMarkers(
-      currentCoords.current,
+      savedPolygon.map((c: any) => fromLonLat(c)),
       squareCoords.map((c) => fromLonLat(c))
     );
   }, [properties, filterMarkers]);

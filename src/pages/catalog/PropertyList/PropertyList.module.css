@@ -28,7 +28,7 @@
 
 .pagination button:disabled {
   background-color: #e0e0e0;
-  color: #999;
+  color: #000000;
   cursor: not-allowed;
 }
 
@@ -37,7 +37,7 @@
   white-space: nowrap;
   font-size: 16px;
   font-weight: bold;
-  color: #333;
+  color: ##ffffff;
 }
 
 .propertiesGrid a {

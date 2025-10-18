@@ -2,6 +2,8 @@ import Link from "next/link";
 import PropertyCard from "@/components/PropertyCard";
 import { Property } from "@/types/property";
 import styles from "./PropertyList.module.css";
+import { t } from "i18next";
+
 
 interface Props {
   properties: Property[];
@@ -37,16 +39,16 @@ export default function PropertyList({
 
       <div className={styles.pagination}>
         <button onClick={() => setPage(page - 1)} disabled={page === 1}>
-          Назад
+         {t("back")}
         </button>
         <span>
-          Сторінка {page} з {totalPages}
+         {t("pageOf", { page, totalPages })}
         </span>
         <button
           onClick={() => setPage(page + 1)}
-          disabled={page === totalPages}
+          disabled={page >= totalPages}
         >
-          Вперед
+          {t("forward")}
         </button>
       </div>
     </div>

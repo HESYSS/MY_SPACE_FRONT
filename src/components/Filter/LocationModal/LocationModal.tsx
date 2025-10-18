@@ -130,11 +130,25 @@ export default function LocationModal({
         setSelectedStreets(parsed.streets || []);
         setSelectedJk(parsed.newbuildings || []);
         setSelectedDirections(parsed.directions || []);
-        setLocationType(parsed.isOutOfCity ? "region" : "kyiv");
+        setLocationType(
+          typeof parsed?.isOutOfCity === "boolean"
+            ? parsed.isOutOfCity
+              ? "region"
+              : "kyiv"
+            : "none"
+        );
         setSelectedPolygon(parsed.polygon || []);
       } catch (e) {
         console.error("Ошибка парсинга locationfilters", e);
       }
+    } else {
+      setSelectedMetro([]);
+      setSelectedDistricts([]);
+      setSelectedStreets([]);
+      setSelectedJk([]);
+      setSelectedDirections([]);
+      setLocationType("none");
+      setSelectedPolygon([]);
     }
   }, [router.isReady, router.query.locationfilters]);
 
@@ -144,7 +158,7 @@ export default function LocationModal({
       return;
     }
     const filters: any = {
-      isOutOfCity: locationType === "region",
+      isOutOfCity: locationType === "none" ? "" : locationType === "region" ? true : false,
       streets: selectedStreets,
       newbuildings: selectedJk,
       polygon: selectedPolygon,

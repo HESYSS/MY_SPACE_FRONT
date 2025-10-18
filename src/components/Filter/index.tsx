@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname,  useRouter, useSearchParams } from "next/navigation";
 import styles from "./Filter.module.css";
 import LocationModal from "./LocationModal/LocationModal";
 import FiltersModal from "./FiltersModal/FiltersModal";

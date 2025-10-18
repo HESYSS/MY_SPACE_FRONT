@@ -79,15 +79,15 @@ export default function RealEstateCategories() {
                 otherfilters: encodeURIComponent(
                   JSON.stringify({
                     category: "Житлова",
-                    type: "Будинок",
+                    type: "Квартира",
                   })
                 ),
               },
             }}
             className={styles.frame49}
-            style={houseImageStyle}
+            style={apartmentImageStyle}
           >
-            <p className={styles.categoryTitle}>{t("build")}</p>
+            <p className={styles.categoryTitle}>{t("apartment")}</p>
             <div className={styles.arrowCircle}>
               <img src={arrowPath} alt="Arrow" className={styles.arrowImage} />
             </div>
@@ -124,15 +124,15 @@ export default function RealEstateCategories() {
                 otherfilters: encodeURIComponent(
                   JSON.stringify({
                     category: "Житлова",
-                    type: "Квартира",
+                    type: "Будинок",
                   })
                 ),
               },
             }}
             className={styles.frame43}
-            style={apartmentImageStyle}
+            style={houseImageStyle}
           >
-            <p className={styles.categoryTitle}>{t("apartment")}</p>
+            <p className={styles.categoryTitle}>{t("build")}</p>
             <div className={styles.arrowCircle}>
               <img src={arrowPath} alt="Arrow" className={styles.arrowImage} />
             </div>
@@ -144,7 +144,7 @@ export default function RealEstateCategories() {
           </div>
         </div>
         <div className={styles.column4}>
-          <a href="#" className={styles.frame43} style={landPlotsImageStyle}>
+          <a className={styles.frame44} style={landPlotsImageStyle}>
             <p className={styles.categoryTitle}>{t("LandPlots")}</p>
             <div className={styles.arrowCircle}>
               <img src={arrowPath} alt="Arrow" className={styles.arrowImage} />

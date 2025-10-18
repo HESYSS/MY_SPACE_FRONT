@@ -113,15 +113,14 @@ export default function CatalogPage() {
         : locationFilters
     );
 
-    if (typeof router.query.search === "string")
+    if (typeof router.query.search === "string") {
       setSearchValue(router.query.search);
-    if (
-      typeof router.query.search === "string" ||
-      (typeof router.query.sort === "string" &&
-        router.query.sort !== sortOption)
-    ) {
-      setPage(1);
+    } else {
+      setSearchValue("");
     }
+    
+    setPage(1);
+    
 
     if (typeof router.query.sort === "string") setSortOption(router.query.sort);
   }, [router.isReady, router.asPath]);

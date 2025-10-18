@@ -111,7 +111,7 @@ export default function PropertyPage() {
       ([key, value]) =>
         value !== null &&
         value !== undefined &&
-        !(typeof value === "string" && value === "")
+        !(typeof value === "string" && (value === "" || value === "null"))
     )
     .map(([key, value]) => {
       let displayValue: string | boolean | number = value as unknown as

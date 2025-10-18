@@ -22,7 +22,7 @@
   width: 1200px;
   max-width: 90%;
   height: 56px;
-  margin-left: 25px;
+  margin-left: 0px;
 }
 
 .leftNav {
@@ -119,9 +119,7 @@
 }
 
 @media (max-width: 1300px) {
-  .header {
-    margin-left: 0px;
-  }
+  
 
   .navLinks,
   .navRight {

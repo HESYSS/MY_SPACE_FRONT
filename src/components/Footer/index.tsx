@@ -1,5 +1,6 @@
 import styles from "./footer.module.css";
-import mySpaceLogo from "../../../public/icons/MySpace_LOGO_1[SVG].png";
+import Link from "next/link";
+import mySpaceLogo from "../../../public/icons/MySpace_LOGO_1.png";
 import youtubeIcon from "../../../public/icons/youtube.svg";
 import instagramIcon from "../../../public/icons/instagram.svg";
 
@@ -19,10 +20,10 @@ export default function Footer() {
           <h4 className={styles.footerHeading}>{t("menuHeading")}</h4>
           <ul className={styles.footerLinks}>
             <li>
-              <a href="/main">{t("home")}</a>
+               <Link href="/">{t("home")}</Link>
             </li>
             <li>
-              <a href="/team">{t("ourTeam")}</a>
+              <Link href="/team">{t("ourTeam")}</Link>
             </li>
           </ul>
         </div>
@@ -30,7 +31,7 @@ export default function Footer() {
           <h4 className={styles.footerHeading}>{t("infoHeading")}</h4>
           <ul className={styles.footerLinks}>
             <li>
-              <a href="/policy">{t("privacyPolicy")}</a>
+              <Link href="/policy">{t("privacyPolicy")}</Link>
             </li>
           </ul>
         </div>
@@ -38,13 +39,13 @@ export default function Footer() {
           <h4 className={styles.footerHeading}>{t("contactHeading")}</h4>
           <ul className={styles.footerLinks}>
             <li>
-              <a href="/contacts">{t("contacts")}</a>
+              <Link href="/contacts">{t("contacts")}</Link>
             </li>
             <li>
-              <a href="mailto:office@myspace.in.ua">{t("email")}</a>
+              <Link href="mailto:office@myspace.in.ua">{t("email")}</Link>
             </li>
             <li>
-              <a href="tel:+380687777337">{t("phoneFooter")}</a>
+              <Link href="tel:+380687777337">{t("phoneFooter")}</Link>
             </li>
           </ul>
           <div className={styles.socialIcons}>

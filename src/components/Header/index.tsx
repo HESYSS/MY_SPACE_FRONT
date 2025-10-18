@@ -3,7 +3,7 @@ import Image from "next/image";
 import { useTranslation } from "react-i18next";
 import { FC, useState } from "react";
 import styles from "./styles.module.css";
-import mySpaceLogo from "../../../public/icons/MySpace_LOGO_1[SVG].png";
+import mySpaceLogo from "../../../public/icons/MySpace_LOGO_1.png";
 import LanguageSwitcher from "../LanguageSwitcher/LanguageSwitcher";
 import { useModal } from "../../hooks/useModal";
 
@@ -44,7 +44,7 @@ const Header: FC = () => {
       <nav className={styles.navbar}>
         <div className={styles.leftNav}>
           <div className={styles.logo}>
-            <Link href="/main">
+            <Link href="/">
               <Image
                 src={mySpaceLogo}
                 alt="MySpace Logo"

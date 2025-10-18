@@ -119,7 +119,7 @@ const ContactsPage: React.FC = () => {
               <div className={styles.contactTextSection}>
                 <h4 className={styles.contactTitle}>{t('connectionTitle')}</h4>
                 <p className={styles.contactInfoSmall}>
-                  {t('connectionText')}
+                 {/* {t('connectionText')}*/}
                 </p>
               </div>
               <div className={styles.workHours}>

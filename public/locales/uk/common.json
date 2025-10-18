@@ -209,5 +209,8 @@
   "sort_oldest": "Спочатку старі",
   "sort_price_asc": "Спочатку дешевші",
   "sort_price_desc": "Спочатку дорожчі",
-  "objectManagerLabel": "Менеджер об'єкту"
+  "objectManagerLabel": "Менеджер об'єкту",
+  "back": "Назад",
+  "pageOf": "Сторінка {{page}} з {{totalPages}}",
+  "forward": "Вперед"
 }
