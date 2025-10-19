@@ -927,31 +927,53 @@ const AdminPage: React.FC = () => {
                     <input
                       type="checkbox"
                       checked={isSupervisor}
-                      onChange={(e) => setIsSupervisor(e.target.checked)}
+                      onChange={(e) => {
+                        const checked = e.target.checked;
+                        setIsSupervisor(checked);
+                        if (checked) {
+                          setIsManager(false);
+                        }
+                      }}
                     />{" "}
                     Керiвник
                   </label>
                 </div>
+
                 <div className={styles.checkboxGroup}>
                   <label>
                     <input
                       type="checkbox"
                       checked={isPartner}
-                      onChange={(e) => setIsPartner(e.target.checked)}
+                      onChange={(e) => {
+                        const checked = e.target.checked;
+                        setIsPartner(checked);
+                        if (checked) {
+                          setIsManager(false);
+                        }
+                      }}
                     />{" "}
                     Партнер
                   </label>
                 </div>
+
                 <div className={styles.checkboxGroup}>
                   <label>
                     <input
                       type="checkbox"
                       checked={isManager}
-                      onChange={(e) => setIsManager(e.target.checked)}
+                      onChange={(e) => {
+                        const checked = e.target.checked;
+                        setIsManager(checked);
+                        if (checked) {
+                          setIsSupervisor(false);
+                          setIsPartner(false);
+                        }
+                      }}
                     />{" "}
                     Менеджер
                   </label>
                 </div>
+
                 <div className={styles.checkboxGroup}>
                   <label>
                     <input
@@ -962,6 +984,7 @@ const AdminPage: React.FC = () => {
                     Активний
                   </label>
                 </div>
+
                 <button type="submit" className={styles.submitBtn}>
                   Додати працівника
                 </button>
