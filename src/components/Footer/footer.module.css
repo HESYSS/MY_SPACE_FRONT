@@ -110,7 +110,7 @@
   .footer {
     min-width: 800px;
     max-width: 1800px;
-    width: auto;
+    width: 100%;
     height: 265px;
     margin: 0 auto;
   }
