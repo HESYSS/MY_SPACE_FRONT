@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import styles from "./TeamSection.module.css";
 import TeamMemberCard from "./TeamMemberCard";
@@ -17,6 +16,7 @@ interface Employee {
   isPARTNER: boolean;
   isMANAGER: boolean;
   isACTIVE: boolean;
+  isSUPERVISOR: boolean;
   photoUrl?: string;
 }
 
@@ -39,7 +39,7 @@ export default function TeamSection() {
         const data: Employee[] = await response.json();
 
         const fetchedPartners = data.filter((member) => member.isPARTNER);
-        const fetchedManagers = data.filter((member) => member.isMANAGER);
+        const fetchedManagers = data.filter((member) => member.isSUPERVISOR);
 
         setPartners(fetchedPartners);
         setManagers(fetchedManagers);

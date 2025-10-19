@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from "react";
 import styles from "./admin.module.css";
 import { jwtDecode, JwtPayload } from "jwt-decode";
-import { DragDropContext, Droppable, Draggable, DropResult } from '@hello-pangea/dnd';
+import {
+  DragDropContext,
+  Droppable,
+  Draggable,
+  DropResult,
+} from "@hello-pangea/dnd";
 
 interface MyToken extends JwtPayload {
   userId: string;
@@ -24,6 +29,7 @@ interface Employee {
   isPARTNER: boolean;
   isMANAGER: boolean;
   isACTIVE: boolean;
+  isSUPERVISOR: boolean;
   photoUrl?: string;
 }
 
@@ -92,6 +98,7 @@ const AdminPage: React.FC = () => {
   const [aboutMeEn, setAboutMeEn] = useState("");
   const [isPartner, setIsPartner] = useState(false);
   const [isManager, setIsManager] = useState(false);
+  const [isSupervisor, setIsSupervisor] = useState(false);
   const [isActive, setIsActive] = useState(false);
   const [employeePhotoFile, setEmployeePhotoFile] = useState<File | null>(null);
 
@@ -411,6 +418,7 @@ const AdminPage: React.FC = () => {
       formData.append("aboutMeEn", aboutMeEn);
       formData.append("isPARTNER", String(isPartner));
       formData.append("isMANAGER", String(isManager));
+      formData.append("isSUPERVISOR", String(isSupervisor));
       formData.append("isACTIVE", String(isActive));
 
       const token = localStorage.getItem("token");
@@ -441,6 +449,7 @@ const AdminPage: React.FC = () => {
         setIsPartner(false);
         setIsManager(false);
         setIsActive(false);
+        setIsSupervisor(false);
         setEmployeePhotoFile(null);
         setIsFormVisible(false);
       } else {
@@ -639,110 +648,118 @@ const AdminPage: React.FC = () => {
     );
   }
 
-const fetchItemsForAdmin = async () => {
-  setLoading(true);
-  setError(null);
-  try {
-    const backendUrl = process.env.REACT_APP_API_URL;
-    const response = await fetch(`${backendUrl}/items/admin`, {
-      headers: getHeadersWithAuth(),
-    });
-    if (response.ok) {
-      const data = await response.json();
-      setItems(data);
-    } else {
-      setError("Не вдалося отримати список об'єктів.");
+  const fetchItemsForAdmin = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const backendUrl = process.env.REACT_APP_API_URL;
+      const response = await fetch(`${backendUrl}/items/admin`, {
+        headers: getHeadersWithAuth(),
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setItems(data);
+      } else {
+        setError("Не вдалося отримати список об'єктів.");
+      }
+    } catch (err) {
+      console.error("Помилка мережі:", err);
+      setError("Помилка мережі при отриманні списку об'єктів.");
+    } finally {
+      setLoading(false);
     }
-  } catch (err) {
-    console.error("Помилка мережі:", err);
-    setError("Помилка мережі при отриманні списку об'єктів.");
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
-const fetchItemImages = async (itemId: number) => {
-  setLoading(true);
-  setError(null);
-  try {
-    const backendUrl = process.env.REACT_APP_API_URL;
-    const response = await fetch(`${backendUrl}/images/item/${itemId}`, {
-      headers: getHeadersWithAuth(),
-    });
-    if (response.ok) {
-      const data = await response.json();
-      setSelectedItem(prevItem => prevItem ? { ...prevItem, images: data } : null);
-    } else {
-      setError("Не вдалося отримати зображення об'єкта.");
+  const fetchItemImages = async (itemId: number) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const backendUrl = process.env.REACT_APP_API_URL;
+      const response = await fetch(`${backendUrl}/images/item/${itemId}`, {
+        headers: getHeadersWithAuth(),
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setSelectedItem((prevItem) =>
+          prevItem ? { ...prevItem, images: data } : null
+        );
+      } else {
+        setError("Не вдалося отримати зображення об'єкта.");
+      }
+    } catch (err) {
+      console.error("Помилка мережі:", err);
+      setError("Помилка мережі при отриманні зображень об'єкта.");
+    } finally {
+      setLoading(false);
     }
-  } catch (err) {
-    console.error("Помилка мережі:", err);
-    setError("Помилка мережі при отриманні зображень об'єкта.");
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
-const handleToggleImageActive = async (imageId: number, currentStatus: boolean) => {
-  try {
-    const backendUrl = process.env.REACT_APP_API_URL;
-    const response = await fetch(`${backendUrl}/images/item/${imageId}/active`, {
-      method: 'PUT',
-      headers: getHeadersWithAuth(),
-      body: JSON.stringify({ isActive: !currentStatus }),
-    });
-    if (response.ok) {
-      alert("Статус зображення успішно змінено.");
-      if (selectedItem) {
+  const handleToggleImageActive = async (
+    imageId: number,
+    currentStatus: boolean
+  ) => {
+    try {
+      const backendUrl = process.env.REACT_APP_API_URL;
+      const response = await fetch(
+        `${backendUrl}/images/item/${imageId}/active`,
+        {
+          method: "PUT",
+          headers: getHeadersWithAuth(),
+          body: JSON.stringify({ isActive: !currentStatus }),
+        }
+      );
+      if (response.ok) {
+        alert("Статус зображення успішно змінено.");
+        if (selectedItem) {
+          fetchItemImages(selectedItem.id);
+        }
+      } else {
+        const errorData = await response.json();
+        alert(`Помилка під час зміни статусу: ${errorData.message}`);
+      }
+    } catch (error) {
+      console.error("Помилка мережі:", error);
+      alert("Помилка мережі під час зміни статусу зображення.");
+    }
+  };
+
+  const onDragEnd = async (result: DropResult) => {
+    if (!result.destination || !selectedItem) {
+      return;
+    }
+
+    const newImages = Array.from(selectedItem.images);
+    const [reorderedItem] = newImages.splice(result.source.index, 1);
+    newImages.splice(result.destination.index, 0, reorderedItem);
+
+    setSelectedItem({ ...selectedItem, images: newImages });
+
+    const updates = newImages.map((image, index) => ({
+      id: image.id,
+      order: index,
+    }));
+
+    try {
+      const backendUrl = process.env.REACT_APP_API_URL;
+      const response = await fetch(`${backendUrl}/images/item/order`, {
+        method: "PUT",
+        headers: getHeadersWithAuth(),
+        body: JSON.stringify({ updates }),
+      });
+
+      if (response.ok) {
+      } else {
+        const errorData = await response.json();
+        console.error(`Помилка оновлення порядку: ${errorData.message}`);
+        alert(`Помилка оновлення порядку: ${errorData.message}`);
         fetchItemImages(selectedItem.id);
       }
-    } else {
-      const errorData = await response.json();
-      alert(`Помилка під час зміни статусу: ${errorData.message}`);
-    }
-  } catch (error) {
-    console.error("Помилка мережі:", error);
-    alert("Помилка мережі під час зміни статусу зображення.");
-  }
-};
-
-const onDragEnd = async (result: DropResult) => {
-  if (!result.destination || !selectedItem) {
-    return;
-  }
-
-  const newImages = Array.from(selectedItem.images);
-  const [reorderedItem] = newImages.splice(result.source.index, 1);
-  newImages.splice(result.destination.index, 0, reorderedItem);
-
-  setSelectedItem({ ...selectedItem, images: newImages });
-
-  const updates = newImages.map((image, index) => ({
-    id: image.id,
-    order: index,
-  }));
-
-  try {
-    const backendUrl = process.env.REACT_APP_API_URL;
-    const response = await fetch(`${backendUrl}/images/item/order`, {
-      method: 'PUT',
-      headers: getHeadersWithAuth(),
-      body: JSON.stringify({ updates }),
-    });
-
-    if (response.ok) {
-    } else {
-      const errorData = await response.json();
-      console.error(`Помилка оновлення порядку: ${errorData.message}`);
-      alert(`Помилка оновлення порядку: ${errorData.message}`);
+    } catch (error) {
+      console.error("Помилка мережі:", error);
+      alert("Помилка мережі при оновленні порядку зображень.");
       fetchItemImages(selectedItem.id);
     }
-  } catch (error) {
-    console.error("Помилка мережі:", error);
-    alert("Помилка мережі при оновленні порядку зображень.");
-    fetchItemImages(selectedItem.id);
-  }
-};
+  };
 
   return (
     <div className={styles.adminContainer}>
@@ -909,6 +926,16 @@ const onDragEnd = async (result: DropResult) => {
                   <label>
                     <input
                       type="checkbox"
+                      checked={isSupervisor}
+                      onChange={(e) => setIsSupervisor(e.target.checked)}
+                    />{" "}
+                    Керiвник
+                  </label>
+                </div>
+                <div className={styles.checkboxGroup}>
+                  <label>
+                    <input
+                      type="checkbox"
                       checked={isPartner}
                       onChange={(e) => setIsPartner(e.target.checked)}
                     />{" "}
@@ -976,6 +1003,12 @@ const onDragEnd = async (result: DropResult) => {
                             <span className={styles.statusTag}>
                               {" "}
                               (Активний)
+                            </span>
+                          )}
+                          {employee.isSUPERVISOR && (
+                            <span className={styles.statusTag}>
+                              {" "}
+                              (Керiвник)
                             </span>
                           )}
                         </p>
@@ -1102,10 +1135,10 @@ const onDragEnd = async (result: DropResult) => {
                 id="item-select"
                 onChange={(e) => {
                   const selectedId = parseInt(e.target.value);
-                  const item = items.find(i => i.id === selectedId);
+                  const item = items.find((i) => i.id === selectedId);
                   setSelectedItem(item || null);
                 }}
-                value={selectedItem?.id || ''}
+                value={selectedItem?.id || ""}
               >
                 <option value="">-- Виберіть об'єкт --</option>
                 {items.map((item) => (
@@ -1118,57 +1151,80 @@ const onDragEnd = async (result: DropResult) => {
 
             {selectedItem && (
               <div className={styles.itemImagesSection}>
-                <h4 className={styles.sectionTitle}>Зображення для "{selectedItem.title}"</h4>
-                <p>Перетягніть зображення, щоб змінити порядок. Клікніть, щоб змінити видимість.</p>
+                <h4 className={styles.sectionTitle}>
+                  Зображення для "{selectedItem.title}"
+                </h4>
+                <p>
+                  Перетягніть зображення, щоб змінити порядок. Клікніть, щоб
+                  змінити видимість.
+                </p>
                 {loading && <p>Завантаження зображень...</p>}
                 {error && <p className={styles.errorMessage}>{error}</p>}
-                
-                {!loading && !error && selectedItem.images && selectedItem.images.length > 0 ? (
-                <DragDropContext onDragEnd={onDragEnd}>
-                  <Droppable droppableId="images-droppable" direction="horizontal">
-                    {(provided) => (
-                      <div
-                        {...provided.droppableProps}
-                        ref={provided.innerRef}
-                        className={styles.itemImageList}
-                      >
-                        {selectedItem.images.map((image, index) => (
-                        <Draggable key={image.id} draggableId={String(image.id)} index={index}>
-                          {(provided) => (
-                            <div
-                              ref={provided.innerRef}
-                              {...provided.draggableProps}
-                              style={{
-                                ...provided.draggableProps.style,
-                                opacity: image.isActive ? 1 : 0.5,
-                              }}
-                              className={styles.itemImageCard}
+
+                {!loading &&
+                !error &&
+                selectedItem.images &&
+                selectedItem.images.length > 0 ? (
+                  <DragDropContext onDragEnd={onDragEnd}>
+                    <Droppable
+                      droppableId="images-droppable"
+                      direction="horizontal"
+                    >
+                      {(provided) => (
+                        <div
+                          {...provided.droppableProps}
+                          ref={provided.innerRef}
+                          className={styles.itemImageList}
+                        >
+                          {selectedItem.images.map((image, index) => (
+                            <Draggable
+                              key={image.id}
+                              draggableId={String(image.id)}
+                              index={index}
                             >
-                              <div {...provided.dragHandleProps} className={styles.dragHandle}>
-                                <img
-                                  src={image.url}
-                                  className={styles.itemImagePreview}
-                                  onClick={() => handleToggleImageActive(image.id, image.isActive)}
-                                />
-                              </div>
-                              <div className={styles.imageOverlay}>
-                                {image.isActive ? "Активне" : "Неактивне"}
-                              </div>
-                            </div>
-                          )}
-                        </Draggable>
-                        ))}
-                        {provided.placeholder}
-                      </div>
-                    )}
-                  </Droppable>
-                </DragDropContext>
+                              {(provided) => (
+                                <div
+                                  ref={provided.innerRef}
+                                  {...provided.draggableProps}
+                                  style={{
+                                    ...provided.draggableProps.style,
+                                    opacity: image.isActive ? 1 : 0.5,
+                                  }}
+                                  className={styles.itemImageCard}
+                                >
+                                  <div
+                                    {...provided.dragHandleProps}
+                                    className={styles.dragHandle}
+                                  >
+                                    <img
+                                      src={image.url}
+                                      className={styles.itemImagePreview}
+                                      onClick={() =>
+                                        handleToggleImageActive(
+                                          image.id,
+                                          image.isActive
+                                        )
+                                      }
+                                    />
+                                  </div>
+                                  <div className={styles.imageOverlay}>
+                                    {image.isActive ? "Активне" : "Неактивне"}
+                                  </div>
+                                </div>
+                              )}
+                            </Draggable>
+                          ))}
+                          {provided.placeholder}
+                        </div>
+                      )}
+                    </Droppable>
+                  </DragDropContext>
                 ) : (
                   <p>Цей об'єкт не має зображень.</p>
                 )}
               </div>
             )}
-            
+
             <hr className={styles.divider} />
 
             <h3 className={styles.subTitle}>Зображення сайту (існуючі)</h3>
@@ -1190,7 +1246,7 @@ const onDragEnd = async (result: DropResult) => {
                 </button>
               </form>
             </div>
-            
+
             <hr className={styles.divider} />
 
             <h2 className={styles.sectionTitle}>
