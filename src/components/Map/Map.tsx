@@ -11,10 +11,10 @@ import Point from "ol/geom/Point";
 import { fromLonLat, toLonLat } from "ol/proj";
 import { defaults as defaultInteractions, DragPan } from "ol/interaction";
 import Circle from "ol/geom/Circle";
-import { GeoJSON } from "ol/format"; 
+import { GeoJSON } from "ol/format";
 import styles from "./mapStyle.module.css";
 import { kyivMetroStations } from "./kyivMetro";
-import kyivDistricts from "./kyiv.json"; 
+import kyivDistricts from "./kyiv.json";
 import MultiPolygon from "ol/geom/MultiPolygon";
 import { useRouter } from "next/router";
 
@@ -60,9 +60,7 @@ export default function MapDrawFilter({
   locationFilters: any;
   onChangeFilters: (filters: any) => void;
 }) {
-  const savedPolygon = JSON.parse(
-    localStorage.getItem(POLYGON_STORAGE_KEY) || "[]"
-  );
+  const [savedPolygon, setSavedPolygon] = useState<any[]>([]);
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstance = useRef<Map | null>(null);
   const [hasPolygon, setHasPolygon] = useState(false);
@@ -134,8 +132,15 @@ export default function MapDrawFilter({
     [markerStyle]
   );
 
-    useEffect(() => {
+  useEffect(() => {
     currentCoords.current = locationFilters?.polygon || [];
+    if (locationFilters?.polygon && locationFilters.polygon.length > 0) {
+      const stored = localStorage.getItem(POLYGON_STORAGE_KEY);
+      setSavedPolygon(stored ? JSON.parse(stored) : []);
+    } else {
+      drawSource.current.clear();
+      setSavedPolygon([]);
+    }
   }, [locationFilters]);
 
   useEffect(() => {
@@ -350,7 +355,7 @@ export default function MapDrawFilter({
         }
 
         filterPolygon = new Polygon([coords3857]);
-       }
+      }
     }
 
     const noFilters =
@@ -521,13 +526,7 @@ export default function MapDrawFilter({
     <div className={styles.mapContainer}>
       <div className={styles.drawButtonContainer}>
         <button onClick={handlePolygonButton} className={styles.mapButton}>
-          {
-            isDrawing
-              ? "✅"
-              : currentCoords.current.length > 0
-              ? "✖" 
-              : "✏️"
-          }
+          {isDrawing ? "✅" : currentCoords.current.length > 0 ? "✖" : "✏️"}
         </button>
       </div>
 

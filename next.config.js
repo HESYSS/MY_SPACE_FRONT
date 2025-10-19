@@ -5,6 +5,7 @@ const nextConfig = {
   images: {
     domains: [
       "crm-08498194.s3.eu-west-1.amazonaws.com",
+      "recrm21.s3.eu-west-1.amazonaws.com",
       "pub-38a6582090c44c708edfc4468bf587d1.r2.dev",
       "b6d1642ee4dd20be92d14ff69737f7fe.serveo.net",
       "4ffc180c94b5c9add044c621c0bf2ed9.serveo.net",

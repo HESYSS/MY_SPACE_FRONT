@@ -149,6 +149,7 @@ export default function LocationModal({
       setSelectedDirections([]);
       setLocationType("none");
       setSelectedPolygon([]);
+      localStorage.removeItem(POLYGON_STORAGE_KEY);
     }
   }, [router.isReady, router.query.locationfilters]);
 
@@ -158,7 +159,8 @@ export default function LocationModal({
       return;
     }
     const filters: any = {
-      isOutOfCity: locationType === "none" ? "" : locationType === "region" ? true : false,
+      isOutOfCity:
+        locationType === "none" ? "" : locationType === "region" ? true : false,
       streets: selectedStreets,
       newbuildings: selectedJk,
       polygon: selectedPolygon,
