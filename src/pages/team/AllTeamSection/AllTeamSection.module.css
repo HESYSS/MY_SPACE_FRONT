@@ -26,32 +26,28 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 0;
+  padding: 0px;
   gap: 20px;
-  width: 100%; /* <-- Лучше не фиксировать 1200px, чтобы адаптировалось */
-  overflow-x: auto; /* <-- Добавляем горизонтальную прокрутку */
-  overflow-y: hidden;
-  scroll-behavior: smooth; /* <-- Плавная прокрутка */
-  -webkit-overflow-scrolling: touch; /* <-- Для плавности на iOS */
+  width: 1200px;
+  overflow: hidden;
 }
 
 .teamRow {
   display: flex;
   flex-direction: row;
   align-items: flex-start;
-  padding: 0;
+  padding: 0px;
   gap: var(--gap);
-  flex-wrap: nowrap; /* <-- чтобы карточки не переносились */
+  width: 100%;
   transition: transform 0.5s ease-in-out;
-  width: max-content; /* <-- ширина по контенту, чтобы можно было скроллить */
 }
+
 .teamMemberCard {
   width: calc(
     (100% - (var(--items-per-page) - 1) * var(--gap)) / var(--items-per-page)
   );
   flex-shrink: 0;
   flex-grow: 0;
-  gap: 10px;
 }
 
 .photoAndName {
