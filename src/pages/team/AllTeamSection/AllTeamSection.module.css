@@ -26,28 +26,32 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 0px;
+  padding: 0;
   gap: 20px;
-  width: 1200px;
-  overflow: hidden;
+  width: 100%; /* <-- Лучше не фиксировать 1200px, чтобы адаптировалось */
+  overflow-x: auto; /* <-- Добавляем горизонтальную прокрутку */
+  overflow-y: hidden;
+  scroll-behavior: smooth; /* <-- Плавная прокрутка */
+  -webkit-overflow-scrolling: touch; /* <-- Для плавности на iOS */
 }
 
 .teamRow {
   display: flex;
   flex-direction: row;
   align-items: flex-start;
-  padding: 0px;
+  padding: 0;
   gap: var(--gap);
-  width: 100%;
+  flex-wrap: nowrap; /* <-- чтобы карточки не переносились */
   transition: transform 0.5s ease-in-out;
+  width: max-content; /* <-- ширина по контенту, чтобы можно было скроллить */
 }
-
 .teamMemberCard {
   width: calc(
     (100% - (var(--items-per-page) - 1) * var(--gap)) / var(--items-per-page)
   );
   flex-shrink: 0;
   flex-grow: 0;
+  gap: 10px;
 }
 
 .photoAndName {
@@ -170,12 +174,10 @@
 
   .carouselContainer {
     width: 100%;
-    gap: 15px; 
+    gap: 15px;
   }
 
   .teamMemberCard {
-    width: calc(
-      50% - 7.5px
-    ); 
+    width: calc(50% - 7.5px);
   }
 }

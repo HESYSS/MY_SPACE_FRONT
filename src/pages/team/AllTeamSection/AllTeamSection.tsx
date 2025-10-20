@@ -36,7 +36,7 @@ const AllTeamSection: React.FC = () => {
     const handleResize = () => {
       if (window.innerWidth <= 768) {
         setItemsPerPage(2);
-      } else if (window.innerWidth <= 1300) {
+      } else if (window.innerWidth > 768 && window.innerWidth <= 1300) {
         setItemsPerPage(4);
       } else {
         setItemsPerPage(5);
@@ -64,8 +64,8 @@ const AllTeamSection: React.FC = () => {
     };
     fetchEmployees();
   }, []);
-  const activeEmployees = employees.filter((member) => !member.isSUPERVISOR);
-  const totalPages = Math.ceil(activeEmployees.length / itemsPerPage);
+
+  const totalPages = Math.ceil(employees.length / itemsPerPage);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(Math.max(1, Math.min(page, totalPages)));
@@ -85,11 +85,6 @@ const AllTeamSection: React.FC = () => {
     };
   };
 
-  // 👉 вычисляем, какие сотрудники видимы на текущей странице
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const visibleEmployees = activeEmployees.slice(startIndex, endIndex);
-  // свайпы
   const handleTouchStart = (e: React.TouchEvent) => {
     setTouchStartX(e.touches[0].clientX);
     setIsDragging(true);
@@ -130,14 +125,27 @@ const AllTeamSection: React.FC = () => {
             onTouchMove: handleTouchMove,
             onTouchEnd: handleTouchEnd,
           })}
+          style={
+            {
+              transform: `translateX(calc(-${(currentPage - 1) * 100}% + ${
+                isMobileOrTablet ? dragX : 0
+              }px))`,
+              transition:
+                isMobileOrTablet && isDragging
+                  ? "none"
+                  : "transform 0.5s ease-in-out",
+              "--items-per-page": itemsPerPage,
+              "--gap": itemsPerPage === 5 ? "30px" : "15px",
+            } as React.CSSProperties
+          }
         >
-          {visibleEmployees.length === 0 ? (
+          {employees.length === 0 ? (
             <p>Список сотрудников пуст.</p>
           ) : (
-            visibleEmployees.map((member) => {
+            employees.map((member) => {
               const { name, role } = getEmployeeData(member, i18n.language);
               const imageUrl = member.photoUrl || vitaliyPenc.src;
-
+              if (member.isSUPERVISOR === true) return null;
               return (
                 <div key={member.id} className={styles.teamMemberCard}>
                   <div className={styles.cardContent}>
@@ -165,7 +173,6 @@ const AllTeamSection: React.FC = () => {
             })
           )}
         </div>
-
         {totalPages > 1 && (
           <div className={styles.pagination}>
             {Array.from({ length: totalPages }, (_, index) => (
