@@ -16,6 +16,7 @@ interface Employee {
   isPARTNER: boolean;
   isMANAGER: boolean;
   isACTIVE: boolean;
+  isSUPERVISOR: boolean;
   photoUrl?: string;
 }
 
@@ -129,7 +130,10 @@ const AllTeamSection: React.FC = () => {
               transform: `translateX(calc(-${(currentPage - 1) * 100}% + ${
                 isMobileOrTablet ? dragX : 0
               }px))`,
-              transition: isMobileOrTablet && isDragging ? "none" : "transform 0.5s ease-in-out",
+              transition:
+                isMobileOrTablet && isDragging
+                  ? "none"
+                  : "transform 0.5s ease-in-out",
               "--items-per-page": itemsPerPage,
               "--gap": itemsPerPage === 5 ? "30px" : "15px",
             } as React.CSSProperties
@@ -141,7 +145,7 @@ const AllTeamSection: React.FC = () => {
             employees.map((member) => {
               const { name, role } = getEmployeeData(member, i18n.language);
               const imageUrl = member.photoUrl || vitaliyPenc.src;
-
+              if (member.isSUPERVISOR === true) return null;
               return (
                 <div key={member.id} className={styles.teamMemberCard}>
                   <div className={styles.cardContent}>

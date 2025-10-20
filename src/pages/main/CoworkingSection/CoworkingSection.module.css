@@ -227,9 +227,8 @@
 
 @media (max-width: 768px) {
   .coworkingP {
-    width: 90%;
+    width: 100%;
     height: auto;
-    padding: 0 10px;
     gap: 30px;
   }
   .coworkingTitle {

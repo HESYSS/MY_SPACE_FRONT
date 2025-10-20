@@ -339,8 +339,8 @@
 
 @media (min-width: 769px) and (max-width: 1199px) {
   .realEstateP {
-    padding: 0 40px;
     gap: 40px;
+    padding: 0 0px;
   }
   .titleRealEstate {
     gap: 0px;
@@ -404,7 +404,6 @@
   .realEstateP {
     gap: 30px;
     margin: 40px auto;
-    width: 90%;
     padding: 0;
   }
   .titleRealEstate {

@@ -3,8 +3,8 @@
   overflow: hidden;
   background-color: #0a0a0a;
   padding: 20px 0;
-  width: calc(100vw + 40px);
-  margin-left: -40px;
+  width: calc(100% + 4%);
+  margin-left: -2%;
   margin-bottom: -15px;
 }
 
@@ -513,7 +513,7 @@
   .coworking {
     display: flex;
     flex-direction: row;
-    flex-wrap: nowrap; 
+    flex-wrap: nowrap;
     justify-content: center;
     align-items: center;
     width: 90%;

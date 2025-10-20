@@ -100,7 +100,7 @@
   -moz-appearance: none;
   appearance: none;
   background-image: linear-gradient(to right, #03b9b300, #03b9b3),
-      url('data:image/svg+xml;utf8,<svg fill="%2303b9b3" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+    url('data:image/svg+xml;utf8,<svg fill="%2303b9b3" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
   background-repeat: no-repeat, no-repeat;
   background-position: bottom left, right 10px center;
   background-size: 100% 2px, 24px 24px;
@@ -141,9 +141,12 @@
     height: 450px;
   }
   .heroTitleContainer {
-    bottom: 0px;
-    text-align: left;
-    left: 50%;
+    bottom: 0;
+    text-align: center;
+    left: 0;
+    transform: none;
+    width: 100%;
+    max-width: 100%;
   }
   .heroTitle {
     font-size: 48px;
