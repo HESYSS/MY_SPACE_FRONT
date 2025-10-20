@@ -152,9 +152,8 @@
 
 @media (min-width: 769px) and (max-width: 1300px) {
   .coworkingP {
-    width: 90%;
+    width: 100%;
     height: auto;
-    padding: 0 20px;
     gap: 40px;
   }
 
@@ -181,7 +180,6 @@
     height: auto;
     gap: 40px;
     flex-wrap: wrap;
-    justify-content: center;
   }
   .callToAction,
   .frame89 {
