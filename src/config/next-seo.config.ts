@@ -30,6 +30,7 @@ const config: DefaultSeoProps = {
   additionalMetaTags: [
     { name: "robots", content: "index, follow" },
     { name: "application-name", content: "MySpace" },
+    { name: "viewport", content: "width=device-width, initial-scale=1.0" },
   ],
   additionalLinkTags: [
     {
