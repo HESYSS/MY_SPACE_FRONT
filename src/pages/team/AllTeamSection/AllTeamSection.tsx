@@ -64,8 +64,8 @@ const AllTeamSection: React.FC = () => {
     };
     fetchEmployees();
   }, []);
-
-  const totalPages = Math.ceil(employees.length / itemsPerPage);
+  const activeEmployees = employees.filter((member) => !member.isSUPERVISOR);
+  const totalPages = Math.ceil(activeEmployees.length / itemsPerPage);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(Math.max(1, Math.min(page, totalPages)));
@@ -88,8 +88,7 @@ const AllTeamSection: React.FC = () => {
   // 👉 вычисляем, какие сотрудники видимы на текущей странице
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const visibleEmployees = employees.slice(startIndex, endIndex);
-
+  const visibleEmployees = activeEmployees.slice(startIndex, endIndex);
   // свайпы
   const handleTouchStart = (e: React.TouchEvent) => {
     setTouchStartX(e.touches[0].clientX);
@@ -123,64 +122,64 @@ const AllTeamSection: React.FC = () => {
   return (
     <div className={styles.allTeamContainer}>
       <h2 className={styles.sectionTitle}>{t("allTeamTitle")}</h2>
+      <div className={styles.carouselContainer}>
+        <div
+          className={styles.teamRow}
+          {...(isMobileOrTablet && {
+            onTouchStart: handleTouchStart,
+            onTouchMove: handleTouchMove,
+            onTouchEnd: handleTouchEnd,
+          })}
+        >
+          {visibleEmployees.length === 0 ? (
+            <p>Список сотрудников пуст.</p>
+          ) : (
+            visibleEmployees.map((member) => {
+              const { name, role } = getEmployeeData(member, i18n.language);
+              const imageUrl = member.photoUrl || vitaliyPenc.src;
 
-      <div
-        className={styles.teamRow}
-        {...(isMobileOrTablet && {
-          onTouchStart: handleTouchStart,
-          onTouchMove: handleTouchMove,
-          onTouchEnd: handleTouchEnd,
-        })}
-      >
-        {visibleEmployees.length === 0 ? (
-          <p>Список сотрудников пуст.</p>
-        ) : (
-          visibleEmployees.map((member) => {
-            const { name, role } = getEmployeeData(member, i18n.language);
-            const imageUrl = member.photoUrl || vitaliyPenc.src;
-            if (member.isSUPERVISOR) return null;
-
-            return (
-              <div key={member.id} className={styles.teamMemberCard}>
-                <div className={styles.cardContent}>
-                  <div className={styles.photoAndName}>
-                    <Image
-                      src={imageUrl}
-                      alt={name}
-                      className={styles.memberPhoto}
-                      fill
-                    />
-                    <div className={styles.gradientOverlay}></div>
-                    <div className={styles.textContainer}>
-                      <Link
-                        href={`/worker/${member.id}`}
-                        className={styles.memberName}
-                      >
-                        {name}
-                      </Link>
-                      <p className={styles.memberRole}>{role}</p>
+              return (
+                <div key={member.id} className={styles.teamMemberCard}>
+                  <div className={styles.cardContent}>
+                    <div className={styles.photoAndName}>
+                      <Image
+                        src={imageUrl}
+                        alt={name}
+                        className={styles.memberPhoto}
+                        fill
+                      />
+                      <div className={styles.gradientOverlay}></div>
+                      <div className={styles.textContainer}>
+                        <Link
+                          href={`/worker/${member.id}`}
+                          className={styles.memberName}
+                        >
+                          {name}
+                        </Link>
+                        <p className={styles.memberRole}>{role}</p>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            );
-          })
+              );
+            })
+          )}
+        </div>
+
+        {totalPages > 1 && (
+          <div className={styles.pagination}>
+            {Array.from({ length: totalPages }, (_, index) => (
+              <div
+                key={index}
+                className={
+                  index + 1 === currentPage ? styles.dotActive : styles.dot
+                }
+                onClick={() => handlePageChange(index + 1)}
+              ></div>
+            ))}
+          </div>
         )}
       </div>
-
-      {totalPages > 1 && (
-        <div className={styles.pagination}>
-          {Array.from({ length: totalPages }, (_, index) => (
-            <div
-              key={index}
-              className={
-                index + 1 === currentPage ? styles.dotActive : styles.dot
-              }
-              onClick={() => handlePageChange(index + 1)}
-            ></div>
-          ))}
-        </div>
-      )}
     </div>
   );
 };
