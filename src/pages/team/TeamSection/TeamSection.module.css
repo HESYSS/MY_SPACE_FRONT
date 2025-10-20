@@ -160,7 +160,7 @@
 
 @media (min-width: 769px) and (max-width: 1300px) {
   .teamSection {
-    width: 90%;
+    width: 100%;
     max-width: 100%;
     margin: 0 auto;
     gap: 20px;
@@ -206,7 +206,7 @@
 
 @media (max-width: 768px) {
   .teamSection {
-    width: 90%;
+    width: 100%;
     flex-direction: column;
     gap: 30px;
   }
