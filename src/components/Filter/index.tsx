@@ -1,23 +1,23 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
-import { usePathname,  useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import styles from "./Filter.module.css";
 import LocationModal from "./LocationModal/LocationModal";
 import FiltersModal from "./FiltersModal/FiltersModal";
 import { useTranslation } from "react-i18next";
 import FilterIcon from "../../../public/icons/Frame154.png";
+import SearchBar from "./SearchBar/SearchBar"; // ✅ импорт нового компонента
 
 const LOCATION_STORAGE_KEY = "locationFilters";
 const OTHER_STORAGE_KEY = "otherFilters";
 
-export default function Filter({}) {
+export default function Filter() {
   const { t } = useTranslation("common");
   const router = useRouter();
   const searchParams = useSearchParams();
 
   const initialSearch = searchParams.get("search") || "";
   const [searchValue, setSearchValue] = useState(initialSearch);
-
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
   const [isFiltersModalOpen, setIsFiltersModalOpen] = useState(false);
 
@@ -25,59 +25,44 @@ export default function Filter({}) {
   const [sortOption, setSortOption] = useState(initialSort);
 
   const isOutOfCity = false;
-
   const [location, setLocation] = useState<any>(null);
   const [filters, setFilters] = useState<any>(null);
   const locationTriggerRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const currentSearch = searchParams.get("search") || "";
-    if (currentSearch !== searchValue) {
-      setSearchValue(currentSearch);
-    }
+    if (currentSearch !== searchValue) setSearchValue(currentSearch);
   }, [searchParams]);
 
   const handleSearchSubmit = () => {
     const params = new URLSearchParams(window.location.search);
-
-    const trimmedSearchValue = searchValue.trim();
-
+    const trimmed = searchValue.trim();
     params.delete("page");
-
-    params.set("search", trimmedSearchValue);
+    params.set("search", trimmed);
     router.replace(`?${params.toString()}`);
-    return;
   };
 
   const handleSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     const confirmKeys = ["Enter", "Go", "Search", "Done", "Next"];
-
     if (confirmKeys.includes(e.key)) {
       e.preventDefault();
       handleSearchSubmit();
     }
   };
 
-  const handleLocationSubmit = (locationFilters: any) => {
-    setLocation(locationFilters);
-  };
+  const handleLocationSubmit = (loc: any) => setLocation(loc);
 
-  const handleFiltersSubmit = (appliedFilters: any) => {
-    setFilters({ ...appliedFilters });
+  const handleFiltersSubmit = (applied: any) => {
+    setFilters({ ...applied });
     setIsFiltersModalOpen(false);
   };
 
   const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value;
     setSortOption(value);
-
     const params = new URLSearchParams(window.location.search);
-    if (value === "none") {
-      params.delete("sort");
-    } else {
-      params.set("sort", value);
-    }
-
+    if (value === "none") params.delete("sort");
+    else params.set("sort", value);
     router.push(`?${params.toString()}`);
   };
 
@@ -85,24 +70,12 @@ export default function Filter({}) {
     <div className={styles.container}>
       <div className={styles.searchContainer}>
         <div className={styles.topPanel}>
-          <div className={styles.searchInputWrapper}>
-            <input
-              ref={locationTriggerRef}
-              type="text"
-              placeholder={t("search_placeholder")}
-              value={searchValue}
-              onChange={(e) => setSearchValue(e.target.value)}
-              onKeyDown={handleSearchKeyDown}
-              className={styles.input}
-              onClick={() => setIsLocationModalOpen(true)}
-            />
-            <button
-              className={styles.searchButton}
-              onClick={handleSearchSubmit}
-            >
-              {t("search_button")}
-            </button>
-          </div>
+          {/* ✅ Вынесенная строка поиска */}
+          <SearchBar
+            handleSearchSubmit={handleSearchSubmit}
+            handleSearchKeyDown={handleSearchKeyDown}
+            openLocationModal={() => setIsLocationModalOpen(true)}
+          />
 
           <div className={styles.sortWrapper}>
             <select
@@ -139,6 +112,7 @@ export default function Filter({}) {
           </button>
         </div>
 
+        {/* модалка локации */}
         <div
           className={
             isLocationModalOpen ? styles.modalOpen : styles.modalClosed
@@ -153,6 +127,7 @@ export default function Filter({}) {
         </div>
       </div>
 
+      {/* модалка фильтров */}
       <div
         className={isFiltersModalOpen ? styles.modalOpen : styles.modalClosed}
       >

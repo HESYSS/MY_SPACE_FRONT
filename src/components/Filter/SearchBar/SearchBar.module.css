@@ -1,0 +1,89 @@
+.searchInputWrapper {
+  position: relative;
+  width: 100%;
+}
+
+.tagsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  align-items: center;
+  background-color: #0a0a0a;
+  border: 1px solid #03b9b34d;
+  border-radius: 5px;
+  padding: 4px 8px;
+  min-height: 40px;
+  box-sizing: border-box;
+}
+
+.tag {
+  background-color: #03b9b3;
+  color: #000;
+  padding: 4px 8px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  font-size: 0.85rem;
+}
+
+.removeTagButton {
+  background: none;
+  border: none;
+  margin-left: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  color: #000;
+}
+
+.input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  color: #fff;
+  min-width: 120px;
+  height: 28px;
+  outline: none;
+  padding: 4px 0;
+}
+
+.input::placeholder {
+  color: #999;
+}
+
+.searchButton {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  height: 32px;
+  background-color: #fff;
+  color: #000;
+  padding: 0 0.75rem;
+  border: none;
+  border-radius: 0 5px 5px 0;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+}
+
+.searchButton:hover {
+  background-color: #eee;
+}
+
+@media (max-width: 770px) {
+  .tagsContainer {
+    padding: 3px 6px;
+    min-height: 36px;
+  }
+
+  .input {
+    height: 26px;
+  }
+
+  .searchButton {
+    height: 28px;
+    padding: 0 0.6rem;
+    font-size: 0.9rem;
+  }
+}

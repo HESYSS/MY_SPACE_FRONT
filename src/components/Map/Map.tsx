@@ -17,6 +17,7 @@ import { kyivMetroStations } from "./kyivMetro";
 import kyivDistricts from "./kyiv.json";
 import MultiPolygon from "ol/geom/MultiPolygon";
 import { useRouter } from "next/router";
+import Geometry from "ol/geom/Geometry";
 
 interface Property {
   id: number;
@@ -81,6 +82,13 @@ export default function MapDrawFilter({
     image: new CircleStyle({
       radius: 5,
       fill: new Fill({ color: "#051818" }),
+      stroke: new Stroke({ color: "#fff", width: 1 }),
+    }),
+  });
+  const highlightStyle = new Style({
+    image: new CircleStyle({
+      radius: 7,
+      fill: new Fill({ color: "#1a3f3f" }),
       stroke: new Stroke({ color: "#fff", width: 1 }),
     }),
   });
@@ -162,14 +170,51 @@ export default function MapDrawFilter({
 
     mapInstance.current = map;
 
+    // Навигация по клику
     map.on("singleclick", (event) => {
-      map.forEachFeatureAtPixel(event.pixel, (feature) => {
-        const link = feature.get("link");
-        if (link) {
-          window.location.href = link; // открываем в новой вкладке
-        }
+      const feature = map.forEachFeatureAtPixel(event.pixel, (f, layer) => {
+        if (layer === markerLayer && f instanceof Feature) return f;
+        return null;
       });
+
+      if (feature) {
+        const link = feature.get("link");
+        if (link) router.push(link); // 👈 переход только один
+      }
     });
+
+    let hoveredFeature: Feature<Geometry> | null = null;
+
+    map.on("pointermove", (evt) => {
+      // Берём только маркеры
+      const feature = map.forEachFeatureAtPixel(evt.pixel, (f, layer) => {
+        if (layer === markerLayer && f instanceof Feature) return f;
+        return null;
+      });
+
+      const target = map.getTargetElement();
+
+      if (feature) {
+        target.style.cursor = "pointer";
+
+        if (hoveredFeature !== feature) {
+          if (hoveredFeature) hoveredFeature.setStyle(markerStyle);
+
+          feature.setStyle(highlightStyle);
+          hoveredFeature = feature;
+        }
+      } else {
+        target.style.cursor = "";
+        // 👇 важно: не сбрасываем сразу — добавим микрозадержку
+        if (hoveredFeature) {
+          setTimeout(() => {
+            if (hoveredFeature) hoveredFeature.setStyle(markerStyle);
+            hoveredFeature = null;
+          }, 60); // 👈 debounce эффект — предотвращает "мигание"
+        }
+      }
+    });
+    // Изменение курсора и подсветка при наведении
 
     dragPanRef.current = map
       .getInteractions()

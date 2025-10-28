@@ -153,24 +153,25 @@ export default function LocationModal({
     }
   }, [router.isReady, router.query.locationfilters]);
 
-  useEffect(() => {
-    if (isInitialRender) {
-      setIsInitialRender(false);
-      return;
-    }
+  const resetFilters = () => {
+    setSelectedMetro([]);
+    setSelectedDistricts([]);
+    setSelectedStreets([]);
+    setSelectedJk([]);
+    setSelectedDirections([]);
+    setSelectedPolygon([]);
+    localStorage.removeItem(POLYGON_STORAGE_KEY);
+
     const filters: any = {
       isOutOfCity:
         locationType === "none" ? "" : locationType === "region" ? true : false,
-      streets: selectedStreets,
-      newbuildings: selectedJk,
-      polygon: selectedPolygon,
+      metro: [],
+      districts: [],
+      streets: [],
+      newbuildings: [],
+      directions: [],
+      polygon: [],
     };
-    if (locationType === "kyiv") {
-      filters.metro = selectedMetro;
-      filters.districts = selectedDistricts;
-    } else {
-      filters.directions = selectedDirections;
-    }
 
     const query = {
       ...router.query,
@@ -181,15 +182,16 @@ export default function LocationModal({
       shallow: true,
     });
 
-    onSubmit({ ...filters, polygon: loadPolygon() });
-  }, [
-    selectedMetro,
-    selectedDistricts,
-    selectedStreets,
-    selectedJk,
-    selectedDirections,
-    locationType,
-  ]);
+    onSubmit(filters);
+  };
+
+  useEffect(() => {
+    if (isInitialRender) {
+      setIsInitialRender(false);
+      return;
+    }
+    resetFilters();
+  }, [locationType]);
 
   const toggleArrayValue = (
     arr: string[] | string,
@@ -248,8 +250,14 @@ export default function LocationModal({
     } else {
       filters.directions = selectedDirections;
     }
-    localStorage.setItem(FILTERS_STORAGE_KEY, JSON.stringify(filters));
-    onSubmit({ ...filters, polygon: loadPolygon() });
+    const query = {
+      ...router.query,
+      locationfilters: JSON.stringify(filters),
+    };
+
+    router.replace({ pathname: router.pathname, query }, undefined, {
+      shallow: true,
+    });
   }, [
     selectedMetro,
     selectedDistricts,
