@@ -314,7 +314,7 @@ const Carousel: FC = () => {
                           JSON.stringify({ deal: "Продаж", category: "Житлова" })
                         ),
                         locationfilters: encodeURIComponent(
-                          JSON.stringify({ districts: slide.text })
+                          JSON.stringify({ districts: slide.text, isOutOfCity: false, })
                         ),
                       },
                     }}

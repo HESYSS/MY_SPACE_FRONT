@@ -22,12 +22,12 @@ interface Property {
   id: number;
   lat: number;
   lng: number;
-  title?: string;
+  slug?: string;
 }
 
 const DEFAULT_MAP_VIEW = {
-  center: fromLonLat([30.5238, 50.4547]),
-  zoom: 11.5,
+  center: fromLonLat([30.5248, 50.404]),
+  zoom: 10.4,
 };
 const FILTERS_STORAGE_KEY = "locationFilters";
 const POLYGON_STORAGE_KEY = "mapPolygon";
@@ -162,6 +162,15 @@ export default function MapDrawFilter({
 
     mapInstance.current = map;
 
+    map.on("singleclick", (event) => {
+      map.forEachFeatureAtPixel(event.pixel, (feature) => {
+        const link = feature.get("link");
+        if (link) {
+          window.location.href = link; // открываем в новой вкладке
+        }
+      });
+    });
+
     dragPanRef.current = map
       .getInteractions()
       .getArray()
@@ -257,7 +266,7 @@ export default function MapDrawFilter({
 
   useEffect(() => {
     if (!markerSource.current) return;
-
+    if (!Array.isArray(properties)) return;
     const existingFeatures = markerSource.current.getFeatures();
     const existingIds = new Set(existingFeatures.map((f) => f.get("id")));
     const newIds = new Set(properties.map((p) => p.id));
@@ -273,6 +282,7 @@ export default function MapDrawFilter({
         const feature = new Feature({
           geometry: new Point(fromLonLat([p.lng, p.lat])),
           id: p.id,
+          link: `/property/${p.slug || p.id}`,
         });
         feature.setStyle(markerStyle);
         markerSource.current.addFeature(feature);
@@ -473,6 +483,7 @@ export default function MapDrawFilter({
     locationFilters?.districts,
     locationFilters?.metro,
     locationFilters?.polygon,
+    savedPolygon,
   ]);
 
   useEffect(() => {

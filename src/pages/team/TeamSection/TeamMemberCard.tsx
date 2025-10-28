@@ -29,6 +29,7 @@ export default function TeamMemberCard({
             alt={name}
             width={150}
             height={150}
+            unoptimized
             className={styles.memberPhoto}
           />
           <h3 className={styles.memberName}>

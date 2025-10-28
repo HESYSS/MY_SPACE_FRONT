@@ -106,14 +106,14 @@
   width: 574px;
   height: 64px;
   font-family: "Raleway", sans-serif;
-  font-style: bold;
+  font-style: normal;
   font-weight: 700;
   font-size: 14px;
   line-height: 16px;
 
   color: #565656;
   margin: 0;
-  font-variant: small-caps;
+  
   margin-top: -25px;
 }
 
