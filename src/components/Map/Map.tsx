@@ -26,8 +26,8 @@ interface Property {
 }
 
 const DEFAULT_MAP_VIEW = {
-  center: fromLonLat([30.5238, 50.4547]),
-  zoom: 11.5,
+  center: fromLonLat([30.5248, 50.404]),
+  zoom: 10.4,
 };
 const FILTERS_STORAGE_KEY = "locationFilters";
 const POLYGON_STORAGE_KEY = "mapPolygon";
@@ -473,6 +473,7 @@ export default function MapDrawFilter({
     locationFilters?.districts,
     locationFilters?.metro,
     locationFilters?.polygon,
+    savedPolygon,
   ]);
 
   useEffect(() => {

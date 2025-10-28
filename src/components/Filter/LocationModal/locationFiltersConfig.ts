@@ -145,7 +145,7 @@ export const METRO_LINES: Record<string, Record<string, string[]>> = {
       "Харківська",
       "Вирлиця",
       "Бориспільська",
-      "Червоний хутір",
+      "Червоний Хутір",
     ],
   },
 };

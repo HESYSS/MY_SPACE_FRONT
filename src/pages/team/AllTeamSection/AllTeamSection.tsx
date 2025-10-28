@@ -28,10 +28,12 @@ const AllTeamSection: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(5);
 
+  // 👉 состояния для свайпа / драга
   const [touchStartX, setTouchStartX] = useState<number | null>(null);
   const [dragX, setDragX] = useState<number>(0);
   const [isDragging, setIsDragging] = useState<boolean>(false);
 
+  // адаптация под ширину экрана
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth <= 768) {
@@ -47,6 +49,7 @@ const AllTeamSection: React.FC = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  // загрузка сотрудников
   useEffect(() => {
     const fetchEmployees = async () => {
       try {
@@ -65,7 +68,8 @@ const AllTeamSection: React.FC = () => {
     fetchEmployees();
   }, []);
 
-  const totalPages = Math.ceil(employees.length / itemsPerPage);
+  const activeEmployees = employees.filter((member) => !member.isSUPERVISOR);
+  const totalPages = Math.ceil(activeEmployees.length / itemsPerPage);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(Math.max(1, Math.min(page, totalPages)));
@@ -85,19 +89,19 @@ const AllTeamSection: React.FC = () => {
     };
   };
 
-  const handleTouchStart = (e: React.TouchEvent) => {
-    setTouchStartX(e.touches[0].clientX);
+  // --- Универсальная логика свайпа и мыши ---
+  const startDrag = (clientX: number) => {
+    setTouchStartX(clientX);
     setIsDragging(true);
   };
 
-  const handleTouchMove = (e: React.TouchEvent) => {
+  const moveDrag = (clientX: number) => {
     if (!isDragging || touchStartX === null) return;
-    const dragDistance = e.touches[0].clientX - touchStartX;
+    const dragDistance = clientX - touchStartX;
     setDragX(dragDistance);
   };
 
-  const handleTouchEnd = () => {
-    setIsDragging(false);
+  const endDrag = () => {
     if (touchStartX === null) return;
     const swipeThreshold = 50;
     if (dragX < -swipeThreshold) {
@@ -105,8 +109,29 @@ const AllTeamSection: React.FC = () => {
     } else if (dragX > swipeThreshold) {
       handlePageChange(currentPage - 1);
     }
+    setIsDragging(false);
     setTouchStartX(null);
     setDragX(0);
+  };
+
+  // touch события
+  const handleTouchStart = (e: React.TouchEvent) =>
+    startDrag(e.touches[0].clientX);
+  const handleTouchMove = (e: React.TouchEvent) =>
+    moveDrag(e.touches[0].clientX);
+  const handleTouchEnd = () => endDrag();
+
+  // mouse события
+  const handleMouseDown = (e: React.MouseEvent) => {
+    e.preventDefault(); // чтобы не выделялся текст и не тянулись ссылки
+    startDrag(e.clientX);
+  };
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (isDragging) moveDrag(e.clientX);
+  };
+  const handleMouseUp = () => endDrag();
+  const handleMouseLeave = () => {
+    if (isDragging) endDrag();
   };
 
   const isMobileOrTablet = itemsPerPage === 2 || itemsPerPage === 4;
@@ -120,29 +145,29 @@ const AllTeamSection: React.FC = () => {
       <div className={styles.carouselContainer}>
         <div
           className={styles.teamRow}
-          {...(isMobileOrTablet && {
-            onTouchStart: handleTouchStart,
-            onTouchMove: handleTouchMove,
-            onTouchEnd: handleTouchEnd,
-          })}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+          onMouseDown={handleMouseDown}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUp}
+          onMouseLeave={handleMouseLeave}
           style={
             {
-              transform: `translateX(calc(-${(currentPage - 1) * 100}% + ${
-                isMobileOrTablet ? dragX : 0
-              }px))`,
-              transition:
-                isMobileOrTablet && isDragging
-                  ? "none"
-                  : "transform 0.5s ease-in-out",
+              transform: `translateX(calc(-${
+                (currentPage - 1) * 100
+              }% + ${dragX}px))`,
+              transition: isDragging ? "none" : "transform 0.5s ease-in-out",
               "--items-per-page": itemsPerPage,
               "--gap": itemsPerPage === 5 ? "30px" : "15px",
+              cursor: isDragging ? "grabbing" : "grab",
             } as React.CSSProperties
           }
         >
-          {employees.length === 0 ? (
+          {activeEmployees.length === 0 ? (
             <p>Список сотрудников пуст.</p>
           ) : (
-            employees.map((member) => {
+            activeEmployees.map((member) => {
               const { name, role } = getEmployeeData(member, i18n.language);
               const imageUrl = member.photoUrl || vitaliyPenc.src;
               if (member.isSUPERVISOR === true) return null;
@@ -155,6 +180,8 @@ const AllTeamSection: React.FC = () => {
                         alt={name}
                         className={styles.memberPhoto}
                         fill
+                        style={{ objectFit: "cover" }}
+                        unoptimized
                       />
                       <div className={styles.gradientOverlay}></div>
                       <div className={styles.textContainer}>
@@ -173,6 +200,7 @@ const AllTeamSection: React.FC = () => {
             })
           )}
         </div>
+
         {totalPages > 1 && (
           <div className={styles.pagination}>
             {Array.from({ length: totalPages }, (_, index) => (
