@@ -1,0 +1,64 @@
+/* Контейнер модалки под инпутом */
+.overlay {
+  position: absolute;
+  top: 100%; /* сразу под инпутом */
+  left: 0;
+  width: 100%;
+  background-color: #0a0a0a;
+  color: #ebebeb;
+  border-radius: 12px;
+  padding: 10px 0;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+  font-family: Arial, sans-serif;
+  box-sizing: border-box;
+  max-height: 80vh; /* можно подстроить */
+  overflow-y: auto;
+  z-index: 1001;
+}
+
+/* Содержимое модалки */
+.modal {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Скрываем скролл */
+.modal::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+.modal {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Список результатов */
+.results {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+/* Элемент результата */
+.item {
+  padding: 10px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.item:hover {
+  background-color: #1f303c;
+}
+
+/* Нет результатов */
+.noResults {
+  text-align: center;
+  color: #888;
+  padding: 10px 0;
+  font-size: 16px;
+}
