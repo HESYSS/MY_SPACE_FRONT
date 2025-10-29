@@ -1,7 +1,7 @@
 // OffersSection.tsx
 
 import React, { FC } from 'react';
-import { Offer } from '../types/interface'; // <--- НОВИЙ ІМПОРТ З ЄДИНОГО ДЖЕРЕЛА
+import { Offer } from '../../../types/interface'; // <--- НОВИЙ ІМПОРТ З ЄДИНОГО ДЖЕРЕЛА
 
 // 2. Створення інтерфейсу для пропсів
 interface OffersSectionProps {

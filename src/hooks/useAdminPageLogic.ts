@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback, Dispatch, SetStateAction } from "react";
 import { jwtDecode, JwtPayload } from "jwt-decode";
 import { DropResult } from "@hello-pangea/dnd";
-import { Offer, Employee, Admin, Item, SiteImage } from './types/interface'; 
+import { Offer, Employee, Admin, Item, SiteImage } from '../types/interface'; 
 // Предполагаем, что интерфейсы Offer, Employee, Admin, Item, SiteImage доступны по этому пути
 
 // -------------------------------------------------------------

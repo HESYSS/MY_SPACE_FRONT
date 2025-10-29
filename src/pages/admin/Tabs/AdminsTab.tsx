@@ -3,7 +3,7 @@
 import React, { FC, Dispatch, SetStateAction } from 'react';
 // 🛑 ВИДАЛЯЄМО ЛОКАЛЬНЕ ОГОЛОШЕННЯ Admin ТА AdminRole!
 // ⬇️ ІМПОРТУЄМО КОРЕКТНИЙ ТИП Admin З УНІФІКОВАНОГО ФАЙЛУ
-import { Admin } from '../types/interface'; 
+import { Admin } from '../../../types/interface'; 
 
 // Тип для ролі (використовуємо string, як ви просили)
 type AdminRoleLiteral = "ADMIN" | "SUPERADMIN"; // Для селектора (літерали)

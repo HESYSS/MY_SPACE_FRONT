@@ -7,7 +7,7 @@ import {
 } from "@hello-pangea/dnd";
 
 // ИМПОРТ ХУКА
-import { useAdminPageLogic } from './useAdminPageLogic';
+import { useAdminPageLogic } from '../../hooks/useAdminPageLogic';
 
 // Импорт компонентов вкладок
 import EmployeesSection from './Tabs/EmployeesTab';
