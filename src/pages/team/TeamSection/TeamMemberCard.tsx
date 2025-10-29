@@ -10,6 +10,7 @@ interface TeamMemberCardProps {
   name: string;
   position: string;
   id: number;
+  isLarge?: boolean; // ДОБАВЛЕНО: Новый пропс
 }
 
 export default function TeamMemberCard({
@@ -17,11 +18,19 @@ export default function TeamMemberCard({
   name,
   position,
   id,
+  isLarge = false, // ДОБАВЛЕНО: Значение по умолчанию
 }: TeamMemberCardProps) {
   const nameWords = name.split(" ");
 
+  // ДОБАВЛЕНО: Условное применение класса для большой карточки
+  const cardClassName = `${styles.teamMemberCard} ${
+    isLarge ? styles.partnerCardLarge : ""
+  }`;
+
   return (
-    <div className={styles.teamMemberCard}>
+    <div className={cardClassName}>
+      {" "}
+      {/* ИСПОЛЬЗУЕТСЯ УСЛОВНЫЙ КЛАСС */}
       <div className={styles.cardContent}>
         <div className={styles.photoAndName}>
           <Image
@@ -29,7 +38,6 @@ export default function TeamMemberCard({
             alt={name}
             width={150}
             height={150}
-            unoptimized
             className={styles.memberPhoto}
           />
           <h3 className={styles.memberName}>

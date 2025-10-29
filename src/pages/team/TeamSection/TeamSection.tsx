@@ -78,7 +78,8 @@ export default function TeamSection() {
     <div className={styles.teamSection}>
       <div className={styles.groupContainer}>
         <h2 className={styles.title}>{t("partnersTitle")}</h2>
-        <div className={styles.teamGroup}>
+        {/* ИСПОЛЬЗУЕМ НОВЫЙ КЛАСС ДЛЯ СЕТКИ ПАРТНЕРОВ */}
+        <div className={styles.partnersGroup}>
           {partners.map((member) => {
             const { name, position } = getMemberData(member, i18n.language);
             return (
@@ -88,6 +89,7 @@ export default function TeamSection() {
                 name={name}
                 position={position}
                 photoSrc={member.photoUrl || defaultTeamImage.src}
+                isLarge={true} // ИСПРАВЛЕНО: Комментарий убран из фигурных скобок
               />
             );
           })}
