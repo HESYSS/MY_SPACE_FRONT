@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styles from "./SearchBar.module.css";
 import { useTranslation } from "react-i18next";
 import { useSearchParams, useRouter } from "next/navigation";
@@ -31,49 +31,89 @@ export default function SearchBar({
 
   const [tags, setTags] = useState<Tag[]>([]);
   const [inputValue, setInputValue] = useState("");
+  const tagListRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const tagList = tagListRef.current;
+    if (!tagList) return;
+
+    let isDown = false;
+    let startX: number;
+    let scrollLeft: number;
+
+    const onMouseDown = (e: MouseEvent) => {
+      isDown = true;
+      tagList.classList.add(styles.dragging);
+      startX = e.pageX - tagList.offsetLeft;
+      scrollLeft = tagList.scrollLeft;
+    };
+
+    const onMouseLeave = () => {
+      isDown = false;
+      tagList.classList.remove(styles.dragging);
+    };
+
+    const onMouseUp = () => {
+      isDown = false;
+      tagList.classList.remove(styles.dragging);
+    };
+
+    const onMouseMove = (e: MouseEvent) => {
+      if (!isDown) return;
+      e.preventDefault();
+      const x = e.pageX - tagList.offsetLeft;
+      const walk = (x - startX) * 1.5;
+      tagList.scrollLeft = scrollLeft - walk;
+    };
+
+    tagList.addEventListener("mousedown", onMouseDown);
+    tagList.addEventListener("mouseleave", onMouseLeave);
+    tagList.addEventListener("mouseup", onMouseUp);
+    tagList.addEventListener("mousemove", onMouseMove);
+
+    return () => {
+      tagList.removeEventListener("mousedown", onMouseDown);
+      tagList.removeEventListener("mouseleave", onMouseLeave);
+      tagList.removeEventListener("mouseup", onMouseUp);
+      tagList.removeEventListener("mousemove", onMouseMove);
+    };
+  }, [tags]);
 
   useEffect(() => {
     const rawLocation = searchParams.get("locationfilters");
-    if (!rawLocation) return;
+    if (!rawLocation) {
+      setTags([]);
+      return;
+    }
 
     try {
       const decoded = decodeURIComponent(decodeURIComponent(rawLocation));
       const parsed = JSON.parse(decoded);
       const newTags: Tag[] = [];
 
-      // --- Метро ---
       if (parsed.metro?.length) {
         const stationsLeft = [...parsed.metro];
-
         for (const line in METRO_LINES) {
           const lineStations = METRO_LINES[line].ua;
           const selected = lineStations.filter((s) => stationsLeft.includes(s));
-
           if (selected.length === lineStations.length) {
-            // Все станции линии выбраны
             newTags.push({ type: "Метро", value: line, fullName: line });
-            // удаляем эти станции, чтобы не создавать отдельные теги
             selected.forEach((s) => {
               const idx = stationsLeft.indexOf(s);
               if (idx > -1) stationsLeft.splice(idx, 1);
             });
           }
         }
-
-        // Оставшиеся станции создаем как отдельные теги
         stationsLeft.forEach((s) => newTags.push({ type: "Метро", value: s }));
       }
 
-      // --- Райони ---
       if (parsed.districts?.length) {
         const districtsLeft = [...parsed.districts];
-
         for (const shore in SHORE_DISTRICTS) {
           const shoreDistricts = SHORE_DISTRICTS[shore].ua;
           const selected = shoreDistricts.filter((d) =>
             districtsLeft.includes(d)
           );
-
           if (selected.length === shoreDistricts.length) {
             newTags.push({ type: "Район", value: shore, fullName: shore });
             selected.forEach((d) => {
@@ -82,18 +122,15 @@ export default function SearchBar({
             });
           }
         }
-
         districtsLeft.forEach((d) => newTags.push({ type: "Район", value: d }));
       }
 
-      // --- Вулиці ---
       if (parsed.streets?.length) {
         parsed.streets.forEach((val: string) =>
           newTags.push({ type: "Вулиця", value: val })
         );
       }
 
-      // --- Новобудови ---
       if (parsed.newbuildings?.length) {
         parsed.newbuildings.forEach((val: string) =>
           newTags.push({ type: "Новобудова", value: val })
@@ -103,6 +140,7 @@ export default function SearchBar({
       setTags(newTags);
     } catch (err) {
       console.error("Ошибка при разборе locationfilters:", err);
+      setTags([]);
     }
   }, [searchParams]);
 
@@ -135,8 +173,7 @@ export default function SearchBar({
 
         case "Район":
           if (removedTag.fullName) {
-            const shoreKey =
-              removedTag.fullName as keyof typeof SHORE_DISTRICTS;
+            const shoreKey = removedTag.fullName as keyof typeof SHORE_DISTRICTS;
             const shoreDistricts = SHORE_DISTRICTS[shoreKey].ua;
             parsed.districts = parsed.districts.filter(
               (d: string) => !shoreDistricts.includes(d)
@@ -149,9 +186,7 @@ export default function SearchBar({
           break;
 
         case "Вулиця":
-          parsed.streets = parsed.streets.filter(
-            (d: string) => d !== removedTag.value
-          );
+          parsed.streets = parsed.streets.filter((d: string) => d !== removedTag.value);
           break;
 
         case "Новобудова":
@@ -161,9 +196,21 @@ export default function SearchBar({
           break;
       }
 
-      const encoded = encodeURIComponent(JSON.stringify(parsed));
+      const hasActiveFilters =
+        (parsed.metro?.length || 0) > 0 ||
+        (parsed.districts?.length || 0) > 0 ||
+        (parsed.streets?.length || 0) > 0 ||
+        (parsed.newbuildings?.length || 0) > 0;
+
       const params = new URLSearchParams(window.location.search);
-      params.set("locationfilters", encoded);
+
+      if (hasActiveFilters) {
+        const encoded = encodeURIComponent(JSON.stringify(parsed));
+        params.set("locationfilters", encoded);
+      } else {
+        params.delete("locationfilters");
+      }
+
       router.replace(`?${params.toString()}`);
     } catch (err) {
       console.error("Ошибка при обновлении locationfilters:", err);
@@ -173,21 +220,25 @@ export default function SearchBar({
   return (
     <div className={styles.searchInputWrapper}>
       <div className={styles.tagsContainer}>
-        {tags.map((tag, idx) => (
-          <span
-            key={idx}
-            className={`${styles.tag} ${styles[`tag${tag.type}`]}`}
-          >
-            {tag.type}: {tag.fullName ?? tag.value}
-            <button
-              type="button"
-              className={styles.removeTagButton}
-              onClick={() => removeTag(idx)}
-            >
-              ×
-            </button>
-          </span>
-        ))}
+        {tags.length > 0 && (
+          <div ref={tagListRef} className={styles.tagList}>
+            {tags.map((tag, idx) => (
+              <span key={idx} className={styles.tag}>
+                {tag.type}: {tag.fullName ?? tag.value}
+                <button
+                  type="button"
+                  className={styles.removeTagButton}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    removeTag(idx);
+                  }}
+                >
+                  ×
+                </button>
+              </span>
+            ))}
+          </div>
+        )}
         <input
           type="text"
           placeholder={t("search_placeholder")}

@@ -23,7 +23,7 @@
   min-width: 100px;
   max-width: 120px;
   width: auto;
-  height: 40px;
+  height: 42px;
   padding: 0 0.5rem;
   border-radius: 5px;
   background-color: #0a0a0a;
@@ -38,7 +38,7 @@
 }
 
 .filterButton {
-  height: 40px;
+  height: 42px;
   padding: 0 1rem;
   border-radius: 5px;
   background-color: #0a0a0a;

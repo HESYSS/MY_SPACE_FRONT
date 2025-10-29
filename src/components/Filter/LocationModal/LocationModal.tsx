@@ -151,6 +151,9 @@ export default function LocationModal({
       setSelectedPolygon([]);
       localStorage.removeItem(POLYGON_STORAGE_KEY);
     }
+    if (isInitialRender) {
+      setIsInitialRender(false);
+    }
   }, [router.isReady, router.query.locationfilters]);
 
   const resetFilters = () => {
@@ -177,22 +180,14 @@ export default function LocationModal({
       ...router.query,
       locationfilters: JSON.stringify(filters),
     };
-
+    
     router.replace({ pathname: router.pathname, query }, undefined, {
       shallow: true,
     });
 
     onSubmit(filters);
   };
-
-  useEffect(() => {
-    if (isInitialRender) {
-      setIsInitialRender(false);
-      return;
-    }
-    resetFilters();
-  }, [locationType]);
-
+  
   const toggleArrayValue = (
     arr: string[] | string,
     value: string
@@ -239,6 +234,7 @@ export default function LocationModal({
 
   useEffect(() => {
     if (isInitialRender) return;
+    
     const filters: any = {
       isOutOfCity: locationType === "region",
       streets: selectedStreets,
@@ -250,10 +246,20 @@ export default function LocationModal({
     } else {
       filters.directions = selectedDirections;
     }
+    
+    const hasActiveFilters = 
+        Object.values(filters).some(val => Array.isArray(val) && val.length > 0) || 
+        locationType !== 'none';
+        
     const query = {
       ...router.query,
-      locationfilters: JSON.stringify(filters),
     };
+
+    if (hasActiveFilters) {
+        query.locationfilters = encodeURIComponent(JSON.stringify(filters));
+    } else {
+        delete query.locationfilters;
+    }
 
     router.replace({ pathname: router.pathname, query }, undefined, {
       shallow: true,
@@ -264,6 +270,8 @@ export default function LocationModal({
     selectedStreets,
     selectedJk,
     selectedDirections,
+    locationType,
+    isInitialRender
   ]);
 
   const Dropdown = ({
@@ -293,7 +301,12 @@ export default function LocationModal({
           className={`${styles.locationButton} ${
             locationType === "kyiv" ? styles.active : ""
           }`}
-          onClick={() => setLocationType("kyiv")}
+          onClick={() => {
+            if (locationType !== "kyiv") {
+              resetFilters();
+            }
+            setLocationType("kyiv");
+          }}
         >
           {t("kyiv_city")}
         </button>
@@ -301,7 +314,12 @@ export default function LocationModal({
           className={`${styles.locationButton} ${
             locationType === "region" ? styles.active : ""
           }`}
-          onClick={() => setLocationType("region")}
+          onClick={() => {
+            if (locationType !== "region") {
+              resetFilters();
+            }
+            setLocationType("region");
+          }}
         >
           {t("kyiv_region")}
         </button>
