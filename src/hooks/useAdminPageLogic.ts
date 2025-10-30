@@ -26,6 +26,7 @@ interface UserAuthType {
 
 interface AdminPageLogic {
     // Состояния
+    selectedEmployee: Employee | null; setSelectedEmployee: Dispatch<SetStateAction<Employee | null>>; // <-- НОВОЕ СОСТОЯНИЕ
     activeTab: string; setActiveTab: Dispatch<SetStateAction<string>>;
     isFormVisible: boolean; setIsFormVisible: Dispatch<SetStateAction<boolean>>;
     isFormVisibleAdmins: boolean; setIsFormVisibleAdmins: Dispatch<SetStateAction<boolean>>;
@@ -73,6 +74,8 @@ interface AdminPageLogic {
     selectedItem: Item | null; setSelectedItem: Dispatch<SetStateAction<Item | null>>;
 
     // Функции
+    handleEditEmployee: (employee: Employee) => void;                                                  // <-- НОВАЯ ФУНКЦИЯ
+    handleUpdateEmployee: (event: React.FormEvent) => Promise<void>;
     getHeadersWithAuth: (isMultipart?: boolean) => HeadersInit;
     fetchEmployees: () => Promise<void>;
     fetchOffers: () => Promise<void>;
@@ -104,7 +107,7 @@ export const useAdminPageLogic = (): AdminPageLogic => {
     // -------------------------------------------------------------
     // СОСТОЯНИЯ
     // -------------------------------------------------------------
-
+    const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(null); // <-- НОВОЕ СОСТОЯНИЕ
     const [activeTab, setActiveTab] = useState("employees");
     const [isFormVisible, setIsFormVisible] = useState(false);
     const [isFormVisibleAdmins, setIsFormVisibleAdmins] = useState(false);
@@ -557,6 +560,153 @@ export const useAdminPageLogic = (): AdminPageLogic => {
         }
     }, [getHeadersWithAuth, fetchEmployees]);
     
+    const handleEditEmployee = useCallback((employee: Employee) => {
+    setSelectedEmployee(employee);
+    setFirstName(employee.firstName || "");
+    setLastName(employee.lastName || "");
+    setPosition(employee.position || "");
+    setExperienceYears(employee.experienceYears?.toString() || undefined);
+    setProfile(employee.profile || "");
+    setAboutMe(employee.aboutMe || "");
+    
+    // Английские поля
+    setFirstNameEn(employee.firstNameEn || "");
+    setLastNameEn(employee.lastNameEn || "");
+    setPositionEn(employee.positionEn || "");
+    setProfileEn(employee.profileEn || "");
+    setAboutMeEn(employee.aboutMeEn || "");
+
+    // Булевы поля
+    setIsPartner(employee.isPARTNER);
+    setIsManager(employee.isMANAGER);
+    setIsSupervisor(employee.isSUPERVISOR);
+    setIsActive(employee.isACTIVE);
+    
+    // Сброс файла, так как мы не загружаем его обратно
+    setEmployeePhotoFile(null); 
+    
+    setIsFormVisible(true);
+}, []);
+
+
+const handleUpdateEmployee = useCallback(async (event: React.FormEvent) => {
+    event.preventDefault();
+
+    if (!selectedEmployee) {
+        alert("Ошибка: Сотрудник для обновления не выбран.");
+        return;
+    }
+    
+    // Запускаем загрузку
+    setLoading(true);
+    setError(null);
+    
+    try {
+        const formData = new FormData();
+        
+        // 1. Добавление файла (если он выбран)
+        if (employeePhotoFile) {
+            formData.append("file", employeePhotoFile);
+        }
+        
+        // 2. Добавление текстовых полей
+        formData.append("firstName", firstName);
+        formData.append("lastName", lastName);
+        formData.append("position", position);
+        formData.append("profile", profile);
+        formData.append("aboutMe", aboutMe);
+        formData.append("firstNameEn", firstNameEn);
+        formData.append("lastNameEn", lastNameEn);
+        formData.append("positionEn", positionEn);
+        formData.append("profileEn", profileEn);
+        formData.append("aboutMeEn", aboutMeEn);
+        
+        // 🛑 ИСПРАВЛЕНИЕ ДЛЯ experienceYears 🛑
+        // 1. Приводим к строке и удаляем пробелы.
+        const expYearsString = String(experienceYears || "").trim();
+
+        // 2. Преобразуем в целое число.
+        // 💡 ИСПРАВЛЕНИЕ: Используем let и явно указываем тип number | undefined
+        let expYearsInt: number | undefined = parseInt(expYearsString, 10); 
+
+        // 3. Проверка на валидность.
+        // Если это NaN (нечисловой ввод) или меньше нуля.
+        if (isNaN(expYearsInt) || expYearsInt < 0) {
+            // Теперь присвоение undefined разрешено
+            expYearsInt = undefined; 
+        }
+
+        if (expYearsInt !== undefined) {
+            // Если получили корректное целое число, отправляем его как строку.
+            formData.append("experienceYears", String(expYearsInt));
+        } else {
+            // Если поле пустое или некорректное, отправляем пустую строку.
+            formData.append("experienceYears", ""); 
+        }
+        
+        // 🛑 Булевы значения отправляются как строки "true" или "false"
+        // (Это корректно для FormData, если DTO настроен на трансформацию)
+        formData.append("isPARTNER", String(isPartner));
+        formData.append("isMANAGER", String(isManager));
+        formData.append("isSUPERVISOR", String(isSupervisor));
+        formData.append("isACTIVE", String(isActive));
+        
+        // ----------------------------------------------------------------------
+        
+        const token = localStorage.getItem("token");
+        if (!token) throw new Error("Токен не найден.");
+        const backendUrl = process.env.REACT_APP_API_URL;
+        
+        // Используем метод PUT с ID сотрудника
+        const response = await fetch(`${backendUrl}/employee/${selectedEmployee.id}`, {
+            method: "PUT",
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+            body: formData,
+        });
+
+        if (response.ok) {
+            alert("Сотрудник успешно обновлен!");
+            fetchEmployees(); 
+            
+            // Сброс формы и закрытие
+            setSelectedEmployee(null); 
+            setFirstName("");
+            setLastName("");
+            setPosition("");
+            setExperienceYears(undefined); // Сброс experienceYears
+            setProfile("");
+            setAboutMe("");
+            setFirstNameEn("");
+            setLastNameEn("");
+            setPositionEn("");
+            setProfileEn("");
+            setAboutMeEn("");
+            setIsPartner(false);
+            setIsManager(false);
+            setIsActive(false);
+            setIsSupervisor(false);
+            setEmployeePhotoFile(null);
+            setIsFormVisible(false);
+        } else {
+            const errorData = await response.json();
+            alert(`Ошибка при обновлении сотрудника: ${errorData.message}`);
+        }
+    } catch (err: unknown) {
+        console.error("Ошибка:", err);
+        const errorMessage = err instanceof Error ? err.message : "Произошла неизвестная ошибка сети.";
+        alert(`Ошибка обновления: ${errorMessage}`);
+    } finally {
+        setLoading(false);
+    }
+}, [
+    selectedEmployee, employeePhotoFile, firstName, lastName, position, 
+    experienceYears, profile, aboutMe, firstNameEn, lastNameEn, positionEn, 
+    profileEn, aboutMeEn, isPartner, isManager, isSupervisor, isActive, 
+    fetchEmployees 
+]);
+
     const handleLogin = useCallback(async (event: React.FormEvent) => {
         event.preventDefault();
         setLoading(true);
@@ -839,6 +989,7 @@ export const useAdminPageLogic = (): AdminPageLogic => {
         userRole, setUserRole,
         userAuthInfo, setUserAuthInfo,
         file, setFile,
+        selectedEmployee, setSelectedEmployee, // <-- НОВОЕ СОСТОЯНИЕ
 
         // Состояния формы сотрудников
         firstName, setFirstName,
@@ -889,5 +1040,7 @@ export const useAdminPageLogic = (): AdminPageLogic => {
         handleUpdateRole,
         handleToggleImageActive,
         onDragEnd,
+        handleEditEmployee,       // <-- НОВАЯ ФУНКЦИЯ
+        handleUpdateEmployee,
     };
 };
