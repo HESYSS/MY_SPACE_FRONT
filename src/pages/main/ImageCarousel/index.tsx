@@ -55,16 +55,32 @@ const Carousel: FC = () => {
   // Данные слайдов
   const baseSlidesData = useMemo(
     () => [
-      { name: "Solomianskyi.png", text: "Солом'янський", text_en: "Solomianskyi" },
+      {
+        name: "Solomianskyi.png",
+        text: "Солом'янський",
+        text_en: "Solomianskyi",
+      },
       { name: "Podilskyi.png", text: "Подільський", text_en: "Podilskyi" },
       { name: "Pecherskyi.png", text: "Печерський", text_en: "Pecherskyi" },
       { name: "Dniprovskyi.png", text: "Дніпровський", text_en: "Dniprovskyi" },
-      { name: "Shevchenkivskyi.png", text: "Шевченківський", text_en: "Shevchenkivskyi" },
-      { name: "Holosiivskyi.png", text: "Голосіївський", text_en: "Holosiivskyi" },
+      {
+        name: "Shevchenkivskyi.png",
+        text: "Шевченківський",
+        text_en: "Shevchenkivskyi",
+      },
+      {
+        name: "Holosiivskyi.png",
+        text: "Голосіївський",
+        text_en: "Holosiivskyi",
+      },
       { name: "Obolonskyi.png", text: "Оболонський", text_en: "Obolonskyi" },
       { name: "Darnytskyi.png", text: "Дарницький", text_en: "Darnytskyi" },
       { name: "Desnianskyi.png", text: "Деснянський", text_en: "Desnianskyi" },
-      { name: "Sviatoshynskyi.png", text: "Святошинський", text_en: "Sviatoshynskyi" },
+      {
+        name: "Sviatoshynskyi.png",
+        text: "Святошинський",
+        text_en: "Sviatoshynskyi",
+      },
     ],
     []
   );
@@ -74,10 +90,16 @@ const Carousel: FC = () => {
       const img = images.find((i) => i.name === name);
       return img ? img.url : "";
     };
-    return baseSlidesData.map((s) => ({ ...s, src: getImageUrlByName(s.name) }));
+    return baseSlidesData.map((s) => ({
+      ...s,
+      src: getImageUrlByName(s.name),
+    }));
   }, [baseSlidesData, images]);
 
-  const loopSlides = useMemo(() => [...slidesData, ...slidesData, ...slidesData], [slidesData]);
+  const loopSlides = useMemo(
+    () => [...slidesData, ...slidesData, ...slidesData],
+    [slidesData]
+  );
 
   // Автопрокрутка
   const startTimer = useCallback(() => {
@@ -107,9 +129,12 @@ const Carousel: FC = () => {
   }, [slidesData.length, resetTimer]);
 
   // Свайпы
-  const handleTouchStart = useCallback((e: React.TouchEvent<HTMLDivElement>) => {
-    touchStartRef.current = e.touches[0].clientX;
-  }, []);
+  const handleTouchStart = useCallback(
+    (e: React.TouchEvent<HTMLDivElement>) => {
+      touchStartRef.current = e.touches[0].clientX;
+    },
+    []
+  );
 
   const handleTouchEnd = useCallback(
     (e: React.TouchEvent<HTMLDivElement>) => {
@@ -287,15 +312,19 @@ const Carousel: FC = () => {
           onTouchEnd={handleTouchEnd}
         >
           {loopSlides.map((slide, idx) => {
-            const { width, height, opacity, zIndex, translateX, rotateY } = getPositionStyle(idx);
+            const { width, height, opacity, zIndex, translateX, rotateY } =
+              getPositionStyle(idx);
             if (opacity === 0) return null;
             const isCenter = zIndex === 10;
-            const slideText = currentLanguage === "en" ? slide.text_en : slide.text;
+            const slideText =
+              currentLanguage === "en" ? slide.text_en : slide.text;
 
             return (
               <div
                 key={`${slide.name}-${idx}`}
-                className={`${styles.slide} ${isCenter ? styles.centerSlide : ""}`}
+                className={`${styles.slide} ${
+                  isCenter ? styles.centerSlide : ""
+                }`}
                 style={{
                   width,
                   height,
@@ -311,42 +340,50 @@ const Carousel: FC = () => {
                       pathname: "/catalog",
                       query: {
                         otherfilters: encodeURIComponent(
-                          JSON.stringify({ deal: "Продаж", category: "Житлова" })
+                          JSON.stringify({
+                            deal: "Продаж",
+                            category: "Житлова",
+                          })
                         ),
                         locationfilters: encodeURIComponent(
-                          JSON.stringify({ districts: slide.text, isOutOfCity: false, })
+                          JSON.stringify({
+                            districts: [slide.text],
+                            isOutOfCity: false,
+                          })
                         ),
                       },
                     }}
                     className={styles.linkWrapper}
                   >
-                  <Image
-  src={slide.src}
-  alt={slide.name}
-  fill
-  sizes="(max-width: 480px) 250px,
+                    <Image
+                      src={slide.src}
+                      alt={slide.name}
+                      fill
+                      sizes="(max-width: 480px) 250px,
          (max-width: 768px) 300px,
          (max-width: 1200px) 400px,
          500px"
-  className={styles.slideImage}
-/>
+                      className={styles.slideImage}
+                    />
                     <div className={styles.textOverlay} />
                     <div className={styles.slideTextContainer}>
-                      <span className={styles.slideSubtitle}>{t("district")}</span>
+                      <span className={styles.slideSubtitle}>
+                        {t("district")}
+                      </span>
                       <span className={styles.slideTitle}>{slideText}</span>
                     </div>
                   </Link>
                 ) : (
-              <Image
-  src={slide.src}
-  alt={slide.name}
-  fill
-  sizes="(max-width: 480px) 250px,
+                  <Image
+                    src={slide.src}
+                    alt={slide.name}
+                    fill
+                    sizes="(max-width: 480px) 250px,
          (max-width: 768px) 300px,
          (max-width: 1200px) 400px,
          500px"
-  className={styles.slideImage}
-/>
+                    className={styles.slideImage}
+                  />
                 )}
               </div>
             );
@@ -356,7 +393,10 @@ const Carousel: FC = () => {
 
       {(!isMobile || (isMobile && slidesData.length > 2)) && (
         <div className={styles.arrows}>
-          <button onClick={prevSlide} className={`${styles.arrowBtn} ${styles.leftArrow}`}>
+          <button
+            onClick={prevSlide}
+            className={`${styles.arrowBtn} ${styles.leftArrow}`}
+          >
             <svg width="18" height="18" viewBox="0 0 10 16" fill="none">
               <path
                 d="M1.33203 14.668L8.00003 8.00003L1.33203 1.33203"
@@ -368,7 +408,10 @@ const Carousel: FC = () => {
             </svg>
           </button>
 
-          <button onClick={nextSlide} className={`${styles.arrowBtn} ${styles.rightArrow}`}>
+          <button
+            onClick={nextSlide}
+            className={`${styles.arrowBtn} ${styles.rightArrow}`}
+          >
             <svg width="18" height="18" viewBox="0 0 10 16" fill="none">
               <path
                 d="M1.33203 14.668L8.00003 8.00003L1.33203 1.33203"
