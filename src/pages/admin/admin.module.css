@@ -459,14 +459,16 @@
 
 .cancelBtn {
   background-color: #555;
+  display: block;
+  width: 100%;
+  padding: 12px;
   color: #fff;
   border: none;
-  padding: 12px;
   border-radius: 4px;
-  cursor: pointer;
   font-size: 16px;
-  flex-grow: 1;
+  cursor: pointer;
   transition: background-color 0.2s ease-in-out;
+  margin-top: 5px;
 }
 
 .cancelBtn:hover {
@@ -652,4 +654,17 @@
 
 .dragHandle {
   cursor: grab;
+}
+
+.editBtn{
+  background-color: #03b9b3;
+  color: #fff;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s ease-in-out;
+  margin-bottom: 5px;
+  margin-top: 5px;
 }
