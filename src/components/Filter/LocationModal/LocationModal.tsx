@@ -70,6 +70,7 @@ export default function LocationModal({
   const [isInitialRender, setIsInitialRender] = useState(true);
   const [streetLimit, setStreetLimit] = useState(20);
   const [jkLimit, setJkLimit] = useState(20);
+  
   useEffect(() => {
     let otherFilters: Record<string, any> = {};
 
@@ -78,7 +79,6 @@ export default function LocationModal({
         const decoded = decodeURIComponent(router.query.otherfilters);
         const parsed = JSON.parse(decoded);
 
-        // Берём только нужные поля, если они есть
         ["category", "deal", "type"].forEach((key) => {
           if (parsed[key] !== undefined && parsed[key] !== null) {
             otherFilters[key] = parsed[key];
@@ -89,13 +89,10 @@ export default function LocationModal({
       }
     }
 
-    console.log("otherFilters", otherFilters);
-
     async function fetchLocationData() {
       try {
         const backendUrl = process.env.REACT_APP_API_URL;
 
-        // Формируем query string из otherFilters
         const queryParams = new URLSearchParams(otherFilters).toString();
         const url = `${backendUrl}/items/location${
           queryParams ? `?${queryParams}` : ""
@@ -317,7 +314,8 @@ export default function LocationModal({
 
   return (
     <div ref={modalRef} className={styles.modalContent}>
-      <div className={styles.scrollBar}>
+      
+      <div className={styles.modalHeader}>
         <div className={styles.locationToggle}>
           <button
             className={`${styles.locationButton} ${
@@ -346,251 +344,257 @@ export default function LocationModal({
             {t("kyiv_region")}
           </button>
         </div>
-        {locationType === "kyiv" ? (
-          <div className={styles.locationGroup}>
-            <Dropdown
-              title={t("metro")}
-              isOpen={metroOpen}
-              onToggle={() => setMetroOpen(!metroOpen)}
-            >
-              <div className={styles.columnsWrapper}>
-                {Object.keys(METRO_LINES).map((line) => {
-                  const selectedCount = METRO_LINES[line]["ua"].filter((s) =>
-                    selectedMetro.includes(s)
-                  ).length;
-                  return (
-                    <div key={line} className={styles.metroColumn}>
+      </div>
+
+      <div className={styles.modalBodyScroll}>
+        <div className={styles.scrollBar}>
+          {locationType === "kyiv" ? (
+            <div className={styles.locationGroup}>
+              <Dropdown
+                title={t("metro")}
+                isOpen={metroOpen}
+                onToggle={() => setMetroOpen(!metroOpen)}
+              >
+                <div className={styles.columnsWrapper}>
+                  {Object.keys(METRO_LINES).map((line) => {
+                    const selectedCount = METRO_LINES[line]["ua"].filter((s) =>
+                      selectedMetro.includes(s)
+                    ).length;
+                    return (
+                      <div key={line} className={styles.metroColumn}>
+                        <div
+                          className={`${styles.dropdownItem} ${
+                            METRO_LINES[line]["ua"].every((s) =>
+                              selectedMetro.includes(s)
+                            )
+                              ? styles.active
+                              : ""
+                          }`}
+                          style={{ fontWeight: "bold" }}
+                          onClick={() => handleSelectMetroLine(line)}
+                        >
+                          {t(line)}
+                          {selectedCount > 0 && ` (${selectedCount})`}
+                        </div>
+                        <div className={styles.dropdownSubList}>
+                          {METRO_LINES[line]["ua"].map((stationUa, index) => {
+                            const stationEn = METRO_LINES[line][lang][index];
+                            return (
+                              <div
+                                key={stationUa}
+                                className={`${styles.dropdownItem} ${
+                                  selectedMetro.includes(stationUa)
+                                    ? styles.active
+                                    : ""
+                                }`}
+                                style={{ paddingLeft: "20px" }}
+                                onClick={() =>
+                                  handleSelectMetroStation(stationUa)
+                                }
+                              >
+                                {stationEn}
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </Dropdown>
+              <Dropdown
+                title={t("districts")}
+                isOpen={districtOpen}
+                onToggle={() => setDistrictOpen(!districtOpen)}
+              >
+                <div className={styles.districtsWrapper}>
+                  {Object.keys(SHORE_DISTRICTS).map((shore) => (
+                    <div key={shore} className={styles.districtColumn}>
                       <div
                         className={`${styles.dropdownItem} ${
-                          METRO_LINES[line]["ua"].every((s) =>
-                            selectedMetro.includes(s)
+                          SHORE_DISTRICTS[shore]["ua"].every((d) =>
+                            selectedDistricts.includes(d)
                           )
                             ? styles.active
                             : ""
                         }`}
                         style={{ fontWeight: "bold" }}
-                        onClick={() => handleSelectMetroLine(line)}
+                        onClick={() => handleSelectShore(shore)}
                       >
-                        {t(line)}
-                        {selectedCount > 0 && ` (${selectedCount})`}
+                        {t(shore)}
                       </div>
-                      <div className={styles.dropdownSubList}>
-                        {METRO_LINES[line]["ua"].map((stationUa, index) => {
-                          const stationEn = METRO_LINES[line][lang][index];
-                          return (
-                            <div
-                              key={stationUa}
-                              className={`${styles.dropdownItem} ${
-                                selectedMetro.includes(stationUa)
-                                  ? styles.active
-                                  : ""
-                              }`}
-                              style={{ paddingLeft: "20px" }}
-                              onClick={() =>
-                                handleSelectMetroStation(stationUa)
-                              }
-                            >
-                              {stationEn}
-                            </div>
-                          );
-                        })}
+                      {SHORE_DISTRICTS[shore]["ua"].map((districtUa, index) => {
+                        const districtEn = SHORE_DISTRICTS[shore][lang][index];
+                        return (
+                          <div
+                            key={districtUa}
+                            className={`${styles.dropdownItem} ${
+                              selectedDistricts.includes(districtUa)
+                                ? styles.active
+                                : ""
+                            }`}
+                            style={{ paddingLeft: "20px" }}
+                            onClick={() => handleSelectDistrict(districtUa)}
+                          >
+                            {districtEn}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  ))}
+                </div>
+              </Dropdown>
+              <Dropdown
+                title={t("street")}
+                isOpen={streetOpen}
+                onToggle={() => setStreetOpen(!streetOpen)}
+              >
+                <div className={styles.inlineList}>
+                  {locationData?.kyiv?.streets
+                    .slice(0, streetLimit)
+                    .map((street) => (
+                      <div
+                        key={street}
+                        className={`${styles.dropdownItem} ${
+                          selectedStreets.includes(street) ? styles.active : ""
+                        }`}
+                        onClick={() => handleSelectStreet(street)}
+                      >
+                        {street}
                       </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </Dropdown>
-            <Dropdown
-              title={t("districts")}
-              isOpen={districtOpen}
-              onToggle={() => setDistrictOpen(!districtOpen)}
-            >
-              <div className={styles.districtsWrapper}>
-                {Object.keys(SHORE_DISTRICTS).map((shore) => (
-                  <div key={shore} className={styles.districtColumn}>
-                    <div
-                      className={`${styles.dropdownItem} ${
-                        SHORE_DISTRICTS[shore]["ua"].every((d) =>
-                          selectedDistricts.includes(d)
-                        )
-                          ? styles.active
-                          : ""
-                      }`}
-                      style={{ fontWeight: "bold" }}
-                      onClick={() => handleSelectShore(shore)}
+                    ))}
+
+                  {(locationData?.kyiv?.streets ?? []).length > streetLimit && (
+                    <p
+                      className={styles.showMoreBtn}
+                      onClick={() => setStreetLimit((prev) => prev + 20)}
                     >
-                      {t(shore)}
-                    </div>
-                    {SHORE_DISTRICTS[shore]["ua"].map((districtUa, index) => {
-                      const districtEn = SHORE_DISTRICTS[shore][lang][index];
-                      return (
-                        <div
-                          key={districtUa}
-                          className={`${styles.dropdownItem} ${
-                            selectedDistricts.includes(districtUa)
-                              ? styles.active
-                              : ""
-                          }`}
-                          style={{ paddingLeft: "20px" }}
-                          onClick={() => handleSelectDistrict(districtUa)}
-                        >
-                          {districtEn}
-                        </div>
-                      );
-                    })}
-                  </div>
-                ))}
-              </div>
-            </Dropdown>
-            <Dropdown
-              title={t("street")}
-              isOpen={streetOpen}
-              onToggle={() => setStreetOpen(!streetOpen)}
-            >
-              <div className={styles.inlineList}>
-                {locationData?.kyiv?.streets
-                  .slice(0, streetLimit)
-                  .map((street) => (
-                    <div
-                      key={street}
-                      className={`${styles.dropdownItem} ${
-                        selectedStreets.includes(street) ? styles.active : ""
-                      }`}
-                      onClick={() => handleSelectStreet(street)}
+                      {t("showMore")}
+                    </p>
+                  )}
+                </div>
+              </Dropdown>
+
+              <Dropdown
+                title={t("jk")}
+                isOpen={jkOpen}
+                onToggle={() => setJkOpen(!jkOpen)}
+              >
+                <div className={styles.inlineList}>
+                  {locationData?.kyiv?.newbuildings
+                    .slice(0, jkLimit)
+                    .map((jk) => (
+                      <div
+                        key={jk}
+                        className={`${styles.dropdownItem} ${
+                          selectedJk.includes(jk) ? styles.active : ""
+                        }`}
+                        onClick={() => handleSelectJk(jk)}
+                      >
+                        {jk}
+                      </div>
+                    ))}
+
+                  {(locationData?.kyiv?.newbuildings ?? []).length > jkLimit && (
+                    <p
+                      className={styles.showMoreBtn}
+                      onClick={() => setJkLimit((prev) => prev + 20)}
                     >
-                      {street}
+                      {t("showMore")}
+                    </p>
+                  )}
+                </div>
+              </Dropdown>
+            </div>
+          ) : locationType === "region" ? (
+            <div className={styles.locationGroup}>
+              <Dropdown
+                title={t("directions")}
+                isOpen={regionDirectionOpen}
+                onToggle={() => setRegionDirectionOpen(!regionDirectionOpen)}
+              >
+                <div className={styles.inlineList}>
+                  {locationData?.region?.directions.map((dir) => (
+                    <div
+                      key={dir}
+                      className={`${styles.dropdownItem} ${
+                        selectedDirections.includes(dir) ? styles.active : ""
+                      }`}
+                      onClick={() => handleSelectDirection(dir)}
+                    >
+                      {dir}
                     </div>
                   ))}
+                </div>
+              </Dropdown>
+              <Dropdown
+                title={t("street")}
+                isOpen={streetOpen}
+                onToggle={() => setStreetOpen(!streetOpen)}
+              >
+                <div className={styles.inlineList}>
+                  {locationData?.region?.streets
+                    .slice(0, streetLimit)
+                    .map((street) => (
+                      <div
+                        key={street}
+                        className={`${styles.dropdownItem} ${
+                          selectedStreets.includes(street) ? styles.active : ""
+                        }`}
+                        onClick={() => handleSelectStreet(street)}
+                      >
+                        {street}
+                      </div>
+                    ))}
 
-                {(locationData?.kyiv?.streets ?? []).length > streetLimit && (
-                  <p
-                    className={styles.showMoreBtn}
-                    onClick={() => setStreetLimit((prev) => prev + 20)}
-                  >
-                    {t("showMore")}
-                  </p>
-                )}
-              </div>
-            </Dropdown>
-
-            <Dropdown
-              title={t("jk")}
-              isOpen={jkOpen}
-              onToggle={() => setJkOpen(!jkOpen)}
-            >
-              <div className={styles.inlineList}>
-                {locationData?.kyiv?.newbuildings
-                  .slice(0, jkLimit)
-                  .map((jk) => (
-                    <div
-                      key={jk}
-                      className={`${styles.dropdownItem} ${
-                        selectedJk.includes(jk) ? styles.active : ""
-                      }`}
-                      onClick={() => handleSelectJk(jk)}
+                  {(locationData?.region?.streets ?? []).length > streetLimit && (
+                    <p
+                      className={styles.showMoreBtn}
+                      onClick={() => setStreetLimit((prev) => prev + 20)}
                     >
-                      {jk}
-                    </div>
-                  ))}
+                      {t("showMore")}
+                    </p>
+                  )}
+                </div>
+              </Dropdown>
 
-                {(locationData?.kyiv?.newbuildings ?? []).length > jkLimit && (
-                  <p
-                    className={styles.showMoreBtn}
-                    onClick={() => setJkLimit((prev) => prev + 20)}
-                  >
-                    {t("showMore")}
-                  </p>
-                )}
-              </div>
-            </Dropdown>
-          </div>
-        ) : locationType === "region" ? (
-          <div className={styles.locationGroup}>
-            <Dropdown
-              title={t("directions")}
-              isOpen={regionDirectionOpen}
-              onToggle={() => setRegionDirectionOpen(!regionDirectionOpen)}
-            >
-              <div className={styles.inlineList}>
-                {locationData?.region?.directions.map((dir) => (
-                  <div
-                    key={dir}
-                    className={`${styles.dropdownItem} ${
-                      selectedDirections.includes(dir) ? styles.active : ""
-                    }`}
-                    onClick={() => handleSelectDirection(dir)}
-                  >
-                    {dir}
-                  </div>
-                ))}
-              </div>
-            </Dropdown>
-            <Dropdown
-              title={t("street")}
-              isOpen={streetOpen}
-              onToggle={() => setStreetOpen(!streetOpen)}
-            >
-              <div className={styles.inlineList}>
-                {locationData?.region?.streets
-                  .slice(0, streetLimit)
-                  .map((street) => (
-                    <div
-                      key={street}
-                      className={`${styles.dropdownItem} ${
-                        selectedStreets.includes(street) ? styles.active : ""
-                      }`}
-                      onClick={() => handleSelectStreet(street)}
+              <Dropdown
+                title={t("jk")}
+                isOpen={jkOpen}
+                onToggle={() => setJkOpen(!jkOpen)}
+              >
+                <div className={styles.inlineList}>
+                  {locationData?.region?.newbuildings
+                    .slice(0, jkLimit)
+                    .map((jk) => (
+                      <div
+                        key={jk}
+                        className={`${styles.dropdownItem} ${
+                          selectedJk.includes(jk) ? styles.active : ""
+                        }`}
+                        onClick={() => handleSelectJk(jk)}
+                      >
+                        {jk}
+                      </div>
+                    ))}
+
+                  {(locationData?.region?.newbuildings ?? []).length >
+                    jkLimit && (
+                    <p
+                      className={styles.showMoreBtn}
+                      onClick={() => setJkLimit((prev) => prev + 20)}
                     >
-                      {street}
-                    </div>
-                  ))}
-
-                {(locationData?.region?.streets ?? []).length > streetLimit && (
-                  <p
-                    className={styles.showMoreBtn}
-                    onClick={() => setStreetLimit((prev) => prev + 20)}
-                  >
-                    {t("showMore")}
-                  </p>
-                )}
-              </div>
-            </Dropdown>
-
-            <Dropdown
-              title={t("jk")}
-              isOpen={jkOpen}
-              onToggle={() => setJkOpen(!jkOpen)}
-            >
-              <div className={styles.inlineList}>
-                {locationData?.region?.newbuildings
-                  .slice(0, jkLimit)
-                  .map((jk) => (
-                    <div
-                      key={jk}
-                      className={`${styles.dropdownItem} ${
-                        selectedJk.includes(jk) ? styles.active : ""
-                      }`}
-                      onClick={() => handleSelectJk(jk)}
-                    >
-                      {jk}
-                    </div>
-                  ))}
-
-                {(locationData?.region?.newbuildings ?? []).length >
-                  jkLimit && (
-                  <p
-                    className={styles.showMoreBtn}
-                    onClick={() => setJkLimit((prev) => prev + 20)}
-                  >
-                    {t("showMore")}
-                  </p>
-                )}
-              </div>
-            </Dropdown>
-          </div>
-        ) : undefined}
+                      {t("showMore")}
+                    </p>
+                  )}
+                </div>
+              </Dropdown>
+            </div>
+          ) : undefined}
+        </div>
       </div>
-      <div className={styles.footerButtons}>
+
+      <div className={styles.modalFooter}>
         <button className={styles.resetButton} onClick={resetFilters}>
           {t("reset")}
         </button>

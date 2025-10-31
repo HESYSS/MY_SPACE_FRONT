@@ -3,14 +3,54 @@
   color: #ebebeb;
   border-radius: 12px;
   width: 100%;
-  padding: 20px;
+  
+  padding: 20px; 
+  display: flex; 
+  flex-direction: column; 
+  overflow-y: hidden;
+  max-height: 75vh;
+  
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
   font-family: Arial, sans-serif;
   box-sizing: border-box;
   position: absolute;
-  max-height: 75vh;
-  overflow-y: auto;
   z-index: 1000;
+}
+
+.modalHeader {
+    flex-shrink: 0;
+    padding-bottom: 20px;
+    margin: -20px -20px 0;
+    padding: 20px 20px 0;
+    background-color: #0a0a0a;
+    z-index: 10;
+}
+
+.modalBodyScroll {
+    flex-grow: 1;
+    overflow-y: auto;
+    margin: 0 -20px;
+    padding: 0 20px; 
+}
+
+.modalFooter {
+    flex-shrink: 0;
+    display: flex;
+    justify-content: space-between;
+    background-color: #0a0a0a;
+    gap: 1rem;
+    border-top: 1px solid #1c1c1c;
+    z-index: 10;
+    
+    margin: 0 -20px -20px;
+    padding: 20px;
+}
+
+
+.locationToggle {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 0;
 }
 
 .scrollBar::-webkit-scrollbar {
@@ -21,12 +61,6 @@
 .scrollBar {
   -ms-overflow-style: none;
   scrollbar-width: none;
-}
-
-.locationToggle {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
 }
 
 .locationButton {
@@ -41,6 +75,7 @@
   font-weight: 500;
   transition: background-color 0.2s, border-color 0.2s, color 0.2s;
   text-align: center;
+  margin-bottom: 25px;
 }
 
 .locationButton:hover {
@@ -192,33 +227,21 @@
 
 .showMoreBtn {
   display: block;
-  margin: 8px auto; /* Отступ сверху/снизу и по центру */
-  padding: 6px 12px; /* Внутренние отступы */
-  background-color: #051818; /* Синий фон */
-  color: #adadad; /* Белый текст */
-  border-radius: 4px; /* Скругление углов */
-  text-align: center; /* Текст по центру */
-  cursor: pointer; /* Курсор как у кнопки */
-  font-size: 14px; /* Размер текста */
-  transition: background-color 0.2s; /* Плавный hover */
-  user-select: none; /* Запрет выделения текста при клике */
+  margin: 8px auto; 
+  padding: 6px 12px; 
+  background-color: #051818; 
+  color: #adadad; 
+  border-radius: 4px; 
+  text-align: center; 
+  cursor: pointer; 
+  font-size: 14px; 
+  transition: background-color 0.2s; 
+  user-select: none; 
 }
 
 .showMoreBtn:hover {
   background-color: #082525;
-  color: #ffffff; /* Темнее при наведении */
-}
-
-.footerButtons {
-  position: sticky;
-  bottom: 0;
-  display: flex;
-  justify-content: space-between;
-  background-color: #0a0a0a;
-  gap: 1rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid #1c1c1c;
-  z-index: 10;
+  color: #ffffff; 
 }
 
 .resetButton,
