@@ -104,97 +104,102 @@ export default function SearchBar({
   }, [tags]);
 
   useEffect(() => {
-    const rawLocation = searchParams.get("locationfilters");
-    const globalQ = searchParams.get("search");
+    const handler = setTimeout(() => {
+      const rawLocation = searchParams.get("locationfilters");
+      const globalQ = searchParams.get("search");
 
-    const newTags: Tag[] = [];
+      const newTags: Tag[] = [];
 
-    if (globalQ) {
-      newTags.push({ type: "search", value: globalQ });
-    }
+      if (globalQ) {
+        newTags.push({ type: "search", value: globalQ });
+      }
 
-    if (rawLocation) {
-      try {
-        const decoded = decodeURIComponent(decodeURIComponent(rawLocation));
-        const parsed = JSON.parse(decoded);
+      if (rawLocation) {
+        try {
+          const decoded = decodeURIComponent(decodeURIComponent(rawLocation));
+          const parsed = JSON.parse(decoded);
+          console.log("Parsed locationfilters:", parsed);
 
-        if (parsed.metro?.length) {
-          const stationsLeft = [...parsed.metro];
-          for (const line in METRO_LINES) {
-            const lineStations = METRO_LINES[line].ua;
-            const selected = lineStations.filter((s) =>
-              stationsLeft.includes(s)
-            );
-            if (selected.length === lineStations.length) {
-              newTags.push({ type: "metro", value: line, fullName: line });
-              selected.forEach((s) => {
-                const idx = stationsLeft.indexOf(s);
-                if (idx > -1) stationsLeft.splice(idx, 1);
-              });
+          if (parsed.metro?.length) {
+            const stationsLeft = [...parsed.metro];
+            for (const line in METRO_LINES) {
+              const lineStations = METRO_LINES[line].ua;
+              const selected = lineStations.filter((s) =>
+                stationsLeft.includes(s)
+              );
+              if (selected.length === lineStations.length) {
+                newTags.push({ type: "metro", value: line, fullName: line });
+                selected.forEach((s) => {
+                  const idx = stationsLeft.indexOf(s);
+                  if (idx > -1) stationsLeft.splice(idx, 1);
+                });
+              }
             }
-          }
-          stationsLeft.forEach((s) =>
-            newTags.push({ type: "metro", value: toLocalized("metro", s) })
-          );
-        }
-
-        if (parsed.districts?.length) {
-          const districtsLeft = [...parsed.districts];
-          for (const shore in SHORE_DISTRICTS) {
-            const shoreDistricts = SHORE_DISTRICTS[shore].ua;
-            const selected = shoreDistricts.filter((d) =>
-              districtsLeft.includes(d)
+            stationsLeft.forEach((s) =>
+              newTags.push({ type: "metro", value: toLocalized("metro", s) })
             );
-            if (selected.length === shoreDistricts.length) {
+          }
+
+          if (parsed.districts?.length) {
+            const districtsLeft = [...parsed.districts];
+            for (const shore in SHORE_DISTRICTS) {
+              const shoreDistricts = SHORE_DISTRICTS[shore].ua;
+              const selected = shoreDistricts.filter((d) =>
+                districtsLeft.includes(d)
+              );
+              if (selected.length === shoreDistricts.length) {
+                newTags.push({
+                  type: "districts",
+                  value: shore,
+                  fullName: shore,
+                });
+                selected.forEach((d) => {
+                  const idx = districtsLeft.indexOf(d);
+                  if (idx > -1) districtsLeft.splice(idx, 1);
+                });
+              }
+            }
+            districtsLeft.forEach((d) =>
               newTags.push({
                 type: "districts",
-                value: shore,
-                fullName: shore,
-              });
-              selected.forEach((d) => {
-                const idx = districtsLeft.indexOf(d);
-                if (idx > -1) districtsLeft.splice(idx, 1);
-              });
-            }
+                value: toLocalized("districts", d),
+              })
+            );
           }
-          districtsLeft.forEach((d) =>
+
+          if (parsed.streets?.length) {
+            parsed.streets.forEach((val: string) =>
+              newTags.push({ type: "street", value: val })
+            );
+          }
+
+          if (parsed.newbuildings?.length) {
+            parsed.newbuildings.forEach((val: string) =>
+              newTags.push({ type: "jk", value: val })
+            );
+          }
+
+          if (parsed.directions?.length) {
+            parsed.directions.forEach((dir: string) =>
+              newTags.push({ type: "directions", value: dir })
+            );
+          }
+
+          if (parsed.polygon != "") {
             newTags.push({
-              type: "districts",
-              value: toLocalized("districts", d),
-            })
-          );
+              type: "Полігон",
+              value: "Пользовательський полігон",
+            });
+          }
+        } catch (err) {
+          console.error("Ошибка при разборе locationfilters:", err);
         }
-
-        if (parsed.streets?.length) {
-          parsed.streets.forEach((val: string) =>
-            newTags.push({ type: "street", value: val })
-          );
-        }
-
-        if (parsed.newbuildings?.length) {
-          parsed.newbuildings.forEach((val: string) =>
-            newTags.push({ type: "jk", value: val })
-          );
-        }
-
-        if (parsed.directions?.length) {
-          parsed.directions.forEach((dir: string) =>
-            newTags.push({ type: "directions", value: dir })
-          );
-        }
-
-        if (parsed.polygon != "") {
-          newTags.push({
-            type: "Полігон",
-            value: "Пользовательський полігон",
-          });
-        }
-      } catch (err) {
-        console.error("Ошибка при разборе locationfilters:", err);
       }
-    }
 
-    setTags(newTags);
+      setTags(newTags);
+    }, 500);
+
+    return () => clearTimeout(handler);
   }, [searchParams]);
 
   const removeTag = (index: number) => {
@@ -281,8 +286,6 @@ export default function SearchBar({
   };
 
   const clearAllTags = () => {
-    setTags((prev) => prev.filter((t) => t.type === "search"));
-
     const params = new URLSearchParams(window.location.search);
     const rawLocation = searchParams.get("locationfilters");
     if (!rawLocation) {
