@@ -57,7 +57,6 @@ export default function SearchBar({
     return uaVal;
   };
 
-  // --- Drag для тегов ---
   useEffect(() => {
     const tagList = tagListRef.current;
     if (!tagList) return;
@@ -104,7 +103,6 @@ export default function SearchBar({
     };
   }, [tags]);
 
-  // --- Разбор locationfilters + глобального q ---
   useEffect(() => {
     const rawLocation = searchParams.get("locationfilters");
     const globalQ = searchParams.get("search");
@@ -199,7 +197,6 @@ export default function SearchBar({
     setTags(newTags);
   }, [searchParams]);
 
-  // --- Удаление одного тега ---
   const removeTag = (index: number) => {
     console.log("Removing tag at index:", index);
     const newTags = [...tags];
@@ -283,15 +280,12 @@ export default function SearchBar({
     }
   };
 
-  // --- Очистка всех тегов через removeTag ---
   const clearAllTags = () => {
-    // Очищаем UI теги сразу
     setTags((prev) => prev.filter((t) => t.type === "search"));
 
     const params = new URLSearchParams(window.location.search);
     const rawLocation = searchParams.get("locationfilters");
     if (!rawLocation) {
-      // ничего не делаем, если нет локации
       return;
     }
 
@@ -299,7 +293,6 @@ export default function SearchBar({
       const decoded = decodeURIComponent(decodeURIComponent(rawLocation));
       const parsed = JSON.parse(decoded);
 
-      // Удаляем все location-поля
       delete parsed.metro;
       delete parsed.districts;
       delete parsed.streets;
@@ -307,8 +300,7 @@ export default function SearchBar({
       delete parsed.directions;
       delete parsed.polygon;
       delete parsed.userPolygon;
-
-      // Если остались другие поля, можно оставить их, иначе удаляем полностью
+      params.delete("search");
       const hasAny = Object.keys(parsed).length > 0;
       if (hasAny) {
         params.set(
@@ -322,10 +314,14 @@ export default function SearchBar({
       router.replace(`?${params.toString()}`);
     } catch (err) {
       console.error("clearAllTags error:", err);
-      // На случай ошибки — просто удалить параметр
       params.delete("locationfilters");
       router.replace(`?${params.toString()}`);
     }
+  };
+
+  const clearInputValue = () => {
+    setInputValue("");
+    setShowModal(false);
   };
 
   return (
@@ -349,8 +345,6 @@ export default function SearchBar({
                   </button>
                 </span>
               ))}
-
-              {/* Глобальный крестик */}
             </div>
           )}
 
@@ -368,8 +362,19 @@ export default function SearchBar({
               onKeyDown={handleSearchKeyDown}
               className={styles.input}
             />
+            {inputValue.length > 0 && (
+              <button
+                type="button"
+                className={styles.clearAllButton}
+                onClick={clearInputValue}
+                title={t("clear_input") ?? "Очистити поле"}
+              >
+                ×
+              </button>
+            )}
           </div>
-          {tags.some((tag) => tag.type !== "search") && (
+
+          {tags.some((tag) => tag.type !== "") && (
             <button
               type="button"
               className={styles.clearAllButton}

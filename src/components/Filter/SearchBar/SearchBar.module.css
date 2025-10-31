@@ -4,8 +4,8 @@
   max-width: 100%;
   overflow: hidden;
   box-sizing: border-box;
-  display: flex; /* Нова властивість */
-  align-items: center; /* Нова властивість */
+  display: flex;
+  align-items: center;
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;
@@ -19,11 +19,29 @@
   border: 1px solid #03b9b34d;
   border-radius: 5px;
   padding: 6px 8px;
+  padding-right: 40px;
+  height: 44px;
+  position: relative;
+
   flex-grow: 1;
   box-sizing: border-box;
-  height: 42px;
   overflow: hidden;
-  position: relative;
+}
+
+.clearAllButton {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #fff;
+  font-size: 1.5rem;
+  font-weight: 300;
+  line-height: 1;
+  padding: 0;
+  z-index: 5;
 }
 
 .tagList {
@@ -91,11 +109,7 @@
 }
 
 .searchButton {
-  position: absolute;
-  top: 50%;
-  right: 0;
-  transform: translateY(-50%);
-  height: 36px;
+  height: 44px;
   background-color: #fff;
   color: #000;
   padding: 0 10px;
@@ -144,11 +158,18 @@
 
   .tagsContainer {
     padding: 5px 6px;
-    height: 42px;
+    height: 40px;
+    padding-right: 35px;
   }
 
   .tagList {
     max-width: 180px;
+  }
+
+  .clearAllButton {
+    right: 5px;
+    font-size: 1.3rem;
+    right: -25px;
   }
 
   .input {
@@ -170,11 +191,18 @@
 
   .tagsContainer {
     padding: 4px 6px;
-    height: 42px;
+    height: 40px;
+    padding-right: 35px;
   }
 
   .tagList {
     max-width: 50px;
+  }
+
+  .clearAllButton {
+    right: 5px;
+    font-size: 1.3rem;
+    visibility: hidden;
   }
 
   .input {
