@@ -8,17 +8,17 @@
   font-family: Arial, sans-serif;
   box-sizing: border-box;
   position: absolute;
-  max-height: 80vh;
+  max-height: 75vh;
   overflow-y: auto;
   z-index: 1000;
 }
 
-.modalContent::-webkit-scrollbar {
+.scrollBar::-webkit-scrollbar {
   width: 0;
   height: 0;
 }
 
-.modalContent {
+.scrollBar {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
@@ -188,6 +188,68 @@
   color: #ebebeb;
   font-size: 24px;
   cursor: pointer;
+}
+
+.showMoreBtn {
+  display: block;
+  margin: 8px auto; /* Отступ сверху/снизу и по центру */
+  padding: 6px 12px; /* Внутренние отступы */
+  background-color: #051818; /* Синий фон */
+  color: #adadad; /* Белый текст */
+  border-radius: 4px; /* Скругление углов */
+  text-align: center; /* Текст по центру */
+  cursor: pointer; /* Курсор как у кнопки */
+  font-size: 14px; /* Размер текста */
+  transition: background-color 0.2s; /* Плавный hover */
+  user-select: none; /* Запрет выделения текста при клике */
+}
+
+.showMoreBtn:hover {
+  background-color: #082525;
+  color: #ffffff; /* Темнее при наведении */
+}
+
+.footerButtons {
+  position: sticky;
+  bottom: 0;
+  display: flex;
+  justify-content: space-between;
+  background-color: #0a0a0a;
+  gap: 1rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #1c1c1c;
+  z-index: 10;
+}
+
+.resetButton,
+.applyButton {
+  padding: 0.75rem 2rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.2s;
+}
+
+.resetButton {
+  background: #0a0a0a;
+  color: #fff;
+  border: 1px solid #333;
+}
+
+.resetButton:hover {
+  background: #e0e0e0;
+}
+
+.applyButton {
+  background-color: #051818;
+  color: #fff;
+  border: none;
+}
+
+.applyButton:hover {
+  background-color: #12725d;
+  color: #fff;
 }
 
 @media (min-width: 769px) and (max-width: 1300px) {

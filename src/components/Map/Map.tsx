@@ -196,13 +196,6 @@ export default function MapDrawFilter({
 
       if (feature) {
         target.style.cursor = "pointer";
-
-        if (hoveredFeature !== feature) {
-          if (hoveredFeature) hoveredFeature.setStyle(markerStyle);
-
-          feature.setStyle(highlightStyle);
-          hoveredFeature = feature;
-        }
       } else {
         target.style.cursor = "";
         // 👇 важно: не сбрасываем сразу — добавим микрозадержку

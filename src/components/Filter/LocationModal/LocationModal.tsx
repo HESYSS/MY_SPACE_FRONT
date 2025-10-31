@@ -68,30 +68,48 @@ export default function LocationModal({
   const [selectedPolygon, setSelectedPolygon] = useState<string[]>([]);
   const [locationData, setLocationData] = useState<LocationData | null>(null);
   const [isInitialRender, setIsInitialRender] = useState(true);
-
+  const [streetLimit, setStreetLimit] = useState(20);
+  const [jkLimit, setJkLimit] = useState(20);
   useEffect(() => {
-    const savedData = localStorage.getItem(DATA_STORAGE_KEY);
-    if (savedData) {
-      const parsedData = JSON.parse(savedData);
-      if (parsedData.lang === lang) {
-        const data = {
-          kyiv: parsedData.kyiv,
-          region: parsedData.region,
-        };
-        setLocationData(data);
-        return;
+    let otherFilters: Record<string, any> = {};
+
+    if (typeof router.query.otherfilters === "string") {
+      try {
+        const decoded = decodeURIComponent(router.query.otherfilters);
+        const parsed = JSON.parse(decoded);
+
+        // Берём только нужные поля, если они есть
+        ["category", "deal", "type"].forEach((key) => {
+          if (parsed[key] !== undefined && parsed[key] !== null) {
+            otherFilters[key] = parsed[key];
+          }
+        });
+      } catch (e) {
+        console.warn("Ошибка парсинга otherfilters", e);
       }
     }
+
+    console.log("otherFilters", otherFilters);
+
     async function fetchLocationData() {
       try {
         const backendUrl = process.env.REACT_APP_API_URL;
-        const res = await fetch(`${backendUrl}/items/location`, {
+
+        // Формируем query string из otherFilters
+        const queryParams = new URLSearchParams(otherFilters).toString();
+        const url = `${backendUrl}/items/location${
+          queryParams ? `?${queryParams}` : ""
+        }`;
+
+        const res = await fetch(url, {
           headers: {
             "Accept-Language": lang,
           },
         });
+
         const data = await res.json();
         setLocationData(data);
+
         const dataWithLang = {
           ...data,
           lang: lang,
@@ -101,8 +119,9 @@ export default function LocationModal({
         console.error("Ошибка загрузки локаций", err);
       }
     }
+
     fetchLocationData();
-  }, [lang]);
+  }, [lang, router.query.otherfilters]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -180,14 +199,14 @@ export default function LocationModal({
       ...router.query,
       locationfilters: JSON.stringify(filters),
     };
-    
+
     router.replace({ pathname: router.pathname, query }, undefined, {
       shallow: true,
     });
 
     onSubmit(filters);
   };
-  
+
   const toggleArrayValue = (
     arr: string[] | string,
     value: string
@@ -234,11 +253,12 @@ export default function LocationModal({
 
   useEffect(() => {
     if (isInitialRender) return;
-    
+
     const filters: any = {
       isOutOfCity: locationType === "region",
       streets: selectedStreets,
       newbuildings: selectedJk,
+      polygon: selectedPolygon || [],
     };
     if (locationType === "kyiv") {
       filters.metro = selectedMetro;
@@ -246,19 +266,20 @@ export default function LocationModal({
     } else {
       filters.directions = selectedDirections;
     }
-    
-    const hasActiveFilters = 
-        Object.values(filters).some(val => Array.isArray(val) && val.length > 0) || 
-        locationType !== 'none';
-        
+
+    const hasActiveFilters =
+      Object.values(filters).some(
+        (val) => Array.isArray(val) && val.length > 0
+      ) || locationType !== "none";
+
     const query = {
       ...router.query,
     };
 
     if (hasActiveFilters) {
-        query.locationfilters = encodeURIComponent(JSON.stringify(filters));
+      query.locationfilters = encodeURIComponent(JSON.stringify(filters));
     } else {
-        delete query.locationfilters;
+      delete query.locationfilters;
     }
 
     router.replace({ pathname: router.pathname, query }, undefined, {
@@ -271,7 +292,7 @@ export default function LocationModal({
     selectedJk,
     selectedDirections,
     locationType,
-    isInitialRender
+    isInitialRender,
   ]);
 
   const Dropdown = ({
@@ -296,228 +317,305 @@ export default function LocationModal({
 
   return (
     <div ref={modalRef} className={styles.modalContent}>
-      <div className={styles.locationToggle}>
-        <button
-          className={`${styles.locationButton} ${
-            locationType === "kyiv" ? styles.active : ""
-          }`}
-          onClick={() => {
-            if (locationType !== "kyiv") {
-              resetFilters();
-            }
-            setLocationType("kyiv");
-          }}
-        >
-          {t("kyiv_city")}
-        </button>
-        <button
-          className={`${styles.locationButton} ${
-            locationType === "region" ? styles.active : ""
-          }`}
-          onClick={() => {
-            if (locationType !== "region") {
-              resetFilters();
-            }
-            setLocationType("region");
-          }}
-        >
-          {t("kyiv_region")}
-        </button>
-      </div>
-      {locationType === "kyiv" ? (
-        <div className={styles.locationGroup}>
-          <Dropdown
-            title={t("metro")}
-            isOpen={metroOpen}
-            onToggle={() => setMetroOpen(!metroOpen)}
+      <div className={styles.scrollBar}>
+        <div className={styles.locationToggle}>
+          <button
+            className={`${styles.locationButton} ${
+              locationType === "kyiv" ? styles.active : ""
+            }`}
+            onClick={() => {
+              if (locationType !== "kyiv") {
+                resetFilters();
+              }
+              setLocationType("kyiv");
+            }}
           >
-            <div className={styles.columnsWrapper}>
-              {Object.keys(METRO_LINES).map((line) => {
-                const selectedCount = METRO_LINES[line]["ua"].filter((s) =>
-                  selectedMetro.includes(s)
-                ).length;
-                return (
-                  <div key={line} className={styles.metroColumn}>
+            {t("kyiv_city")}
+          </button>
+          <button
+            className={`${styles.locationButton} ${
+              locationType === "region" ? styles.active : ""
+            }`}
+            onClick={() => {
+              if (locationType !== "region") {
+                resetFilters();
+              }
+              setLocationType("region");
+            }}
+          >
+            {t("kyiv_region")}
+          </button>
+        </div>
+        {locationType === "kyiv" ? (
+          <div className={styles.locationGroup}>
+            <Dropdown
+              title={t("metro")}
+              isOpen={metroOpen}
+              onToggle={() => setMetroOpen(!metroOpen)}
+            >
+              <div className={styles.columnsWrapper}>
+                {Object.keys(METRO_LINES).map((line) => {
+                  const selectedCount = METRO_LINES[line]["ua"].filter((s) =>
+                    selectedMetro.includes(s)
+                  ).length;
+                  return (
+                    <div key={line} className={styles.metroColumn}>
+                      <div
+                        className={`${styles.dropdownItem} ${
+                          METRO_LINES[line]["ua"].every((s) =>
+                            selectedMetro.includes(s)
+                          )
+                            ? styles.active
+                            : ""
+                        }`}
+                        style={{ fontWeight: "bold" }}
+                        onClick={() => handleSelectMetroLine(line)}
+                      >
+                        {t(line)}
+                        {selectedCount > 0 && ` (${selectedCount})`}
+                      </div>
+                      <div className={styles.dropdownSubList}>
+                        {METRO_LINES[line]["ua"].map((stationUa, index) => {
+                          const stationEn = METRO_LINES[line][lang][index];
+                          return (
+                            <div
+                              key={stationUa}
+                              className={`${styles.dropdownItem} ${
+                                selectedMetro.includes(stationUa)
+                                  ? styles.active
+                                  : ""
+                              }`}
+                              style={{ paddingLeft: "20px" }}
+                              onClick={() =>
+                                handleSelectMetroStation(stationUa)
+                              }
+                            >
+                              {stationEn}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </Dropdown>
+            <Dropdown
+              title={t("districts")}
+              isOpen={districtOpen}
+              onToggle={() => setDistrictOpen(!districtOpen)}
+            >
+              <div className={styles.districtsWrapper}>
+                {Object.keys(SHORE_DISTRICTS).map((shore) => (
+                  <div key={shore} className={styles.districtColumn}>
                     <div
                       className={`${styles.dropdownItem} ${
-                        METRO_LINES[line]["ua"].every((s) =>
-                          selectedMetro.includes(s)
+                        SHORE_DISTRICTS[shore]["ua"].every((d) =>
+                          selectedDistricts.includes(d)
                         )
                           ? styles.active
                           : ""
                       }`}
                       style={{ fontWeight: "bold" }}
-                      onClick={() => handleSelectMetroLine(line)}
+                      onClick={() => handleSelectShore(shore)}
                     >
-                      {t(line)}
-                      {selectedCount > 0 && ` (${selectedCount})`}
+                      {t(shore)}
                     </div>
-                    <div className={styles.dropdownSubList}>
-                      {METRO_LINES[line]["ua"].map((stationUa, index) => {
-                        const stationEn = METRO_LINES[line][lang][index];
-                        return (
-                          <div
-                            key={stationUa}
-                            className={`${styles.dropdownItem} ${
-                              selectedMetro.includes(stationUa)
-                                ? styles.active
-                                : ""
-                            }`}
-                            style={{ paddingLeft: "20px" }}
-                            onClick={() => handleSelectMetroStation(stationUa)}
-                          >
-                            {stationEn}
-                          </div>
-                        );
-                      })}
-                    </div>
+                    {SHORE_DISTRICTS[shore]["ua"].map((districtUa, index) => {
+                      const districtEn = SHORE_DISTRICTS[shore][lang][index];
+                      return (
+                        <div
+                          key={districtUa}
+                          className={`${styles.dropdownItem} ${
+                            selectedDistricts.includes(districtUa)
+                              ? styles.active
+                              : ""
+                          }`}
+                          style={{ paddingLeft: "20px" }}
+                          onClick={() => handleSelectDistrict(districtUa)}
+                        >
+                          {districtEn}
+                        </div>
+                      );
+                    })}
                   </div>
-                );
-              })}
-            </div>
-          </Dropdown>
-          <Dropdown
-            title={t("districts")}
-            isOpen={districtOpen}
-            onToggle={() => setDistrictOpen(!districtOpen)}
-          >
-            <div className={styles.districtsWrapper}>
-              {Object.keys(SHORE_DISTRICTS).map((shore) => (
-                <div key={shore} className={styles.districtColumn}>
-                  <div
-                    className={`${styles.dropdownItem} ${
-                      SHORE_DISTRICTS[shore]["ua"].every((d) =>
-                        selectedDistricts.includes(d)
-                      )
-                        ? styles.active
-                        : ""
-                    }`}
-                    style={{ fontWeight: "bold" }}
-                    onClick={() => handleSelectShore(shore)}
+                ))}
+              </div>
+            </Dropdown>
+            <Dropdown
+              title={t("street")}
+              isOpen={streetOpen}
+              onToggle={() => setStreetOpen(!streetOpen)}
+            >
+              <div className={styles.inlineList}>
+                {locationData?.kyiv?.streets
+                  .slice(0, streetLimit)
+                  .map((street) => (
+                    <div
+                      key={street}
+                      className={`${styles.dropdownItem} ${
+                        selectedStreets.includes(street) ? styles.active : ""
+                      }`}
+                      onClick={() => handleSelectStreet(street)}
+                    >
+                      {street}
+                    </div>
+                  ))}
+
+                {(locationData?.kyiv?.streets ?? []).length > streetLimit && (
+                  <p
+                    className={styles.showMoreBtn}
+                    onClick={() => setStreetLimit((prev) => prev + 20)}
                   >
-                    {t(shore)}
+                    {t("showMore")}
+                  </p>
+                )}
+              </div>
+            </Dropdown>
+
+            <Dropdown
+              title={t("jk")}
+              isOpen={jkOpen}
+              onToggle={() => setJkOpen(!jkOpen)}
+            >
+              <div className={styles.inlineList}>
+                {locationData?.kyiv?.newbuildings
+                  .slice(0, jkLimit)
+                  .map((jk) => (
+                    <div
+                      key={jk}
+                      className={`${styles.dropdownItem} ${
+                        selectedJk.includes(jk) ? styles.active : ""
+                      }`}
+                      onClick={() => handleSelectJk(jk)}
+                    >
+                      {jk}
+                    </div>
+                  ))}
+
+                {(locationData?.kyiv?.newbuildings ?? []).length > jkLimit && (
+                  <p
+                    className={styles.showMoreBtn}
+                    onClick={() => setJkLimit((prev) => prev + 20)}
+                  >
+                    {t("showMore")}
+                  </p>
+                )}
+              </div>
+            </Dropdown>
+          </div>
+        ) : locationType === "region" ? (
+          <div className={styles.locationGroup}>
+            <Dropdown
+              title={t("directions")}
+              isOpen={regionDirectionOpen}
+              onToggle={() => setRegionDirectionOpen(!regionDirectionOpen)}
+            >
+              <div className={styles.inlineList}>
+                {locationData?.region?.directions.map((dir) => (
+                  <div
+                    key={dir}
+                    className={`${styles.dropdownItem} ${
+                      selectedDirections.includes(dir) ? styles.active : ""
+                    }`}
+                    onClick={() => handleSelectDirection(dir)}
+                  >
+                    {dir}
                   </div>
-                  {SHORE_DISTRICTS[shore]["ua"].map((districtUa, index) => {
-                    const districtEn = SHORE_DISTRICTS[shore][lang][index];
-                    return (
-                      <div
-                        key={districtUa}
-                        className={`${styles.dropdownItem} ${
-                          selectedDistricts.includes(districtUa)
-                            ? styles.active
-                            : ""
-                        }`}
-                        style={{ paddingLeft: "20px" }}
-                        onClick={() => handleSelectDistrict(districtUa)}
-                      >
-                        {districtEn}
-                      </div>
-                    );
-                  })}
-                </div>
-              ))}
-            </div>
-          </Dropdown>
-          <Dropdown
-            title={t("street")}
-            isOpen={streetOpen}
-            onToggle={() => setStreetOpen(!streetOpen)}
-          >
-            <div className={styles.inlineList}>
-              {locationData?.kyiv?.streets.map((street) => (
-                <div
-                  key={street}
-                  className={`${styles.dropdownItem} ${
-                    selectedStreets.includes(street) ? styles.active : ""
-                  }`}
-                  onClick={() => handleSelectStreet(street)}
-                >
-                  {street}
-                </div>
-              ))}
-            </div>
-          </Dropdown>
-          <Dropdown
-            title={t("jk")}
-            isOpen={jkOpen}
-            onToggle={() => setJkOpen(!jkOpen)}
-          >
-            <div className={styles.inlineList}>
-              {locationData?.kyiv?.newbuildings.map((jk) => (
-                <div
-                  key={jk}
-                  className={`${styles.dropdownItem} ${
-                    selectedJk.includes(jk) ? styles.active : ""
-                  }`}
-                  onClick={() => handleSelectJk(jk)}
-                >
-                  {jk}
-                </div>
-              ))}
-            </div>
-          </Dropdown>
-        </div>
-      ) : locationType === "region" ? (
-        <div className={styles.locationGroup}>
-          <Dropdown
-            title={t("directions")}
-            isOpen={regionDirectionOpen}
-            onToggle={() => setRegionDirectionOpen(!regionDirectionOpen)}
-          >
-            <div className={styles.inlineList}>
-              {locationData?.region?.directions.map((dir) => (
-                <div
-                  key={dir}
-                  className={`${styles.dropdownItem} ${
-                    selectedDirections.includes(dir) ? styles.active : ""
-                  }`}
-                  onClick={() => handleSelectDirection(dir)}
-                >
-                  {dir}
-                </div>
-              ))}
-            </div>
-          </Dropdown>
-          <Dropdown
-            title={t("street")}
-            isOpen={regionStreetOpen}
-            onToggle={() => setRegionStreetOpen(!regionStreetOpen)}
-          >
-            <div className={styles.inlineList}>
-              {locationData?.region?.streets.map((street) => (
-                <div
-                  key={street}
-                  className={`${styles.dropdownItem} ${
-                    selectedStreets.includes(street) ? styles.active : ""
-                  }`}
-                  onClick={() => handleSelectStreet(street)}
-                >
-                  {street}
-                </div>
-              ))}
-            </div>
-          </Dropdown>
-          <Dropdown
-            title={t("jk")}
-            isOpen={regionJkOpen}
-            onToggle={() => setRegionJkOpen(!regionJkOpen)}
-          >
-            <div className={styles.inlineList}>
-              {locationData?.region?.newbuildings.map((jk) => (
-                <div
-                  key={jk}
-                  className={`${styles.dropdownItem} ${
-                    selectedJk.includes(jk) ? styles.active : ""
-                  }`}
-                  onClick={() => handleSelectJk(jk)}
-                >
-                  {jk}
-                </div>
-              ))}
-            </div>
-          </Dropdown>
-        </div>
-      ) : undefined}
+                ))}
+              </div>
+            </Dropdown>
+            <Dropdown
+              title={t("street")}
+              isOpen={streetOpen}
+              onToggle={() => setStreetOpen(!streetOpen)}
+            >
+              <div className={styles.inlineList}>
+                {locationData?.region?.streets
+                  .slice(0, streetLimit)
+                  .map((street) => (
+                    <div
+                      key={street}
+                      className={`${styles.dropdownItem} ${
+                        selectedStreets.includes(street) ? styles.active : ""
+                      }`}
+                      onClick={() => handleSelectStreet(street)}
+                    >
+                      {street}
+                    </div>
+                  ))}
+
+                {(locationData?.region?.streets ?? []).length > streetLimit && (
+                  <p
+                    className={styles.showMoreBtn}
+                    onClick={() => setStreetLimit((prev) => prev + 20)}
+                  >
+                    {t("showMore")}
+                  </p>
+                )}
+              </div>
+            </Dropdown>
+
+            <Dropdown
+              title={t("jk")}
+              isOpen={jkOpen}
+              onToggle={() => setJkOpen(!jkOpen)}
+            >
+              <div className={styles.inlineList}>
+                {locationData?.region?.newbuildings
+                  .slice(0, jkLimit)
+                  .map((jk) => (
+                    <div
+                      key={jk}
+                      className={`${styles.dropdownItem} ${
+                        selectedJk.includes(jk) ? styles.active : ""
+                      }`}
+                      onClick={() => handleSelectJk(jk)}
+                    >
+                      {jk}
+                    </div>
+                  ))}
+
+                {(locationData?.region?.newbuildings ?? []).length >
+                  jkLimit && (
+                  <p
+                    className={styles.showMoreBtn}
+                    onClick={() => setJkLimit((prev) => prev + 20)}
+                  >
+                    {t("showMore")}
+                  </p>
+                )}
+              </div>
+            </Dropdown>
+          </div>
+        ) : undefined}
+      </div>
+      <div className={styles.footerButtons}>
+        <button className={styles.resetButton} onClick={resetFilters}>
+          {t("reset")}
+        </button>
+        <button
+          className={styles.applyButton}
+          onClick={() => {
+            const filters: any = {
+              isOutOfCity: locationType === "region",
+              streets: selectedStreets,
+              newbuildings: selectedJk,
+              polygon: selectedPolygon || [],
+            };
+            if (locationType === "kyiv") {
+              filters.metro = selectedMetro;
+              filters.districts = selectedDistricts;
+            } else {
+              filters.directions = selectedDirections;
+            }
+            onSubmit(filters);
+            onClose();
+          }}
+        >
+          {t("showResults")}
+        </button>
+      </div>
     </div>
   );
 }

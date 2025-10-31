@@ -228,5 +228,7 @@
   "objectManagerLabel": "Facility Manager",
   "back": "Back",
   "pageOf": "Page {{page}} of {{totalPages}}",
-  "forward": "Next"
+  "forward": "Next",
+  "showMore": "Show more",
+  "search": "Your option"
 }

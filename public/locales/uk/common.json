@@ -212,5 +212,7 @@
   "objectManagerLabel": "Менеджер об'єкту",
   "back": "Назад",
   "pageOf": "Сторінка {{page}} з {{totalPages}}",
-  "forward": "Вперед"
+  "forward": "Вперед",
+  "showMore": "Показати більше",
+  "search": "Ваш варіант"
 }

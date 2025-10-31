@@ -8,6 +8,7 @@ import {
   SHORE_DISTRICTS,
 } from "../LocationModal/locationFiltersConfig";
 import { useSearchParams } from "next/navigation";
+import { t } from "i18next";
 
 interface SearchModalProps {
   query: string;
@@ -57,11 +58,19 @@ export const SearchModal: React.FC<SearchModalProps> = ({
 
     const results: ResultItem[] = [];
 
-    // Метро
+    // metro
     Object.entries(METRO_LINES).forEach(([line, stations]) => {
       stations.ua.forEach((station) => {
         if (station.toLowerCase().includes(q)) {
-          results.push({ label: "Метро", value: station });
+          results.push({ label: "metro", value: station });
+        }
+      });
+    });
+
+    Object.entries(METRO_LINES).forEach(([line, stations]) => {
+      stations.en.forEach((station) => {
+        if (station.toLowerCase().includes(q)) {
+          results.push({ label: "metro", value: station });
         }
       });
     });
@@ -70,7 +79,15 @@ export const SearchModal: React.FC<SearchModalProps> = ({
     Object.values(SHORE_DISTRICTS).forEach((shore) => {
       shore.ua.forEach((district) => {
         if (district.toLowerCase().includes(q)) {
-          results.push({ label: "Район", value: district });
+          results.push({ label: "districts", value: district });
+        }
+      });
+    });
+
+    Object.values(SHORE_DISTRICTS).forEach((shore) => {
+      shore.en.forEach((district) => {
+        if (district.toLowerCase().includes(q)) {
+          results.push({ label: "districts", value: district });
         }
       });
     });
@@ -78,14 +95,14 @@ export const SearchModal: React.FC<SearchModalProps> = ({
     // Улицы
     streets.forEach((street) => {
       if (street.toLowerCase().includes(q)) {
-        results.push({ label: "Вулиця", value: street });
+        results.push({ label: "street", value: street });
       }
     });
 
     // Новостройки
     newbuildings.forEach((nb) => {
       if (nb.toLowerCase().includes(q)) {
-        results.push({ label: "Новобудова", value: nb });
+        results.push({ label: "jk", value: nb });
       }
     });
 
@@ -96,7 +113,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
 
     // Берем максимум 11 элементов и добавляем свой вариант последним
     const limitedResults = uniqueResults.slice(0, 11);
-    limitedResults.push({ label: "Ваш варіант", value: query });
+    limitedResults.push({ label: "search", value: q });
 
     setFiltered(limitedResults);
   }, [query, streets, newbuildings]);
@@ -127,25 +144,47 @@ export const SearchModal: React.FC<SearchModalProps> = ({
       metro: existingFilters.metro || [],
       districts: existingFilters.districts || [],
       isOutOfCity: existingFilters.isOutOfCity || false,
+      q: "",
     };
+
+    const toUaValue = (label: string, val: string): string => {
+      switch (label) {
+        case "metro":
+          for (const [line, stations] of Object.entries(METRO_LINES)) {
+            const idx = (stations as any).en.indexOf(val);
+            if (idx !== -1) return (stations as any).ua[idx];
+          }
+          return val;
+        case "districts":
+          for (const shore of Object.values(SHORE_DISTRICTS)) {
+            const idx = (shore as any).en.indexOf(val);
+            if (idx !== -1) return (shore as any).ua[idx];
+          }
+          return val;
+        default:
+          return val;
+      }
+    };
+    const uaValue = toUaValue(item.label, value);
 
     // --- Добавляем новое значение в нужный фильтр ---
     switch (item.label) {
-      case "Метро":
-        if (!filters.metro.includes(value)) filters.metro.push(value);
+      case "metro":
+        if (!filters.metro.includes(value)) filters.metro.push(uaValue);
         break;
-      case "Район":
-        if (!filters.districts.includes(value)) filters.districts.push(value);
+      case "districts":
+        if (!filters.districts.includes(value)) filters.districts.push(uaValue);
         break;
-      case "Вулиця":
+      case "street":
         if (!filters.streets.includes(value)) filters.streets.push(value);
         break;
-      case "Новобудова":
+      case "jk":
         if (!filters.newbuildings.includes(value))
           filters.newbuildings.push(value);
         break;
-      default:
-        if (!filters.streets.includes(value)) filters.streets.push(value);
+      case "search":
+        params.set("search", value); // 🔹 сохраняем как поиск, а не как улицу
+        break;
     }
     console.log("Обновленные фильтры:", filters);
     // --- Обновляем параметр locationfilters ---
@@ -155,7 +194,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
     router.replace(`?${params.toString()}`);
 
     // --- Закрываем модалку ---
-    onSelect(value);
+    onSelect("");
     onClose();
   };
 
@@ -170,7 +209,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
                 className={styles.item}
                 onClick={() => handleSelect(item.value)}
               >
-                <strong>{item.label}:</strong> {item.value}
+                <strong>{t(item.label)}:</strong> {item.value}
               </li>
             ))
           ) : (
