@@ -107,21 +107,18 @@ export default function SearchBar({
   // --- Разбор locationfilters + глобального q ---
   useEffect(() => {
     const rawLocation = searchParams.get("locationfilters");
-    const globalQ = searchParams.get("search"); // 🔹 читаем глобальный q
+    const globalQ = searchParams.get("search");
 
     const newTags: Tag[] = [];
 
-    // 🔹 добавляем тег "Пошук", если q есть
     if (globalQ) {
       newTags.push({ type: "search", value: globalQ });
-      // обновляем поле ввода
     }
 
     if (rawLocation) {
       try {
         const decoded = decodeURIComponent(decodeURIComponent(rawLocation));
         const parsed = JSON.parse(decoded);
-        console.log("Разобранные фильтры:", parsed);
 
         if (parsed.metro?.length) {
           const stationsLeft = [...parsed.metro];
@@ -187,7 +184,7 @@ export default function SearchBar({
             newTags.push({ type: "directions", value: dir })
           );
         }
-        // 🔹 Если есть пользовательский полигон
+
         if (parsed.polygon != "") {
           newTags.push({
             type: "Полігон",
@@ -199,12 +196,12 @@ export default function SearchBar({
       }
     }
 
-    console.log("Теги для установки:", newTags);
     setTags(newTags);
   }, [searchParams]);
 
-  // --- Удаление тегов ---
+  // --- Удаление одного тега ---
   const removeTag = (index: number) => {
+    console.log("Removing tag at index:", index);
     const newTags = [...tags];
     const removedTag = newTags.splice(index, 1)[0];
     setTags(newTags);
@@ -212,7 +209,6 @@ export default function SearchBar({
     const params = new URLSearchParams(window.location.search);
 
     if (removedTag.type === "search") {
-      // 🔹 если удаляем тег поиска — убираем q из URL
       params.delete("search");
       router.replace(`?${params.toString()}`);
       return;
@@ -230,31 +226,13 @@ export default function SearchBar({
           if (removedTag.fullName) {
             const lineKey = removedTag.fullName as keyof typeof METRO_LINES;
             const lineStationsUa = METRO_LINES[lineKey].ua;
-
-            // 🔹 Если тег был на английском, переводим в украинский
-            const valueUa = METRO_LINES[lineKey].en.includes(removedTag.value)
-              ? lineStationsUa[
-                  METRO_LINES[lineKey].en.indexOf(removedTag.value)
-                ]
-              : removedTag.value;
-
             parsed.metro = parsed.metro.filter(
-              (s: string) => !lineStationsUa.includes(s) && s !== valueUa
+              (s: string) => !lineStationsUa.includes(s)
             );
           } else {
-            // 🔹 Если отдельная станция была выбрана
-            let valueUa = removedTag.value;
-
-            // ищем украинский вариант, если тег на английском
-            for (const line in METRO_LINES) {
-              const idx = METRO_LINES[line].en.indexOf(removedTag.value);
-              if (idx !== -1) {
-                valueUa = METRO_LINES[line].ua[idx];
-                break;
-              }
-            }
-
-            parsed.metro = parsed.metro.filter((s: string) => s !== valueUa);
+            parsed.metro = parsed.metro.filter(
+              (s: string) => s !== removedTag.value
+            );
           }
           break;
 
@@ -263,30 +241,12 @@ export default function SearchBar({
             const shoreKey =
               removedTag.fullName as keyof typeof SHORE_DISTRICTS;
             const shoreDistrictsUa = SHORE_DISTRICTS[shoreKey].ua;
-
-            // 🔹 Если тег на английском, переведём в украинский
-            let valueUa = removedTag.value;
-            const idx = SHORE_DISTRICTS[shoreKey].en.indexOf(removedTag.value);
-            if (idx !== -1) valueUa = SHORE_DISTRICTS[shoreKey].ua[idx];
-
             parsed.districts = parsed.districts.filter(
-              (d: string) => !shoreDistrictsUa.includes(d) && d !== valueUa
+              (d: string) => !shoreDistrictsUa.includes(d)
             );
           } else {
-            // отдельный район
-            let valueUa = removedTag.value;
-
-            // ищем украинский вариант
-            for (const shore in SHORE_DISTRICTS) {
-              const idx = SHORE_DISTRICTS[shore].en.indexOf(removedTag.value);
-              if (idx !== -1) {
-                valueUa = SHORE_DISTRICTS[shore].ua[idx];
-                break;
-              }
-            }
-
             parsed.districts = parsed.districts.filter(
-              (d: string) => d !== valueUa
+              (d: string) => d !== removedTag.value
             );
           }
           break;
@@ -302,11 +262,13 @@ export default function SearchBar({
             (d: string) => d !== removedTag.value
           );
           break;
+
         case "directions":
           parsed.directions = parsed.directions.filter(
             (d: string) => d !== removedTag.value
           );
           break;
+
         case "Полігон":
           delete parsed.polygon;
           delete parsed.userPolygon;
@@ -318,6 +280,51 @@ export default function SearchBar({
       router.replace(`?${params.toString()}`);
     } catch (err) {
       console.error("Ошибка при обновлении locationfilters:", err);
+    }
+  };
+
+  // --- Очистка всех тегов через removeTag ---
+  const clearAllTags = () => {
+    // Очищаем UI теги сразу
+    setTags((prev) => prev.filter((t) => t.type === "search"));
+
+    const params = new URLSearchParams(window.location.search);
+    const rawLocation = searchParams.get("locationfilters");
+    if (!rawLocation) {
+      // ничего не делаем, если нет локации
+      return;
+    }
+
+    try {
+      const decoded = decodeURIComponent(decodeURIComponent(rawLocation));
+      const parsed = JSON.parse(decoded);
+
+      // Удаляем все location-поля
+      delete parsed.metro;
+      delete parsed.districts;
+      delete parsed.streets;
+      delete parsed.newbuildings;
+      delete parsed.directions;
+      delete parsed.polygon;
+      delete parsed.userPolygon;
+
+      // Если остались другие поля, можно оставить их, иначе удаляем полностью
+      const hasAny = Object.keys(parsed).length > 0;
+      if (hasAny) {
+        params.set(
+          "locationfilters",
+          encodeURIComponent(JSON.stringify(parsed))
+        );
+      } else {
+        params.delete("locationfilters");
+      }
+
+      router.replace(`?${params.toString()}`);
+    } catch (err) {
+      console.error("clearAllTags error:", err);
+      // На случай ошибки — просто удалить параметр
+      params.delete("locationfilters");
+      router.replace(`?${params.toString()}`);
     }
   };
 
@@ -342,10 +349,11 @@ export default function SearchBar({
                   </button>
                 </span>
               ))}
+
+              {/* Глобальный крестик */}
             </div>
           )}
 
-          {/* --- поле ввода --- */}
           <div className={styles.inputWrapper}>
             <input
               type="text"
@@ -361,6 +369,16 @@ export default function SearchBar({
               className={styles.input}
             />
           </div>
+          {tags.some((tag) => tag.type !== "search") && (
+            <button
+              type="button"
+              className={styles.clearAllButton}
+              onClick={clearAllTags}
+              title={t("clear_all") ?? "Очистити фільтри"}
+            >
+              ×
+            </button>
+          )}
         </div>
 
         <button className={styles.searchButton} onClick={handleSearchSubmit}>
@@ -368,7 +386,6 @@ export default function SearchBar({
         </button>
       </div>
 
-      {/* 🔹 Модалка поверх */}
       {showModal && (
         <SearchModal
           query={inputValue}
