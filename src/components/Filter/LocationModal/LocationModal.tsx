@@ -70,7 +70,7 @@ export default function LocationModal({
   const [isInitialRender, setIsInitialRender] = useState(true);
   const [streetLimit, setStreetLimit] = useState(20);
   const [jkLimit, setJkLimit] = useState(20);
-  
+
   useEffect(() => {
     let otherFilters: Record<string, any> = {};
 
@@ -314,7 +314,6 @@ export default function LocationModal({
 
   return (
     <div ref={modalRef} className={styles.modalContent}>
-      
       <div className={styles.modalHeader}>
         <div className={styles.locationToggle}>
           <button
@@ -444,36 +443,6 @@ export default function LocationModal({
                   ))}
                 </div>
               </Dropdown>
-              <Dropdown
-                title={t("street")}
-                isOpen={streetOpen}
-                onToggle={() => setStreetOpen(!streetOpen)}
-              >
-                <div className={styles.inlineList}>
-                  {locationData?.kyiv?.streets
-                    .slice(0, streetLimit)
-                    .map((street) => (
-                      <div
-                        key={street}
-                        className={`${styles.dropdownItem} ${
-                          selectedStreets.includes(street) ? styles.active : ""
-                        }`}
-                        onClick={() => handleSelectStreet(street)}
-                      >
-                        {street}
-                      </div>
-                    ))}
-
-                  {(locationData?.kyiv?.streets ?? []).length > streetLimit && (
-                    <p
-                      className={styles.showMoreBtn}
-                      onClick={() => setStreetLimit((prev) => prev + 20)}
-                    >
-                      {t("showMore")}
-                    </p>
-                  )}
-                </div>
-              </Dropdown>
 
               <Dropdown
                 title={t("jk")}
@@ -495,7 +464,8 @@ export default function LocationModal({
                       </div>
                     ))}
 
-                  {(locationData?.kyiv?.newbuildings ?? []).length > jkLimit && (
+                  {(locationData?.kyiv?.newbuildings ?? []).length >
+                    jkLimit && (
                     <p
                       className={styles.showMoreBtn}
                       onClick={() => setJkLimit((prev) => prev + 20)}
@@ -525,36 +495,6 @@ export default function LocationModal({
                       {dir}
                     </div>
                   ))}
-                </div>
-              </Dropdown>
-              <Dropdown
-                title={t("street")}
-                isOpen={streetOpen}
-                onToggle={() => setStreetOpen(!streetOpen)}
-              >
-                <div className={styles.inlineList}>
-                  {locationData?.region?.streets
-                    .slice(0, streetLimit)
-                    .map((street) => (
-                      <div
-                        key={street}
-                        className={`${styles.dropdownItem} ${
-                          selectedStreets.includes(street) ? styles.active : ""
-                        }`}
-                        onClick={() => handleSelectStreet(street)}
-                      >
-                        {street}
-                      </div>
-                    ))}
-
-                  {(locationData?.region?.streets ?? []).length > streetLimit && (
-                    <p
-                      className={styles.showMoreBtn}
-                      onClick={() => setStreetLimit((prev) => prev + 20)}
-                    >
-                      {t("showMore")}
-                    </p>
-                  )}
                 </div>
               </Dropdown>
 
