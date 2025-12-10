@@ -10,7 +10,7 @@ interface TeamMemberCardProps {
   name: string;
   position: string;
   id: number;
-  isLarge?: boolean; // ДОБАВЛЕНО: Новый пропс
+  isLarge?: boolean;
 }
 
 export default function TeamMemberCard({
@@ -18,28 +18,27 @@ export default function TeamMemberCard({
   name,
   position,
   id,
-  isLarge = false, // ДОБАВЛЕНО: Значение по умолчанию
+  isLarge = false,
 }: TeamMemberCardProps) {
   const nameWords = name.split(" ");
 
-  // ДОБАВЛЕНО: Условное применение класса для большой карточки
   const cardClassName = `${styles.teamMemberCard} ${
     isLarge ? styles.partnerCardLarge : ""
   }`;
 
   return (
-    <div className={cardClassName}>
-      {" "}
-      {/* ИСПОЛЬЗУЕТСЯ УСЛОВНЫЙ КЛАСС */}
+    <Link href={`/worker/${id}`} className={cardClassName}>
       <div className={styles.cardContent}>
+        {/* БЛОК ФОТО + ИМЯ */}
         <div className={styles.photoAndName}>
           <Image
             src={photoSrc}
             alt={name}
-            width={150}
-            height={150}
+            fill
             className={styles.memberPhoto}
+            unoptimized
           />
+
           <h3 className={styles.memberName}>
             {nameWords.map((word, index) => (
               <span key={index}>
@@ -50,6 +49,7 @@ export default function TeamMemberCard({
           </h3>
         </div>
 
+        {/* НИЖНЯЯ ЧАСТЬ */}
         <div className={styles.memberDesc}>
           <div className={styles.memberPosition}>
             <div className={styles.line}></div>
@@ -60,22 +60,21 @@ export default function TeamMemberCard({
             <Image
               src={mySpaceLogo}
               alt="MySpace Logo"
-              width={30}
-              height={30}
+              width={52}
+              height={20}
               className={styles.mySpaceLogo}
             />
-            <Link href={`/worker/${id}`}>
-              <Image
-                src={arrowIcon}
-                alt="Arrow"
-                width={24}
-                height={24}
-                className={styles.arrowIcon}
-              />
-            </Link>
+
+            <Image
+              src={arrowIcon}
+              alt="Arrow"
+              width={20}
+              height={20}
+              className={styles.arrowIcon}
+            />
           </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }

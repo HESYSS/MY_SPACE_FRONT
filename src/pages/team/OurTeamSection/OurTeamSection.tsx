@@ -3,7 +3,7 @@ import Image from "next/image";
 import styles from "./OurTeamSection.module.css";
 import arrow from "../../../../public/icons/Vector10.svg";
 import { useTranslation } from "react-i18next";
-import Link from "next/link";
+import Link from "next/link"; // Обязательный импорт
 
 import defaultTeamImage from "../../../../public/icons/Бубенко_Ірина.png";
 
@@ -28,7 +28,13 @@ const OurTeamSection = () => {
   useEffect(() => {
     const fetchEmployees = async () => {
       try {
-        const backendUrl = process.env.REACT_APP_API_URL;
+        // Убедитесь, что эта переменная окружения доступна и правильно настроена
+        const backendUrl = process.env.REACT_APP_API_URL; 
+
+        // Проверка на undefined или null
+        if (!backendUrl) {
+            throw new Error("REACT_APP_API_URL is not defined in environment.");
+        }
 
         const response = await fetch(`${backendUrl}/employee`);
         if (!response.ok) {
@@ -36,6 +42,7 @@ const OurTeamSection = () => {
         }
         const data: Employee[] = await response.json();
 
+        // Сортировка по полю isACTIVE, как указано в логике
         const activeEmployees = data.filter((employee) => employee.isACTIVE);
         setEmployees(activeEmployees);
       } catch (err) {
@@ -87,25 +94,36 @@ const OurTeamSection = () => {
                   ? member.positionEn
                   : member.position;
 
+              // Используем photoUrl, если доступен, иначе — дефолтный локальный файл
               const imageUrl = member.photoUrl || defaultTeamImage.src;
 
               return (
                 <div className={styles.memberCard} key={member.id}>
-                  <div className={styles.imageWrapper}>
-                    <Image
-                      src={imageUrl}
-                      alt={`${firstName} ${lastName}`}
-                      className={styles.memberImage}
-                      fill
-                    />
-                    <div className={styles.imageOverlay}></div>
-                  </div>
+                  {/* ИЗМЕНЕНИЕ: Оборачиваем imageWrapper в Link */}
+                  <Link 
+                    href={`/worker/${member.id}`} 
+                    className={styles.imageLink} // Используем для сброса стилей ссылки
+                  >
+                    <div className={styles.imageWrapper}>
+                      <Image
+                        src={imageUrl}
+                        alt={`${firstName} ${lastName}`}
+                        className={styles.memberImage}
+                        fill
+                        unoptimized
+                      />
+                      <div className={styles.imageOverlay}></div>
+                    </div>
+                  </Link>
+
                   <div className={styles.memberInfo}>
                     <h4 className={styles.memberName}>
                       {firstName}
                       <br />
                       {lastName}
                     </h4>
+                    
+                    {/* Ссылка для роли/стрелочки (оставлена, если нужно) */}
                     <Link
                       href={`/worker/${member.id}`}
                       className={styles.memberRole}

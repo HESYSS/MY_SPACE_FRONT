@@ -166,12 +166,12 @@
 .detailsContainer {
   display: flex;
   flex-direction: row;
-  gap: 40px;
+  gap: 23%;
 }
 
 .sectionBlock {
   border-radius: 12px;
-  padding: 30px;
+  padding: 30px 0px;
   flex: 1;
   z-index: 1;
 }
@@ -222,9 +222,7 @@
   }
 
   .propertyPage {
-    padding: 20px;
-    margin-left: -15px;
-    margin-right: 17px;
+    padding: 0px;
   }
 
   .mainInfoSection {
@@ -244,7 +242,7 @@
   .priceAndButton {
     align-items: flex-start;
   }
-  
+
   .managerInfo {
     gap: 5px;
   }
@@ -266,9 +264,7 @@
 
 @media (min-width: 375px) and (max-width: 768px) {
   .propertyPage {
-    padding: 20px;
-    margin-left: -15px;
-    margin-right: 10px;
+    padding: 0px;
   }
 
   .contentWrapper {
@@ -309,7 +305,7 @@
   .price {
     font-size: 1.8em;
   }
-  
+
   .managerInfo {
     gap: 4px;
   }
@@ -317,7 +313,7 @@
   .managerLabel {
     font-size: 0.95em;
   }
-  
+
   .managerPhone,
   .managerEmail {
     font-size: 0.9em;
@@ -349,7 +345,7 @@
   }
 
   .sectionBlock {
-    padding: 20px;
+    padding: 20px 0px;
   }
 
   .sectionTitle {

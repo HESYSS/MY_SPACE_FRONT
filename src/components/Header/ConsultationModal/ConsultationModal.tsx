@@ -9,6 +9,8 @@ export default function ConsultationModal() {
 
   const [clientName, setClientName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [nameError, setNameError] = useState("");
+  const [phoneError, setPhoneError] = useState("");
 
   const propertyOptions = [
     { value: "RESIDENTIAL", label: t("residential") },
@@ -48,6 +50,8 @@ export default function ConsultationModal() {
     setClientName("");
     setPhoneNumber("");
     setError("");
+    setNameError("");
+    setPhoneError("");
     setIsSubmitted(false);
     closeModal();
   };
@@ -75,10 +79,50 @@ export default function ConsultationModal() {
     return () => window.removeEventListener("keydown", handleEsc);
   }, []);
 
+  // Обработчик изменения для поля телефона с фильтрацией на только цифры
+  const handlePhoneNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // Оставляем только цифры
+    const onlyNums = e.target.value.replace(/[^0-9]/g, "");
+    setPhoneNumber(onlyNums);
+    // Сбрасываем ошибку при вводе
+    if (onlyNums) {
+      setPhoneError("");
+    }
+  };
+
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
-    setIsLoading(true);
     setError("");
+    setNameError("");
+    setPhoneError("");
+
+    // --- Клиентская валидация (проверка обязательных полей) ---
+    let isValid = true;
+
+    if (!clientName.trim()) {
+      setNameError(t("nameRequired"));
+      isValid = false;
+    } else {
+      setNameError("");
+    }
+
+    if (!phoneNumber.trim()) {
+      setPhoneError(t("phoneRequired"));
+      isValid = false;
+    } else if (phoneNumber.replace(/[^0-9]/g, "").length < 5) {
+      // Пример: проверка на минимальную длину номера
+      setPhoneError(t("phoneTooShort"));
+      isValid = false;
+    } else {
+      setPhoneError("");
+    }
+
+    if (!isValid) {
+      return; // Если есть ошибки валидации, прерываем отправку
+    }
+    // ------------------------------------------------------------------
+
+    setIsLoading(true);
 
     const offerData = {
       clientName,
@@ -138,25 +182,39 @@ export default function ConsultationModal() {
         <h2 className={styles.modalTitle}>{t("modalTitle")}</h2>
         <form className={styles.form} onSubmit={handleSubmit}>
           <div className={styles.formItem}>
-            <label className={styles.formLabel}>{t("yourName")}</label>
+            <label className={styles.formLabel}>
+              {t("yourName")} <span className={styles.required}>*</span>
+            </label>
             <input
               type="text"
               placeholder={t("namePlaceholder")}
               value={clientName}
-              onChange={(e) => setClientName(e.target.value)}
-              required
+              onChange={(e) => {
+                setClientName(e.target.value);
+                if (e.target.value) setNameError("");
+              }}
+              // required убран, используется ручная валидация
             />
+            {nameError && <p className={styles.validationError}>{nameError}</p>}
           </div>
 
           <div className={styles.formItem}>
-            <label className={styles.formLabel}>{t("yourPhone")}</label>
+            <label className={styles.formLabel}>
+              {t("yourPhone")} <span className={styles.required}>*</span>
+            </label>
             <input
               type="tel"
               placeholder={t("phonePlaceholder")}
               value={phoneNumber}
-              onChange={(e) => setPhoneNumber(e.target.value)}
-              required
+              // Новый обработчик для ввода только цифр
+              onChange={handlePhoneNumberChange}
+              inputMode="numeric"
+              pattern="[0-9]*"
+              // required убран, используется ручная валидация
             />
+            {phoneError && (
+              <p className={styles.validationError}>{phoneError}</p>
+            )}
           </div>
 
           <div className={styles.formItem}>

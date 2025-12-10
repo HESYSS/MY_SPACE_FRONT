@@ -314,11 +314,20 @@ export default function MapDrawFilter({
         markerSource.current.removeFeature(f);
       }
     });
+    
+    const coords3857 = properties.map((p) => fromLonLat([p.lng, p.lat])) as [
+      number,
+      number
+    ][];
 
-    properties.forEach((p) => {
+   
+    const adjusted = offsetOverlapping(coords3857);
+
+
+    properties.forEach((p, i) => {
       if (!existingIds.has(p.id)) {
         const feature = new Feature({
-          geometry: new Point(fromLonLat([p.lng, p.lat])),
+          geometry: new Point(adjusted[i]), 
           id: p.id,
           link: `/property/${p.slug || p.id}`,
         });
@@ -570,6 +579,26 @@ export default function MapDrawFilter({
       currentCoords.current = [];
     }
   };
+
+function offsetOverlapping(coordinates: [number, number][]) {
+    const groups = new globalThis.Map<string, number>();
+
+    return coordinates.map(([x, y]) => {
+      const key = `${x}_${y}`;
+      const count = groups.get(key) ?? 0;
+      groups.set(key, count + 1);
+
+      if (count === 0) return [x, y];
+
+      const angle = (count * 40 * Math.PI) / 180; 
+      const radius = 10; 
+
+      const dx = Math.cos(angle) * radius;
+      const dy = Math.sin(angle) * radius;
+
+      return [x + dx, y + dy];
+    });
+  }
 
   return (
     <div className={styles.mapContainer}>

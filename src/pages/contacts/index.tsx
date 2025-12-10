@@ -6,6 +6,8 @@ import { useModal } from '../../hooks/useModal';
 import Link from "next/link";
 
 import youtubeIcon from "../../../public/icons/youtube.svg";
+import telegramIcon from "../../../public/icons/telega.png";
+import viberIcon from "../../../public/icons/123.jpg";
 import instagramIcon from "../../../public/icons/instagram.svg";
 import arrowRight from "../../../public/icons/line.svg";
 import star from "../../../public/icons/star.svg";
@@ -66,6 +68,34 @@ const ContactsPage: React.FC = () => {
                       />
                       <p className={styles.socialText}>Instagram</p>
                     </a>
+                      <a
+                      href="https://t.me/+380687777337"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={styles.socialLink}
+                    >
+                      <Image
+                        src={telegramIcon}
+                        alt="Telegram"
+                        width={22}
+                        height={16}
+                      />
+                      <p className={styles.socialText}>Telegram</p>
+                    </a>
+                    <a
+                      href="viber://chat?number=+380687777337"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={styles.socialLink}
+                    >
+                      <Image
+                        src={viberIcon}
+                        alt="Viber"
+                        width={22}
+                        height={16}
+                      />
+                      <p className={styles.socialText}>Viber</p>
+                    </a>
                   </div>
                 </div>
               </div>
@@ -116,12 +146,6 @@ const ContactsPage: React.FC = () => {
             </div>
 
             <div className={styles.bottomRow}>
-              <div className={styles.contactTextSection}>
-                <h4 className={styles.contactTitle}>{t('connectionTitle')}</h4>
-                <p className={styles.contactInfoSmall}>
-                 {/* {t('connectionText')}*/}
-                </p>
-              </div>
               <div className={styles.workHours}>
                 <h4 className={styles.contactTitle}>{t('workHoursTitle')}</h4>
                 <div className={styles.line}></div>

@@ -96,7 +96,7 @@
 
 /* Увеличиваем высоту фото для большой карточки партнера (2x2) */
 .partnerCardLarge .photoAndName {
-  height: calc(232px * 2 + 20px); /* 2x базовая высота + gap между карточками */
+  height: calc(232px * 2 - 41px); /* 2x базовая высота + gap между карточками */
 }
 
 .memberPhoto {
@@ -205,7 +205,7 @@
 
   /* МЕДИА: Обновление высоты для большой карточки */
   .partnerCardLarge .photoAndName {
-    height: calc(180px * 2 + 15px); /* 2x высота + gap 15px */
+    height: calc(180px * 2 - 22px); /* 2x высота + gap 15px */
   }
 
   .memberName {

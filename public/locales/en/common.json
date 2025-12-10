@@ -1,4 +1,6 @@
 {
+  "phoneRequired": "Enter your phone number",
+  "nameRequired": "Please enter your name.",
   "sale": "SALE",
   "rent": "RENT",
   "ourTeam": "OUR TEAM",
@@ -27,17 +29,17 @@
   "principlesTitle": "OUR VALUES",
   "starAlt": "Star",
   "broadSelectionTitle": "Wide Selection",
-  "broadSelectionText": "We provide access to the widest range of properties — from apartments to commercial spaces for every need.",
+  "broadSelectionText": "We open access to a diverse range of real estate — from cozy apartments to prestigious commercial spaces. We have a solution for every dream and every goal.",
   "customerTrustTitle": "Customer Trust",
-  "customerTrustText": "Our clients choose us again and again — we build trusting relationships on which success is based.",
+  "customerTrustText": "The highest recognition of our work is our returning clients. We build long-term relationships based on honesty, openness, and mutual respect.",
   "reliabilityTitle": "Reliability",
-  "reliabilityText": "We only work with verified properties and partners. With us, you can be confident in your choice.",
+  "reliabilityText": "We work only with trusted developers, property owners, and partners. Every property undergoes a thorough inspection so you can be confident in your choice.",
   "easeOfUseTitle": "Ease of Use",
-  "easeOfUseText": "We have made property search simple and fast — find the best options in just a few clicks.",
+  "easeOfUseText": "Finding real estate with us is comfortable, fast, and intuitive. We’ve made sure you can discover the best options in just a few clicks.",
   "individualApproachTitle": "Individual Approach",
-  "individualApproachText": "Our team is always ready to provide advice and assist at every stage.",
-  "secureDealsTitle": "Secure Transactions",
-  "secureDealsText": "We guarantee that every transaction will be 100% safe and transparent.",
+  "individualApproachText": "We value every client. Our team supports you at every stage — from the first consultation to signing the deal. Your needs are our priority.",
+  "secureDealsTitle": "Secure Deals",
+  "secureDealsText": "We guarantee full transparency and legal safety for every transaction. With us, your investments are always protected.",
   "cooperationTitle": "Cooperation",
   "consultationCallToAction": "Do you want to get a consultation?",
   "forSellersLandlords": "For Sellers/Landlords",
@@ -123,7 +125,6 @@
   "successMessage": "Our manager will contact you shortly to discuss the details. Thank you!",
   "district": "District",
 
-  "search_placeholder": "Search...",
   "filter_button": "Filter",
 
   "loading": "Loading...",
@@ -134,7 +135,7 @@
   "areaAlt": "Area",
   "getPropertyConsultation": "GET A CONSULTATION",
   "featuresTitle": "Features",
-  "crmIdLabel": "Article: ",
+  "crmIdLabel": "Article",
   "descriptionTitle": "Description",
   "propertyType": "Property Type",
   "objectView": "Object View",
@@ -232,3 +233,4 @@
   "showMore": "Show more",
   "search": "Your option"
 }
+

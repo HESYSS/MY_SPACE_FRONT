@@ -20,6 +20,7 @@ export interface Employee {
 
 export interface SiteImage {
   id: number;
+  article: string;
   name: string;
   url: string;
 }

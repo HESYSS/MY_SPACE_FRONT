@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import styles from "./AllTeamSection.module.css";
 import { useTranslation } from "react-i18next";
-import Link from "next/link";
+import Link from "next/link"; // Оставляем импорт
 import vitaliyPenc from "../../../../public/icons/vitaliyPenc.png";
 
 interface Employee {
@@ -32,6 +32,8 @@ const AllTeamSection: React.FC = () => {
   const [touchStartX, setTouchStartX] = useState<number | null>(null);
   const [dragX, setDragX] = useState<number>(0);
   const [isDragging, setIsDragging] = useState<boolean>(false);
+  // НОВОЕ СОСТОЯНИЕ: отслеживает, был ли "свайп" (перемещение), а не просто клик
+  const [isSwiped, setIsSwiped] = useState<boolean>(false); 
 
   // адаптация под ширину экрана
   useEffect(() => {
@@ -68,11 +70,19 @@ const AllTeamSection: React.FC = () => {
     fetchEmployees();
   }, []);
 
-  const activeEmployees = employees.filter((member) => !member.isSUPERVISOR);
+  const activeEmployees = employees.filter((member) => !member.isSUPERVISOR && member.isPARTNER === false );
   const totalPages = Math.ceil(activeEmployees.length / itemsPerPage);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(Math.max(1, Math.min(page, totalPages)));
+  };
+
+  const handlePrev = () => {
+    handlePageChange(currentPage - 1);
+  };
+
+  const handleNext = () => {
+    handlePageChange(currentPage + 1);
   };
 
   const getEmployeeData = (employee: Employee, language: string) => {
@@ -93,22 +103,32 @@ const AllTeamSection: React.FC = () => {
   const startDrag = (clientX: number) => {
     setTouchStartX(clientX);
     setIsDragging(true);
+    // Сбрасываем флаг свайпа перед началом
+    setIsSwiped(false); 
   };
 
   const moveDrag = (clientX: number) => {
     if (!isDragging || touchStartX === null) return;
     const dragDistance = clientX - touchStartX;
     setDragX(dragDistance);
+    // Если перемещение больше небольшого порога, считаем это свайпом
+    if (Math.abs(dragDistance) > 10) { 
+      setIsSwiped(true);
+    }
   };
 
   const endDrag = () => {
     if (touchStartX === null) return;
     const swipeThreshold = 50;
+    // Если расстояние перетаскивания превышает порог, меняем страницу
     if (dragX < -swipeThreshold) {
       handlePageChange(currentPage + 1);
+      setIsSwiped(true); // Убеждаемся, что переход по ссылке не произойдет
     } else if (dragX > swipeThreshold) {
       handlePageChange(currentPage - 1);
+      setIsSwiped(true); // Убеждаемся, что переход по ссылке не произойдет
     }
+    
     setIsDragging(false);
     setTouchStartX(null);
     setDragX(0);
@@ -123,7 +143,10 @@ const AllTeamSection: React.FC = () => {
 
   // mouse события
   const handleMouseDown = (e: React.MouseEvent) => {
-    e.preventDefault(); // чтобы не выделялся текст и не тянулись ссылки
+    // ВАЖНО: только для элементов, которые не являются ссылками,
+    // чтобы позволить ссылкам внутри себя работать как обычно, 
+    // но в вашем случае вся карточка будет ссылкой, поэтому оставляем.
+    e.preventDefault(); 
     startDrag(e.clientX);
   };
   const handleMouseMove = (e: React.MouseEvent) => {
@@ -133,8 +156,18 @@ const AllTeamSection: React.FC = () => {
   const handleMouseLeave = () => {
     if (isDragging) endDrag();
   };
+  
+  // НОВАЯ ФУНКЦИЯ: предотвращает переход по ссылке, если был свайп.
+  const handleClick = (e: React.MouseEvent) => {
+      // Если был свайп (перетаскивание), предотвращаем переход по ссылке
+      if (isSwiped) {
+          e.preventDefault();
+          e.stopPropagation();
+      }
+  };
 
-  const isMobileOrTablet = itemsPerPage === 2 || itemsPerPage === 4;
+
+  // const isMobileOrTablet = itemsPerPage === 2 || itemsPerPage === 4; // НЕ ИСПОЛЬЗУЕТСЯ - УДАЛЕНА ИЛИ ЗАКОММЕНТИРОВАНА
 
   if (loading) return <div>Загрузка...</div>;
   if (error) return <div>Ошибка: {error}</div>;
@@ -142,78 +175,108 @@ const AllTeamSection: React.FC = () => {
   return (
     <div className={styles.allTeamContainer}>
       <h2 className={styles.sectionTitle}>{t("allTeamTitle")}</h2>
-      <div className={styles.carouselContainer}>
-        <div
-          className={styles.teamRow}
-          onTouchStart={handleTouchStart}
-          onTouchMove={handleTouchMove}
-          onTouchEnd={handleTouchEnd}
-          onMouseDown={handleMouseDown}
-          onMouseMove={handleMouseMove}
-          onMouseUp={handleMouseUp}
-          onMouseLeave={handleMouseLeave}
-          style={
-            {
-              transform: `translateX(calc(-${
-                (currentPage - 1) * 100
-              }% + ${dragX}px))`,
-              transition: isDragging ? "none" : "transform 0.5s ease-in-out",
-              "--items-per-page": itemsPerPage,
-              "--gap": itemsPerPage === 5 ? "30px" : "15px",
-              cursor: isDragging ? "grabbing" : "grab",
-            } as React.CSSProperties
-          }
+      {/* 👈 Обертка для позиционирования стрелок относительно карусели */}
+      <div className={styles.carouselWrapper}>
+        
+        {/* Кнопка "Назад" */}
+        <button
+          className={`${styles.navButton} ${styles.navPrev}`}
+          onClick={handlePrev}
+          disabled={currentPage === 1}
+          aria-label={t("previousSlide")}
         >
-          {activeEmployees.length === 0 ? (
-            <p>Список сотрудников пуст.</p>
-          ) : (
-            activeEmployees.map((member) => {
-              const { name, role } = getEmployeeData(member, i18n.language);
-              const imageUrl = member.photoUrl || vitaliyPenc.src;
-              if (member.isSUPERVISOR === true) return null;
-              return (
-                <div key={member.id} className={styles.teamMemberCard}>
-                  <div className={styles.cardContent}>
-                    <div className={styles.photoAndName}>
-                      <Image
-                        src={imageUrl}
-                        alt={name}
-                        className={styles.memberPhoto}
-                        fill
-                        style={{ objectFit: "cover" }}
-                        unoptimized
-                      />
-                      <div className={styles.gradientOverlay}></div>
-                      <div className={styles.textContainer}>
-                        <Link
-                          href={`/worker/${member.id}`}
-                          className={styles.memberName}
-                        >
-                          {name}
-                        </Link>
-                        <p className={styles.memberRole}>{role}</p>
+          {"<"}
+        </button>
+
+        <div className={styles.carouselContainer}>
+          <div
+            className={styles.teamRow}
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+            onMouseDown={handleMouseDown}
+            onMouseMove={handleMouseMove}
+            onMouseUp={handleMouseUp}
+            onMouseLeave={handleMouseLeave}
+            style={
+              {
+                transform: `translateX(calc(-${
+                  (currentPage - 1) * 100
+                }% + ${dragX}px))`,
+                transition: isDragging ? "none" : "transform 0.5s ease-in-out",
+                "--items-per-page": itemsPerPage,
+                "--gap": itemsPerPage === 5 ? "30px" : "15px",
+                cursor: isDragging ? "grabbing" : "grab",
+              } as React.CSSProperties
+            }
+          >
+            {activeEmployees.length === 0 ? (
+              <p>Список сотрудников пуст.</p>
+            ) : (
+              activeEmployees.map((member) => {
+                const { name, role } = getEmployeeData(member, i18n.language);
+                const imageUrl = member.photoUrl || vitaliyPenc.src;
+                if (member.isSUPERVISOR === true) return null;
+                
+                // 👈 КЛЮЧЕВОЕ ИЗМЕНЕНИЕ: Оборачиваем всю карточку в Link
+                return (
+                  <Link
+                    key={member.id}
+                    href={`/worker/${member.id}`}
+                    className={styles.teamMemberCard} // Используем класс стилей для Link
+                    onClick={handleClick} // Добавляем проверку на свайп
+                  >
+                    <div className={styles.cardContent}>
+                      <div className={styles.photoAndName}>
+                        <Image
+                          src={imageUrl}
+                          alt={name}
+                          className={styles.memberPhoto}
+                          fill
+                          style={{ objectFit: "cover" }}
+                          unoptimized
+                        />
+                        <div className={styles.gradientOverlay}></div>
+                        <div className={styles.textContainer}>
+                          {/* ⚠️ УДАЛЕН ЛИШНИЙ Link ВОКРУГ ИМЕНИ */}
+                          <div className={styles.memberName}>
+                            {name}
+                          </div>
+                          <p className={styles.memberRole}>{role}</p>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </div>
-              );
-            })
+                  </Link>
+                );
+              })
+            )}
+          </div>
+
+          {totalPages > 1 && (
+            <div className={styles.pagination}>
+              {Array.from({ length: totalPages }, (_, index) => (
+                <div
+                  key={index}
+                  className={
+                    index + 1 === currentPage ? styles.dotActive : styles.dot
+                  }
+                  onClick={() => handlePageChange(index + 1)}
+                ></div>
+              ))}
+            </div>
           )}
         </div>
+        
+        {/* Кнопка "Вперед" */}
+        <button
+          className={`${styles.navButton} ${styles.navNext}`}
+          onClick={handleNext}
+          disabled={currentPage === totalPages}
+          aria-label={t("nextSlide")}
+        >
+          {">"}
+        </button>
 
-        {totalPages > 1 && (
-          <div className={styles.pagination}>
-            {Array.from({ length: totalPages }, (_, index) => (
-              <div
-                key={index}
-                className={
-                  index + 1 === currentPage ? styles.dotActive : styles.dot
-                }
-                onClick={() => handlePageChange(index + 1)}
-              ></div>
-            ))}
-          </div>
-        )}
       </div>
     </div>
   );

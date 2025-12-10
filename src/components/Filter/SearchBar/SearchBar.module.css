@@ -2,30 +2,27 @@
   position: relative;
   width: 100%;
   max-width: 100%;
-  overflow: hidden;
   box-sizing: border-box;
   display: flex;
-  align-items: center;
-  width: 100%;
-  max-width: 100%;
-  box-sizing: border-box;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .tagsContainer {
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
   gap: 8px;
   background-color: #0a0a0a;
   border: 1px solid #03b9b34d;
   border-radius: 5px;
   padding: 6px 8px;
-  padding-right: 40px;
-  height: 44px;
+  min-height: 44px;
+  height: auto;
   position: relative;
-
   flex-grow: 1;
   box-sizing: border-box;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .clearAllButton {
@@ -44,28 +41,17 @@
   z-index: 5;
 }
 
+/* Стили для десктопного списка тегов */
 .tagList {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 6px;
-  overflow-x: auto;
-  overflow-y: hidden;
-  white-space: nowrap;
-  cursor: grab;
+  cursor: default;
   user-select: none;
-  scrollbar-width: none;
-
-  flex: 0 0 auto;
-  max-width: 300px;
+  max-width: 100%;
   min-width: 0;
-}
-
-.tagList::-webkit-scrollbar {
-  display: none;
-}
-
-.tagList.dragging {
-  cursor: grabbing;
+  margin-bottom: 6px;
 }
 
 .tag {
@@ -78,6 +64,29 @@
   font-size: 0.85rem;
   flex-shrink: 0;
   white-space: nowrap;
+}
+
+/* Стили для мобильного счетчика тегов */
+.tagCounter {
+  background-color: #ffffff;
+  color: #000000;
+  padding: 4px 8px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  font-weight: normal;
+  flex-shrink: 0;
+  white-space: nowrap;
+  margin-right: 6px;
+  transition: background-color 0.15s ease;
+  height: 28px;
+  display: none;
+}
+
+.tagCounter:hover {
+  background-color: #02a39d;
 }
 
 .removeTagButton {
@@ -109,110 +118,125 @@
 }
 
 .searchButton {
+  /* Стили по умолчанию (для ДЕСКТОПНОЙ кнопки, которая находится ВНЕ tagsContainer) */
+  width: 100%;
   height: 44px;
   background-color: #fff;
   color: #000;
   padding: 0 10px;
   border: none;
-  border-radius: 0 5px 5px 0;
+  border-radius: 5px;
   cursor: pointer;
   font-weight: 500;
-  transition: all 0.15s ease;
+  transition: background-color 0.15s ease;
   text-transform: uppercase;
   z-index: 20;
   flex-shrink: 0;
+  font-size: 1rem; /* Убедимся, что текст виден по умолчанию */
+}
+
+.searchButton:hover {
+  background-color: #02a39d;
 }
 
 .inputWrapper {
   position: relative;
   width: 100%;
+  display: flex;
+  align-items: center;
 }
 
-.suggestionsList {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  background: white;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  max-height: 200px;
-  overflow-y: auto;
-  z-index: 10;
-}
-
-.suggestionItem {
-  padding: 8px 12px;
-  cursor: pointer;
-}
-
-.suggestionItem:hover {
-  background-color: #f0f0f0;
-}
-
-@media (max-width: 1000px) {
+/* АДАПТАЦИЯ для больших экранов (min-width: 1000px) */
+@media (min-width: 1000px) {
   .searchInputWrapper {
-    max-width: 720px;
-    margin: 0 auto;
+    flex-direction: row;
+    gap: 12px;
+    max-width: 900px;
   }
 
   .tagsContainer {
-    padding: 5px 6px;
-    height: 40px;
-    padding-right: 35px;
+    flex-direction: column;
+    padding-right: 40px;
+    min-height: 44px;
+    height: 100%;
+    justify-content: space-between;
   }
 
-  .tagList {
-    max-width: 180px;
-  }
-
-  .clearAllButton {
-    right: 5px;
-    font-size: 1.3rem;
-    right: -25px;
-  }
-
-  .input {
-    height: 26px;
+  .tagCounter {
+    display: none;
   }
 
   .searchButton {
-    height: 40px;
-    padding: 0 8px;
-    font-size: 0.9rem;
+    width: 150px;
+    height: 44px;
+    border-radius: 5px;
+    flex-shrink: 0;
   }
 }
 
+/* АДАПТАЦИЯ для мобильных устройств (<= 600px) */
 @media (max-width: 600px) {
   .searchInputWrapper {
-    max-width: 360px;
-    margin: 0 auto;
+    max-width: 100%;
+    flex-direction: column;
+    margin: 0;
+    gap: 8px;
   }
 
   .tagsContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    flex-grow: 1;
+    min-height: 40px;
     padding: 4px 6px;
-    height: 40px;
-    padding-right: 35px;
+    width: 100%;
+    gap: 6px;
   }
 
   .tagList {
-    max-width: 50px;
+    display: none;
   }
 
-  .clearAllButton {
-    right: 5px;
-    font-size: 1.3rem;
-    visibility: hidden;
+  .tagCounter {
+    display: flex;
+    flex-shrink: 0;
+  }
+
+  .inputWrapper {
+    flex-grow: 1;
   }
 
   .input {
-    height: 24px;
+    height: 28px;
     font-size: 0.9rem;
+    padding-left: 0;
   }
 
-  .searchButton {
-    height: 40px;
-    padding: 0 6px;
+  /* Стили для кнопки, когда она находится ВНУТРИ tagsContainer (мобильный) */
+  .tagsContainer .searchButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    /* ИЗМЕНЕНИЕ: Убираем фиксированную ширину и возвращаем padding для текста */
+    width: auto;
+    height: 36px;
+    padding: 0 10px;
+
+    background-color: #ffffff;
+    color: #000000;
+    border-radius: 5px;
+    flex-shrink: 0;
+
+    /* НОВОЕ: Возвращаем размер шрифта */
     font-size: 0.85rem;
+
+    margin-left: 6px;
+  }
+
+  /* Скрываем десктопную кнопку */
+  .searchInputWrapper > .searchButton {
+    display: none;
   }
 }

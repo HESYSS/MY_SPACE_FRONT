@@ -28,7 +28,6 @@ export default function SearchBar({
 }: SearchBarProps) {
   const { t, i18n } = useTranslation("common");
   const lang = i18n.language;
-  const langKey = lang === "en" ? "en" : "ua";
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -37,89 +36,79 @@ export default function SearchBar({
   const [showModal, setShowModal] = useState(false);
   const tagListRef = useRef<HTMLDivElement>(null);
 
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      // 600px соответствует медиа-запросу
+      setIsMobile(window.innerWidth <= 600);
+    };
+
+    if (typeof window !== "undefined") {
+      checkMobile();
+      window.addEventListener("resize", checkMobile);
+    }
+
+    return () => {
+      if (typeof window !== "undefined") {
+        window.removeEventListener("resize", checkMobile);
+      }
+    };
+  }, []);
+
+  const modalRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        modalRef.current &&
+        !modalRef.current.contains(event.target as Node)
+      ) {
+        setShowModal(false);
+      }
+    };
+
+    if (showModal) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showModal]);
+
   const toLocalized = (label: string, uaVal: string) => {
     if (lang === "uk") return uaVal;
-
     if (label === "metro") {
       for (const line in METRO_LINES) {
         const idx = METRO_LINES[line].ua.indexOf(uaVal);
         if (idx !== -1) return METRO_LINES[line].en[idx];
       }
     }
-
     if (label === "districts") {
       for (const shore in SHORE_DISTRICTS) {
         const idx = SHORE_DISTRICTS[shore].ua.indexOf(uaVal);
         if (idx !== -1) return SHORE_DISTRICTS[shore].en[idx];
       }
     }
-
     return uaVal;
   };
-
-  useEffect(() => {
-    const tagList = tagListRef.current;
-    if (!tagList) return;
-
-    let isDown = false;
-    let startX: number;
-    let scrollLeft: number;
-
-    const onMouseDown = (e: MouseEvent) => {
-      isDown = true;
-      tagList.classList.add(styles.dragging);
-      startX = e.pageX - tagList.offsetLeft;
-      scrollLeft = tagList.scrollLeft;
-    };
-
-    const onMouseLeave = () => {
-      isDown = false;
-      tagList.classList.remove(styles.dragging);
-    };
-
-    const onMouseUp = () => {
-      isDown = false;
-      tagList.classList.remove(styles.dragging);
-    };
-
-    const onMouseMove = (e: MouseEvent) => {
-      if (!isDown) return;
-      e.preventDefault();
-      const x = e.pageX - tagList.offsetLeft;
-      const walk = (x - startX) * 1.5;
-      tagList.scrollLeft = scrollLeft - walk;
-    };
-
-    tagList.addEventListener("mousedown", onMouseDown);
-    tagList.addEventListener("mouseleave", onMouseLeave);
-    tagList.addEventListener("mouseup", onMouseUp);
-    tagList.addEventListener("mousemove", onMouseMove);
-
-    return () => {
-      tagList.removeEventListener("mousedown", onMouseDown);
-      tagList.removeEventListener("mouseleave", onMouseLeave);
-      tagList.removeEventListener("mouseup", onMouseUp);
-      tagList.removeEventListener("mousemove", onMouseMove);
-    };
-  }, [tags]);
 
   useEffect(() => {
     const handler = setTimeout(() => {
       const rawLocation = searchParams.get("locationfilters");
       const globalQ = searchParams.get("search");
-
       const newTags: Tag[] = [];
-
       if (globalQ) {
         newTags.push({ type: "search", value: globalQ });
       }
-
       if (rawLocation) {
         try {
           const decoded = decodeURIComponent(decodeURIComponent(rawLocation));
           const parsed = JSON.parse(decoded);
-          console.log("Parsed locationfilters:", parsed);
-
+          // --- Ваша логика парсинга тегов из searchParams ---
           if (parsed.metro?.length) {
             const stationsLeft = [...parsed.metro];
             for (const line in METRO_LINES) {
@@ -139,7 +128,6 @@ export default function SearchBar({
               newTags.push({ type: "metro", value: toLocalized("metro", s) })
             );
           }
-
           if (parsed.districts?.length) {
             const districtsLeft = [...parsed.districts];
             for (const shore in SHORE_DISTRICTS) {
@@ -166,44 +154,38 @@ export default function SearchBar({
               })
             );
           }
-
           if (parsed.streets?.length) {
             parsed.streets.forEach((val: string) =>
               newTags.push({ type: "street", value: val })
             );
           }
-
           if (parsed.newbuildings?.length) {
             parsed.newbuildings.forEach((val: string) =>
               newTags.push({ type: "jk", value: val })
             );
           }
-
           if (parsed.directions?.length) {
             parsed.directions.forEach((dir: string) =>
               newTags.push({ type: "directions", value: dir })
             );
           }
-
           if (parsed.polygon != "") {
             newTags.push({
               type: "Полігон",
               value: "Пользовательський полігон",
             });
           }
+          // --- Конец логики парсинга ---
         } catch (err) {
           console.error("Ошибка при разборе locationfilters:", err);
         }
       }
-
       setTags(newTags);
     }, 500);
-
     return () => clearTimeout(handler);
   }, [searchParams]);
 
   const removeTag = (index: number) => {
-    console.log("Removing tag at index:", index);
     const newTags = [...tags];
     const removedTag = newTags.splice(index, 1)[0];
     setTags(newTags);
@@ -284,7 +266,6 @@ export default function SearchBar({
       console.error("Ошибка при обновлении locationfilters:", err);
     }
   };
-
   const clearAllTags = () => {
     const params = new URLSearchParams(window.location.search);
     const rawLocation = searchParams.get("locationfilters");
@@ -321,89 +302,107 @@ export default function SearchBar({
       router.replace(`?${params.toString()}`);
     }
   };
-
   const clearInputValue = () => {
     setInputValue("");
     setShowModal(false);
   };
 
+  const activeFilterCount = tags.length;
+
   return (
-    <>
-      <div className={styles.searchInputWrapper}>
-        <div className={styles.tagsContainer}>
-          {tags.length > 0 && (
-            <div ref={tagListRef} className={styles.tagList}>
-              {tags.map((tag, idx) => (
-                <span key={idx} className={styles.tag}>
-                  {t(tag.type)}: {t(tag.fullName ?? tag.value)}
-                  <button
-                    type="button"
-                    className={styles.removeTagButton}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      removeTag(idx);
-                    }}
-                  >
-                    ×
-                  </button>
-                </span>
-              ))}
-            </div>
-          )}
-
-          <div className={styles.inputWrapper}>
-            <input
-              type="text"
-              placeholder={t("search_placeholder")}
-              value={inputValue}
-              onChange={(e) => {
-                const value = e.target.value;
-                setInputValue(value);
-                setShowModal(value.trim().length > 0);
-              }}
-              onClick={openLocationModal}
-              onKeyDown={handleSearchKeyDown}
-              className={styles.input}
-            />
-            {inputValue.length > 0 && (
-              <button
-                type="button"
-                className={styles.clearAllButton}
-                onClick={clearInputValue}
-                title={t("clear_input") ?? "Очистити поле"}
+    <div className={styles.searchInputWrapper}>
+      <div className={styles.tagsContainer}>
+        {/* 1. Условный рендеринг счетчика / списка тегов */}
+        {tags.length > 0 && (
+          <>
+            {/* Мобильный счетчик: Показывается только на мобильных при активных фильтрах */}
+            {isMobile && activeFilterCount > 0 && (
+              <div
+                className={styles.tagCounter}
+                onClick={openLocationModal}
+                title={t("view_filters") ?? "Посмотреть фильтры"}
               >
-                ×
-              </button>
+                {activeFilterCount}
+              </div>
             )}
-          </div>
+            {/* Десктопный список тегов: Показывается только на десктопе */}
+            {!isMobile && (
+              <div ref={tagListRef} className={styles.tagList}>
+                {tags.map((tag, idx) => (
+                  <span key={idx} className={styles.tag}>
+                    {t(tag.type)}: {t(tag.fullName ?? tag.value)}
+                    <button
+                      type="button"
+                      className={styles.removeTagButton}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        removeTag(idx);
+                      }}
+                    >
+                      ×
+                    </button>
+                  </span>
+                ))}
+              </div>
+            )}
+          </>
+        )}
 
-          {tags.some((tag) => tag.type !== "") && (
-            <button
-              type="button"
-              className={styles.clearAllButton}
-              onClick={clearAllTags}
-              title={t("clear_all") ?? "Очистити фільтри"}
-            >
-              ×
-            </button>
-          )}
+        <div className={styles.inputWrapper}>
+          <input
+            type="text"
+            value={inputValue}
+            onChange={(e) => {
+              const value = e.target.value;
+              setInputValue(value);
+              setShowModal(value.trim().length > 0);
+            }}
+            onClick={openLocationModal}
+            onKeyDown={handleSearchKeyDown}
+            className={styles.input}
+          />
         </div>
 
+        
+        { tags.some((tag) => tag.type !== "") && (
+          <button
+            type="button"
+            className={styles.clearAllButton}
+            onClick={clearAllTags}
+            title={t("clear_all") ?? "Очистити фільтри"}
+            style={{
+              right: isMobile ? "85px" : "40px", }}
+          >
+            ×
+          </button>
+        )}
+
+        {/* === МОБИЛЬНАЯ КНОПКА ПОИСКА: ВНУТРИ tagsContainer === */}
+        {isMobile && (
+          <button className={styles.searchButton} onClick={handleSearchSubmit}>
+            {t("search_button")}
+          </button>
+        )}
+      </div>
+
+      {/* === ДЕСКТОПНАЯ КНОПКА ПОИСКА: ВНЕ tagsContainer === */}
+      {!isMobile && (
         <button className={styles.searchButton} onClick={handleSearchSubmit}>
           {t("search_button")}
         </button>
-      </div>
+      )}
 
       {showModal && (
         <SearchModal
+          ref={modalRef}
           query={inputValue}
           onClose={() => setShowModal(false)}
           onSelect={(val) => {
             setInputValue(val);
-            setShowModal(false);
           }}
         />
       )}
-    </>
+    </div>
   );
 }
+

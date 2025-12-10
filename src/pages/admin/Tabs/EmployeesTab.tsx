@@ -368,6 +368,10 @@ const EmployeesSection: FC<EmployeesSectionProps> = ({
                                         handleEditEmployee(employee); // <--- ВЫЗЫВАЕМ ФУНКЦИЮ ДЛЯ ЗАПОЛНЕНИЯ ПОЛЕЙ
                                         // setEditingEmployee(employee); // ЭТА СТРОКА ТЕПЕРЬ НЕ НУЖНА, Т.К. handleEditEmployee УЖЕ ДЕЛАЕТ ЭТО
                                         setIsFormVisible(true);
+                                        window.scrollTo({
+                                         top: 100,
+                                         behavior: "smooth",
+                                        });
                                     }}
                                 >
                                     Редагувати

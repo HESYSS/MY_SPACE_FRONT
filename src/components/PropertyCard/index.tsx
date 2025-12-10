@@ -110,7 +110,7 @@ export default function PropertyCard({ property }: Props) {
         <div className={styles["property-footer"]}>
           <span className={styles["property-type"]}>{property.type}</span>
           <span className={styles["property-date"]}>
-            {formatDate(property.updatedAt)}
+            {t("crmIdLabel")}: {property.article}
           </span>
         </div>
       </div>

@@ -74,7 +74,7 @@ const ImagesSection: FC<ImagesSectionProps> = ({
           <option value="">-- Виберіть об'єкт --</option>
           {items.map((item) => (
             <option key={item.id} value={item.id}>
-              {item.title} (ID: {item.id})
+              {item.title} (article: {item.article})
             </option>
           ))}
         </select>

@@ -215,7 +215,7 @@ export default function FiltersModal({ onClose }: FiltersModalProps) {
         </div>
 
         <div className={styles.section}>
-          <div className={styles.label}>{t("Цена")}</div>
+          <div className={styles.label}>{t("Ціна")}</div>
           <div className={styles.priceContainer}>
             <div className={styles.priceInputGroup}>
               <input

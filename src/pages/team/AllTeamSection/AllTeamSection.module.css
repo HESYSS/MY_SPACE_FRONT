@@ -22,15 +22,63 @@
   margin: 0;
 }
 
+/* 👈 НОВЫЙ СТИЛЬ: Обертка для позиционирования стрелок */
+.carouselWrapper {
+  position: relative; /* Для позиционирования стрелок */
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
 .carouselContainer {
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 0px;
   gap: 20px;
-  width: 1200px;
+  width: 1200px; /* Сохраняем ширину, но она будет адаптироваться ниже */
   overflow: hidden;
 }
+
+/* 👈 НОВЫЙ СТИЛЬ: Стрелки навигации */
+.navButton {
+  position: absolute;
+  top: 50%; /* Центрируем по вертикали относительно carouselContainer */
+  transform: translateY(-100%); /* Точная настройка центра */
+  background: rgba(10, 10, 10, 0.7);
+  color: #ebebeb;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  font-size: 24px;
+  cursor: pointer;
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: background 0.3s;
+}
+
+.navButton:hover:not(:disabled) {
+  background: rgba(3, 185, 179, 0.9); /* #03b9b3 */
+}
+
+.navButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.navPrev {
+  left: -50px; /* Смещаем влево от контейнера */
+}
+
+.navNext {
+  right: -50px; /* Смещаем вправо от контейнера */
+}
+/* ------------------------------------ */
 
 .teamRow {
   display: flex;
@@ -160,6 +208,15 @@
     width: 100%;
     gap: 15px;
   }
+  
+  /* Адаптация положения стрелок для меньших экранов */
+  .navPrev {
+    left: -10px; 
+  }
+
+  .navNext {
+    right: -10px;
+  }
 }
 
 @media (max-width: 768px) {
@@ -175,5 +232,10 @@
 
   .teamMemberCard {
     width: calc(50% - 7.5px);
+  }
+  
+  /* Скрываем стрелки на мобильных устройствах, т.к. есть свайп */
+  .navButton {
+    display: none;
   }
 }
