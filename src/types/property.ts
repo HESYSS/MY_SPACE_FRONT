@@ -5,6 +5,7 @@ export interface Property {
   prices: Price[];
   rooms: number;
   area: number;
+  article: string;
   firstImage: string;
   district: string;
   type: string;
