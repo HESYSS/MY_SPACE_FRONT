@@ -13,7 +13,7 @@
   box-sizing: border-box;
   max-height: 80vh; /* можно подстроить */
   overflow-y: auto;
-  z-index: 1001;
+  z-index: 999;
 }
 
 /* Содержимое модалки */
