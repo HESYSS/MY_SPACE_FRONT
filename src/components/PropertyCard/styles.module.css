@@ -1,9 +1,6 @@
 .properties {
   display: grid;
-  grid-template-columns: repeat(
-    auto-fill,
-    minmax(300px, 1fr)
-  );
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 20px;
   padding: 20px;
   justify-content: center;
@@ -75,14 +72,13 @@
 }
 
 .property-price {
-  font-family: "Raleway", sans-serif;
+  font-family: "Inter", sans-serif;
   font-weight: 700;
   font-weight: bold;
   font-size: 14px;
   color: #263544;
   margin-top: auto;
   margin-bottom: 15px;
-  text-transform: uppercase;
 }
 
 .property-details {

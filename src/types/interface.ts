@@ -20,7 +20,6 @@ export interface Employee {
 
 export interface SiteImage {
   id: number;
-  article: string;
   name: string;
   url: string;
 }
@@ -55,4 +54,5 @@ export interface Offer {
   propertyType: "RESIDENTIAL" | "COMMERCIAL" | "LAND";
   createdAt: string;
   status: "PENDING" | "PROCESSED" | "COMPLETED";
+  propertyArticle: string | null;
 }

@@ -16,8 +16,11 @@ interface Tag {
 }
 
 interface SearchBarProps {
-  handleSearchSubmit: () => void;
-  handleSearchKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void;
+  handleSearchSubmit: (value: string) => void;
+  handleSearchKeyDown: (
+    e: React.KeyboardEvent<HTMLInputElement>,
+    value: string
+  ) => void;
   openLocationModal: () => void;
 }
 
@@ -34,6 +37,10 @@ export default function SearchBar({
   const [tags, setTags] = useState<Tag[]>([]);
   const [inputValue, setInputValue] = useState("");
   const [showModal, setShowModal] = useState(false);
+
+  // Новое состояние для отображения списка фильтров на мобильном
+  const [showTagsModal, setShowTagsModal] = useState(false);
+
   const tagListRef = useRef<HTMLDivElement>(null);
 
   const [isMobile, setIsMobile] = useState(false);
@@ -55,29 +62,6 @@ export default function SearchBar({
       }
     };
   }, []);
-
-  const modalRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        modalRef.current &&
-        !modalRef.current.contains(event.target as Node)
-      ) {
-        setShowModal(false);
-      }
-    };
-
-    if (showModal) {
-      document.addEventListener("mousedown", handleClickOutside);
-    } else {
-      document.removeEventListener("mousedown", handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [showModal]);
 
   const toLocalized = (label: string, uaVal: string) => {
     if (lang === "uk") return uaVal;
@@ -266,6 +250,7 @@ export default function SearchBar({
       console.error("Ошибка при обновлении locationfilters:", err);
     }
   };
+
   const clearAllTags = () => {
     const params = new URLSearchParams(window.location.search);
     const rawLocation = searchParams.get("locationfilters");
@@ -302,12 +287,13 @@ export default function SearchBar({
       router.replace(`?${params.toString()}`);
     }
   };
+
   const clearInputValue = () => {
     setInputValue("");
     setShowModal(false);
   };
 
-  const activeFilterCount = tags.length;
+  const activeFilterCount = tags.filter((tag) => tag.type !== "search").length;
 
   return (
     <div className={styles.searchInputWrapper}>
@@ -319,7 +305,11 @@ export default function SearchBar({
             {isMobile && activeFilterCount > 0 && (
               <div
                 className={styles.tagCounter}
-                onClick={openLocationModal}
+                onClick={(e) => {
+                  // Изменено: теперь открывает окно фильтров, а не модалку выбора
+                  e.stopPropagation();
+                  setShowTagsModal(!showTagsModal);
+                }}
                 title={t("view_filters") ?? "Посмотреть фильтры"}
               >
                 {activeFilterCount}
@@ -348,6 +338,53 @@ export default function SearchBar({
           </>
         )}
 
+        {/* 2. Модальное окно для мобильных тегов */}
+        {isMobile && showTagsModal && activeFilterCount > 0 && (
+          <div className={styles.mobileTagsModal}>
+            <div className={styles.mobileTagsHeader}>
+              <span>{t("active_filters") ?? "Активні фільтри"}</span>
+              <button
+                className={styles.closeTagsModal}
+                onClick={() => setShowTagsModal(false)}
+              >
+                ×
+              </button>
+            </div>
+
+            <div className={styles.mobileTagsList}>
+              {tags.map(
+                (tag, idx) =>
+                  // Не показываем тег глобального поиска в фильтрах, если он считается отдельно,
+                  // или уберите условие tag.type !== "search", если хотите видеть и его.
+                  tag.type !== "search" && (
+                    <div key={idx} className={styles.mobileTagItem}>
+                      <span>
+                        {t(tag.type)}: {t(tag.fullName ?? tag.value)}
+                      </span>
+                      <button
+                        type="button"
+                        className={styles.mobileRemoveTagBtn}
+                        onClick={() => removeTag(idx)}
+                      >
+                        ×
+                      </button>
+                    </div>
+                  )
+              )}
+            </div>
+
+            <button
+              className={styles.mobileClearAllBtn}
+              onClick={() => {
+                clearAllTags();
+                setShowTagsModal(false);
+              }}
+            >
+              {t("clear_all") ?? "Очистити все"}
+            </button>
+          </div>
+        )}
+
         <div className={styles.inputWrapper}>
           <input
             type="text"
@@ -358,20 +395,19 @@ export default function SearchBar({
               setShowModal(value.trim().length > 0);
             }}
             onClick={openLocationModal}
-            onKeyDown={handleSearchKeyDown}
+            onKeyDown={(e) => handleSearchKeyDown(e, inputValue)}
             className={styles.input}
           />
         </div>
 
-        
-        { tags.some((tag) => tag.type !== "") && (
+        {/* Кнопка "Очистить все теги" - только на десктопе */}
+        {!isMobile && tags.some((tag) => tag.type !== "") && (
           <button
             type="button"
             className={styles.clearAllButton}
             onClick={clearAllTags}
             title={t("clear_all") ?? "Очистити фільтри"}
-            style={{
-              right: isMobile ? "85px" : "40px", }}
+            style={{ right: "40px" }}
           >
             ×
           </button>
@@ -379,7 +415,10 @@ export default function SearchBar({
 
         {/* === МОБИЛЬНАЯ КНОПКА ПОИСКА: ВНУТРИ tagsContainer === */}
         {isMobile && (
-          <button className={styles.searchButton} onClick={handleSearchSubmit}>
+          <button
+            className={styles.searchButton}
+            onClick={() => handleSearchSubmit(inputValue)}
+          >
             {t("search_button")}
           </button>
         )}
@@ -387,22 +426,24 @@ export default function SearchBar({
 
       {/* === ДЕСКТОПНАЯ КНОПКА ПОИСКА: ВНЕ tagsContainer === */}
       {!isMobile && (
-        <button className={styles.searchButton} onClick={handleSearchSubmit}>
+        <button
+          className={styles.searchButton}
+          onClick={() => handleSearchSubmit(inputValue)}
+        >
           {t("search_button")}
         </button>
       )}
 
       {showModal && (
         <SearchModal
-          ref={modalRef}
           query={inputValue}
           onClose={() => setShowModal(false)}
           onSelect={(val) => {
             setInputValue(val);
+            setShowModal(false);
           }}
         />
       )}
     </div>
   );
 }
-

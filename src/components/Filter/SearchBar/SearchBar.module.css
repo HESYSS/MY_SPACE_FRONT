@@ -83,10 +83,12 @@
   transition: background-color 0.15s ease;
   height: 28px;
   display: none;
+  cursor: pointer;
 }
 
 .tagCounter:hover {
   background-color: #02a39d;
+  color: #fff;
 }
 
 .removeTagButton {
@@ -132,7 +134,7 @@
   text-transform: uppercase;
   z-index: 20;
   flex-shrink: 0;
-  font-size: 1rem; /* Убедимся, что текст виден по умолчанию */
+  font-size: 1rem;
 }
 
 .searchButton:hover {
@@ -145,6 +147,132 @@
   display: flex;
   align-items: center;
 }
+
+/* --- СТИЛИ ДЛЯ МОБИЛЬНОЙ МОДАЛКИ (ОБНОВЛЕННЫЕ) --- */
+
+.mobileTagsModal {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  /* Темный фон как у контейнера */
+  background: #0a0a0a;
+  border-radius: 8px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  padding: 16px;
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  /* Граница в цвет основной темы */
+  border: 1px solid #03b9b34d;
+}
+
+/* Стрелочка сверху модалки (опционально, для красоты) */
+.mobileTagsModal::before {
+  content: "";
+  position: absolute;
+  top: -6px;
+  left: 20px; /* Позиция под счетчиком */
+  width: 10px;
+  height: 10px;
+  background: #0a0a0a;
+  border-left: 1px solid #03b9b34d;
+  border-top: 1px solid #03b9b34d;
+  transform: rotate(45deg);
+}
+
+.mobileTagsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 600;
+  font-size: 14px;
+  color: #fff; /* Белый текст */
+  padding-bottom: 8px;
+  border-bottom: 1px solid #03b9b34d; /* Разделитель в цвет темы */
+}
+
+.closeTagsModal {
+  background: none;
+  border: none;
+  font-size: 24px;
+  line-height: 1;
+  color: #999;
+  padding: 0 5px;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.closeTagsModal:hover {
+  color: #fff;
+}
+
+.mobileTagsList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.mobileTagItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  /* Такой же фон как у десктопных тегов */
+  background-color: #03b9b34d;
+  padding: 6px 10px;
+  border-radius: 5px;
+  font-size: 13px;
+  color: #fff;
+  border: 1px solid transparent;
+}
+
+.mobileRemoveTagBtn {
+  background: transparent;
+  border: none;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px; /* Чуть крупнее крестик */
+  cursor: pointer;
+  color: #fff;
+  opacity: 0.7;
+  padding: 0;
+  margin-left: 2px;
+}
+
+.mobileRemoveTagBtn:hover {
+  opacity: 1;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.mobileClearAllBtn {
+  margin-top: 4px;
+  padding: 10px;
+  background: transparent;
+  border: 1px dashed #03b9b34d; /* Пунктирная граница в цвет темы */
+  border-radius: 5px;
+  color: #ccc;
+  font-size: 13px;
+  cursor: pointer;
+  width: 100%;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.mobileClearAllBtn:hover {
+  border-color: #02a39d;
+  color: #fff;
+  background-color: rgba(3, 185, 179, 0.1);
+}
+
+/* --- КОНЕЦ СТИЛЕЙ МОДАЛКИ --- */
 
 /* АДАПТАЦИЯ для больших экранов (min-width: 1000px) */
 @media (min-width: 1000px) {

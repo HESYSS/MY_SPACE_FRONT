@@ -3,11 +3,48 @@ import styles from "./ConsultationModal.module.css";
 import { useTranslation } from "react-i18next";
 import { useModal } from "../../../hooks/useModal";
 
+// --- ФУНКЦИЯ ФОРМАТИРОВАНИЯ ТЕЛЕФОНА ---
+const formatPhoneNumber = (value: string): string => {
+  // Оставляем только цифры
+  const onlyNums = value.replace(/[^\d]/g, "");
+
+  // Начальная маска: +380
+  let formatted = "+380";
+  const remaining = onlyNums.substring(3); // Оставляем все после +380
+
+  if (!remaining) return onlyNums.length > 3 ? "+380" : onlyNums; // Если введено 3 цифры (+380)
+
+  // +380 (XX) XXX-XX-XX
+  if (remaining.length > 0) {
+    // Код оператора (XX)
+    formatted += ` (${remaining.substring(0, 2)}`;
+  }
+  if (remaining.length > 2) {
+    // Промежуток
+    formatted += `) ${remaining.substring(2, 5)}`;
+  }
+  if (remaining.length > 5) {
+    // Вторая группа (XX)
+    formatted += `-${remaining.substring(5, 7)}`;
+  }
+  if (remaining.length > 7) {
+    // Третья группа (XX)
+    formatted += `-${remaining.substring(7, 9)}`;
+  }
+
+  // Возвращаем отформатированную строку
+  return formatted;
+};
+
+// --- ОСНОВНОЙ КОМПОНЕНТ ---
+
 export default function ConsultationModal() {
   const { t } = useTranslation("common");
-  const { isModalOpen, closeModal, preselectedForWhom } = useModal();
+  const { isModalOpen, closeModal, preselectedForWhom, propertyArticle } =
+    useModal();
 
   const [clientName, setClientName] = useState("");
+  // Инициализируем phoneNumber с маской, но только после открытия модалки
   const [phoneNumber, setPhoneNumber] = useState("");
   const [nameError, setNameError] = useState("");
   const [phoneError, setPhoneError] = useState("");
@@ -32,6 +69,7 @@ export default function ConsultationModal() {
   const [error, setError] = useState("");
 
   useEffect(() => {
+    // Логика предустановки для whom
     if (preselectedForWhom) {
       const mappedValue =
         preselectedForWhom === "forSellers" ? "SELLING" : "BUYING";
@@ -44,11 +82,17 @@ export default function ConsultationModal() {
     } else {
       setSelectedForWhom(forWhomOptions[0]);
     }
-  }, [preselectedForWhom]);
+
+    // Логика инициализации для модалки:
+    if (isModalOpen) {
+      // Инициализируем номер телефона только кодом страны при открытии
+      setPhoneNumber("+380");
+    }
+  }, [preselectedForWhom, isModalOpen]);
 
   const handleCloseModal = () => {
     setClientName("");
-    setPhoneNumber("");
+    setPhoneNumber("+380"); // Сброс на маску
     setError("");
     setNameError("");
     setPhoneError("");
@@ -57,9 +101,24 @@ export default function ConsultationModal() {
   };
 
   useEffect(() => {
+    // ... (Обработчики клика вне модалки и Esc)
     const handleOutsideClick = (event: MouseEvent) => {
       const modalContent = document.querySelector(`.${styles.modalContent}`);
-      if (modalContent && !modalContent.contains(event.target as Node)) {
+      const dropdowns = document.querySelectorAll(`.${styles.customSelect}`);
+
+      let clickedInsideDropdown = false;
+      dropdowns.forEach((dropdown) => {
+        if (dropdown.contains(event.target as Node)) {
+          clickedInsideDropdown = true;
+        }
+      });
+
+      if (
+        isModalOpen &&
+        modalContent &&
+        !modalContent.contains(event.target as Node) &&
+        !clickedInsideDropdown
+      ) {
         handleCloseModal();
       }
     };
@@ -79,13 +138,27 @@ export default function ConsultationModal() {
     return () => window.removeEventListener("keydown", handleEsc);
   }, []);
 
-  // Обработчик изменения для поля телефона с фильтрацией на только цифры
+  // ИЗМЕНЕНИЕ 2: Обработчик изменения для поля телефона с форматированием по маске
   const handlePhoneNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // Оставляем только цифры
-    const onlyNums = e.target.value.replace(/[^0-9]/g, "");
-    setPhoneNumber(onlyNums);
+    const value = e.target.value;
+
+    // Всегда начинаем с +380
+    if (!value.startsWith("+380")) {
+      setPhoneNumber("+380");
+      return;
+    }
+
+    // Применяем форматирование
+    const formatted = formatPhoneNumber(value);
+
+    // Ограничиваем максимальную длину
+    if (formatted.length <= "+380 (00) 000-00-00".length) {
+      setPhoneNumber(formatted);
+    }
+
     // Сбрасываем ошибку при вводе
-    if (onlyNums) {
+    if (formatted.length > 4) {
+      // После +380
       setPhoneError("");
     }
   };
@@ -96,9 +169,10 @@ export default function ConsultationModal() {
     setNameError("");
     setPhoneError("");
 
-    // --- Клиентская валидация (проверка обязательных полей) ---
+    // --- Валидация ---
     let isValid = true;
 
+    // ... (валидация имени)
     if (!clientName.trim()) {
       setNameError(t("nameRequired"));
       isValid = false;
@@ -106,11 +180,14 @@ export default function ConsultationModal() {
       setNameError("");
     }
 
-    if (!phoneNumber.trim()) {
+    // ОЧИЩАЕМ номер от маски для отправки на бэкенд и для валидации
+    const cleanPhoneNumber = phoneNumber.replace(/[^\d]/g, "");
+
+    if (!cleanPhoneNumber || cleanPhoneNumber === "380") {
       setPhoneError(t("phoneRequired"));
       isValid = false;
-    } else if (phoneNumber.replace(/[^0-9]/g, "").length < 5) {
-      // Пример: проверка на минимальную длину номера
+    } else if (cleanPhoneNumber.length < 12) {
+      // 12 цифр для +380 XXXXXXXXX
       setPhoneError(t("phoneTooShort"));
       isValid = false;
     } else {
@@ -118,7 +195,7 @@ export default function ConsultationModal() {
     }
 
     if (!isValid) {
-      return; // Если есть ошибки валидации, прерываем отправку
+      return;
     }
     // ------------------------------------------------------------------
 
@@ -126,9 +203,11 @@ export default function ConsultationModal() {
 
     const offerData = {
       clientName,
-      phoneNumber,
+      // ИЗМЕНЕНИЕ 3: Отправляем очищенный номер
+      phoneNumber: cleanPhoneNumber,
       reason: selectedForWhom.value,
       propertyType: selectedProperty.value,
+      ...(propertyArticle && { propertyArticle: propertyArticle }),
     };
 
     try {
@@ -180,6 +259,13 @@ export default function ConsultationModal() {
     <div className={styles.modalOverlay} onClick={handleCloseModal}>
       <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
         <h2 className={styles.modalTitle}>{t("modalTitle")}</h2>
+
+        {propertyArticle && (
+          <p className={styles.articleInfo}>
+            {t("object_article")}: <strong>{propertyArticle}</strong>
+          </p>
+        )}
+
         <form className={styles.form} onSubmit={handleSubmit}>
           <div className={styles.formItem}>
             <label className={styles.formLabel}>
@@ -193,7 +279,6 @@ export default function ConsultationModal() {
                 setClientName(e.target.value);
                 if (e.target.value) setNameError("");
               }}
-              // required убран, используется ручная валидация
             />
             {nameError && <p className={styles.validationError}>{nameError}</p>}
           </div>
@@ -204,13 +289,12 @@ export default function ConsultationModal() {
             </label>
             <input
               type="tel"
-              placeholder={t("phonePlaceholder")}
+              placeholder="+380 (XX) XXX-XX-XX" // Новый placeholder для маски
               value={phoneNumber}
-              // Новый обработчик для ввода только цифр
+              // Новый обработчик с маскированием
               onChange={handlePhoneNumberChange}
               inputMode="numeric"
-              pattern="[0-9]*"
-              // required убран, используется ручная валидация
+              pattern="[0-9+() -]*" // Для поддержки символов маски в браузере
             />
             {phoneError && (
               <p className={styles.validationError}>{phoneError}</p>

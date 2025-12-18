@@ -1,4 +1,7 @@
 {
+  "object_article": "Артикул",
+  "active_filters": "Активні фільтри",
+  "clear_all": "Очистити усе",
   "phoneRequired": "Вклажіть номер телефону",
   "nameRequired": "Вкажіть ваше ім'я",
   "sale": "ПРОДАЖ",

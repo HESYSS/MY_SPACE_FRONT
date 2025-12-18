@@ -1,4 +1,7 @@
 {
+  "object_article": "Аrticle",
+  "active_filters": "Active filters",
+  "clear_all": "Clear all",
   "phoneRequired": "Enter your phone number",
   "nameRequired": "Please enter your name.",
   "sale": "SALE",
@@ -233,4 +236,3 @@
   "showMore": "Show more",
   "search": "Your option"
 }
-

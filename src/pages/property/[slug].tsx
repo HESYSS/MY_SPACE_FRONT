@@ -309,7 +309,7 @@ export default function PropertyPage() {
 
                 <button
                   className={styles.contactButton}
-                  onClick={() => openModal("forBuyers")}
+                  onClick={() => openModal("forBuyers", property.article)}
                 >
                   {t("getPropertyConsultation")}
                 </button>

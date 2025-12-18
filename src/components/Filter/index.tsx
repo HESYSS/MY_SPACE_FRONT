@@ -34,19 +34,29 @@ export default function Filter() {
     if (currentSearch !== searchValue) setSearchValue(currentSearch);
   }, [searchParams]);
 
-  const handleSearchSubmit = () => {
+  const handleSearchSubmit = (value: string) => {
     const params = new URLSearchParams(window.location.search);
-    const trimmed = searchValue.trim();
+    const trimmed = value.trim();
+
     params.delete("page");
-    params.set("search", trimmed);
+
+    if (trimmed) {
+      params.set("search", trimmed);
+    } else {
+      params.delete("search");
+    }
+
     router.replace(`?${params.toString()}`);
   };
-
-  const handleSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleSearchKeyDown = (
+    e: React.KeyboardEvent<HTMLInputElement>,
+    value: string
+  ) => {
     const confirmKeys = ["Enter", "Go", "Search", "Done", "Next"];
+
     if (confirmKeys.includes(e.key)) {
       e.preventDefault();
-      handleSearchSubmit();
+      handleSearchSubmit(value);
     }
   };
 
