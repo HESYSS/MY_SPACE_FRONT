@@ -293,7 +293,7 @@ export default function SearchBar({
     setShowModal(false);
   };
 
-  const activeFilterCount = tags.filter((tag) => tag.type !== "search").length;
+  const activeFilterCount = tags.length;
 
   return (
     <div className={styles.searchInputWrapper}>
@@ -352,25 +352,20 @@ export default function SearchBar({
             </div>
 
             <div className={styles.mobileTagsList}>
-              {tags.map(
-                (tag, idx) =>
-                  // Не показываем тег глобального поиска в фильтрах, если он считается отдельно,
-                  // или уберите условие tag.type !== "search", если хотите видеть и его.
-                  tag.type !== "search" && (
-                    <div key={idx} className={styles.mobileTagItem}>
-                      <span>
-                        {t(tag.type)}: {t(tag.fullName ?? tag.value)}
-                      </span>
-                      <button
-                        type="button"
-                        className={styles.mobileRemoveTagBtn}
-                        onClick={() => removeTag(idx)}
-                      >
-                        ×
-                      </button>
-                    </div>
-                  )
-              )}
+              {tags.map((tag, idx) => (
+                <div key={idx} className={styles.mobileTagItem}>
+                  <span>
+                    {t(tag.type)}: {t(tag.fullName ?? tag.value)}
+                  </span>
+                  <button
+                    type="button"
+                    className={styles.mobileRemoveTagBtn}
+                    onClick={() => removeTag(idx)}
+                  >
+                    ×
+                  </button>
+                </div>
+              ))}
             </div>
 
             <button
